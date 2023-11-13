@@ -4,6 +4,8 @@
 #include <QWidget>
 #include <QLabel>
 #include <QVBoxLayout>
+#include <QHBoxLayout>
+#include <QPixmap>
 #include "WeatherData.h"
 
 class WeatherWidget : public QWidget
@@ -17,11 +19,15 @@ public:
 signals:
 
 private:
-    WeatherData* data;
+    WeatherData *data;
+    QHBoxLayout *hBox;
+    QVBoxLayout *leftVBox;
+    QVBoxLayout *rightVBox;
     QLabel* locationLabel;
     QLabel* temperatureLabel;
-    QLabel *timeLabel;
-    QVBoxLayout *layout;
+    QLabel* timeLabel;
+    QLabel* iconLabel;
+    QPixmap weatherIcon;
 };
 
 #endif // WEATHERWIDGET_H

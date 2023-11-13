@@ -10,13 +10,19 @@
 WeatherWidget::WeatherWidget(QWidget *parent, WeatherData* data_)
     : QWidget{parent},
     data(data_),
+    hBox(new QHBoxLayout(this)),
+    leftVBox(new QVBoxLayout()),
+    rightVBox(new QVBoxLayout()),
     locationLabel(new QLabel(data->location, this)),
     temperatureLabel(new QLabel(QString::number(data->temperature), this)),
     timeLabel(new QLabel(QTime::currentTime().toString("HH:mm"), this)),
-    layout(new QVBoxLayout(this))
+    iconLabel(new QLabel(this)),
+    weatherIcon("/home/veljko/Desktop/weather-app/Resources/weatherIcons/PartlyCloudyDay.png") // test
 {
-    layout->setSpacing(5);
-    layout->setContentsMargins(10, 10, 10, 10);
+    hBox->setSpacing(5);
+    hBox->setContentsMargins(10, 10, 10, 10);
+    hBox->addLayout(leftVBox);
+    hBox->addLayout(rightVBox);
 
     setAttribute(Qt::WA_StyledBackground, true);
     setStyleSheet("WeatherWidget { border-radius: 20px; background-color: #598be0; }");
@@ -24,24 +30,30 @@ WeatherWidget::WeatherWidget(QWidget *parent, WeatherData* data_)
     locationLabel->setFont(QFont("Arial", 18, QFont::Bold));
     timeLabel->setFont(QFont("Arial", 14, QFont::Normal));
     temperatureLabel->setFont(QFont("Arial", 24, QFont::Bold));
+    iconLabel->setPixmap(weatherIcon.scaled(50, 50, Qt::KeepAspectRatio, Qt::SmoothTransformation));
 
     QString labelStyle = "QLabel { color: white; }";
     locationLabel->setStyleSheet(labelStyle);
     timeLabel->setStyleSheet(labelStyle);
     temperatureLabel->setStyleSheet(labelStyle);
 
-    layout->addWidget(locationLabel);
-    layout->addWidget(timeLabel);
-    layout->addWidget(temperatureLabel, 0, Qt::AlignRight);
+    leftVBox->addWidget(locationLabel);
+    leftVBox->addWidget(timeLabel);
+    rightVBox->addWidget(iconLabel, 0, Qt::AlignTop | Qt::AlignRight);
+    rightVBox->addWidget(temperatureLabel, 0, Qt::AlignBottom | Qt::AlignRight);
 
-    setLayout(layout);
-
+    setLayout(hBox);
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
 }
 
 WeatherWidget::~WeatherWidget()
 {
     delete data;
+    delete hBox;
+    delete leftVBox;
+    delete rightVBox;
     delete locationLabel;
     delete temperatureLabel;
+    delete timeLabel;
+    delete iconLabel;
 }

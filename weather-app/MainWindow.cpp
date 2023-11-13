@@ -35,7 +35,6 @@ void MainWindow::addNewWidget(WeatherData* data) // test
 {
     auto leftWidget = this->findChild<QWidget*>("widget_2");
     WeatherWidget* tile = new WeatherWidget(leftWidget, data);
-    tile->setFixedSize(leftWidget->width(), 80);
     this->m_widgets.push_back(tile);
 
     auto leftVBox = this->findChild<QVBoxLayout*>("verticalLayout_2");

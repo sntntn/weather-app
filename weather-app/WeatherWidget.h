@@ -3,6 +3,7 @@
 
 #include <QWidget>
 #include <QLabel>
+#include <QVBoxLayout>
 #include "WeatherData.h"
 
 class WeatherWidget : public QWidget
@@ -19,7 +20,8 @@ private:
     WeatherData* data;
     QLabel* locationLabel;
     QLabel* temperatureLabel;
-
+    QLabel *timeLabel;
+    QVBoxLayout *layout;
 };
 
 #endif // WEATHERWIDGET_H

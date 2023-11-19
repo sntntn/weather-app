@@ -63,7 +63,7 @@ void MainWindow::addNewWidget(WeatherData* data) // test
     }
     leftWidget->setProperty("InsertWidget", !insertLeftWidget);
 }
-
+/*
 void MainWindow::geocodeCity(const QString& cityName) {
     QNetworkAccessManager* manager = new QNetworkAccessManager(this);
     connect(manager, &QNetworkAccessManager::finished, this, &MainWindow::handleGeocodingResponse);
@@ -93,3 +93,4 @@ void MainWindow::someFunction() {
     QString cityName = "Belgrade";  // za pocetak za Beograd
     geocodeCity(cityName);
 }
+*/

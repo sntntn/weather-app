@@ -23,5 +23,6 @@ private slots:
 private:
     Ui::MainWindow *ui;
     QVector<WeatherWidget*> m_widgets;
+    static const QString OPEN_CAGE_API_KEY="0741d020f58441f6b58ae4dc4128740d";     //dodajem API
 };
 #endif // MAINWINDOW_H

@@ -64,3 +64,41 @@ void MainWindow::addNewWidget(WeatherData* data) // test
     leftWidget->setProperty("InsertWidget", !insertLeftWidget);
 }
 
+
+void MainWindow::geocodeCity(const QString& cityName) {                                                 //dodajem funkciju za geokodiranje
+    QNetworkAccessManager* manager = new QNetworkAccessManager(this);
+    connect(manager, &QNetworkAccessManager::finished, this, &MainWindow::handleGeocodingResponse);
+
+    QString apiUrl = QString("https://api.opencagedata.com/geocode/v1/json?q=%1&key=%2")
+                         .arg(cityName)
+                         .arg(OPEN_CAGE_API_KEY);
+
+    QNetworkRequest request(QUrl(apiUrl));
+    manager->get(request);
+}
+
+void MainWindow::handleGeocodingResponse(QNetworkReply* reply) {                                        //dodajem funkciju za obradu odgovora
+    if (reply->error() != QNetworkReply::NoError) {
+        qDebug() << "Error:" << reply->errorString();
+        return;
+    }
+
+    QByteArray responseData = reply->readAll();
+
+    //ispisivanje JSON-a radi provere formata
+    qDebug() << "JSON Response:" << responseData.toStdString().c_str();
+
+
+    // Obrada JSON odgovora i izdvojavanje latitude i longitude
+    // ...
+
+
+
+
+    reply->deleteLater();
+}
+
+void MainWindow::pisiIme() {                                                                            //funkcija koja poziva sve za odredjeni grad
+    QString cityName = "Belgrade";
+    geocodeCity(cityName);
+}

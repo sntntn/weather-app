@@ -14,11 +14,10 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
 
-    WeatherAPI *api = new WeatherAPI(this);
+    auto *api = new WeatherAPI(this);
+    auto location = QString::fromStdString("Belgrade"); // test
 
-    QString location = QString::fromStdString("Belgrade"); // test
-
-    for(int i = 0; i < 5; i++){
+    for(int i = 0; i < 1; i++){
         api->fetchData(location);
     }
 
@@ -63,8 +62,11 @@ void MainWindow::addNewWidget(WeatherData* data) // test
     }
     leftWidget->setProperty("InsertWidget", !insertLeftWidget);
 }
+
+
 /*
-void MainWindow::geocodeCity(const QString& cityName) {
+void MainWindow::geocodeCity(const QString& cityName)
+{
     QNetworkAccessManager* manager = new QNetworkAccessManager(this);
     connect(manager, &QNetworkAccessManager::finished, this, &MainWindow::handleGeocodingResponse);
 
@@ -76,7 +78,8 @@ void MainWindow::geocodeCity(const QString& cityName) {
     manager->get(request);
 }
 
-void MainWindow::handleGeocodingResponse(QNetworkReply* reply) {
+void MainWindow::handleGeocodingResponse(QNetworkReply* reply)
+{
     if (reply->error() != QNetworkReply::NoError) {
         qDebug() << "Error:" << reply->errorString();
         return;
@@ -89,7 +92,8 @@ void MainWindow::handleGeocodingResponse(QNetworkReply* reply) {
     reply->deleteLater();
 }
 
-void MainWindow::someFunction() {
+void MainWindow::someFunction()
+{
     QString cityName = "Belgrade";  // za pocetak za Beograd
     geocodeCity(cityName);
 }

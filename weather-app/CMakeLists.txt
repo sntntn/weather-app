@@ -30,8 +30,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         WeatherAPI.h WeatherAPI.cpp
         WeatherWidget.h WeatherWidget.cpp
         HomePage.h HomePage.cpp
-
-
+        location.h location.cpp
     )
 # Define target properties for Android with Qt 6 as:
 #    set_property(TARGET weather-app APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR

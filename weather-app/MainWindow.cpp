@@ -16,6 +16,7 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
 
+<<<<<<< HEAD
     QStackedWidget *stackedWidget = new QStackedWidget(this);
 
     HomePage *homePage = new HomePage();
@@ -31,6 +32,12 @@ MainWindow::MainWindow(QWidget *parent)
     QString location = QString::fromStdString("Belgrade"); // test
 
     for(int i = 0; i < 25; i++){
+=======
+    auto *api = new WeatherAPI(this);
+    auto location = QString::fromStdString("Belgrade"); // test
+
+    for(int i = 0; i < 1; i++){
+>>>>>>> a8e521bed7d90ff0424c572b3ff02b4889206a40
         api->fetchData(location);
     }
 
@@ -47,8 +54,43 @@ MainWindow::~MainWindow()
     }
 }
 
+<<<<<<< HEAD
+=======
+void MainWindow::addNewWidget(WeatherData* data) // test
+{
+    auto rightWidget = this->findChild<QWidget*>("widget");
+    auto leftWidget = this->findChild<QWidget*>("widget_2");
+
+    QVariant value = leftWidget->property("InsertWidget");
+
+    bool insertLeftWidget = value.toBool();
+
+    if(insertLeftWidget){
+        WeatherWidget* tile = new WeatherWidget(leftWidget, data);
+        this->m_widgets.push_back(tile);
+
+        auto leftVBox = this->findChild<QVBoxLayout*>("verticalLayout_2");
+        leftVBox->addWidget(tile);
+        auto leftSpacer = new QSpacerItem(0, 1, QSizePolicy::Minimum, QSizePolicy::Expanding);
+        leftVBox->addSpacerItem(leftSpacer);
+    }
+    else {
+        WeatherWidget* tile = new WeatherWidget(rightWidget, data);
+        this->m_widgets.push_back(tile);
+
+        auto rightVBox = this->findChild<QVBoxLayout*>("verticalLayout_3");
+        rightVBox->addWidget(tile);
+        auto rightSpacer = new QSpacerItem(0, 1, QSizePolicy::Minimum, QSizePolicy::Expanding);
+        rightVBox->addSpacerItem(rightSpacer);
+    }
+    leftWidget->setProperty("InsertWidget", !insertLeftWidget);
+}
+
+
+>>>>>>> a8e521bed7d90ff0424c572b3ff02b4889206a40
 /*
-void MainWindow::geocodeCity(const QString& cityName) {
+void MainWindow::geocodeCity(const QString& cityName)
+{
     QNetworkAccessManager* manager = new QNetworkAccessManager(this);
     connect(manager, &QNetworkAccessManager::finished, this, &MainWindow::handleGeocodingResponse);
 
@@ -60,7 +102,8 @@ void MainWindow::geocodeCity(const QString& cityName) {
     manager->get(request);
 }
 
-void MainWindow::handleGeocodingResponse(QNetworkReply* reply) {
+void MainWindow::handleGeocodingResponse(QNetworkReply* reply)
+{
     if (reply->error() != QNetworkReply::NoError) {
         qDebug() << "Error:" << reply->errorString();
         return;
@@ -73,7 +116,8 @@ void MainWindow::handleGeocodingResponse(QNetworkReply* reply) {
     reply->deleteLater();
 }
 
-void MainWindow::someFunction() {
+void MainWindow::someFunction()
+{
     QString cityName = "Belgrade";  // za pocetak za Beograd
     geocodeCity(cityName);
 }

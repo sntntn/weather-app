@@ -9,16 +9,18 @@
 
 class WeatherWidget;
 class WeatherData;
+class MainWindow;
 
 class HomePage : public QWidget
 {
     Q_OBJECT
 public:
-    explicit HomePage(QWidget *parent = nullptr);
+    explicit HomePage(MainWindow *mainWindow, QWidget *parent = nullptr);
     ~HomePage();
 
 
 signals:
+    void weatherWidgetClicked(WeatherData* data);
 
 public slots:
     void addNewWidget(WeatherData* data);
@@ -28,11 +30,13 @@ private:
     QLineEdit *searchBar;
     QScrollArea *scrollArea;
     QHBoxLayout *scrollLayout;
+    QWidget *scrollAreaContents;
     QWidget *leftWidget;
     QWidget *rightWidget;
     QVBoxLayout *leftVBox;
     QVBoxLayout *rightVBox;
 
+    MainWindow *m_mainWindow;
     QVector<WeatherWidget*> m_widgets;
 };
 

@@ -9,6 +9,7 @@
 #include "WeatherData.h"
 #include "WeatherWidget.h"
 #include "HomePage.h"
+#include "DetailedWeatherPage.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -16,11 +17,13 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
 
-    QStackedWidget *stackedWidget = new QStackedWidget(this);
+    stackedWidget = new QStackedWidget(this);
 
-    HomePage *homePage = new HomePage();
+    homePage = new HomePage(this);
+    detailedWeather = new DetailedWeatherPage();
 
     stackedWidget->addWidget(homePage);
+    stackedWidget->addWidget(detailedWeather);
     setCentralWidget(stackedWidget);
 
     // Optionally set HomePage as the initial page
@@ -33,17 +36,32 @@ MainWindow::MainWindow(QWidget *parent)
         api->fetchData(location);
     }
 
-    connect(api, &WeatherAPI::dataFetched, homePage, &HomePage::addNewWidget);
+    connect(api, &WeatherAPI::dataFetched, this, &MainWindow::addNewWidget);
 
+}
+
+void MainWindow::onWeatherWidgetClicked(WeatherData* data) {
+
+    // Assuming you have a method in DetailedWeatherPage to set the data
+    detailedWeather->setData(data);
+    detailedWeather->getLocations(m_locations);
+
+    // And assuming you have a member variable or a method to get the QStackedWidget
+    stackedWidget->setCurrentWidget(detailedWeather);
 }
 
 MainWindow::~MainWindow()
 {
     delete ui;
 
-    for(auto widget : m_widgets){
-        delete widget;
+    for(auto location : m_locations){
+        delete location;
     }
+}
+
+void MainWindow::addNewWidget(WeatherData* data){
+    m_locations.append(data);
+    homePage->addNewWidget(data);
 }
 
 /*

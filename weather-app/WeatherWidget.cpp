@@ -48,6 +48,11 @@ WeatherWidget::WeatherWidget(QWidget *parent, WeatherData* data_)
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
 }
 
+void WeatherWidget::mousePressEvent(QMouseEvent *event) {
+    QWidget::mousePressEvent(event);
+    emit clicked(data);
+}
+
 WeatherWidget::~WeatherWidget()
 {
     delete data;

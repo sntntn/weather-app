@@ -2,13 +2,16 @@
 
 #include "WeatherData.h"
 #include "WeatherWidget.h"
+#include "MainWindow.h"
 
-HomePage::HomePage(QWidget *parent)
+HomePage::HomePage(MainWindow *mainWindow, QWidget *parent)
     : QWidget{parent},
+    m_mainWindow(mainWindow),
     mainLayout(new QVBoxLayout(this)),
     searchBar(new QLineEdit()),
     scrollArea(new QScrollArea()),
     scrollLayout(new QHBoxLayout()),
+    scrollAreaContents(new QWidget()), // Container widget for the scroll area
     leftWidget(new QWidget()),
     rightWidget(new QWidget()),
     leftVBox(new QVBoxLayout()),
@@ -29,7 +32,6 @@ HomePage::HomePage(QWidget *parent)
     searchBar->setPlaceholderText("Enter location...");
     mainLayout->addWidget(searchBar);
 
-    QWidget *scrollAreaContents = new QWidget(); // Container widget for the scroll area
     scrollAreaContents->setLayout(scrollLayout);
     scrollArea->setWidget(scrollAreaContents);
     scrollArea->setWidgetResizable(true);
@@ -66,6 +68,8 @@ void HomePage::addNewWidget(WeatherData* data)
 
     if(inserttoLeft){
         WeatherWidget* tile = new WeatherWidget(leftWidget, data);
+        connect(tile, &WeatherWidget::clicked, m_mainWindow, &MainWindow::onWeatherWidgetClicked);
+
         tile->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Preferred);
         this->m_widgets.push_back(tile);
 
@@ -73,6 +77,9 @@ void HomePage::addNewWidget(WeatherData* data)
     }
     else {
         WeatherWidget* tile = new WeatherWidget(rightWidget, data);
+        connect(tile, &WeatherWidget::clicked, m_mainWindow, &MainWindow::onWeatherWidgetClicked);
+
+
         this->m_widgets.push_back(tile);
 
         rightVBox->addWidget(tile);

@@ -17,9 +17,6 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
-private slots:
-    void addNewWidget(WeatherData* data);
-
 private:
     Ui::MainWindow *ui;
     QVector<WeatherWidget*> m_widgets;

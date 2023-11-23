@@ -17,7 +17,7 @@ WeatherWidget::WeatherWidget(QWidget *parent, WeatherData* data_)
     temperatureLabel(new QLabel(QString::number(data->temperature), this)),
     timeLabel(new QLabel(QTime::currentTime().toString("HH:mm"), this)),
     iconLabel(new QLabel(this)),
-    weatherIcon("/home/veljko/Desktop/weather-app/Resources/weatherIcons/PartlyCloudyDay.png") // test
+    weatherIcon("../Resources/weatherIcons/PartlyCloudyDay.png") // test
 {
     hBox->setSpacing(5);
     hBox->setContentsMargins(10, 10, 10, 10);

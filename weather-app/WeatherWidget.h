@@ -6,7 +6,7 @@
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QPixmap>
-#include "WeatherData.h"
+class WeatherData;
 
 class WeatherWidget : public QWidget
 {

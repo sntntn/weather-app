@@ -7,6 +7,8 @@
 #include <QPalette>
 #include <QFrame>
 
+#include "WeatherData.h"
+
 WeatherWidget::WeatherWidget(QWidget *parent, WeatherData* data_)
     : QWidget{parent},
     data(data_),

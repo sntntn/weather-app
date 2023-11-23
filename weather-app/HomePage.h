@@ -7,14 +7,16 @@
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 
-#include "WeatherWidget.h"
-#include "WeatherData.h"
+class WeatherWidget;
+class WeatherData;
 
 class HomePage : public QWidget
 {
     Q_OBJECT
 public:
     explicit HomePage(QWidget *parent = nullptr);
+    ~HomePage();
+
 
 signals:
 

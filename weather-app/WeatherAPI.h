@@ -1,7 +1,7 @@
 #ifndef WEATHERAPI_H
 #define WEATHERAPI_H
 
-#include "WeatherData.h"
+class WeatherData;
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
 #include <QGeoCoordinate>

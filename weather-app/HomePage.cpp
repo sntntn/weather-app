@@ -1,5 +1,8 @@
 #include "HomePage.h"
 
+#include "WeatherData.h"
+#include "WeatherWidget.h"
+
 HomePage::HomePage(QWidget *parent)
     : QWidget{parent},
     mainLayout(new QVBoxLayout(this)),
@@ -75,5 +78,21 @@ void HomePage::addNewWidget(WeatherData* data)
         rightVBox->addWidget(tile);
     }
     leftWidget->setProperty("inserttoLeft", !inserttoLeft);
+}
+
+HomePage::~HomePage()
+{
+    delete mainLayout;
+    delete searchBar;
+    delete scrollArea;
+    delete scrollLayout;
+    delete leftWidget;
+    delete rightWidget;
+    delete leftVBox;
+    delete rightVBox;
+
+    for(auto widget : m_widgets){
+        delete widget;
+    }
 }
 

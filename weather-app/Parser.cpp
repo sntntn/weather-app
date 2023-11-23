@@ -1,4 +1,6 @@
 #include "Parser.h"
+#include "WeatherData.h"
+
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QJsonValue>

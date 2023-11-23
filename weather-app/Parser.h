@@ -1,7 +1,9 @@
 #ifndef PARSER_H
 #define PARSER_H
 
-#include "WeatherData.h"
+#include <QString>
+
+class WeatherData;
 
 class Parser
 {

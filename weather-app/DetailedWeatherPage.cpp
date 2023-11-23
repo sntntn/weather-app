@@ -50,17 +50,14 @@ DetailedWeatherPage::DetailedWeatherPage(QWidget *parent)
 
 void DetailedWeatherPage::setData(WeatherData* data) {
     if (data != nullptr) {
-        std::cout << data->location.toStdString() << std::endl << data ->temperature << std::endl;
+        //std::cout << data->location.toStdString() << std::endl << data ->temperature << std::endl;
     }
-    std::cout << "--------------------------------------" << std::endl;
+    //std::cout << "--------------------------------------" << std::endl;
 }
 
 void DetailedWeatherPage::getLocations(QVector<WeatherData*> locations){
 
     m_locations = locations;
-    for(auto location : locations){
-        std::cout << location->location.toStdString() << std::endl << location->temperature << std::endl;
-    }
     drawWidgets(m_locations);
 }
 

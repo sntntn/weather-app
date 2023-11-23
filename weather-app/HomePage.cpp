@@ -63,7 +63,7 @@ void HomePage::addNewWidget(WeatherData* data)
 
     if(inserttoLeft){
         WeatherWidget* tile = new WeatherWidget(leftWidget, data);
-        tile->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
+        tile->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Preferred);
         this->m_widgets.push_back(tile);
 
         leftVBox->addWidget(tile);

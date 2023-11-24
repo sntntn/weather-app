@@ -10,16 +10,16 @@
 #include "WeatherData.h"
 
 WeatherWidget::WeatherWidget(WeatherData* data_, QWidget *parent)
-    : QWidget{parent},
-    data(data_),
-    hBox(new QHBoxLayout(this)),
-    leftVBox(new QVBoxLayout()),
-    rightVBox(new QVBoxLayout()),
-    locationLabel(new QLabel(data->location, this)),
-    temperatureLabel(new QLabel(QString::number(data->temperature), this)),
-    timeLabel(new QLabel(QTime::currentTime().toString("HH:mm"), this)),
-    iconLabel(new QLabel(this)),
-    weatherIcon("../Resources/weatherIcons/PartlyCloudyDay.png") // test
+    : QWidget{parent}
+    , data(data_)
+    , hBox(new QHBoxLayout(this))
+    , leftVBox(new QVBoxLayout())
+    , rightVBox(new QVBoxLayout())
+    , locationLabel(new QLabel(data->location, this))
+    , temperatureLabel(new QLabel(QString::number(data->temperature), this))
+    , timeLabel(new QLabel(QTime::currentTime().toString("HH:mm"), this))
+    , iconLabel(new QLabel(this))
+    , weatherIcon("../Resources/weatherIcons/PartlyCloudyDay.png") // test
 {
     hBox->setSpacing(5);
     hBox->setContentsMargins(10, 10, 10, 10);

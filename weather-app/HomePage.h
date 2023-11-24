@@ -26,6 +26,7 @@ public slots:
     void addNewWidget(WeatherData* data);
 
 private:
+    MainWindow *m_mainWindow;
     QVBoxLayout *mainLayout;
     QLineEdit *searchBar;
     QScrollArea *scrollArea;
@@ -36,7 +37,6 @@ private:
     QVBoxLayout *leftVBox;
     QVBoxLayout *rightVBox;
 
-    MainWindow *m_mainWindow;
     QVector<WeatherWidget*> m_widgets;
 };
 

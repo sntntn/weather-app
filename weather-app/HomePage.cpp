@@ -5,17 +5,17 @@
 #include "MainWindow.h"
 
 HomePage::HomePage(MainWindow *mainWindow, QWidget *parent)
-    : QWidget{parent},
-    m_mainWindow(mainWindow),
-    mainLayout(new QVBoxLayout(this)),
-    searchBar(new QLineEdit()),
-    scrollArea(new QScrollArea()),
-    scrollLayout(new QHBoxLayout()),
-    scrollAreaContents(new QWidget()), // Container widget for the scroll area
-    leftWidget(new QWidget()),
-    rightWidget(new QWidget()),
-    leftVBox(new QVBoxLayout()),
-    rightVBox(new QVBoxLayout())
+    : QWidget{parent}
+    , m_mainWindow(mainWindow)
+    , mainLayout(new QVBoxLayout(this))
+    , searchBar(new QLineEdit())
+    , scrollArea(new QScrollArea())
+    , scrollLayout(new QHBoxLayout())
+    , scrollAreaContents(new QWidget())
+    , leftWidget(new QWidget())
+    , rightWidget(new QWidget())
+    , leftVBox(new QVBoxLayout())
+    , rightVBox(new QVBoxLayout())
 {
     searchBar->setStyleSheet(
         "QLineEdit {"
@@ -70,25 +70,19 @@ void HomePage::addNewWidget(WeatherData* data)
 {
 
     bool inserttoLeft = leftWidget->property("inserttoLeft").toBool();
+    WeatherWidget* tile = new WeatherWidget(data, scrollAreaContents);
+    connect(tile, &WeatherWidget::clicked, m_mainWindow, &MainWindow::onWeatherWidgetClicked);
+    tile->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Preferred);
+    this->m_widgets.push_back(tile);
+
 
     if(inserttoLeft){
-        WeatherWidget* tile = new WeatherWidget(data, leftWidget);
-        connect(tile, &WeatherWidget::clicked, m_mainWindow, &MainWindow::onWeatherWidgetClicked);
-
-        tile->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Preferred);
-        this->m_widgets.push_back(tile);
-
         leftVBox->addWidget(tile);
     }
     else {
-        WeatherWidget* tile = new WeatherWidget(data, rightWidget);
-        connect(tile, &WeatherWidget::clicked, m_mainWindow, &MainWindow::onWeatherWidgetClicked);
-
-        tile->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Preferred);
-        this->m_widgets.push_back(tile);
-
         rightVBox->addWidget(tile);
     }
+
     leftWidget->setProperty("inserttoLeft", !inserttoLeft);
 }
 

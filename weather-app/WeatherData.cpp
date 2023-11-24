@@ -1,5 +1,4 @@
 #include "WeatherData.h"
-#include <limits>
 
 WeatherData::WeatherData(QString location_,
                          double temperature_,

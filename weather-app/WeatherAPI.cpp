@@ -6,16 +6,25 @@
 #include <QUrlQuery>
 #include <QString>
 
-WeatherAPI::WeatherAPI(QObject *parent)
-    : QObject{parent},
-    networkManager(new QNetworkAccessManager(this))
+WeatherAPI::WeatherAPI(QString location_, QObject *parent)
+    : QThread{parent}
+    , location(location_)
+    , networkManager(new QNetworkAccessManager())
 {
     connect(networkManager, &QNetworkAccessManager::finished, this, &WeatherAPI::replyFinished);
+    networkManager->moveToThread(this);
 }
 
 WeatherAPI::~WeatherAPI()
 {
     delete networkManager;
+}
+
+void WeatherAPI::run()
+{
+    QGeoCoordinate coordinates = locationToCoordinate(location);
+    fetchData(coordinates);
+    exec();
 }
 
 QGeoCoordinate WeatherAPI::locationToCoordinate(const QString &location){ // test
@@ -24,13 +33,6 @@ QGeoCoordinate WeatherAPI::locationToCoordinate(const QString &location){ // tes
     }
     return QGeoCoordinate(0,0);
 }
-
-void WeatherAPI::fetchData(const QString &location) // test
-{
-    QGeoCoordinate coordinates = locationToCoordinate(location);
-    fetchData(coordinates);
-}
-
 
 void WeatherAPI::fetchData(const QGeoCoordinate &coordinates)
 {

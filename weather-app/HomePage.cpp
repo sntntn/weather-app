@@ -67,7 +67,7 @@ void HomePage::addNewWidget(WeatherData* data)
     bool inserttoLeft = leftWidget->property("inserttoLeft").toBool();
 
     if(inserttoLeft){
-        WeatherWidget* tile = new WeatherWidget(leftWidget, data);
+        WeatherWidget* tile = new WeatherWidget(data, leftWidget);
         connect(tile, &WeatherWidget::clicked, m_mainWindow, &MainWindow::onWeatherWidgetClicked);
 
         tile->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Preferred);
@@ -76,7 +76,7 @@ void HomePage::addNewWidget(WeatherData* data)
         leftVBox->addWidget(tile);
     }
     else {
-        WeatherWidget* tile = new WeatherWidget(rightWidget, data);
+        WeatherWidget* tile = new WeatherWidget(data, rightWidget);
         connect(tile, &WeatherWidget::clicked, m_mainWindow, &MainWindow::onWeatherWidgetClicked);
 
 

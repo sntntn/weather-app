@@ -9,7 +9,7 @@
 
 #include "WeatherData.h"
 
-WeatherWidget::WeatherWidget(QWidget *parent, WeatherData* data_)
+WeatherWidget::WeatherWidget(WeatherData* data_, QWidget *parent)
     : QWidget{parent},
     data(data_),
     hBox(new QHBoxLayout(this)),

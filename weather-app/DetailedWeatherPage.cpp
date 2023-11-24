@@ -65,7 +65,7 @@ void DetailedWeatherPage::drawWidgets(QVector<WeatherData*> m_locations)
 {
     for(auto data : m_locations){
 
-        WeatherWidget* tile = new WeatherWidget(widgetsScrollAreaContents, data);
+        WeatherWidget* tile = new WeatherWidget(data, widgetsScrollAreaContents);
         tile->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Preferred);
         //connect(tile, &WeatherWidget::clicked, m_mainWindow, &MainWindow::onWeatherWidgetClicked);
 

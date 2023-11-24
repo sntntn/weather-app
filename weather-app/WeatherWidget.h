@@ -13,7 +13,7 @@ class WeatherWidget : public QWidget
     Q_OBJECT
 
 public:
-    explicit WeatherWidget(QWidget *parent = nullptr, WeatherData *data_ = nullptr);
+    explicit WeatherWidget(WeatherData *data_, QWidget *parent = nullptr);
     ~WeatherWidget();
     void mousePressEvent(QMouseEvent *event) override;
 

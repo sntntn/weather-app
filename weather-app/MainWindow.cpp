@@ -29,15 +29,14 @@ MainWindow::MainWindow(QWidget *parent)
     // Optionally set HomePage as the initial page
     stackedWidget->setCurrentWidget(homePage);
 
-    auto *api = new WeatherAPI(this);
     auto location = QString::fromStdString("Belgrade"); // test
 
     for(int i = 0; i < 25; i++){
-        api->fetchData(location);
+        auto api = new WeatherAPI(location, this);
+        connect(api, &WeatherAPI::finished, api, &WeatherAPI::deleteLater);
+        connect(api, &WeatherAPI::dataFetched, this, &MainWindow::addNewWidget);
+        api->start();
     }
-
-    connect(api, &WeatherAPI::dataFetched, this, &MainWindow::addNewWidget);
-
 }
 
 void MainWindow::onWeatherWidgetClicked(WeatherData* data) {

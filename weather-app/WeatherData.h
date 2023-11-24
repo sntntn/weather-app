@@ -7,7 +7,7 @@ class WeatherData
 {
 public:
     WeatherData();
-    WeatherData(QString location_, double temperature_, double windSpeed_, double rain_);
+    WeatherData(QString& location_, double temperature_, double windSpeed_, double rain_);
     QString location;
     double temperature;
     double windSpeed;

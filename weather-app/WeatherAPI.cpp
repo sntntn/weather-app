@@ -1,12 +1,14 @@
 #include "WeatherAPI.h"
-#include "WeatherData.h"
-#include "Parser.h"
+
 #include <iostream>
 #include <QUrl>
 #include <QUrlQuery>
 #include <QString>
 
-WeatherAPI::WeatherAPI(QString location_, QObject *parent)
+#include "WeatherData.h"
+#include "Parser.h"
+
+WeatherAPI::WeatherAPI(QString& location_, QObject *parent)
     : QThread{parent}
     , location(location_)
     , networkManager(new QNetworkAccessManager())

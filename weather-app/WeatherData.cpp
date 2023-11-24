@@ -1,6 +1,6 @@
 #include "WeatherData.h"
 
-WeatherData::WeatherData(QString location_,
+WeatherData::WeatherData(QString& location_,
                          double temperature_,
                          double windSpeed_,
                          double rain_)

@@ -1,13 +1,13 @@
 #include "DetailedWeatherPage.h"
 
 #include <iostream>
+
+#include "MainWindow.h"
 #include "WeatherData.h"
 #include "WeatherWidget.h"
-#include "MainWindow.h"
 
 DetailedWeatherPage::DetailedWeatherPage(MainWindow *mainWindow, QWidget *parent)
     : QWidget{parent}
-    , m_locations()
     , m_mainWindow(mainWindow)
     , mainLayout(new QHBoxLayout(this))
     , widgetsScrollArea(new QScrollArea())
@@ -16,6 +16,7 @@ DetailedWeatherPage::DetailedWeatherPage(MainWindow *mainWindow, QWidget *parent
     , weatherScrollAreaContents(new QWidget())
     , widgetsLayout(new QVBoxLayout())
     , weatherLayout(new QVBoxLayout())
+    , buttonsLayout(new QHBoxLayout())
     , returnToHomePage(new QPushButton())
     , addToSavedLocations(new QPushButton())
 {
@@ -31,7 +32,6 @@ DetailedWeatherPage::DetailedWeatherPage(MainWindow *mainWindow, QWidget *parent
     returnToHomePage->setText("< Home Page");
     addToSavedLocations->setText("Add");
 
-    QHBoxLayout* buttonsLayout = new QHBoxLayout();
     buttonsLayout->addWidget(returnToHomePage);
     buttonsLayout->addStretch();
     buttonsLayout->addWidget(addToSavedLocations);
@@ -51,9 +51,9 @@ void DetailedWeatherPage::resizeEvent(QResizeEvent* event) {
     widgetsScrollArea->setFixedWidth(newWidth);
 }
 
-void DetailedWeatherPage::setData(QString location) {
+void DetailedWeatherPage::setData(const QString& location) {
     if (location != nullptr) {
-        std::cout << location.toStdString() << std::endl;
+        //std::cout << location.toStdString() << std::endl;
     }
 }
 
@@ -71,7 +71,8 @@ void DetailedWeatherPage::drawWidgets(QVector<WeatherData*> m_locations)
 {
     for(auto data : m_locations){
 
-        WeatherWidget* tile = new WeatherWidget(data, widgetsScrollAreaContents);
+        auto tile = new WeatherWidget(data, widgetsScrollAreaContents);
+        this->m_widgets.append(tile);
 
         // has to use setLocation slot to call setData because of calling setData from home page
         connect(tile, &WeatherWidget::clicked, this, &DetailedWeatherPage::setLocation);
@@ -90,9 +91,13 @@ DetailedWeatherPage::~DetailedWeatherPage()
     delete weatherScrollAreaContents;
     delete widgetsLayout;
     delete weatherLayout;
+    delete buttonsLayout;
     delete returnToHomePage;
     delete addToSavedLocations;
 
+    for(auto widget : m_widgets){
+        delete widget;
+    }
     for(auto location : m_locations){
         delete location;
     }

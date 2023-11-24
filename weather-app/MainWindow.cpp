@@ -1,8 +1,6 @@
 #include "MainWindow.h"
 #include "./ui_MainWindow.h"
 
-#include <iostream>
-
 #include <QStackedWidget>
 
 #include "WeatherAPI.h"
@@ -14,14 +12,12 @@
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
+    , homePage(new HomePage(this))
+    , detailedWeather(new DetailedWeatherPage(this))
+    , stackedWidget(new QStackedWidget(this))
 {
     ui->setupUi(this);
     resize(900,600);
-
-    stackedWidget = new QStackedWidget(this);
-
-    homePage = new HomePage(this);
-    detailedWeather = new DetailedWeatherPage(this);
 
     stackedWidget->addWidget(homePage);
     stackedWidget->addWidget(detailedWeather);
@@ -32,7 +28,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     auto location = QString::fromStdString("Belgrade"); // test
 
-    for(int i = 0; i < 25; i++){
+    for(int i = 0; i < 15; i++){
         auto api = new WeatherAPI(location, this);
         connect(api, &WeatherAPI::finished, api, &WeatherAPI::deleteLater);
         connect(api, &WeatherAPI::dataFetched, this, &MainWindow::addNewWidget);
@@ -44,7 +40,7 @@ void MainWindow::onReturnToHomePageClicked(){
     stackedWidget->setCurrentWidget(homePage);
 }
 
-void MainWindow::onWeatherWidgetClicked(QString location) {
+void MainWindow::onWeatherWidgetClicked(QString& location) {
 
     // Assuming you have a method in DetailedWeatherPage to set the data
     // WeatherAPI i GeocodingAPI
@@ -58,6 +54,9 @@ void MainWindow::onWeatherWidgetClicked(QString location) {
 MainWindow::~MainWindow()
 {
     delete ui;
+    delete homePage;
+    delete detailedWeather;
+    delete stackedWidget;
 
     for(auto location : m_locations){
         delete location;

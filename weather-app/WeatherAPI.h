@@ -13,7 +13,7 @@ class WeatherAPI : public QThread
 {
     Q_OBJECT
 public:
-    explicit WeatherAPI(QString location, QObject *parent = nullptr);
+    explicit WeatherAPI(QString& location, QObject *parent = nullptr);
     ~WeatherAPI();
 
 signals:

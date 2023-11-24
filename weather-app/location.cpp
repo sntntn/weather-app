@@ -1,5 +1,7 @@
 #include "location.h"
 
+#include <iostream>
+
 Location::Location(QObject* parent)
     : QObject{parent}
 {

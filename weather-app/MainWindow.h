@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+
 class WeatherData;
 class WeatherWidget;
 class QStackedWidget;
@@ -21,16 +22,16 @@ public:
     ~MainWindow();
 
 public slots:
-    void onWeatherWidgetClicked(QString location);
+    void onWeatherWidgetClicked(QString &location);
     void addNewWidget(WeatherData* data);
     void onReturnToHomePageClicked();
 
 private:
     Ui::MainWindow *ui;
     QVector<WeatherData*> m_locations;
-    QStackedWidget *stackedWidget;
     HomePage *homePage;
     DetailedWeatherPage *detailedWeather;
+    QStackedWidget *stackedWidget;
     static const QString OPEN_CAGE_API_KEY; //TO DO CONFIG FILE
 };
 #endif // MAINWINDOW_H

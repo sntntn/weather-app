@@ -1,4 +1,5 @@
 #include "WeatherWidget.h"
+
 #include <QString>
 #include <QLabel>
 #include <QTime>

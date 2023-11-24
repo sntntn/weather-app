@@ -6,6 +6,7 @@
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QPixmap>
+
 class WeatherData;
 
 class WeatherWidget : public QWidget
@@ -18,7 +19,7 @@ public:
     void mousePressEvent(QMouseEvent *event) override;
 
 signals:
-    void clicked(QString location);
+    void clicked(QString& location);
 
 private:
     WeatherData *data;

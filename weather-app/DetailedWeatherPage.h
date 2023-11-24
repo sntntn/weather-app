@@ -10,6 +10,7 @@
 
 class WeatherData;
 class MainWindow;
+class WeatherWidget;
 
 class DetailedWeatherPage : public QWidget
 {
@@ -19,7 +20,7 @@ public:
     explicit DetailedWeatherPage(MainWindow* mainWindow, QWidget *parent = nullptr);
     ~DetailedWeatherPage();
 
-    void setData(QString location);
+    void setData(const QString& location);
     void getLocations(QVector<WeatherData*> m_locations);
     void drawWidgets(QVector<WeatherData*> m_locations);
     void resizeEvent(QResizeEvent *event) override;
@@ -39,8 +40,11 @@ private:
     QWidget *weatherScrollAreaContents;
     QVBoxLayout *widgetsLayout;
     QVBoxLayout *weatherLayout;
+    QHBoxLayout *buttonsLayout;
     QPushButton *returnToHomePage;
     QPushButton *addToSavedLocations;
+
+    QVector<WeatherWidget *> m_widgets;
 
 
 };

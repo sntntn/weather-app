@@ -1,14 +1,13 @@
 #include "Parser.h"
-#include "WeatherData.h"
 
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QJsonValue>
 #include <QJsonArray>
 
-Parser::Parser()
-{
-}
+#include "WeatherData.h"
+
+Parser::Parser() = default;
 
 WeatherData* Parser::parseWeatherData(const QString& jsonData)
 {
@@ -20,7 +19,7 @@ WeatherData* Parser::parseWeatherData(const QString& jsonData)
     double temperature = current.value("temperature_2m").toDouble();
     double windSpeed = current.value("wind_speed_10m").toDouble();
     double rain = current.value("rain").toDouble();
-    WeatherData *data = new WeatherData(location, temperature, windSpeed, rain);
+    auto data = new WeatherData(location, temperature, windSpeed, rain);
 
     return data;
 }

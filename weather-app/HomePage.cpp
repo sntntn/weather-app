@@ -1,8 +1,8 @@
 #include "HomePage.h"
 
+#include "MainWindow.h"
 #include "WeatherData.h"
 #include "WeatherWidget.h"
-#include "MainWindow.h"
 
 HomePage::HomePage(MainWindow *mainWindow, QWidget *parent)
     : QWidget{parent}
@@ -70,7 +70,7 @@ void HomePage::addNewWidget(WeatherData* data)
 {
 
     bool inserttoLeft = leftWidget->property("inserttoLeft").toBool();
-    WeatherWidget* tile = new WeatherWidget(data, scrollAreaContents);
+    auto tile = new WeatherWidget(data, scrollAreaContents);
     connect(tile, &WeatherWidget::clicked, m_mainWindow, &MainWindow::onWeatherWidgetClicked);
     tile->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Preferred);
     this->m_widgets.push_back(tile);

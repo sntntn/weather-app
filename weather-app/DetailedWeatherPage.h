@@ -31,6 +31,7 @@ private slots:
 
 private:
     QVector<WeatherData*> m_locations;
+    MainWindow *m_mainWindow;
     QHBoxLayout *mainLayout;
     QScrollArea *widgetsScrollArea;
     QScrollArea *weatherScrollArea;
@@ -40,7 +41,6 @@ private:
     QVBoxLayout *weatherLayout;
     QPushButton *returnToHomePage;
     QPushButton *addToSavedLocations;
-    MainWindow *m_mainWindow;
 
 
 };

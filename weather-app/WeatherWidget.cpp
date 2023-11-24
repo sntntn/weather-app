@@ -50,7 +50,7 @@ WeatherWidget::WeatherWidget(QWidget *parent, WeatherData* data_)
 
 void WeatherWidget::mousePressEvent(QMouseEvent *event) {
     QWidget::mousePressEvent(event);
-    emit clicked(data);
+    emit clicked(data->location);
 }
 
 WeatherWidget::~WeatherWidget()

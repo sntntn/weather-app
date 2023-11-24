@@ -16,11 +16,12 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    resize(900,600);
 
     stackedWidget = new QStackedWidget(this);
 
     homePage = new HomePage(this);
-    detailedWeather = new DetailedWeatherPage();
+    detailedWeather = new DetailedWeatherPage(this);
 
     stackedWidget->addWidget(homePage);
     stackedWidget->addWidget(detailedWeather);
@@ -32,7 +33,7 @@ MainWindow::MainWindow(QWidget *parent)
     auto *api = new WeatherAPI(this);
     auto location = QString::fromStdString("Belgrade"); // test
 
-    for(int i = 0; i < 25; i++){
+    for(int i = 0; i < 15; i++){
         api->fetchData(location);
     }
 
@@ -40,10 +41,15 @@ MainWindow::MainWindow(QWidget *parent)
 
 }
 
-void MainWindow::onWeatherWidgetClicked(WeatherData* data) {
+void MainWindow::onReturnToHomePageClicked(){
+    stackedWidget->setCurrentWidget(homePage);
+}
+
+void MainWindow::onWeatherWidgetClicked(QString location) {
 
     // Assuming you have a method in DetailedWeatherPage to set the data
-    detailedWeather->setData(data);
+    // WeatherAPI i GeocodingAPI
+    detailedWeather->setData(location);
     detailedWeather->getLocations(m_locations);
 
     // And assuming you have a member variable or a method to get the QStackedWidget

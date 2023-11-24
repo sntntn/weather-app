@@ -21,8 +21,9 @@ public:
     ~MainWindow();
 
 public slots:
-    void onWeatherWidgetClicked(WeatherData* data);
+    void onWeatherWidgetClicked(QString location);
     void addNewWidget(WeatherData* data);
+    void onReturnToHomePageClicked();
 
 private:
     Ui::MainWindow *ui;

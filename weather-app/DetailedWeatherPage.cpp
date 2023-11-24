@@ -3,56 +3,60 @@
 #include <iostream>
 #include "WeatherData.h"
 #include "WeatherWidget.h"
+#include "MainWindow.h"
 
-DetailedWeatherPage::DetailedWeatherPage(QWidget *parent)
+DetailedWeatherPage::DetailedWeatherPage(MainWindow *mainWindow, QWidget *parent)
     : QWidget{parent},
     m_locations(),
+    m_mainWindow(mainWindow),
     mainLayout(new QHBoxLayout(this)),
     widgetsScrollArea(new QScrollArea()),
     weatherScrollArea(new QScrollArea()),
-    widgetsScrollAreaContents(new QWidget()), // Container widget for the scroll area
-    weatherScrollAreaContents(new QWidget()), // Container widget for the scroll area
+    widgetsScrollAreaContents(new QWidget()),
+    weatherScrollAreaContents(new QWidget()),
     widgetsLayout(new QVBoxLayout()),
-    weatherLayout(new QVBoxLayout())
+    weatherLayout(new QVBoxLayout()),
+    returnToHomePage(new QPushButton()),
+    addToSavedLocations(new QPushButton())
 {
-    weatherScrollAreaContents->setLayout(weatherLayout);
-    weatherScrollArea->setWidget(weatherScrollAreaContents);
-    weatherScrollArea->setWidgetResizable(true);
-    weatherScrollArea->setStyleSheet(
-        "QScrollBar:vertical {"
-        "    width: 7px;"
-        "    border-radius: 30px;"  // Rounded corners for the scroll bar
-        "}"
-        "QScrollBar::handle:vertical {"
-        "    background: gray;"
-        "    min-height: 20px;"
-        "    border-radius: 30px;"  // Rounded corners for the handle
-        "}");
-    mainLayout->addWidget(weatherScrollArea);
-
 
     widgetsScrollAreaContents->setLayout(widgetsLayout);
     widgetsScrollArea->setWidget(widgetsScrollAreaContents);
     widgetsScrollArea->setWidgetResizable(true);
-    widgetsScrollArea->setStyleSheet(
-        "QScrollBar:vertical {"
-        "    width: 7px;"
-        "    border-radius: 30px;"  // Rounded corners for the scroll bar
-        "}"
-        "QScrollBar::handle:vertical {"
-        "    background: gray;"
-        "    min-height: 20px;"
-        "    border-radius: 30px;"  // Rounded corners for the handle
-        "}");
     mainLayout->addWidget(widgetsScrollArea);
+
+    connect(returnToHomePage, &QPushButton::clicked, mainWindow, &MainWindow::onReturnToHomePageClicked);
+    // TODO: add location button: connect(addToSavedLocations, &QPushButton::clicked, this, &DetailedWeatherPage::addLocation);
+
+    returnToHomePage->setText("< Home Page");
+    addToSavedLocations->setText("Add");
+
+    QHBoxLayout* buttonsLayout = new QHBoxLayout();
+    buttonsLayout->addWidget(returnToHomePage);
+    buttonsLayout->addStretch();
+    buttonsLayout->addWidget(addToSavedLocations);
+
+    weatherLayout->setAlignment(Qt::AlignTop);
+    weatherLayout->addLayout(buttonsLayout);
+
+    weatherScrollAreaContents->setLayout(weatherLayout);
+    weatherScrollArea->setWidget(weatherScrollAreaContents);
+    weatherScrollArea->setWidgetResizable(true);
+    mainLayout->addWidget(weatherScrollArea);
 
 }
 
-void DetailedWeatherPage::setData(WeatherData* data) {
-    if (data != nullptr) {
-        //std::cout << data->location.toStdString() << std::endl << data ->temperature << std::endl;
+void DetailedWeatherPage::resizeEvent(QResizeEvent* event) {
+    QWidget::resizeEvent(event);
+
+    int newWidth = this->width() / 3;
+    widgetsScrollArea->setFixedWidth(newWidth);
+}
+
+void DetailedWeatherPage::setData(QString location) {
+    if (location != nullptr) {
+        std::cout << location.toStdString() << std::endl;
     }
-    //std::cout << "--------------------------------------" << std::endl;
 }
 
 void DetailedWeatherPage::getLocations(QVector<WeatherData*> locations){
@@ -61,18 +65,36 @@ void DetailedWeatherPage::getLocations(QVector<WeatherData*> locations){
     drawWidgets(m_locations);
 }
 
+void DetailedWeatherPage::setLocation(QString location){
+    setData(location);
+}
+
 void DetailedWeatherPage::drawWidgets(QVector<WeatherData*> m_locations)
 {
     for(auto data : m_locations){
 
         WeatherWidget* tile = new WeatherWidget(widgetsScrollAreaContents, data);
-        tile->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Preferred);
-        //connect(tile, &WeatherWidget::clicked, m_mainWindow, &MainWindow::onWeatherWidgetClicked);
+        //has to use setLocation slot to call setData because of calling setData from home page
+        connect(tile, &WeatherWidget::clicked, this, &DetailedWeatherPage::setLocation);
 
-        //this->m_widgets.push_back(tile);
-
-        weatherLayout->addWidget(tile);
+        widgetsLayout->addWidget(tile);
     }
+}
 
+DetailedWeatherPage::~DetailedWeatherPage()
+{
+    delete m_mainWindow;
+    delete mainLayout;
+    delete widgetsScrollArea;
+    delete weatherScrollArea;
+    delete widgetsScrollAreaContents;
+    delete weatherScrollAreaContents;
+    delete widgetsLayout;
+    delete weatherLayout;
+    delete returnToHomePage;
+    delete addToSavedLocations;
 
+    for(auto location : m_locations){
+        delete location;
+    }
 }

@@ -32,23 +32,29 @@ HomePage::HomePage(MainWindow *mainWindow, QWidget *parent)
     searchBar->setPlaceholderText("Enter location...");
     mainLayout->addWidget(searchBar);
 
+    int leftMargin = 25;
+    int rightMargin = 25;
+    int topMargin = 0;
+    int bottomMargin = 0;
+    scrollLayout->setContentsMargins(leftMargin, topMargin, rightMargin, bottomMargin);
+
     scrollAreaContents->setLayout(scrollLayout);
     scrollArea->setWidget(scrollAreaContents);
     scrollArea->setWidgetResizable(true);
     scrollArea->setStyleSheet(
                   "QScrollBar:vertical {"
                   "    width: 7px;"
-                  "    border-radius: 30px;"  // Rounded corners for the scroll bar
+                  "    border-radius: 30px;"
                   "}"
                   "QScrollBar::handle:vertical {"
                   "    background: gray;"
                   "    min-height: 20px;"
-                  "    border-radius: 30px;"  // Rounded corners for the handle
+                  "    border-radius: 30px;"
         "}");
 
-    mainLayout->addWidget(scrollArea); // Add scroll area to the main layout
+    mainLayout->addWidget(scrollArea);
 
-    // Setting layouts for left and right widgets
+
     leftVBox->setAlignment(Qt::AlignTop);
     leftWidget->setLayout(leftVBox);
     leftWidget->setProperty("inserttoLeft", true);
@@ -56,7 +62,6 @@ HomePage::HomePage(MainWindow *mainWindow, QWidget *parent)
     rightVBox->setAlignment(Qt::AlignTop);
     rightWidget->setLayout(rightVBox);
 
-    // Adding widgets to the horizontal layout inside scroll area
     scrollLayout->addWidget(leftWidget);
     scrollLayout->addWidget(rightWidget);
 }
@@ -79,7 +84,7 @@ void HomePage::addNewWidget(WeatherData* data)
         WeatherWidget* tile = new WeatherWidget(rightWidget, data);
         connect(tile, &WeatherWidget::clicked, m_mainWindow, &MainWindow::onWeatherWidgetClicked);
 
-
+        tile->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Preferred);
         this->m_widgets.push_back(tile);
 
         rightVBox->addWidget(tile);

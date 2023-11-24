@@ -17,7 +17,7 @@ class DetailedWeatherPage : public QWidget
     Q_OBJECT
 
 public:
-    explicit DetailedWeatherPage(MainWindow* mainWindow, QWidget *parent = nullptr);
+    explicit DetailedWeatherPage(QWidget *parent = nullptr);
     ~DetailedWeatherPage();
 
     void setData(const QString& location);
@@ -32,7 +32,6 @@ private slots:
 
 private:
     QVector<WeatherData*> m_locations;
-    MainWindow *m_mainWindow;
     QHBoxLayout *mainLayout;
     QScrollArea *widgetsScrollArea;
     QScrollArea *weatherScrollArea;
@@ -43,10 +42,8 @@ private:
     QHBoxLayout *buttonsLayout;
     QPushButton *returnToHomePage;
     QPushButton *addToSavedLocations;
-
     QVector<WeatherWidget *> m_widgets;
-
-
+    MainWindow *mainWindow;
 };
 
 #endif // DETAILEDWEATHERPAGE_H

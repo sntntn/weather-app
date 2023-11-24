@@ -1,14 +1,11 @@
 #include "DetailedWeatherPage.h"
 
-#include <iostream>
-
 #include "MainWindow.h"
 #include "WeatherData.h"
 #include "WeatherWidget.h"
 
-DetailedWeatherPage::DetailedWeatherPage(MainWindow *mainWindow, QWidget *parent)
+DetailedWeatherPage::DetailedWeatherPage(QWidget *parent)
     : QWidget{parent}
-    , m_mainWindow(mainWindow)
     , mainLayout(new QHBoxLayout(this))
     , widgetsScrollArea(new QScrollArea())
     , weatherScrollArea(new QScrollArea())
@@ -19,8 +16,8 @@ DetailedWeatherPage::DetailedWeatherPage(MainWindow *mainWindow, QWidget *parent
     , buttonsLayout(new QHBoxLayout())
     , returnToHomePage(new QPushButton())
     , addToSavedLocations(new QPushButton())
+    , mainWindow(qobject_cast<MainWindow*>(parent))
 {
-
     widgetsScrollAreaContents->setLayout(widgetsLayout);
     widgetsScrollArea->setWidget(widgetsScrollAreaContents);
     widgetsScrollArea->setWidgetResizable(true);
@@ -72,6 +69,8 @@ void DetailedWeatherPage::drawWidgets(QVector<WeatherData*> m_locations)
     for(auto *data : m_locations){
 
         auto *tile = new WeatherWidget(data, widgetsScrollAreaContents);
+
+        tile->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Preferred);
         this->m_widgets.append(tile);
 
         // has to use setLocation slot to call setData because of calling setData from home page
@@ -83,7 +82,6 @@ void DetailedWeatherPage::drawWidgets(QVector<WeatherData*> m_locations)
 
 DetailedWeatherPage::~DetailedWeatherPage()
 {
-    delete m_mainWindow;
     delete mainLayout;
     delete widgetsScrollArea;
     delete weatherScrollArea;

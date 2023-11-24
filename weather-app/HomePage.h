@@ -15,7 +15,7 @@ class HomePage : public QWidget
 {
     Q_OBJECT
 public:
-    explicit HomePage(MainWindow *mainWindow, QWidget *parent = nullptr);
+    explicit HomePage(QWidget *parent = nullptr);
     ~HomePage();
 
 
@@ -26,7 +26,6 @@ public slots:
     void addNewWidget(WeatherData* data);
 
 private:
-    MainWindow *m_mainWindow;
     QVBoxLayout *mainLayout;
     QLineEdit *searchBar;
     QScrollArea *scrollArea;
@@ -36,8 +35,8 @@ private:
     QWidget *rightWidget;
     QVBoxLayout *leftVBox;
     QVBoxLayout *rightVBox;
-
     QVector<WeatherWidget*> m_widgets;
+    MainWindow *mainWindow;
 };
 
 #endif // HOMEPAGE_H

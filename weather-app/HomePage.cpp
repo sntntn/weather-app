@@ -4,9 +4,8 @@
 #include "WeatherData.h"
 #include "WeatherWidget.h"
 
-HomePage::HomePage(MainWindow *mainWindow, QWidget *parent)
+HomePage::HomePage(QWidget *parent)
     : QWidget{parent}
-    , m_mainWindow(mainWindow)
     , mainLayout(new QVBoxLayout(this))
     , searchBar(new QLineEdit())
     , scrollArea(new QScrollArea())
@@ -16,6 +15,7 @@ HomePage::HomePage(MainWindow *mainWindow, QWidget *parent)
     , rightWidget(new QWidget())
     , leftVBox(new QVBoxLayout())
     , rightVBox(new QVBoxLayout())
+    , mainWindow(qobject_cast<MainWindow*>(parent))
 {
     searchBar->setStyleSheet(
         "QLineEdit {"
@@ -68,10 +68,11 @@ HomePage::HomePage(MainWindow *mainWindow, QWidget *parent)
 
 void HomePage::addNewWidget(WeatherData* data)
 {
-
     bool inserttoLeft = leftWidget->property("inserttoLeft").toBool();
     auto *tile = new WeatherWidget(data, scrollAreaContents);
-    connect(tile, &WeatherWidget::clicked, m_mainWindow, &MainWindow::onWeatherWidgetClicked);
+
+    connect(tile, &WeatherWidget::clicked, mainWindow, &MainWindow::onWeatherWidgetClicked);
+
     tile->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Preferred);
     this->m_widgets.push_back(tile);
 

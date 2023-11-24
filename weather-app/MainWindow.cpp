@@ -9,6 +9,8 @@
 #include "HomePage.h"
 #include "DetailedWeatherPage.h"
 
+#include <iostream>
+
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
@@ -23,12 +25,11 @@ MainWindow::MainWindow(QWidget *parent)
     stackedWidget->addWidget(detailedWeather);
     setCentralWidget(stackedWidget);
 
-    // Optionally set HomePage as the initial page
     stackedWidget->setCurrentWidget(homePage);
 
     auto location = QString::fromStdString("Belgrade"); // test
 
-    for(int i = 0; i < 15; i++){
+    for(int i = 0; i < 1; i++){
         auto* api = new WeatherAPI(location, this);
         connect(api, &WeatherAPI::finished, api, &WeatherAPI::deleteLater);
         connect(api, &WeatherAPI::dataFetched, this, &MainWindow::addNewWidget);

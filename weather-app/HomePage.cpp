@@ -70,7 +70,7 @@ void HomePage::addNewWidget(WeatherData* data)
 {
 
     bool inserttoLeft = leftWidget->property("inserttoLeft").toBool();
-    auto tile = new WeatherWidget(data, scrollAreaContents);
+    auto *tile = new WeatherWidget(data, scrollAreaContents);
     connect(tile, &WeatherWidget::clicked, m_mainWindow, &MainWindow::onWeatherWidgetClicked);
     tile->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Preferred);
     this->m_widgets.push_back(tile);
@@ -97,7 +97,7 @@ HomePage::~HomePage()
     delete leftVBox;
     delete rightVBox;
 
-    for(auto widget : m_widgets){
+    for(auto *widget : m_widgets){
         delete widget;
     }
 }

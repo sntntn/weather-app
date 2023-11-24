@@ -29,7 +29,7 @@ MainWindow::MainWindow(QWidget *parent)
     auto location = QString::fromStdString("Belgrade"); // test
 
     for(int i = 0; i < 15; i++){
-        auto api = new WeatherAPI(location, this);
+        auto* api = new WeatherAPI(location, this);
         connect(api, &WeatherAPI::finished, api, &WeatherAPI::deleteLater);
         connect(api, &WeatherAPI::dataFetched, this, &MainWindow::addNewWidget);
         api->start();
@@ -58,7 +58,7 @@ MainWindow::~MainWindow()
     delete detailedWeather;
     delete stackedWidget;
 
-    for(auto location : m_locations){
+    for(auto *location : m_locations){
         delete location;
     }
 }

@@ -21,7 +21,7 @@ public:
     ~DetailedWeatherPage();
 
     void setData(const QString& location);
-    void getLocations(QVector<WeatherData*> m_locations);
+    void getLocations(const QVector<WeatherData*>& m_locations);
     void drawWidgets(QVector<WeatherData*> m_locations);
     void resizeEvent(QResizeEvent *event) override;
 

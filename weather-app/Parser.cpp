@@ -19,7 +19,7 @@ WeatherData* Parser::parseWeatherData(const QString& jsonData)
     double temperature = current.value("temperature_2m").toDouble();
     double windSpeed = current.value("wind_speed_10m").toDouble();
     double rain = current.value("rain").toDouble();
-    auto data = new WeatherData(location, temperature, windSpeed, rain);
+    auto *data = new WeatherData(location, temperature, windSpeed, rain);
 
     return data;
 }

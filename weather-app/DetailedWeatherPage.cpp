@@ -57,7 +57,7 @@ void DetailedWeatherPage::setData(const QString& location) {
     }
 }
 
-void DetailedWeatherPage::getLocations(QVector<WeatherData*> locations){
+void DetailedWeatherPage::getLocations(const QVector<WeatherData*>& locations){
 
     m_locations = locations;
     drawWidgets(m_locations);
@@ -69,9 +69,9 @@ void DetailedWeatherPage::setLocation(QString location){
 
 void DetailedWeatherPage::drawWidgets(QVector<WeatherData*> m_locations)
 {
-    for(auto data : m_locations){
+    for(auto *data : m_locations){
 
-        auto tile = new WeatherWidget(data, widgetsScrollAreaContents);
+        auto *tile = new WeatherWidget(data, widgetsScrollAreaContents);
         this->m_widgets.append(tile);
 
         // has to use setLocation slot to call setData because of calling setData from home page
@@ -95,10 +95,10 @@ DetailedWeatherPage::~DetailedWeatherPage()
     delete returnToHomePage;
     delete addToSavedLocations;
 
-    for(auto widget : m_widgets){
+    for(auto *widget : m_widgets){
         delete widget;
     }
-    for(auto location : m_locations){
+    for(auto *location : m_locations){
         delete location;
     }
 }

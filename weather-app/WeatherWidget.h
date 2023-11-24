@@ -18,7 +18,7 @@ public:
     void mousePressEvent(QMouseEvent *event) override;
 
 signals:
-    void clicked(WeatherData* data);
+    void clicked(QString location);
 
 private:
     WeatherData *data;

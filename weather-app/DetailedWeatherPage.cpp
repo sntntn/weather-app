@@ -6,18 +6,18 @@
 #include "MainWindow.h"
 
 DetailedWeatherPage::DetailedWeatherPage(MainWindow *mainWindow, QWidget *parent)
-    : QWidget{parent},
-    m_locations(),
-    m_mainWindow(mainWindow),
-    mainLayout(new QHBoxLayout(this)),
-    widgetsScrollArea(new QScrollArea()),
-    weatherScrollArea(new QScrollArea()),
-    widgetsScrollAreaContents(new QWidget()),
-    weatherScrollAreaContents(new QWidget()),
-    widgetsLayout(new QVBoxLayout()),
-    weatherLayout(new QVBoxLayout()),
-    returnToHomePage(new QPushButton()),
-    addToSavedLocations(new QPushButton())
+    : QWidget{parent}
+    , m_locations()
+    , m_mainWindow(mainWindow)
+    , mainLayout(new QHBoxLayout(this))
+    , widgetsScrollArea(new QScrollArea())
+    , weatherScrollArea(new QScrollArea())
+    , widgetsScrollAreaContents(new QWidget())
+    , weatherScrollAreaContents(new QWidget())
+    , widgetsLayout(new QVBoxLayout())
+    , weatherLayout(new QVBoxLayout())
+    , returnToHomePage(new QPushButton())
+    , addToSavedLocations(new QPushButton())
 {
 
     widgetsScrollAreaContents->setLayout(widgetsLayout);
@@ -43,12 +43,10 @@ DetailedWeatherPage::DetailedWeatherPage(MainWindow *mainWindow, QWidget *parent
     weatherScrollArea->setWidget(weatherScrollAreaContents);
     weatherScrollArea->setWidgetResizable(true);
     mainLayout->addWidget(weatherScrollArea);
-
 }
 
 void DetailedWeatherPage::resizeEvent(QResizeEvent* event) {
     QWidget::resizeEvent(event);
-
     int newWidth = this->width() / 3;
     widgetsScrollArea->setFixedWidth(newWidth);
 }

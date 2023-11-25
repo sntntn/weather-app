@@ -49,7 +49,7 @@ void DetailedWeatherPage::resizeEvent(QResizeEvent* event) {
     widgetsScrollArea->setFixedWidth(newWidth);
 }
 
-void DetailedWeatherPage::addNewWidget(QSharedPointer<WeatherData> data)
+void DetailedWeatherPage::addNewWidget(const QSharedPointer<WeatherData> &data)
 {
     auto *widget = new WeatherWidget(data, widgetsScrollAreaContents);
     connect(widget, &WeatherWidget::clicked, this, &DetailedWeatherPage::setData);
@@ -59,7 +59,7 @@ void DetailedWeatherPage::addNewWidget(QSharedPointer<WeatherData> data)
     widgetsLayout->addWidget(widget);
 }
 
-void DetailedWeatherPage::setData(QSharedPointer<WeatherData> data)
+void DetailedWeatherPage::setData(const QSharedPointer<WeatherData> &data)
 {
     std::cout << data->location.toStdString() << std::endl;
 }

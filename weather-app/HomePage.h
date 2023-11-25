@@ -22,7 +22,7 @@ public:
     ~HomePage();
 
 public slots:
-    void addNewWidget(QSharedPointer<WeatherData>) override;
+    void addNewWidget(const QSharedPointer<WeatherData> &data) override;
 
 private:
 

@@ -14,14 +14,14 @@ class WeatherWidget : public QWidget
     Q_OBJECT
 
 public:
-    explicit WeatherWidget(QSharedPointer<WeatherData> data_, QWidget *parent = nullptr);
+    explicit WeatherWidget(const QSharedPointer<WeatherData> &data_, QWidget *parent = nullptr);
     ~WeatherWidget();
     void mousePressEvent(QMouseEvent *event) override;
 
-    QSharedPointer<WeatherData> data;
+    const QSharedPointer<WeatherData> data;
 
 signals:
-    void clicked(QSharedPointer<WeatherData>);
+    void clicked(const QSharedPointer<WeatherData> &data);
 
 private:
     QHBoxLayout *hBox;

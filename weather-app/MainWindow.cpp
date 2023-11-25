@@ -45,7 +45,7 @@ void MainWindow::showHomePage(){
     stackedWidget->setCurrentWidget(homePage);
 }
 
-void MainWindow::showDetailedWeatherPage(QSharedPointer<WeatherData> data)
+void MainWindow::showDetailedWeatherPage(const QSharedPointer<WeatherData> &data)
 {
     stackedWidget->setCurrentWidget(detailedWeather);
     emit detailedWeatherPageShown(data);

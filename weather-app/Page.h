@@ -15,7 +15,7 @@ public:
     virtual ~Page() = default;
 
 public slots:
-    virtual void addNewWidget(QSharedPointer<WeatherData>) = 0;
+    virtual void addNewWidget(const QSharedPointer<WeatherData> &data) = 0;
 
 protected:
     explicit Page(QWidget *parent = nullptr);

@@ -10,7 +10,7 @@
 
 #include "WeatherData.h"
 
-WeatherWidget::WeatherWidget(WeatherData* data_, QWidget *parent)
+WeatherWidget::WeatherWidget(WeatherData *data_, QWidget *parent)
     : QWidget{parent}
     , data(data_)
     , hBox(new QHBoxLayout(this))
@@ -51,7 +51,7 @@ WeatherWidget::WeatherWidget(WeatherData* data_, QWidget *parent)
 
 void WeatherWidget::mousePressEvent(QMouseEvent *event) {
     QWidget::mousePressEvent(event);
-    emit clicked(data->location);
+    emit clicked(data);
 }
 
 WeatherWidget::~WeatherWidget()

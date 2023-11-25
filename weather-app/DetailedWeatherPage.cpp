@@ -4,8 +4,10 @@
 #include "WeatherData.h"
 #include "WeatherWidget.h"
 
+#include <iostream>
+
 DetailedWeatherPage::DetailedWeatherPage(QWidget *parent)
-    : QWidget{parent}
+    : Page{parent}
     , mainLayout(new QHBoxLayout(this))
     , widgetsScrollArea(new QScrollArea())
     , weatherScrollArea(new QScrollArea())
@@ -16,14 +18,13 @@ DetailedWeatherPage::DetailedWeatherPage(QWidget *parent)
     , buttonsLayout(new QHBoxLayout())
     , returnToHomePage(new QPushButton())
     , addToSavedLocations(new QPushButton())
-    , mainWindow(qobject_cast<MainWindow*>(parent))
 {
     widgetsScrollAreaContents->setLayout(widgetsLayout);
     widgetsScrollArea->setWidget(widgetsScrollAreaContents);
     widgetsScrollArea->setWidgetResizable(true);
     mainLayout->addWidget(widgetsScrollArea);
 
-    connect(returnToHomePage, &QPushButton::clicked, mainWindow, &MainWindow::onReturnToHomePageClicked);
+    connect(returnToHomePage, &QPushButton::clicked, this->mainWindow, &MainWindow::showHomePage);
     // TODO: add location button: connect(addToSavedLocations, &QPushButton::clicked, this, &DetailedWeatherPage::addLocation);
 
     returnToHomePage->setText("< Home Page");
@@ -48,36 +49,19 @@ void DetailedWeatherPage::resizeEvent(QResizeEvent* event) {
     widgetsScrollArea->setFixedWidth(newWidth);
 }
 
-void DetailedWeatherPage::setData(const QString& location) {
-    if (location != nullptr) {
-        //std::cout << location.toStdString() << std::endl;
-    }
-}
-
-void DetailedWeatherPage::getLocations(const QVector<WeatherData*>& locations){
-
-    m_locations = locations;
-    drawWidgets(m_locations);
-}
-
-void DetailedWeatherPage::setLocation(QString location){
-    setData(location);
-}
-
-void DetailedWeatherPage::drawWidgets(QVector<WeatherData*> m_locations)
+void DetailedWeatherPage::addNewWidget(WeatherData *data)
 {
-    for(auto *data : m_locations){
+    auto *widget = new WeatherWidget(data, widgetsScrollAreaContents);
+    connect(widget, &WeatherWidget::clicked, this, &DetailedWeatherPage::setData);
+    m_widgets.push_back(widget);
 
-        auto *tile = new WeatherWidget(data, widgetsScrollAreaContents);
+    widget->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Preferred);
+    widgetsLayout->addWidget(widget);
+}
 
-        tile->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Preferred);
-        this->m_widgets.append(tile);
-
-        // has to use setLocation slot to call setData because of calling setData from home page
-        connect(tile, &WeatherWidget::clicked, this, &DetailedWeatherPage::setLocation);
-
-        widgetsLayout->addWidget(tile);
-    }
+void DetailedWeatherPage::setData(WeatherData *data)
+{
+    std::cout << data->location.toStdString() << std::endl;
 }
 
 DetailedWeatherPage::~DetailedWeatherPage()
@@ -95,8 +79,5 @@ DetailedWeatherPage::~DetailedWeatherPage()
 
     for(auto *widget : m_widgets){
         delete widget;
-    }
-    for(auto *location : m_locations){
-        delete location;
     }
 }

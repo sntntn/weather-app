@@ -18,11 +18,12 @@ public:
     ~WeatherWidget();
     void mousePressEvent(QMouseEvent *event) override;
 
+    WeatherData *data;
+
 signals:
-    void clicked(QString& location);
+    void clicked(WeatherData*);
 
 private:
-    WeatherData *data;
     QHBoxLayout *hBox;
     QVBoxLayout *leftVBox;
     QVBoxLayout *rightVBox;

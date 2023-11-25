@@ -22,13 +22,14 @@ public:
     ~MainWindow();
 
 public slots:
-    void onWeatherWidgetClicked(QString &location);
-    void addNewWidget(WeatherData* data);
-    void onReturnToHomePageClicked();
+    void showHomePage();
+    void showDetailedWeatherPage(WeatherData*);
+
+signals:
+    void detailedWeatherPageShown(WeatherData*);
 
 private:
     Ui::MainWindow *ui;
-    QVector<WeatherData*> m_locations;
     HomePage *homePage;
     DetailedWeatherPage *detailedWeather;
     QStackedWidget *stackedWidget;

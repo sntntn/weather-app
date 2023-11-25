@@ -18,6 +18,8 @@ MainWindow::MainWindow(QWidget *parent)
     , detailedWeather(new DetailedWeatherPage(this))
     , stackedWidget(new QStackedWidget(this))
 {
+    connect(this, &MainWindow::detailedWeatherPageShown, detailedWeather, &DetailedWeatherPage::setData);
+
     ui->setupUi(this);
     resize(900,600);
 
@@ -27,29 +29,26 @@ MainWindow::MainWindow(QWidget *parent)
 
     stackedWidget->setCurrentWidget(homePage);
 
-    auto location = QString::fromStdString("Belgrade"); // test
+    QVector<QString> locations(3, "Belgrade"); // test
 
-    for(int i = 0; i < 1; i++){
+    for(auto location : locations){
         auto* api = new WeatherAPI(location, this);
         connect(api, &WeatherAPI::finished, api, &WeatherAPI::deleteLater);
-        connect(api, &WeatherAPI::dataFetched, this, &MainWindow::addNewWidget);
+        connect(api, &WeatherAPI::dataFetched, homePage, &HomePage::addNewWidget);
+        connect(api, &WeatherAPI::dataFetched, detailedWeather, &DetailedWeatherPage::addNewWidget);
+
         api->start();
     }
 }
 
-void MainWindow::onReturnToHomePageClicked(){
+void MainWindow::showHomePage(){
     stackedWidget->setCurrentWidget(homePage);
 }
 
-void MainWindow::onWeatherWidgetClicked(QString& location) {
-
-    // Assuming you have a method in DetailedWeatherPage to set the data
-    // WeatherAPI i GeocodingAPI
-    detailedWeather->setData(location);
-    detailedWeather->getLocations(m_locations);
-
-    // And assuming you have a member variable or a method to get the QStackedWidget
+void MainWindow::showDetailedWeatherPage(WeatherData *data)
+{
     stackedWidget->setCurrentWidget(detailedWeather);
+    emit detailedWeatherPageShown(data);
 }
 
 MainWindow::~MainWindow()
@@ -58,15 +57,6 @@ MainWindow::~MainWindow()
     delete homePage;
     delete detailedWeather;
     delete stackedWidget;
-
-    for(auto *location : m_locations){
-        delete location;
-    }
-}
-
-void MainWindow::addNewWidget(WeatherData* data){
-    m_locations.append(data);
-    homePage->addNewWidget(data);
 }
 
 /*

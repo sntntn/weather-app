@@ -7,25 +7,27 @@
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 
+#include "Page.h"
+
 class WeatherWidget;
 class WeatherData;
 class MainWindow;
 
-class HomePage : public QWidget
+class HomePage : public Page
 {
     Q_OBJECT
 public:
     explicit HomePage(QWidget *parent = nullptr);
     ~HomePage();
 
-
 signals:
     void weatherWidgetClicked(WeatherData* data);
 
 public slots:
-    void addNewWidget(WeatherData* data);
+    void addNewWidget(WeatherData*) override;
 
 private:
+
     QVBoxLayout *mainLayout;
     QLineEdit *searchBar;
     QScrollArea *scrollArea;
@@ -35,8 +37,6 @@ private:
     QWidget *rightWidget;
     QVBoxLayout *leftVBox;
     QVBoxLayout *rightVBox;
-    QVector<WeatherWidget*> m_widgets;
-    MainWindow *mainWindow;
 };
 
 #endif // HOMEPAGE_H

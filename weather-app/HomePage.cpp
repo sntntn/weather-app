@@ -5,7 +5,7 @@
 #include "WeatherWidget.h"
 
 HomePage::HomePage(QWidget *parent)
-    : QWidget{parent}
+    : Page{parent}
     , mainLayout(new QVBoxLayout(this))
     , searchBar(new QLineEdit())
     , scrollArea(new QScrollArea())
@@ -15,7 +15,6 @@ HomePage::HomePage(QWidget *parent)
     , rightWidget(new QWidget())
     , leftVBox(new QVBoxLayout())
     , rightVBox(new QVBoxLayout())
-    , mainWindow(qobject_cast<MainWindow*>(parent))
 {
     searchBar->setStyleSheet(
         "QLineEdit {"
@@ -66,22 +65,21 @@ HomePage::HomePage(QWidget *parent)
     scrollLayout->addWidget(rightWidget);
 }
 
-void HomePage::addNewWidget(WeatherData* data)
+void HomePage::addNewWidget(WeatherData *data)
 {
+    auto *widget = new WeatherWidget(data, scrollAreaContents);
+    m_widgets.push_back(widget);
+
+    connect(widget, &WeatherWidget::clicked, this->mainWindow, &MainWindow::showDetailedWeatherPage);
+
+    widget->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Preferred);
     bool inserttoLeft = leftWidget->property("inserttoLeft").toBool();
-    auto *tile = new WeatherWidget(data, scrollAreaContents);
-
-    connect(tile, &WeatherWidget::clicked, mainWindow, &MainWindow::onWeatherWidgetClicked);
-
-    tile->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Preferred);
-    this->m_widgets.push_back(tile);
-
 
     if(inserttoLeft){
-        leftVBox->addWidget(tile);
+        leftVBox->addWidget(widget);
     }
     else {
-        rightVBox->addWidget(tile);
+        rightVBox->addWidget(widget);
     }
 
     leftWidget->setProperty("inserttoLeft", !inserttoLeft);
@@ -98,7 +96,7 @@ HomePage::~HomePage()
     delete leftVBox;
     delete rightVBox;
 
-    for(auto *widget : m_widgets){
+    for (auto *widget : m_widgets){
         delete widget;
     }
 }

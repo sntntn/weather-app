@@ -8,11 +8,13 @@
 #include <QVector>
 #include <QPushButton>
 
+#include "Page.h"
+
 class WeatherData;
 class MainWindow;
 class WeatherWidget;
 
-class DetailedWeatherPage : public QWidget
+class DetailedWeatherPage : public Page
 {
     Q_OBJECT
 
@@ -20,18 +22,14 @@ public:
     explicit DetailedWeatherPage(QWidget *parent = nullptr);
     ~DetailedWeatherPage();
 
-    void setData(const QString& location);
-    void getLocations(const QVector<WeatherData*>& m_locations);
-    void drawWidgets(QVector<WeatherData*> m_locations);
     void resizeEvent(QResizeEvent *event) override;
 
-signals:
 
-private slots:
-    void setLocation(QString location);
+public slots:
+    void setData(WeatherData *data);
+    void addNewWidget(WeatherData*) override;
 
 private:
-    QVector<WeatherData*> m_locations;
     QHBoxLayout *mainLayout;
     QScrollArea *widgetsScrollArea;
     QScrollArea *weatherScrollArea;
@@ -42,8 +40,6 @@ private:
     QHBoxLayout *buttonsLayout;
     QPushButton *returnToHomePage;
     QPushButton *addToSavedLocations;
-    QVector<WeatherWidget *> m_widgets;
-    MainWindow *mainWindow;
 };
 
 #endif // DETAILEDWEATHERPAGE_H

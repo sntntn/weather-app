@@ -72,16 +72,10 @@ void HomePage::addNewWidget(QSharedPointer<WeatherData> data)
 
     connect(widget, &WeatherWidget::clicked, this->mainWindow, &MainWindow::showDetailedWeatherPage);
 
-    widget->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Preferred);
     bool inserttoLeft = leftWidget->property("inserttoLeft").toBool();
+    inserttoLeft ? leftVBox->addWidget(widget) : rightVBox->addWidget(widget);
 
-    if(inserttoLeft){
-        leftVBox->addWidget(widget);
-    }
-    else {
-        rightVBox->addWidget(widget);
-    }
-
+    widget->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Preferred);
     leftWidget->setProperty("inserttoLeft", !inserttoLeft);
 }
 

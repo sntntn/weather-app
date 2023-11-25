@@ -2,6 +2,7 @@
 #define PAGE_H
 
 #include <QWidget>
+#include <QSharedPointer>
 
 class WeatherWidget;
 class WeatherData;
@@ -14,7 +15,7 @@ public:
     virtual ~Page() = default;
 
 public slots:
-    virtual void addNewWidget(WeatherData*) = 0;
+    virtual void addNewWidget(QSharedPointer<WeatherData>) = 0;
 
 protected:
     explicit Page(QWidget *parent = nullptr);

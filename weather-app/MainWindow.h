@@ -23,10 +23,10 @@ public:
 
 public slots:
     void showHomePage();
-    void showDetailedWeatherPage(WeatherData*);
+    void showDetailedWeatherPage(QSharedPointer<WeatherData>);
 
 signals:
-    void detailedWeatherPageShown(WeatherData*);
+    void detailedWeatherPageShown(QSharedPointer<WeatherData>);
 
 private:
     Ui::MainWindow *ui;

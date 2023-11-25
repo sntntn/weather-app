@@ -59,7 +59,7 @@ void WeatherAPI::replyFinished(QNetworkReply *reply){
 
     QString jsonData = reply->readAll();
     Parser parser;
-    WeatherData* data = parser.parseWeatherData(jsonData);
+    auto data = parser.parseWeatherData(jsonData);
     emit dataFetched(data);
 
     reply->deleteLater();

@@ -9,7 +9,7 @@
 
 Parser::Parser() = default;
 
-WeatherData* Parser::parseWeatherData(const QString& jsonData)
+QSharedPointer<WeatherData> Parser::parseWeatherData(const QString& jsonData)
 {
     QJsonDocument doc = QJsonDocument::fromJson(jsonData.toUtf8());
     QJsonObject obj = doc.object();
@@ -19,7 +19,7 @@ WeatherData* Parser::parseWeatherData(const QString& jsonData)
     double temperature = current.value("temperature_2m").toDouble();
     double windSpeed = current.value("wind_speed_10m").toDouble();
     double rain = current.value("rain").toDouble();
-    auto *data = new WeatherData(location, temperature, windSpeed, rain);
+    QSharedPointer<WeatherData> data(new WeatherData(location, temperature, windSpeed, rain));
 
     return data;
 }

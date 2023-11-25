@@ -7,6 +7,8 @@
 #include <QScrollArea>
 #include <QVector>
 #include <QPushButton>
+#include <QSharedPointer>
+
 
 #include "Page.h"
 
@@ -26,8 +28,8 @@ public:
 
 
 public slots:
-    void setData(WeatherData *data);
-    void addNewWidget(WeatherData*) override;
+    void setData(QSharedPointer<WeatherData> data);
+    void addNewWidget(QSharedPointer<WeatherData>) override;
 
 private:
     QHBoxLayout *mainLayout;

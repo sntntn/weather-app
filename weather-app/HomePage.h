@@ -6,6 +6,7 @@
 #include <QScrollArea>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
+#include <QSharedPointer>
 
 #include "Page.h"
 
@@ -20,11 +21,8 @@ public:
     explicit HomePage(QWidget *parent = nullptr);
     ~HomePage();
 
-signals:
-    void weatherWidgetClicked(WeatherData* data);
-
 public slots:
-    void addNewWidget(WeatherData*) override;
+    void addNewWidget(QSharedPointer<WeatherData>) override;
 
 private:
 

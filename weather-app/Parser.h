@@ -2,6 +2,7 @@
 #define PARSER_H
 
 #include <QString>
+#include <QSharedPointer>
 
 class WeatherData;
 
@@ -9,7 +10,7 @@ class Parser
 {
 public:
     explicit Parser();
-    WeatherData* parseWeatherData(const QString& jsonData);
+    QSharedPointer<WeatherData> parseWeatherData(const QString& jsonData);
 
 };
 

@@ -17,7 +17,7 @@ public:
     ~WeatherAPI();
 
 signals:
-    void dataFetched(WeatherData *data);
+    void dataFetched(QSharedPointer<WeatherData> data);
 
 private slots:
     void replyFinished(QNetworkReply* reply);

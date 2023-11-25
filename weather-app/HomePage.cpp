@@ -65,7 +65,7 @@ HomePage::HomePage(QWidget *parent)
     scrollLayout->addWidget(rightWidget);
 }
 
-void HomePage::addNewWidget(WeatherData *data)
+void HomePage::addNewWidget(QSharedPointer<WeatherData> data)
 {
     auto *widget = new WeatherWidget(data, scrollAreaContents);
     m_widgets.push_back(widget);

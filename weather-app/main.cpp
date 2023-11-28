@@ -2,6 +2,8 @@
 #include "location.h"
 
 #include <QApplication>
+#include "geocodingapi.h"
+
 
 int main(int argc, char *argv[])
 {
@@ -10,5 +12,9 @@ int main(int argc, char *argv[])
     QApplication a(argc, argv);
     MainWindow w;
     w.show();
+
+    GeocodingAPI geocodingApi;
+    geocodingApi.testCityFunction();
+
     return a.exec();
 }

@@ -45,38 +45,3 @@ MainWindow::~MainWindow()
         delete widget;
     }
 }
-
-/*
-void MainWindow::geocodeCity(const QString& cityName)
-{
-    QNetworkAccessManager* manager = new QNetworkAccessManager(this);
-    connect(manager, &QNetworkAccessManager::finished, this, &MainWindow::handleGeocodingResponse);
-
-    QString apiUrl = QString("https://api.opencagedata.com/geocode/v1/json?q=%1&key=%2")
-                         .arg(cityName)
-                         .arg(OPEN_CAGE_API_KEY);
-
-    QNetworkRequest request(QUrl(apiUrl));
-    manager->get(request);
-}
-
-void MainWindow::handleGeocodingResponse(QNetworkReply* reply)
-{
-    if (reply->error() != QNetworkReply::NoError) {
-        qDebug() << "Error:" << reply->errorString();
-        return;
-    }
-
-    QByteArray responseData = reply->readAll();
-    // Obrada JSON odgovora i izdvojavanje latitude i longitude
-    // ...
-
-    reply->deleteLater();
-}
-
-void MainWindow::someFunction()
-{
-    QString cityName = "Belgrade";  // za pocetak za Beograd
-    geocodeCity(cityName);
-}
-*/

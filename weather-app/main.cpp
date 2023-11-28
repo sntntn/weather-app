@@ -2,7 +2,7 @@
 #include "location.h"
 
 #include <QApplication>
-#include "geocodingapi.h"
+//#include "geocodingapi.h"
 
 
 int main(int argc, char *argv[])
@@ -13,8 +13,8 @@ int main(int argc, char *argv[])
     MainWindow w;
     w.show();
 
-    GeocodingAPI geocodingApi;
-    geocodingApi.testCityFunction();
+    //GeocodingAPI geocodingApi;
+    //geocodingApi.testCityFunction();
 
     return a.exec();
 }

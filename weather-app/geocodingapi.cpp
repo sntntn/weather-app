@@ -8,15 +8,19 @@ GeocodingAPI::GeocodingAPI() {
 }
 
 void GeocodingAPI::geocodeCity(const QString& cityName) {
-    QNetworkAccessManager* manager = new QNetworkAccessManager(this);
-    connect(manager, &QNetworkAccessManager::finished, this, &GeocodingAPI::handleGeocodingResponse);
+    //QNetworkAccessManager* manager = new QNetworkAccessManager(this);     //dovodi do neocekivanog ponasanja
+    m_networkManager = new QNetworkAccessManager(this);                     //zivotni vek QNetworkAccessManager = zivotni vek instance klase
+
+    connect(m_networkManager, &QNetworkAccessManager::finished, this, &GeocodingAPI::handleGeocodingResponse);
 
     QString apiUrl = QString("https://api.opencagedata.com/geocode/v1/json?q=%1&key=%2")
                          .arg(cityName)
                          .arg(OPEN_CAGE_API_KEY);
 
+    //qDebug() <<"API adresa za dovlacenje JSON: "<<apiUrl;
+
     QNetworkRequest request{QUrl(apiUrl)};
-    manager->get(request);
+    m_networkManager->get(request);
 }
 
 void GeocodingAPI::handleGeocodingResponse(QNetworkReply* reply) {
@@ -46,6 +50,7 @@ void GeocodingAPI::handleGeocodingResponse(QNetworkReply* reply) {
     }
 
     // aj da kazemo da zelimo prvi rezultat za pocetak                  #TO DO kasnije, za druge opcije -> autokomplit
+                            // json za https://api.opencagedata.com/geocode/v1/json?q=Be&key=0741d020f58441f6b58ae4dc4128740d       formatted
     QJsonObject firstResult = resultsArray.first().toObject();
 
     if (!firstResult.contains("formatted") || !firstResult["formatted"].isString()) {

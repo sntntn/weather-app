@@ -6,6 +6,8 @@ class WeatherData;
 #include <QNetworkReply>
 #include <QGeoCoordinate>
 
+#include "geocodingapi.h"
+
 class WeatherAPI : public QObject
 {
     Q_OBJECT
@@ -24,6 +26,8 @@ private:
     QNetworkAccessManager* networkManager;
     void fetchData(const QGeoCoordinate &coordinates);
     QGeoCoordinate locationToCoordinate(const QString &location); // test
+
+    GeocodingAPI geocodingApi;
 };
 
 #endif // WEATHERAPI_H

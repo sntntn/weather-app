@@ -48,6 +48,13 @@ void GeocodingAPI::handleGeocodingResponse(QNetworkReply* reply) {
     // aj da kazemo da zelimo prvi rezultat za pocetak                  #TO DO kasnije, za druge opcije -> autokomplit
     QJsonObject firstResult = resultsArray.first().toObject();
 
+    if (!firstResult.contains("formatted") || !firstResult["formatted"].isString()) {
+        qDebug() << "Error: Missing or invalid 'formatted' string in JSON response";
+        return;
+    }
+
+    QString formattedAddress = firstResult["formatted"].toString();
+
     if (!firstResult.contains("geometry") || !firstResult["geometry"].isObject()) {
         qDebug() << "Error: Missing or invalid 'geometry' object in JSON response";
         return;
@@ -62,7 +69,7 @@ void GeocodingAPI::handleGeocodingResponse(QNetworkReply* reply) {
     double latitude = geometryObject["lat"].toDouble();
     double longitude = geometryObject["lng"].toDouble();
 
-    qDebug() << "Latitude:" << latitude << "Longitude:" << longitude;
+    qDebug() << "City:" << formattedAddress << "Latitude:" << latitude << "Longitude:" << longitude;
 
     reply->deleteLater();
 }
@@ -71,6 +78,6 @@ void GeocodingAPI::handleGeocodingResponse(QNetworkReply* reply) {
 //Bern          Latitude: 46.9485 Longitude: 7.45217
 //Belgrade      Latitude: 44.8178 Longitude: 20.4569
 void GeocodingAPI::testCityFunction() {
-    QString cityName = "Bern";
+    QString cityName = "Belgrade";
     geocodeCity(cityName);
 }

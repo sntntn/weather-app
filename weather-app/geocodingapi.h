@@ -13,6 +13,7 @@ class GeocodingAPI : public QObject
     Q_OBJECT
 public:
     GeocodingAPI();
+    ~GeocodingAPI();
 
     void geocodeCity(const QString& cityName);
     void handleGeocodingResponse(QNetworkReply* reply);

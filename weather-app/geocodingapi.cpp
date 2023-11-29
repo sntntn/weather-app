@@ -4,14 +4,17 @@
 #include <QJsonObject>
 #include <QJsonArray>
 
-GeocodingAPI::GeocodingAPI() {
+GeocodingAPI::GeocodingAPI()
+    :m_networkManager(new QNetworkAccessManager(this))
+{
+    connect(m_networkManager, &QNetworkAccessManager::finished, this, &GeocodingAPI::handleGeocodingResponse);
+}
+GeocodingAPI::~GeocodingAPI()
+{
+    delete m_networkManager;
 }
 
 void GeocodingAPI::geocodeCity(const QString& cityName) {
-    //QNetworkAccessManager* manager = new QNetworkAccessManager(this);     //dovodi do neocekivanog ponasanja
-    m_networkManager = new QNetworkAccessManager(this);                     //zivotni vek QNetworkAccessManager = zivotni vek instance klase
-
-    connect(m_networkManager, &QNetworkAccessManager::finished, this, &GeocodingAPI::handleGeocodingResponse);
 
     QString apiUrl = QString("https://api.opencagedata.com/geocode/v1/json?q=%1&key=%2")
                          .arg(cityName)

@@ -19,9 +19,25 @@ public:
     void handleGeocodingResponse(QNetworkReply* reply);
     void testCityFunction();
 
+    inline double getLatitude(){
+        return m_latitude;
+    }
+    inline double getLongitude(){
+        return m_longitude;
+    }
+    inline QString getPlace(){
+        return m_place;
+    }
+
+
 private:
     const QString OPEN_CAGE_API_KEY = "0741d020f58441f6b58ae4dc4128740d";  // TODO za config fajl
     QNetworkAccessManager* m_networkManager;
+
+    double m_latitude;
+    double m_longitude;
+
+    QString m_place;
 };
 
 #endif // GEOCODINGAPI_H

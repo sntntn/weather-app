@@ -19,8 +19,8 @@ WeatherAPI::~WeatherAPI()
 }
 
 QGeoCoordinate WeatherAPI::locationToCoordinate(const QString &location){ // test
-    //pozvano je svih 25 puta
     geocodingApi.testCityFunction();
+    qDebug() << "City:" << geocodingApi.getPlace() << "Latitude:" << geocodingApi.getLatitude() << "Longitude:" << geocodingApi.getLongitude();
 
     if(location == "Belgrade"){
         return QGeoCoordinate(44.8125, 20.4375);

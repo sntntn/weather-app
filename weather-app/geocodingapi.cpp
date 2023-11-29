@@ -3,11 +3,12 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QJsonArray>
+#include <QEventLoop>
 
 GeocodingAPI::GeocodingAPI()
     :m_networkManager(new QNetworkAccessManager(this))
 {
-    connect(m_networkManager, &QNetworkAccessManager::finished, this, &GeocodingAPI::handleGeocodingResponse);
+    //connect(m_networkManager, &QNetworkAccessManager::finished, this, &GeocodingAPI::handleGeocodingResponse);
 }
 GeocodingAPI::~GeocodingAPI()
 {
@@ -61,7 +62,7 @@ void GeocodingAPI::handleGeocodingResponse(QNetworkReply* reply) {
         return;
     }
 
-    QString formattedAddress = firstResult["formatted"].toString();
+    m_place = firstResult["formatted"].toString();
 
     if (!firstResult.contains("geometry") || !firstResult["geometry"].isObject()) {
         qDebug() << "Error: Missing or invalid 'geometry' object in JSON response";
@@ -74,10 +75,8 @@ void GeocodingAPI::handleGeocodingResponse(QNetworkReply* reply) {
         return;
     }
 
-    double latitude = geometryObject["lat"].toDouble();
-    double longitude = geometryObject["lng"].toDouble();
-
-    qDebug() << "City:" << formattedAddress << "Latitude:" << latitude << "Longitude:" << longitude;
+    m_latitude = geometryObject["lat"].toDouble();
+    m_longitude = geometryObject["lng"].toDouble();
 
     reply->deleteLater();
 }
@@ -88,4 +87,11 @@ void GeocodingAPI::handleGeocodingResponse(QNetworkReply* reply) {
 void GeocodingAPI::testCityFunction() {
     QString cityName = "Belgrade";
     geocodeCity(cityName);
+
+    QEventLoop loop;
+    connect(m_networkManager, &QNetworkAccessManager::finished, this, &GeocodingAPI::handleGeocodingResponse);
+    loop.exec();
+
+    qDebug() << "-----> City:" << m_place << "Latitude:" << m_latitude << "Longitude:" << m_longitude;
+
 }

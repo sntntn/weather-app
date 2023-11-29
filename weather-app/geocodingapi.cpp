@@ -85,7 +85,6 @@ void GeocodingAPI::handleGeocodingResponse(QNetworkReply* reply) {
 //Test
 //Bern          Latitude: 46.9485 Longitude: 7.45217
 //Belgrade      Latitude: 44.8178 Longitude: 20.4569
-void GeocodingAPI::testCityFunction() {
-    QString cityName = "Belgrade";
-    geocodeCity(cityName);
+void GeocodingAPI::testCityFunction(const QString &location) {
+    geocodeCity(location);
 }

@@ -27,7 +27,7 @@ MainWindow::MainWindow(QWidget *parent)
     stackedWidget->setCurrentWidget(homePage);
 
     auto *api = new WeatherAPI(this);
-    auto location = QString::fromStdString("Belgrade"); // test
+    auto location = QString::fromStdString("Tokyo"); // test
 
     for(int i = 0; i < 25; i++){
         api->fetchData(location);

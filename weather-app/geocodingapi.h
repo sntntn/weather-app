@@ -17,7 +17,7 @@ public:
 
     void geocodeCity(const QString& cityName);
     void handleGeocodingResponse(QNetworkReply* reply);
-    void testCityFunction();
+    void testCityFunction(const QString &location);
 
     inline double getLatitude(){
         return m_latitude;

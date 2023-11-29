@@ -6,12 +6,11 @@
 #include <QUrlQuery>
 #include <QString>
 
-#include <QEventLoop>
-
 WeatherAPI::WeatherAPI(QObject *parent)
     : QObject{parent},
     networkManager(new QNetworkAccessManager(this))
 {
+    connect(&geocodingApi, &GeocodingAPI::geocodingDataUpdated, this, &WeatherAPI::updateGeocodingData);
     connect(networkManager, &QNetworkAccessManager::finished, this, &WeatherAPI::replyFinished);
 }
 
@@ -21,12 +20,9 @@ WeatherAPI::~WeatherAPI()
 }
 
 QGeoCoordinate WeatherAPI::locationToCoordinate(const QString &location){ // test
-    //QEventLoop loop;
-    //loop.exec();
     geocodingApi.testCityFunction();
-    //loop.exit();
 
-    qDebug() << "City:" << geocodingApi.getPlace() << "Latitude:" << geocodingApi.getLatitude() << "Longitude:" << geocodingApi.getLongitude();
+    qDebug()<<"------------";
 
     if(location == "Belgrade"){
         return QGeoCoordinate(44.8125, 20.4375);
@@ -69,3 +65,11 @@ void WeatherAPI::replyFinished(QNetworkReply *reply){
 
     reply->deleteLater();
 }
+
+void WeatherAPI::updateGeocodingData(const QString &place, double latitude, double longitude){
+    qDebug() << "City:" << geocodingApi.getPlace() << "Latitude:" << geocodingApi.getLatitude() << "Longitude:" << geocodingApi.getLongitude();
+
+}
+
+
+

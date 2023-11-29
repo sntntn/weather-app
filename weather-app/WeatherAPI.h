@@ -21,6 +21,7 @@ signals:
 
 private slots:
     void replyFinished(QNetworkReply* reply);
+    void updateGeocodingData(const QString& place, double latitude, double longitude);
 
 private:
     QNetworkAccessManager* networkManager;

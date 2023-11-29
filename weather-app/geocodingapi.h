@@ -29,6 +29,8 @@ public:
         return m_place;
     }
 
+signals:
+    void geocodingDataUpdated(const QString& place, double latitude, double longitude);
 
 private:
     const QString OPEN_CAGE_API_KEY = "0741d020f58441f6b58ae4dc4128740d";  // TODO za config fajl

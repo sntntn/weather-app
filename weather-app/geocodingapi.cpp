@@ -3,12 +3,12 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QJsonArray>
-#include <QEventLoop>
+
 
 GeocodingAPI::GeocodingAPI()
     :m_networkManager(new QNetworkAccessManager(this))
 {
-    //connect(m_networkManager, &QNetworkAccessManager::finished, this, &GeocodingAPI::handleGeocodingResponse);
+    connect(m_networkManager, &QNetworkAccessManager::finished, this, &GeocodingAPI::handleGeocodingResponse);
 }
 GeocodingAPI::~GeocodingAPI()
 {
@@ -78,6 +78,9 @@ void GeocodingAPI::handleGeocodingResponse(QNetworkReply* reply) {
     m_latitude = geometryObject["lat"].toDouble();
     m_longitude = geometryObject["lng"].toDouble();
 
+    qDebug() << "-----> City:" << m_place << "Latitude:" << m_latitude << "Longitude:" << m_longitude;
+
+
     reply->deleteLater();
 }
 
@@ -87,11 +90,4 @@ void GeocodingAPI::handleGeocodingResponse(QNetworkReply* reply) {
 void GeocodingAPI::testCityFunction() {
     QString cityName = "Belgrade";
     geocodeCity(cityName);
-
-    QEventLoop loop;
-    connect(m_networkManager, &QNetworkAccessManager::finished, this, &GeocodingAPI::handleGeocodingResponse);
-    loop.exec();
-
-    qDebug() << "-----> City:" << m_place << "Latitude:" << m_latitude << "Longitude:" << m_longitude;
-
 }

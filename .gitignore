@@ -76,5 +76,5 @@ build*
 *.user
 
 #config file
-.config.ini
+config.ini
 

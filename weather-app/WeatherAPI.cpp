@@ -22,10 +22,12 @@ WeatherAPI::~WeatherAPI()
 QGeoCoordinate WeatherAPI::locationToCoordinate(const QString &location){ // test
     geocodingApi.testCityFunction();
 
+
     qDebug()<<"------------";
 
     if(location == "Belgrade"){
         return QGeoCoordinate(44.8125, 20.4375);
+        return QGeoCoordinate(m_lastLatitude, m_lastLongitude);
     }
     return QGeoCoordinate(0,0);
 }
@@ -67,8 +69,10 @@ void WeatherAPI::replyFinished(QNetworkReply *reply){
 }
 
 void WeatherAPI::updateGeocodingData(const QString &place, double latitude, double longitude){
-    qDebug() << "City:" << geocodingApi.getPlace() << "Latitude:" << geocodingApi.getLatitude() << "Longitude:" << geocodingApi.getLongitude();
-
+    qDebug() << "--->" << "City:" << geocodingApi.getPlace() << "Latitude:" << geocodingApi.getLatitude() << "Longitude:" << geocodingApi.getLongitude();
+    m_lastPlace=place;
+    m_lastLatitude=latitude;
+    m_lastLongitude=longitude;
 }
 
 

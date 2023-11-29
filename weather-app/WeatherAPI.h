@@ -29,6 +29,10 @@ private:
     QGeoCoordinate locationToCoordinate(const QString &location); // test
 
     GeocodingAPI geocodingApi;
+    QString m_lastPlace;
+    double m_lastLatitude;
+    double m_lastLongitude;
+
 };
 
 #endif // WEATHERAPI_H

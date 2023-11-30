@@ -3,6 +3,7 @@
 
 #include "qgeopositioninfosource.h"
 #include "qobject.h"
+#include <iostream>
 
 class Location : public QObject
 {
@@ -14,3 +15,4 @@ private slots:
 };
 
 #endif // LOCATION_H
+

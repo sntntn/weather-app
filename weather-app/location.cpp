@@ -14,8 +14,6 @@ Location::Location(QObject* parent)
 void Location::positionUpdated(const QGeoPositionInfo &info)
 {
     qDebug() << "Position updated:" << info;
-    std::cout << "Ispis:" << std::endl;
-    std::cout << &info << std::endl;
 
     QGeoCoordinate coordinate = info.coordinate();
     qreal latitude = coordinate.latitude();

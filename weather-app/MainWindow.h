@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 
+
 class WeatherData;
 class WeatherWidget;
 class QStackedWidget;
@@ -27,12 +28,17 @@ public slots:
 
 signals:
     void detailedWeatherPageShown(const QSharedPointer<WeatherData> &data);
+private slots:
+    void updateGeocodingData(const QString& place, double latitude, double longitude);
+
 
 private:
     Ui::MainWindow *ui;
     HomePage *homePage;
     DetailedWeatherPage *detailedWeather;
     QStackedWidget *stackedWidget;
-    static const QString OPEN_CAGE_API_KEY; //TO DO CONFIG FILE
+
+    double m_lastLongitude;
+    double m_lastLatitude;
 };
 #endif // MAINWINDOW_H

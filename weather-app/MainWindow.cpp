@@ -8,8 +8,11 @@
 #include "WeatherWidget.h"
 #include "HomePage.h"
 #include "DetailedWeatherPage.h"
+#include "geocodingapi.h"
 
 #include <iostream>
+
+GeocodingAPI geocodingApi;
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -19,6 +22,8 @@ MainWindow::MainWindow(QWidget *parent)
     , stackedWidget(new QStackedWidget(this))
 {
     connect(this, &MainWindow::detailedWeatherPageShown, detailedWeather, &DetailedWeatherPage::setData);
+    connect(&geocodingApi, &GeocodingAPI::geocodingDataUpdated, this, &MainWindow::updateGeocodingData);
+
 
     ui->setupUi(this);
     resize(900,600);
@@ -28,6 +33,12 @@ MainWindow::MainWindow(QWidget *parent)
     setCentralWidget(stackedWidget);
 
     stackedWidget->setCurrentWidget(homePage);
+
+
+    geocodingApi.testCityFunction("Belgrade");
+    qDebug()<< "---> " <<"Latitude:" << m_lastLatitude << "Longitude:" << m_lastLongitude;
+
+
 
     QVector<QString> locations(3, "Belgrade"); // test
 
@@ -51,6 +62,12 @@ void MainWindow::showDetailedWeatherPage(const QSharedPointer<WeatherData> &data
     emit detailedWeatherPageShown(data);
 }
 
+void MainWindow::updateGeocodingData(const QString &place, double latitude, double longitude){
+    qDebug() << "City:" << place << "Latitude:" << latitude << "Longitude:" << longitude;
+    m_lastLatitude=latitude;
+    m_lastLongitude=longitude;
+}
+
 MainWindow::~MainWindow()
 {
     delete ui;
@@ -58,38 +75,3 @@ MainWindow::~MainWindow()
     delete detailedWeather;
     delete stackedWidget;
 }
-
-/*
-void MainWindow::geocodeCity(const QString& cityName)
-{
-    QNetworkAccessManager* manager = new QNetworkAccessManager(this);
-    connect(manager, &QNetworkAccessManager::finished, this, &MainWindow::handleGeocodingResponse);
-
-    QString apiUrl = QString("https://api.opencagedata.com/geocode/v1/json?q=%1&key=%2")
-                         .arg(cityName)
-                         .arg(OPEN_CAGE_API_KEY);
-
-    QNetworkRequest request(QUrl(apiUrl));
-    manager->get(request);
-}
-
-void MainWindow::handleGeocodingResponse(QNetworkReply* reply)
-{
-    if (reply->error() != QNetworkReply::NoError) {
-        qDebug() << "Error:" << reply->errorString();
-        return;
-    }
-
-    QByteArray responseData = reply->readAll();
-    // Obrada JSON odgovora i izdvojavanje latitude i longitude
-    // ...
-
-    reply->deleteLater();
-}
-
-void MainWindow::someFunction()
-{
-    QString cityName = "Belgrade";  // za pocetak za Beograd
-    geocodeCity(cityName);
-}
-*/

@@ -18,6 +18,7 @@ HomePage::HomePage(QWidget *parent)
     , leftVBox(new QVBoxLayout())
     , rightVBox(new QVBoxLayout())
 {
+    //fiksirao sam boje jer u suprotnom vidljivost teksta zavisi od teme koja je ukljucena u Qt Creator-u
     searchBar->setStyleSheet(
         "QLineEdit {"
         "    border: 3px solid gray;"
@@ -25,9 +26,11 @@ HomePage::HomePage(QWidget *parent)
         "    padding: 0 8px;"
         "    background-color: rgb(28, 28, 28);"
         "    selection-background-color: darkgray;"
+        "    color: white;"
         "}"
         "QLineEdit:focus {"
         "    border-color: rgb(28, 28, 28);"
+        "    background-color: rgb(40, 40, 40);"
         "}"
         );
     searchBar->setPlaceholderText("Enter location...");
@@ -69,11 +72,6 @@ HomePage::HomePage(QWidget *parent)
     connect(shortcut, &QShortcut::activated, this, &HomePage::searchBarEnter);
 
     connect(this, &HomePage::searchBarPressed, &geocodingApi, &GeocodingAPI::testCityFunction);
-    /*      // Lambda test function for emit
-    connect(&geocodingApi, &GeocodingAPI::geocodingDataUpdated, this, [=](const QString& place, double latitude, double longitude) {
-        qDebug() << "-> City:" << place << " Latitude:" << latitude << " Longitude:" << longitude;
-    });
-    */
 }
 
 HomePage::~HomePage()

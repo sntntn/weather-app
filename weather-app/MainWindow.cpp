@@ -12,8 +12,6 @@
 
 #include <iostream>
 
-GeocodingAPI geocodingApi;
-
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
@@ -22,8 +20,6 @@ MainWindow::MainWindow(QWidget *parent)
     , stackedWidget(new QStackedWidget(this))
 {
     connect(this, &MainWindow::detailedWeatherPageShown, detailedWeather, &DetailedWeatherPage::setData);
-    connect(&geocodingApi, &GeocodingAPI::geocodingDataUpdated, this, &MainWindow::updateGeocodingData);
-
 
     ui->setupUi(this);
     resize(900,600);
@@ -34,9 +30,6 @@ MainWindow::MainWindow(QWidget *parent)
 
     stackedWidget->setCurrentWidget(homePage);
 
-
-    geocodingApi.testCityFunction("Belgrade");
-    qDebug()<< "---> " <<"Latitude:" << m_lastLatitude << "Longitude:" << m_lastLongitude;
 
 
 
@@ -60,12 +53,6 @@ void MainWindow::showDetailedWeatherPage(const QSharedPointer<WeatherData> &data
 {
     stackedWidget->setCurrentWidget(detailedWeather);
     emit detailedWeatherPageShown(data);
-}
-
-void MainWindow::updateGeocodingData(const QString &place, double latitude, double longitude){
-    qDebug() << "City:" << place << "Latitude:" << latitude << "Longitude:" << longitude;
-    m_lastLatitude=latitude;
-    m_lastLongitude=longitude;
 }
 
 MainWindow::~MainWindow()

@@ -4,6 +4,8 @@
 #include "WeatherData.h"
 #include "WeatherWidget.h"
 
+#include <QShortcut>
+
 HomePage::HomePage(QWidget *parent)
     : Page{parent}
     , mainLayout(new QVBoxLayout(this))
@@ -41,18 +43,17 @@ HomePage::HomePage(QWidget *parent)
     scrollArea->setWidget(scrollAreaContents);
     scrollArea->setWidgetResizable(true);
     scrollArea->setStyleSheet(
-                  "QScrollBar:vertical {"
-                  "    width: 7px;"
-                  "    border-radius: 30px;"
-                  "}"
-                  "QScrollBar::handle:vertical {"
-                  "    background: gray;"
-                  "    min-height: 20px;"
-                  "    border-radius: 30px;"
+        "QScrollBar:vertical {"
+        "    width: 7px;"
+        "    border-radius: 30px;"
+        "}"
+        "QScrollBar::handle:vertical {"
+        "    background: gray;"
+        "    min-height: 20px;"
+        "    border-radius: 30px;"
         "}");
 
     mainLayout->addWidget(scrollArea);
-
 
     leftVBox->setAlignment(Qt::AlignTop);
     leftWidget->setLayout(leftVBox);
@@ -63,20 +64,16 @@ HomePage::HomePage(QWidget *parent)
 
     scrollLayout->addWidget(leftWidget);
     scrollLayout->addWidget(rightWidget);
-}
 
-void HomePage::addNewWidget(const QSharedPointer<WeatherData> &data)
-{
-    auto *widget = new WeatherWidget(data, scrollAreaContents);
-    m_widgets.push_back(widget);
+    QShortcut *shortcut = new QShortcut(QKeySequence(Qt::Key_Return), this);
+    connect(shortcut, &QShortcut::activated, this, &HomePage::searchBarEnter);
 
-    connect(widget, &WeatherWidget::clicked, this->mainWindow, &MainWindow::showDetailedWeatherPage);
-
-    bool inserttoLeft = leftWidget->property("inserttoLeft").toBool();
-    inserttoLeft ? leftVBox->addWidget(widget) : rightVBox->addWidget(widget);
-
-    widget->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Preferred);
-    leftWidget->setProperty("inserttoLeft", !inserttoLeft);
+    connect(this, &HomePage::searchBarPressed, &geocodingApi, &GeocodingAPI::testCityFunction);
+    /*      // Lambda test function for emit
+    connect(&geocodingApi, &GeocodingAPI::geocodingDataUpdated, this, [=](const QString& place, double latitude, double longitude) {
+        qDebug() << "-> City:" << place << " Latitude:" << latitude << " Longitude:" << longitude;
+    });
+    */
 }
 
 HomePage::~HomePage()
@@ -95,3 +92,21 @@ HomePage::~HomePage()
     }
 }
 
+void HomePage::addNewWidget(const QSharedPointer<WeatherData> &data)
+{
+    auto *widget = new WeatherWidget(data, scrollAreaContents);
+    m_widgets.push_back(widget);
+
+    connect(widget, &WeatherWidget::clicked, this->mainWindow, &MainWindow::showDetailedWeatherPage);
+
+    bool inserttoLeft = leftWidget->property("inserttoLeft").toBool();
+    inserttoLeft ? leftVBox->addWidget(widget) : rightVBox->addWidget(widget);
+
+    widget->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Preferred);
+    leftWidget->setProperty("inserttoLeft", !inserttoLeft);
+}
+
+void HomePage::searchBarEnter() {
+    QString location = searchBar->text();
+    emit searchBarPressed(location);
+}

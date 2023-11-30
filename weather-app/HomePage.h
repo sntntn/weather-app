@@ -9,6 +9,7 @@
 #include <QSharedPointer>
 
 #include "Page.h"
+#include "geocodingapi.h"
 
 class WeatherWidget;
 class WeatherData;
@@ -21,8 +22,11 @@ public:
     explicit HomePage(QWidget *parent = nullptr);
     ~HomePage();
 
+signals:
+    void searchBarPressed(const QString& location);
 public slots:
     void addNewWidget(const QSharedPointer<WeatherData> &data) override;
+    void searchBarEnter();
 
 private:
 
@@ -35,6 +39,8 @@ private:
     QWidget *rightWidget;
     QVBoxLayout *leftVBox;
     QVBoxLayout *rightVBox;
+
+    GeocodingAPI geocodingApi;
 };
 
 #endif // HOMEPAGE_H

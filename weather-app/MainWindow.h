@@ -28,8 +28,6 @@ public slots:
 
 signals:
     void detailedWeatherPageShown(const QSharedPointer<WeatherData> &data);
-private slots:
-    void updateGeocodingData(const QString& place, double latitude, double longitude);
 
 
 private:

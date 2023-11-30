@@ -17,7 +17,6 @@ public:
 
     void geocodeCity(const QString& cityName);
     void handleGeocodingResponse(QNetworkReply* reply);
-    void testCityFunction(const QString &location);
 
     inline double getLatitude(){
         return m_latitude;
@@ -31,6 +30,8 @@ public:
 
 signals:
     void geocodingDataUpdated(const QString& place, double latitude, double longitude);
+public slots:
+    void testCityFunction(const QString &location);
 
 private:
     const QString OPEN_CAGE_API_KEY = "0741d020f58441f6b58ae4dc4128740d";  // TODO za config fajl

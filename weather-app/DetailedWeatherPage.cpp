@@ -66,16 +66,16 @@ void DetailedWeatherPage::setData(const QSharedPointer<WeatherData> &data)
 
 DetailedWeatherPage::~DetailedWeatherPage()
 {
-    delete mainLayout;
-    delete widgetsScrollArea;
-    delete weatherScrollArea;
-    delete widgetsScrollAreaContents;
-    delete weatherScrollAreaContents;
-    delete widgetsLayout;
+//    delete mainLayout;
+//    delete widgetsScrollArea;
+//    delete weatherScrollArea;
+//    delete widgetsScrollAreaContents;
+//    delete weatherScrollAreaContents;
+//    delete widgetsLayout;
     delete weatherLayout;
     delete buttonsLayout;
-    delete returnToHomePage;
-    delete addToSavedLocations;
+//    delete returnToHomePage;
+//    delete addToSavedLocations;
 
     for(auto *widget : m_widgets){
         delete widget;

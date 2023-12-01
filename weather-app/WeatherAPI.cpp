@@ -29,8 +29,8 @@ QGeoCoordinate WeatherAPI::locationToCoordinate(const QString &location){ // tes
     if(location == "Belgrade"){
         return QGeoCoordinate(44.8125, 20.4375);
         //return QGeoCoordinate(35.6764, 139.6500);  //Tokio
-
     }
+
     return QGeoCoordinate(0,0);
 }
 
@@ -60,6 +60,7 @@ void WeatherAPI::replyFinished(QNetworkReply *reply){
     QString jsonData = reply->readAll();
     auto data = Parser::parseWeatherData(jsonData);
     emit dataFetched(data);
+    this->quit();
 
     reply->deleteLater();
 }

@@ -21,8 +21,8 @@ HomePage::HomePage(QWidget *parent)
     , leftVBox(new QVBoxLayout())
     , rightVBox(new QVBoxLayout())
     , completer(new QCompleter(this))
+    , completionTimer(new QTimer(this))
 {
-    //fiksirao sam boje jer u suprotnom vidljivost teksta zavisi od teme koja je ukljucena u Qt Creator-u
     searchBar->setStyleSheet(
         "QLineEdit {"
         "    border: 3px solid gray;"
@@ -75,10 +75,14 @@ HomePage::HomePage(QWidget *parent)
 
     completer->setCaseSensitivity(Qt::CaseInsensitive);
     completer->setCompletionMode(QCompleter::PopupCompletion);
-    QShortcut *shortcut = new QShortcut(QKeySequence(Qt::Key_Return), this);
-    connect(shortcut, &QShortcut::activated, this, &HomePage::searchBarEnter);
     connect(&geocodingApi, &GeocodingAPI::geocodingDataUpdated, this, &HomePage::updateCompleter);
     connect(completer, QOverload<const QString&>::of(&QCompleter::activated), this, &HomePage::onCompletionActivated);
+
+    connect(searchBar, &QLineEdit::textChanged, this, &HomePage::onSearchBarTextChanged);
+
+    completionTimer->setInterval(500);          //500 ms    odnosno pola sekunde
+    completionTimer->setSingleShot(true);
+    connect(completionTimer, &QTimer::timeout, this, &HomePage::onCompletionTimerTimeout);
 
 
     connect(this, &HomePage::searchBarPressed, &geocodingApi, &GeocodingAPI::testCityFunction);
@@ -114,14 +118,16 @@ void HomePage::addNewWidget(const QSharedPointer<Data> &data)
     leftWidget->setProperty("inserttoLeft", !inserttoLeft);
 }
 
-void HomePage::searchBarEnter() {
-    QString location = searchBar->text();
-    emit searchBarPressed(location);
-    //completer->setCompletionPrefix(location);   //pocinje tek nakon unosa odredjenog broja karaktera
-    completer->complete();      //prikazivanje padajuce liste odmah nakon unosa
+
+void HomePage::onCompletionTimerTimeout() {
+    completer->setCompletionPrefix(searchBar->text());
+    completer->complete();
 }
-
-
+void HomePage::onSearchBarTextChanged(const QString& text) {
+    emit searchBarPressed(text);
+    //completer->setCompletionPrefix(text);  // Postavi prefiks za kompleter na trenutni tekst
+    completionTimer->start();
+}
 
 void HomePage::updateCompleter(const QList<LocationData>& locations) {
     this->locations = locations;

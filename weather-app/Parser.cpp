@@ -21,6 +21,7 @@ QSharedPointer<WeatherData> Parser::parseWeatherData(const QString& jsonData)
 
     int temperature = current.value("temperature_2m").toInt();
     int weatherCode = current.value("weather_code").toInt();
+    bool isDay = current.value("is_day").toInt();
 
     QJsonArray dailyMaxTemperature = daily.value("temperature_2m_max").toArray();
     int maxTemperature = qRound(dailyMaxTemperature[0].toDouble());
@@ -32,7 +33,8 @@ QSharedPointer<WeatherData> Parser::parseWeatherData(const QString& jsonData)
                                                      temperature,
                                                      maxTemperature,
                                                      minTemperature,
-                                                     weatherCode));
+                                                     weatherCode,
+                                                     isDay));
 
     return data;
 }

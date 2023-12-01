@@ -9,18 +9,14 @@
 #include "Parser.h"
 
 WeatherAPI::WeatherAPI(QString& location_, QObject *parent)
-    : QThread{parent}
+    : ApiHandler{parent}
     , location(location_)
-    , networkManager(new QNetworkAccessManager())
 {
     connect(networkManager, &QNetworkAccessManager::finished, this, &WeatherAPI::replyFinished);
-    networkManager->moveToThread(this);
+//    networkManager->moveToThread(this);   // TODO?
 }
 
-WeatherAPI::~WeatherAPI()
-{
-    delete networkManager;
-}
+WeatherAPI::~WeatherAPI() { }
 
 void WeatherAPI::run()
 {

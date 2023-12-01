@@ -29,7 +29,7 @@ public:
 
 public slots:
     void setData(const QSharedPointer<WeatherData> &data);
-    void addNewWidget(const QSharedPointer<WeatherData> &data) override;
+    void addNewWidget(const QSharedPointer<Data> &data) override;
 
 private:
     QHBoxLayout *mainLayout;

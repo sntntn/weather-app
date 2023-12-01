@@ -10,9 +10,9 @@
 
 #include "WeatherData.h"
 
-WeatherWidget::WeatherWidget(const QSharedPointer<WeatherData> &data_, QWidget *parent)
+WeatherWidget::WeatherWidget(const QSharedPointer<WeatherData> &data, QWidget *parent)
     : QWidget{parent}
-    , data(data_)
+    , data(data)
     , hBox(new QHBoxLayout(this))
     , leftVBox(new QVBoxLayout())
     , rightVBox(new QVBoxLayout())

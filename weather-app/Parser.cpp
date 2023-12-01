@@ -43,9 +43,3 @@ QSharedPointer<WeatherData> Parser::parseWeatherData(const QString& jsonData)
 
     return data;
 }
-
-QSharedPointer<DetailedWeatherData> Parser::parseDetailedWeatherData(const QString& jsonData)
-{
-    // todo
-    return nullptr;
-}

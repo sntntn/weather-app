@@ -31,9 +31,6 @@ MainWindow::MainWindow(QWidget *parent)
 
     stackedWidget->setCurrentWidget(homePage);
 
-
-
-
     QVector<QString> locations(3, "Belgrade"); // test
 
     for(auto location : locations){

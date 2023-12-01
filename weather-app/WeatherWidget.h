@@ -24,6 +24,8 @@ signals:
     void clicked(const QSharedPointer<WeatherData> &data);
 
 private:
+    QString weatherCodeToIcon(int weatherCode, bool isDay);
+
     QHBoxLayout *hBox;
     QVBoxLayout *leftVBox;
     QVBoxLayout *rightVBox;

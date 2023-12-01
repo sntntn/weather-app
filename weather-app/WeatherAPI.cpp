@@ -8,9 +8,9 @@
 #include "WeatherData.h"
 #include "Parser.h"
 
-WeatherAPI::WeatherAPI(QString& location_, QObject *parent)
+WeatherAPI::WeatherAPI(QString& location, QObject *parent)
     : ApiHandler{parent}
-    , location(location_)
+    , location(location)
 {
     connect(networkManager, &QNetworkAccessManager::finished, this, &WeatherAPI::replyFinished);
 //    networkManager->moveToThread(this);   // TODO?
@@ -28,6 +28,8 @@ void WeatherAPI::run()
 QGeoCoordinate WeatherAPI::locationToCoordinate(const QString &location){ // test
     if(location == "Belgrade"){
         return QGeoCoordinate(44.8125, 20.4375);
+        //return QGeoCoordinate(35.6764, 139.6500);  //Tokio
+
     }
     return QGeoCoordinate(0,0);
 }
@@ -41,7 +43,7 @@ void WeatherAPI::fetchData(const QGeoCoordinate &coordinates)
     QUrlQuery query;
     query.addQueryItem("latitude", latitude);
     query.addQueryItem("longitude", longitude);
-    query.addQueryItem("current", "temperature_2m,weather_code");
+    query.addQueryItem("current", "temperature_2m,weather_code,is_day");
     query.addQueryItem("daily", "temperature_2m_max,temperature_2m_min");
     query.addQueryItem("timezone", "auto");
     url.setQuery(query);

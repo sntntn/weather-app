@@ -135,6 +135,7 @@ void HomePage::updateCompleter(const QList<LocationData>& locations) {
     completer->setModel(new QStringListModel(places, completer));
     //qDebug() << "Updated completer with places:" << places;
 }
+
 void HomePage::onCompletionActivated(const QString& text) {
     for (const auto& location : locations) {
         if (location.place == text) {

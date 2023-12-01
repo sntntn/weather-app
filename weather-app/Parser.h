@@ -10,7 +10,10 @@ class Parser
 {
 public:
     explicit Parser();
-    QSharedPointer<WeatherData> parseWeatherData(const QString& jsonData);
+    static QSharedPointer<WeatherData> parseWeatherData(const QString& jsonData);
+    static QSharedPointer<WeatherData> parseDetailedWeatherData(const QString& jsonData);
+    static QSharedPointer<WeatherData> parseGeoLocationData(const QString& jsonData);
+
 
 };
 

@@ -3,7 +3,9 @@
 
 #include <QString>
 
-class WeatherData
+#include "Data.h"
+
+class WeatherData : public Data
 {
 public:
     WeatherData();
@@ -12,6 +14,7 @@ public:
     double temperature;
     double windSpeed;
     double rain;
+
 };
 
 #endif // WEATHERDATA_H

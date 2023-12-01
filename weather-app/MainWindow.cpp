@@ -3,6 +3,7 @@
 
 #include <QStackedWidget>
 
+#include "ApiHandler.h"
 #include "WeatherAPI.h"
 #include "WeatherData.h"
 #include "WeatherWidget.h"
@@ -37,9 +38,9 @@ MainWindow::MainWindow(QWidget *parent)
 
     for(auto location : locations){
         auto* api = new WeatherAPI(location, this);
-        connect(api, &WeatherAPI::finished, api, &WeatherAPI::deleteLater);
-        connect(api, &WeatherAPI::dataFetched, homePage, &HomePage::addNewWidget);
-        connect(api, &WeatherAPI::dataFetched, detailedWeather, &DetailedWeatherPage::addNewWidget);
+        connect(api, &ApiHandler::finished, api, &WeatherAPI::deleteLater);
+        connect(api, &ApiHandler::dataFetched, homePage, &HomePage::addNewWidget);
+        connect(api, &ApiHandler::dataFetched, detailedWeather, &DetailedWeatherPage::addNewWidget);
 
         api->start();
     }

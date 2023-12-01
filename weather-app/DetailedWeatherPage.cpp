@@ -49,9 +49,9 @@ void DetailedWeatherPage::resizeEvent(QResizeEvent* event) {
     widgetsScrollArea->setFixedWidth(newWidth);
 }
 
-void DetailedWeatherPage::addNewWidget(const QSharedPointer<WeatherData> &data)
+void DetailedWeatherPage::addNewWidget(const QSharedPointer<Data> &data)
 {
-    auto *widget = new WeatherWidget(data, widgetsScrollAreaContents);
+    auto *widget = new WeatherWidget(qSharedPointerCast<WeatherData>(data), widgetsScrollAreaContents);
     connect(widget, &WeatherWidget::clicked, this, &DetailedWeatherPage::setData);
     m_widgets.push_back(widget);
 

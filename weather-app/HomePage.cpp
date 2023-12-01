@@ -99,9 +99,9 @@ HomePage::~HomePage()
     }
 }
 
-void HomePage::addNewWidget(const QSharedPointer<WeatherData> &data)
+void HomePage::addNewWidget(const QSharedPointer<Data> &data)
 {
-    auto *widget = new WeatherWidget(data, scrollAreaContents);
+    auto *widget = new WeatherWidget(qSharedPointerCast<WeatherData>(data), scrollAreaContents);
     m_widgets.push_back(widget);
 
     connect(widget, &WeatherWidget::clicked, this->mainWindow, &MainWindow::showDetailedWeatherPage);

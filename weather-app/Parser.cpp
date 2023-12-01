@@ -14,12 +14,25 @@ QSharedPointer<WeatherData> Parser::parseWeatherData(const QString& jsonData)
     QJsonDocument doc = QJsonDocument::fromJson(jsonData.toUtf8());
     QJsonObject obj = doc.object();
     QJsonObject current = obj.value("current").toObject();
+    QJsonObject daily = obj.value("daily").toObject();
+
 
     QString location = QString::fromStdString("Belgrade"); // test, TODO
-    double temperature = current.value("temperature_2m").toDouble();
-    double windSpeed = current.value("wind_speed_10m").toDouble();
-    double rain = current.value("rain").toDouble();
-    QSharedPointer<WeatherData> data(new WeatherData(location, temperature, windSpeed, rain));
+
+    int temperature = current.value("temperature_2m").toInt();
+    int weatherCode = current.value("weather_code").toInt();
+
+    QJsonArray dailyMaxTemperature = daily.value("temperature_2m_max").toArray();
+    int maxTemperature = qRound(dailyMaxTemperature[0].toDouble());
+
+    QJsonArray dailyMinTemperature = daily.value("temperature_2m_min").toArray();
+    int minTemperature = qRound(dailyMinTemperature[0].toDouble());
+
+    QSharedPointer<WeatherData> data(new WeatherData(location,
+                                                     temperature,
+                                                     maxTemperature,
+                                                     minTemperature,
+                                                     weatherCode));
 
     return data;
 }

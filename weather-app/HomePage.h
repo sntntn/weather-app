@@ -28,7 +28,7 @@ public:
 signals:
     void searchBarPressed(const QString& location);
 public slots:
-    void addNewWidget(const QSharedPointer<WeatherData> &data) override;
+    void addNewWidget(const QSharedPointer<Data> &data) override;
     void searchBarEnter();
 
 private:

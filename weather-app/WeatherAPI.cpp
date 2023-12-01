@@ -9,18 +9,14 @@
 #include "Parser.h"
 
 WeatherAPI::WeatherAPI(QString& location_, QObject *parent)
-    : QThread{parent}
+    : ApiHandler{parent}
     , location(location_)
-    , networkManager(new QNetworkAccessManager())
 {
     connect(networkManager, &QNetworkAccessManager::finished, this, &WeatherAPI::replyFinished);
-    networkManager->moveToThread(this);
+//    networkManager->moveToThread(this);   // TODO?
 }
 
-WeatherAPI::~WeatherAPI()
-{
-    delete networkManager;
-}
+WeatherAPI::~WeatherAPI() { }
 
 void WeatherAPI::run()
 {
@@ -45,7 +41,9 @@ void WeatherAPI::fetchData(const QGeoCoordinate &coordinates)
     QUrlQuery query;
     query.addQueryItem("latitude", latitude);
     query.addQueryItem("longitude", longitude);
-    query.addQueryItem("current", "temperature_2m,rain,wind_speed_10m");
+    query.addQueryItem("current", "temperature_2m,weather_code");
+    query.addQueryItem("daily", "temperature_2m_max,temperature_2m_min");
+    query.addQueryItem("timezone", "auto");
     url.setQuery(query);
     QNetworkRequest request(url);
     networkManager->get(request);
@@ -58,8 +56,7 @@ void WeatherAPI::replyFinished(QNetworkReply *reply){
     }
 
     QString jsonData = reply->readAll();
-    Parser parser;
-    auto data = parser.parseWeatherData(jsonData);
+    auto data = Parser::parseWeatherData(jsonData);
     emit dataFetched(data);
 
     reply->deleteLater();

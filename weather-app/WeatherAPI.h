@@ -1,36 +1,32 @@
 #ifndef WEATHERAPI_H
 #define WEATHERAPI_H
 
-#include <QNetworkAccessManager>
-#include <QNetworkReply>
 #include <QGeoCoordinate>
 #include <QThread>
 #include <QString>
 
+#include "ApiHandler.h"
+
 class WeatherData;
 
-class WeatherAPI : public QThread
+class WeatherAPI : public ApiHandler
 {
     Q_OBJECT
 public:
     explicit WeatherAPI(QString& location, QObject *parent = nullptr);
     ~WeatherAPI();
 
-signals:
-    void dataFetched(const QSharedPointer<WeatherData> &data);
-
 private slots:
-    void replyFinished(QNetworkReply* reply);
+    void replyFinished(QNetworkReply* reply) override;
 
 private:
     QString location;
-    QNetworkAccessManager* networkManager;
 
     void fetchData(const QGeoCoordinate &coordinates);
     QGeoCoordinate locationToCoordinate(const QString &location); // test
 
 protected:
-    void run();
+    void run() override;
 };
 
 #endif // WEATHERAPI_H

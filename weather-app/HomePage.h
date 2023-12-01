@@ -7,9 +7,12 @@
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QSharedPointer>
+#include <QCompleter>
 
 #include "Page.h"
 #include "geocodingapi.h"
+
+struct LocationData;
 
 class WeatherWidget;
 class WeatherData;
@@ -39,6 +42,12 @@ private:
     QWidget *rightWidget;
     QVBoxLayout *leftVBox;
     QVBoxLayout *rightVBox;
+    QCompleter *completer;
+    QList<LocationData> locations;   //strukturu uzimamo direktno
+
+    void updateCompleter(const QList<LocationData>& locations);
+    void onCompletionActivated(const QString& text);
+
 
     GeocodingAPI geocodingApi;
 };

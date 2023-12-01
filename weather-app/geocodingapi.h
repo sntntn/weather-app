@@ -8,6 +8,13 @@
 
 #include <QObject>
 
+struct LocationData {
+    QString place;
+    double latitude;
+    double longitude;
+};
+
+
 class GeocodingAPI : public QObject
 {
     Q_OBJECT
@@ -19,7 +26,7 @@ public:
     void handleGeocodingResponse(QNetworkReply* reply);
 
 signals:
-    void geocodingDataUpdated(const QString& place, double latitude, double longitude);
+    void geocodingDataUpdated(const QList<LocationData>& locations);
 public slots:
     void testCityFunction(const QString &location);
 

@@ -3,6 +3,7 @@
 #include <QJsonObject>
 #include <QJsonArray>
 
+#include <QList>
 
 GeocodingAPI::GeocodingAPI()
     :m_networkManager(new QNetworkAccessManager(this))
@@ -51,7 +52,8 @@ void GeocodingAPI::handleGeocodingResponse(QNetworkReply* reply) {
     }
 
     // json za https://api.opencagedata.com/geocode/v1/json?q=Be&key=0741d020f58441f6b58ae4dc4128740d       formatted
-    // Iteriraj kroz sve rezultate
+
+    QList<LocationData> locations;
     for (const QJsonValue& resultValue : resultsArray) {
         QJsonObject resultObject = resultValue.toObject();
 
@@ -79,7 +81,14 @@ void GeocodingAPI::handleGeocodingResponse(QNetworkReply* reply) {
         double latitude = geometryObject["lat"].toDouble();
         double longitude = geometryObject["lng"].toDouble();
 
-        qDebug() << "-----> City:" << place << "Latitude:" << latitude << "Longitude:" << longitude;
+        LocationData ld;
+        ld.place=place;
+        ld.latitude=latitude;
+        ld.longitude=longitude;
+        locations.append(ld);
+
+        emit geocodingDataUpdated(locations);
+        //qDebug() << "-----> City:" << place << "Latitude:" << latitude << "Longitude:" << longitude;
     }
     reply->deleteLater();
 }

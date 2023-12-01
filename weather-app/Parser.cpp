@@ -6,6 +6,7 @@
 #include <QJsonArray>
 
 #include "WeatherData.h"
+#include "DetailedWeatherData.h"
 
 Parser::Parser() = default;
 
@@ -35,4 +36,10 @@ QSharedPointer<WeatherData> Parser::parseWeatherData(const QString& jsonData)
                                                      weatherCode));
 
     return data;
+}
+
+QSharedPointer<DetailedWeatherData> Parser::parseDetailedWeatherData(const QString& jsonData)
+{
+    // todo
+    return nullptr;
 }

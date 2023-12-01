@@ -8,9 +8,9 @@
 #include "WeatherData.h"
 #include "Parser.h"
 
-WeatherAPI::WeatherAPI(QString& location_, QObject *parent)
+WeatherAPI::WeatherAPI(QString& location, QObject *parent)
     : ApiHandler{parent}
-    , location(location_)
+    , location(location)
 {
     connect(networkManager, &QNetworkAccessManager::finished, this, &WeatherAPI::replyFinished);
 //    networkManager->moveToThread(this);   // TODO?

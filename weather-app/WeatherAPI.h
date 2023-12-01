@@ -16,17 +16,17 @@ public:
     explicit WeatherAPI(QString& location, QObject *parent = nullptr);
     ~WeatherAPI();
 
-private slots:
+public slots:
     void replyFinished(QNetworkReply* reply) override;
 
-private:
+protected:
+    void run() override;
+
+protected:
     QString location;
 
     void fetchData(const QGeoCoordinate &coordinates);
     QGeoCoordinate locationToCoordinate(const QString &location); // test
-
-protected:
-    void run() override;
 };
 
 #endif // WEATHERAPI_H

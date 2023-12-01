@@ -8,6 +8,8 @@ set(CMAKE_AUTORCC ON)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -Wall -Wextra")
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
@@ -30,9 +32,15 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         WeatherAPI.h WeatherAPI.cpp
         WeatherWidget.h WeatherWidget.cpp
         HomePage.h HomePage.cpp
-        location.h location.cpp
+
         DetailedWeatherPage.h DetailedWeatherPage.cpp
+        Page.h Page.cpp
         geocodingapi.h geocodingapi.cpp
+        Data.h Data.cpp
+        GeoLocationData.h GeoLocationData.cpp
+        DetailedWeatherData.h DetailedWeatherData.cpp
+        ApiHandler.h ApiHandler.cpp
+
     )
 # Define target properties for Android with Qt 6 as:
 #    set_property(TARGET weather-app APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR

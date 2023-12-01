@@ -1,38 +1,38 @@
 #include "WeatherAPI.h"
-#include "WeatherData.h"
-#include "Parser.h"
+
 #include <iostream>
 #include <QUrl>
 #include <QUrlQuery>
 #include <QString>
 
-WeatherAPI::WeatherAPI(QObject *parent)
-    : QObject{parent},
-    networkManager(new QNetworkAccessManager(this))
+#include "WeatherData.h"
+#include "Parser.h"
+
+WeatherAPI::WeatherAPI(QString& location, QObject *parent)
+    : ApiHandler{parent}
+    , location(location)
 {
-    connect(&geocodingApi, &GeocodingAPI::geocodingDataUpdated, this, &WeatherAPI::updateGeocodingData);
     connect(networkManager, &QNetworkAccessManager::finished, this, &WeatherAPI::replyFinished);
+//    networkManager->moveToThread(this);   // TODO?
 }
 
-WeatherAPI::~WeatherAPI()
-{
-    delete networkManager;
-}
+WeatherAPI::~WeatherAPI() { }
 
-QGeoCoordinate WeatherAPI::locationToCoordinate(const QString &location){ // test
-    geocodingApi.testCityFunction(location);
-
-    qDebug()<<"------------";
-
-    return QGeoCoordinate(m_lastLatitude, m_lastLongitude);
-}
-
-void WeatherAPI::fetchData(const QString &location) // test
+void WeatherAPI::run()
 {
     QGeoCoordinate coordinates = locationToCoordinate(location);
     fetchData(coordinates);
+    exec();
 }
 
+QGeoCoordinate WeatherAPI::locationToCoordinate(const QString &location){ // test
+    if(location == "Belgrade"){
+        return QGeoCoordinate(44.8125, 20.4375);
+        //return QGeoCoordinate(35.6764, 139.6500);  //Tokio
+
+    }
+    return QGeoCoordinate(0,0);
+}
 
 void WeatherAPI::fetchData(const QGeoCoordinate &coordinates)
 {
@@ -43,7 +43,9 @@ void WeatherAPI::fetchData(const QGeoCoordinate &coordinates)
     QUrlQuery query;
     query.addQueryItem("latitude", latitude);
     query.addQueryItem("longitude", longitude);
-    query.addQueryItem("current", "temperature_2m,rain,wind_speed_10m");
+    query.addQueryItem("current", "temperature_2m,weather_code,is_day");
+    query.addQueryItem("daily", "temperature_2m_max,temperature_2m_min");
+    query.addQueryItem("timezone", "auto");
     url.setQuery(query);
     QNetworkRequest request(url);
     networkManager->get(request);
@@ -56,19 +58,8 @@ void WeatherAPI::replyFinished(QNetworkReply *reply){
     }
 
     QString jsonData = reply->readAll();
-    Parser parser;
-    WeatherData* data = parser.parseWeatherData(jsonData);
+    auto data = Parser::parseWeatherData(jsonData);
     emit dataFetched(data);
 
     reply->deleteLater();
 }
-
-void WeatherAPI::updateGeocodingData(const QString &place, double latitude, double longitude){
-    qDebug() << "--->" << "City:" << geocodingApi.getPlace() << "Latitude:" << geocodingApi.getLatitude() << "Longitude:" << geocodingApi.getLongitude();
-    m_lastPlace=place;
-    m_lastLatitude=latitude;
-    m_lastLongitude=longitude;
-}
-
-
-

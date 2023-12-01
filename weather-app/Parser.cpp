@@ -1,26 +1,45 @@
 #include "Parser.h"
-#include "WeatherData.h"
 
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QJsonValue>
 #include <QJsonArray>
 
-Parser::Parser()
-{
-}
+#include "WeatherData.h"
+#include "DetailedWeatherData.h"
 
-WeatherData* Parser::parseWeatherData(const QString& jsonData)
+Parser::Parser() = default;
+
+QSharedPointer<WeatherData> Parser::parseWeatherData(const QString& jsonData)
 {
     QJsonDocument doc = QJsonDocument::fromJson(jsonData.toUtf8());
     QJsonObject obj = doc.object();
+    QString timezoneId = obj.value("timezone").toString();
     QJsonObject current = obj.value("current").toObject();
+    QJsonObject daily = obj.value("daily").toObject();
+
 
     QString location = QString::fromStdString("Belgrade"); // test, TODO
-    double temperature = current.value("temperature_2m").toDouble();
-    double windSpeed = current.value("wind_speed_10m").toDouble();
-    double rain = current.value("rain").toDouble();
-    WeatherData *data = new WeatherData(location, temperature, windSpeed, rain);
+
+    QTimeZone timeZone = QTimeZone(timezoneId.toLatin1());
+
+    int temperature = qRound(current.value("temperature_2m").toDouble());
+    int weatherCode = current.value("weather_code").toInt();
+    bool isDay = current.value("is_day").toInt();
+
+    QJsonArray dailyMaxTemperature = daily.value("temperature_2m_max").toArray();
+    int maxTemperature = qRound(dailyMaxTemperature[0].toDouble());
+
+    QJsonArray dailyMinTemperature = daily.value("temperature_2m_min").toArray();
+    int minTemperature = qRound(dailyMinTemperature[0].toDouble());
+
+    QSharedPointer<WeatherData> data(new WeatherData(location,
+                                                     temperature,
+                                                     maxTemperature,
+                                                     minTemperature,
+                                                     weatherCode,
+                                                     isDay,
+                                                     timeZone));
 
     return data;
 }

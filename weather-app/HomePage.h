@@ -6,34 +6,54 @@
 #include <QScrollArea>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
+#include <QSharedPointer>
+#include <QCompleter>
+#include <QTimer>
+
+#include "Page.h"
+#include "geocodingapi.h"
+
+struct LocationData;
 
 class WeatherWidget;
 class WeatherData;
+class MainWindow;
 
-class HomePage : public QWidget
+class HomePage : public Page
 {
     Q_OBJECT
 public:
     explicit HomePage(QWidget *parent = nullptr);
     ~HomePage();
 
-
 signals:
-
+    void searchBarPressed(const QString& location);
 public slots:
-    void addNewWidget(WeatherData* data);
+    void addNewWidget(const QSharedPointer<Data> &data) override;
+    void onSearchBarTextChanged(const QString& text);
+
+private slots:
+    void onCompletionTimerTimeout();
 
 private:
+
     QVBoxLayout *mainLayout;
     QLineEdit *searchBar;
     QScrollArea *scrollArea;
     QHBoxLayout *scrollLayout;
+    QWidget *scrollAreaContents;
     QWidget *leftWidget;
     QWidget *rightWidget;
     QVBoxLayout *leftVBox;
     QVBoxLayout *rightVBox;
+    QCompleter *completer;
+    QList<LocationData> locations;   //strukturu uzimamo direktno
 
-    QVector<WeatherWidget*> m_widgets;
+    void updateCompleter(const QList<LocationData>& locations);
+    void onCompletionActivated(const QString& text);
+
+    QTimer *completionTimer;
+    GeocodingAPI geocodingApi;
 };
 
 #endif // HOMEPAGE_H

@@ -1,9 +1,9 @@
-// geocodingapi.cpp
 #include "geocodingapi.h"
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QJsonArray>
 
+#include <QList>
 
 GeocodingAPI::GeocodingAPI()
     :m_networkManager(new QNetworkAccessManager(this))
@@ -20,8 +20,6 @@ void GeocodingAPI::geocodeCity(const QString& cityName) {
     QString apiUrl = QString("https://api.opencagedata.com/geocode/v1/json?q=%1&key=%2")
                          .arg(cityName)
                          .arg(OPEN_CAGE_API_KEY);
-
-    //qDebug() <<"API adresa za dovlacenje JSON: "<<apiUrl;
 
     QNetworkRequest request{QUrl(apiUrl)};
     m_networkManager->get(request);
@@ -53,32 +51,43 @@ void GeocodingAPI::handleGeocodingResponse(QNetworkReply* reply) {
         return;
     }
 
-    // aj da kazemo da zelimo prvi rezultat za pocetak                  #TO DO kasnije, za druge opcije -> autokomplit
-                            // json za https://api.opencagedata.com/geocode/v1/json?q=Be&key=0741d020f58441f6b58ae4dc4128740d       formatted
-    QJsonObject firstResult = resultsArray.first().toObject();
+    // json za https://api.opencagedata.com/geocode/v1/json?q=Be&key=0741d020f58441f6b58ae4dc4128740d       formatted
 
-    if (!firstResult.contains("formatted") || !firstResult["formatted"].isString()) {
-        qDebug() << "Error: Missing or invalid 'formatted' string in JSON response";
-        return;
+    QList<LocationData> locations;
+    for (const QJsonValue& resultValue : resultsArray) {
+        QJsonObject resultObject = resultValue.toObject();
+
+        if (!resultObject.contains("formatted") || !resultObject["formatted"].isString()) {
+            qDebug() << "Error: Missing or invalid 'formatted' string in JSON response";
+            continue;  // Preskoči ovaj rezultat i idi na sledeći
+        }
+
+        QString place = resultObject["formatted"].toString();
+        if(!place.isEmpty() && place.at(0).isDigit()){
+            continue;       //preskacemo postanske brojeve  -> prikazuje opstine
+        }
+
+        if (!resultObject.contains("geometry") || !resultObject["geometry"].isObject()) {
+            qDebug() << "Error: Missing or invalid 'geometry' object in JSON response";
+            continue;
+        }
+
+        QJsonObject geometryObject = resultObject["geometry"].toObject();
+        if (!geometryObject.contains("lat") || !geometryObject.contains("lng")) {
+            qDebug() << "Error: Missing 'lat' or 'lng' in 'geometry' object";
+            continue;
+        }
+
+        double latitude = geometryObject["lat"].toDouble();
+        double longitude = geometryObject["lng"].toDouble();
+
+        LocationData ld;
+        ld.place=place;
+        ld.latitude=latitude;
+        ld.longitude=longitude;
+        locations.append(ld);
     }
-
-    m_place = firstResult["formatted"].toString();
-
-    if (!firstResult.contains("geometry") || !firstResult["geometry"].isObject()) {
-        qDebug() << "Error: Missing or invalid 'geometry' object in JSON response";
-        return;
-    }
-
-    QJsonObject geometryObject = firstResult["geometry"].toObject();
-    if (!geometryObject.contains("lat") || !geometryObject.contains("lng")) {
-        qDebug() << "Error: Missing 'lat' or 'lng' in 'geometry' object";
-        return;
-    }
-
-    m_latitude = geometryObject["lat"].toDouble();
-    m_longitude = geometryObject["lng"].toDouble();
-
-    emit geocodingDataUpdated(m_place,m_latitude,m_longitude);
+    emit geocodingDataUpdated(locations);
     reply->deleteLater();
 }
 

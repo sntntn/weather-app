@@ -2,8 +2,13 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+
+
 class WeatherData;
 class WeatherWidget;
+class QStackedWidget;
+class HomePage;
+class DetailedWeatherPage;
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -17,8 +22,21 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
+public slots:
+    void showHomePage();
+    void showDetailedWeatherPage(const QSharedPointer<WeatherData> &data);
+
+signals:
+    void detailedWeatherPageShown(const QSharedPointer<WeatherData> &data);
+
+
 private:
     Ui::MainWindow *ui;
-    QVector<WeatherWidget*> m_widgets;
+    HomePage *homePage;
+    DetailedWeatherPage *detailedWeather;
+    QStackedWidget *stackedWidget;
+
+    double m_lastLongitude;
+    double m_lastLatitude;
 };
 #endif // MAINWINDOW_H

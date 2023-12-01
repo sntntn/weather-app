@@ -2,16 +2,29 @@
 #define WEATHERDATA_H
 
 #include <QString>
+#include <QTimeZone>
 
-class WeatherData
+#include "Data.h"
+
+class WeatherData : public Data
 {
 public:
-    WeatherData();
-    WeatherData(QString location_, double temperature_, double windSpeed_, double rain_);
+
+    WeatherData(QString& location,
+                int temperature,
+                int highestTemperature,
+                int lowestTemperature,
+                int weatherCode,
+                bool isDay,
+                QTimeZone timezone);
+
     QString location;
-    double temperature;
-    double windSpeed;
-    double rain;
+    int temperature;
+    int highestTemperature;
+    int lowestTemperature;
+    int weatherCode;
+    bool isDay;
+    QTimeZone timezone;
 };
 
 #endif // WEATHERDATA_H

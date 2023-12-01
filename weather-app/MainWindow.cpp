@@ -1,47 +1,62 @@
 #include "MainWindow.h"
 #include "./ui_MainWindow.h"
 
-#include <iostream>
-
 #include <QStackedWidget>
 
+#include "ApiHandler.h"
 #include "WeatherAPI.h"
 #include "WeatherData.h"
 #include "WeatherWidget.h"
 #include "HomePage.h"
+#include "DetailedWeatherPage.h"
+#include "geocodingapi.h"
+
+#include <iostream>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
+    , homePage(new HomePage(this))
+    , detailedWeather(new DetailedWeatherPage(this))
+    , stackedWidget(new QStackedWidget(this))
 {
+    connect(this, &MainWindow::detailedWeatherPageShown, detailedWeather, &DetailedWeatherPage::setData);
+
     ui->setupUi(this);
-
-    QStackedWidget *stackedWidget = new QStackedWidget(this);
-
-    HomePage *homePage = new HomePage();
+    resize(900,600);
 
     stackedWidget->addWidget(homePage);
+    stackedWidget->addWidget(detailedWeather);
     setCentralWidget(stackedWidget);
 
-    // Optionally set HomePage as the initial page
     stackedWidget->setCurrentWidget(homePage);
 
-    auto *api = new WeatherAPI(this);
-    auto location = QString::fromStdString("Tokyo"); // test
+    QVector<QString> locations(3, "Belgrade"); // test
 
-    for(int i = 0; i < 25; i++){
-        api->fetchData(location);
+    for(auto location : locations){
+        auto* api = new WeatherAPI(location, this);
+        connect(api, &ApiHandler::finished, api, &WeatherAPI::deleteLater);
+        connect(api, &ApiHandler::dataFetched, homePage, &HomePage::addNewWidget);
+        connect(api, &ApiHandler::dataFetched, detailedWeather, &DetailedWeatherPage::addNewWidget);
+
+        api->start();
     }
+}
 
-    connect(api, &WeatherAPI::dataFetched, homePage, &HomePage::addNewWidget);
+void MainWindow::showHomePage(){
+    stackedWidget->setCurrentWidget(homePage);
+}
 
+void MainWindow::showDetailedWeatherPage(const QSharedPointer<WeatherData> &data)
+{
+    stackedWidget->setCurrentWidget(detailedWeather);
+    emit detailedWeatherPageShown(data);
 }
 
 MainWindow::~MainWindow()
 {
     delete ui;
-
-    for(auto widget : m_widgets){
-        delete widget;
-    }
+    delete homePage;
+    delete detailedWeather;
+    delete stackedWidget;
 }

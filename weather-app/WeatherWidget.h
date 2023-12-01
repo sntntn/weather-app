@@ -6,6 +6,7 @@
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QPixmap>
+
 class WeatherData;
 
 class WeatherWidget : public QWidget
@@ -13,18 +14,24 @@ class WeatherWidget : public QWidget
     Q_OBJECT
 
 public:
-    explicit WeatherWidget(QWidget *parent = nullptr, WeatherData *data_ = nullptr);
+    explicit WeatherWidget(const QSharedPointer<WeatherData> &data_, QWidget *parent = nullptr);
     ~WeatherWidget();
+    void mousePressEvent(QMouseEvent *event) override;
+
+    const QSharedPointer<WeatherData> data;
 
 signals:
+    void clicked(const QSharedPointer<WeatherData> &data);
 
 private:
-    WeatherData *data;
+    QString weatherCodeToIcon(int weatherCode, bool isDay);
+
     QHBoxLayout *hBox;
     QVBoxLayout *leftVBox;
     QVBoxLayout *rightVBox;
     QLabel* locationLabel;
     QLabel* temperatureLabel;
+    QLabel* minmaxTemperatureLabel;
     QLabel* timeLabel;
     QLabel* iconLabel;
     QPixmap weatherIcon;

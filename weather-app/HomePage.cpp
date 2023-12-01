@@ -86,6 +86,7 @@ HomePage::HomePage(QWidget *parent)
 
 
     connect(this, &HomePage::searchBarPressed, &geocodingApi, &GeocodingAPI::testCityFunction);
+
 }
 
 HomePage::~HomePage()

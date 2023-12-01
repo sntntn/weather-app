@@ -90,15 +90,6 @@ HomePage::HomePage(QWidget *parent)
 
 HomePage::~HomePage()
 {
-    delete mainLayout;
-    delete searchBar;
-    delete scrollArea;
-    delete scrollLayout;
-    delete leftWidget;
-    delete rightWidget;
-    delete leftVBox;
-    delete rightVBox;
-
     for (auto *widget : m_widgets){
         delete widget;
     }

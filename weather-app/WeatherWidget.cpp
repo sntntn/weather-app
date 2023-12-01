@@ -66,15 +66,7 @@ void WeatherWidget::mousePressEvent(QMouseEvent *event) {
 }
 
 WeatherWidget::~WeatherWidget()
-{
-    delete hBox;
-    delete leftVBox;
-    delete rightVBox;
-    delete locationLabel;
-    delete temperatureLabel;
-    delete timeLabel;
-    delete iconLabel;
-}
+{ }
 
 QString WeatherWidget::weatherCodeToIcon(int weatherCode, bool isDay) {
     QString iconBasePath = "../Resources/weatherIcons/";

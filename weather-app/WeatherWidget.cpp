@@ -19,7 +19,7 @@ WeatherWidget::WeatherWidget(const QSharedPointer<WeatherData> &data_, QWidget *
     , locationLabel(new QLabel(data->location, this))
     , temperatureLabel(new QLabel(QString::number(data->temperature), this))
     , minmaxTemperatureLabel(new QLabel("H:" + QString::number(data->highestTemperature) + " L:" + QString::number(data->lowestTemperature), this))
-    , timeLabel(new QLabel(QTime::currentTime().toString("HH:mm"), this))
+    , timeLabel(new QLabel(QDateTime::currentDateTime().toTimeZone(data->timezone).toString("HH:mm"), this))
     , iconLabel(new QLabel(this))
     , weatherIcon(weatherCodeToIcon(data->weatherCode, data->isDay))
 {

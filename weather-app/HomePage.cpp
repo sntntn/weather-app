@@ -86,11 +86,11 @@ HomePage::HomePage(QWidget *parent)
 
 
     connect(this, &HomePage::searchBarPressed, &geocodingApi, &GeocodingAPI::testCityFunction);
+
 }
 
 HomePage::~HomePage()
 {
-    delete mainLayout;
     delete searchBar;
     delete scrollArea;
     delete scrollLayout;

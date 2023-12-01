@@ -8,14 +8,12 @@ WeatherData::WeatherData()
 {
 }
 
-WeatherData::WeatherData(QString& location_,
-                         double temperature_,
-                         double windSpeed_,
-                         double rain_)
-    : location(location_)
-    , temperature(temperature_)
-    , windSpeed(windSpeed_)
-    , rain(rain_)
+WeatherData::WeatherData(QString& location, double temperature, int highestTemperature, int lowestTemperature, int weatherCode)
+    : location(location)
+    , temperature(temperature)
+    , highestTemperature(highestTemperature)
+    , lowestTemperature(lowestTemperature)
+    , weatherCode(weatherCode)
 {
 }
 

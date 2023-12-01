@@ -9,11 +9,12 @@ class WeatherData : public Data
 {
 public:
     WeatherData();
-    WeatherData(QString& location_, double temperature_, double windSpeed_, double rain_);
+    WeatherData(QString& location_, double temperature_, int highestTemperature, int lowestTemperature, int weatherCode);
     QString location;
-    double temperature;
-    double windSpeed;
-    double rain;
+    int temperature;
+    int highestTemperature;
+    int lowestTemperature;
+    int weatherCode;
 
 };
 

@@ -29,6 +29,7 @@ private:
     QVBoxLayout *rightVBox;
     QLabel* locationLabel;
     QLabel* temperatureLabel;
+    QLabel* minmaxTemperatureLabel;
     QLabel* timeLabel;
     QLabel* iconLabel;
     QPixmap weatherIcon;

@@ -41,7 +41,7 @@ void WeatherAPI::fetchData(const QGeoCoordinate &coordinates)
     QUrlQuery query;
     query.addQueryItem("latitude", latitude);
     query.addQueryItem("longitude", longitude);
-    query.addQueryItem("current", "temperature_2m,weather_code");
+    query.addQueryItem("current", "temperature_2m,weather_code,is_day");
     query.addQueryItem("daily", "temperature_2m_max,temperature_2m_min");
     query.addQueryItem("timezone", "auto");
     url.setQuery(query);

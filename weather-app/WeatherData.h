@@ -8,12 +8,18 @@
 class WeatherData : public Data
 {
 public:
-    WeatherData(QString& location, double temperature, int highestTemperature, int lowestTemperature, int weatherCode);
+    WeatherData(QString& location,
+                double temperature,
+                int highestTemperature,
+                int lowestTemperature,
+                int weatherCode);
+
     QString location;
     int temperature;
     int highestTemperature;
     int lowestTemperature;
     int weatherCode;
+    bool isDay;
 };
 
 #endif // WEATHERDATA_H

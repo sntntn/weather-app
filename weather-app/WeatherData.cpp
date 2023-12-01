@@ -4,10 +4,6 @@
 #include <QJsonObject>
 #include <QSharedPointer>
 
-WeatherData::WeatherData()
-{
-}
-
 WeatherData::WeatherData(QString& location, double temperature, int highestTemperature, int lowestTemperature, int weatherCode)
     : location(location)
     , temperature(temperature)

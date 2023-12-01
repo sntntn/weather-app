@@ -28,6 +28,8 @@ void WeatherAPI::run()
 QGeoCoordinate WeatherAPI::locationToCoordinate(const QString &location){ // test
     if(location == "Belgrade"){
         return QGeoCoordinate(44.8125, 20.4375);
+        //return QGeoCoordinate(35.6764, 139.6500);  //Tokio
+
     }
     return QGeoCoordinate(0,0);
 }

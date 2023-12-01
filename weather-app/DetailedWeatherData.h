@@ -7,11 +7,12 @@ class DetailedWeatherData : public WeatherData
 {
 public:
     explicit DetailedWeatherData(QString& location,
-                                 double temperature,
+                                 int temperature,
                                  int highestTemperature,
                                  int lowestTemperature,
                                  int weatherCode,
-                                 bool isDay);
+                                 bool isDay,
+                                 QTimeZone timezone);
 };
 
 #endif // DETAILEDWEATHERDATA_H

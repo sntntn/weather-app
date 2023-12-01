@@ -12,7 +12,8 @@ public:
                 double temperature,
                 int highestTemperature,
                 int lowestTemperature,
-                int weatherCode);
+                int weatherCode,
+                bool isDay);
 
     QString location;
     int temperature;

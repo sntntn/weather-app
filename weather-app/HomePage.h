@@ -8,6 +8,7 @@
 #include <QHBoxLayout>
 #include <QSharedPointer>
 #include <QCompleter>
+#include <QTimer>
 
 #include "Page.h"
 #include "geocodingapi.h"
@@ -29,7 +30,10 @@ signals:
     void searchBarPressed(const QString& location);
 public slots:
     void addNewWidget(const QSharedPointer<Data> &data) override;
-    void searchBarEnter();
+    void onSearchBarTextChanged(const QString& text);
+
+private slots:
+    void onCompletionTimerTimeout();
 
 private:
 
@@ -48,7 +52,7 @@ private:
     void updateCompleter(const QList<LocationData>& locations);
     void onCompletionActivated(const QString& text);
 
-
+    QTimer *completionTimer;
     GeocodingAPI geocodingApi;
 };
 

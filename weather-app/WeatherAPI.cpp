@@ -16,8 +16,6 @@ WeatherAPI::WeatherAPI(QString& location, QObject *parent)
 //    networkManager->moveToThread(this);   // TODO?
 }
 
-WeatherAPI::~WeatherAPI() { }
-
 void WeatherAPI::run()
 {
     QGeoCoordinate coordinates = locationToCoordinate(location);

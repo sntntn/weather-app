@@ -42,7 +42,8 @@ WeatherWidget::WeatherWidget(const QSharedPointer<WeatherData> &data, QWidget *p
     timeLabel->setStyleSheet(labelStyle);
     temperatureLabel->setStyleSheet(labelStyle);
 
-    QHBoxLayout* hLayout = new QHBoxLayout();
+    //TODO
+    auto* hLayout = new QHBoxLayout();
     //QSpacerItem* spacer = new QSpacerItem();
     hLayout->addStretch();
     hLayout->addWidget(temperatureLabel);
@@ -64,9 +65,6 @@ void WeatherWidget::mousePressEvent(QMouseEvent *event) {
     QWidget::mousePressEvent(event);
     emit clicked(data);
 }
-
-WeatherWidget::~WeatherWidget()
-{ }
 
 QString WeatherWidget::weatherCodeToIcon(int weatherCode, bool isDay) {
     QString iconBasePath = "../Resources/weatherIcons/";

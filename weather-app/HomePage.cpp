@@ -38,6 +38,7 @@ HomePage::HomePage(QWidget *parent)
         "}"
         );
     searchBar->setPlaceholderText("Enter location...");
+    searchBar->setCompleter(completer);
     mainLayout->addWidget(searchBar);
 
     int leftMargin = 25;
@@ -116,6 +117,8 @@ void HomePage::addNewWidget(const QSharedPointer<Data> &data)
 void HomePage::searchBarEnter() {
     QString location = searchBar->text();
     emit searchBarPressed(location);
+    //completer->setCompletionPrefix(location);   //pocinje tek nakon unosa odredjenog broja karaktera
+    completer->complete();      //prikazivanje padajuce liste odmah nakon unosa
 }
 
 
@@ -123,6 +126,7 @@ void HomePage::searchBarEnter() {
 void HomePage::updateCompleter(const QList<LocationData>& locations) {
     this->locations = locations;
     QStringList places;
+    qDebug()<<"----------------------------------"<< locations.size();
     for (const auto& location : locations) {
         qDebug() << "Selected Place:" << location.place << "Latitude:" << location.latitude << "Longitude:" << location.longitude;
         places.append(location.place);

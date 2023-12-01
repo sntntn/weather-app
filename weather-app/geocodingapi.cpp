@@ -86,10 +86,8 @@ void GeocodingAPI::handleGeocodingResponse(QNetworkReply* reply) {
         ld.latitude=latitude;
         ld.longitude=longitude;
         locations.append(ld);
-
-        emit geocodingDataUpdated(locations);
-        //qDebug() << "-----> City:" << place << "Latitude:" << latitude << "Longitude:" << longitude;
     }
+    emit geocodingDataUpdated(locations);
     reply->deleteLater();
 }
 

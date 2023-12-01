@@ -91,14 +91,6 @@ HomePage::HomePage(QWidget *parent)
 
 HomePage::~HomePage()
 {
-    delete searchBar;
-    delete scrollArea;
-    delete scrollLayout;
-    delete leftWidget;
-    delete rightWidget;
-    delete leftVBox;
-    delete rightVBox;
-
     for (auto *widget : m_widgets){
         delete widget;
     }
@@ -145,8 +137,8 @@ void HomePage::updateCompleter(const QList<LocationData>& locations) {
 void HomePage::onCompletionActivated(const QString& text) {
     for (const auto& location : locations) {
         if (location.place == text) {
-            double latitude = location.latitude;
-            double longitude = location.longitude;
+//            double latitude = location.latitude;
+//            double longitude = location.longitude;
 
             //TO DO -> ovde implementiram sta ce da se desi kada kliknemo predlog
             //qDebug() << "Selected Place:" << text << "Latitude:" << latitude << "Longitude:" << longitude;

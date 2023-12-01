@@ -27,7 +27,7 @@ DetailedWeatherPage::DetailedWeatherPage(QWidget *parent)
     connect(returnToHomePage, &QPushButton::clicked, this->mainWindow, &MainWindow::showHomePage);
     // TODO: add location button: connect(addToSavedLocations, &QPushButton::clicked, this, &DetailedWeatherPage::addLocation);
 
-    returnToHomePage->setText("< HomePage");
+    returnToHomePage->setText("< Home");
     addToSavedLocations->setText("Add");
 
     weatherLayout->addWidget(returnToHomePage, 0, 0);
@@ -65,6 +65,7 @@ void DetailedWeatherPage::setData(const QSharedPointer<WeatherData> &data)
 
 DetailedWeatherPage::~DetailedWeatherPage()
 {
+    //delete horizontalSpacer;
     for(auto *widget : m_widgets){
         delete widget;
     }

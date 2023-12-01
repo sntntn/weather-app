@@ -10,9 +10,9 @@
 
 #include "WeatherData.h"
 
-WeatherWidget::WeatherWidget(const QSharedPointer<WeatherData> &data_, QWidget *parent)
+WeatherWidget::WeatherWidget(const QSharedPointer<WeatherData> &data, QWidget *parent)
     : QWidget{parent}
-    , data(data_)
+    , data(data)
     , hBox(new QHBoxLayout(this))
     , leftVBox(new QVBoxLayout())
     , rightVBox(new QVBoxLayout())
@@ -66,15 +66,7 @@ void WeatherWidget::mousePressEvent(QMouseEvent *event) {
 }
 
 WeatherWidget::~WeatherWidget()
-{
-    delete hBox;
-    delete leftVBox;
-    delete rightVBox;
-    delete locationLabel;
-    delete temperatureLabel;
-    delete timeLabel;
-    delete iconLabel;
-}
+{ }
 
 QString WeatherWidget::weatherCodeToIcon(int weatherCode, bool isDay) {
     QString iconBasePath = "../Resources/weatherIcons/";

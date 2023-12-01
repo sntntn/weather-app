@@ -32,7 +32,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         WeatherAPI.h WeatherAPI.cpp
         WeatherWidget.h WeatherWidget.cpp
         HomePage.h HomePage.cpp
-        location.h location.cpp
+
         DetailedWeatherPage.h DetailedWeatherPage.cpp
         Page.h Page.cpp
         geocodingapi.h geocodingapi.cpp

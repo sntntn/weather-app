@@ -65,7 +65,6 @@ void DetailedWeatherPage::setData(const QSharedPointer<WeatherData> &data)
 
 DetailedWeatherPage::~DetailedWeatherPage()
 {
-    //delete horizontalSpacer;
     for(auto *widget : m_widgets){
         delete widget;
     }

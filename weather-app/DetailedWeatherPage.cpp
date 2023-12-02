@@ -62,10 +62,3 @@ void DetailedWeatherPage::setData(const QSharedPointer<WeatherData> &data)
 {
     std::cout << data->location.toStdString() << std::endl;
 }
-
-DetailedWeatherPage::~DetailedWeatherPage()
-{
-    for(auto *widget : m_widgets){
-        delete widget;
-    }
-}

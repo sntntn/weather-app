@@ -89,13 +89,6 @@ HomePage::HomePage(QWidget *parent)
 
 }
 
-HomePage::~HomePage()
-{
-    for (auto *widget : m_widgets){
-        delete widget;
-    }
-}
-
 void HomePage::addNewWidget(const QSharedPointer<Data> &data)
 {
     auto *widget = new WeatherWidget(qSharedPointerCast<WeatherData>(data), scrollAreaContents);

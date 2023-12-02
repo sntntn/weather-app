@@ -22,7 +22,7 @@ class DetailedWeatherPage : public Page
 
 public:
     explicit DetailedWeatherPage(QWidget *parent = nullptr);
-    ~DetailedWeatherPage();
+    ~DetailedWeatherPage() = default;
 
     void resizeEvent(QResizeEvent *event) override;
 

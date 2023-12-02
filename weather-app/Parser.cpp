@@ -46,6 +46,34 @@ QSharedPointer<WeatherData> Parser::parseWeatherData(const QString& jsonData)
 
 QSharedPointer<DetailedWeatherData> Parser::parseDetailedWeatherData(const QString& jsonData)
 {
-    // todo
-    return nullptr;
+    QJsonDocument doc = QJsonDocument::fromJson(jsonData.toUtf8());
+    QJsonObject obj = doc.object();
+    QString timezoneId = obj.value("timezone").toString();
+    QJsonObject current = obj.value("current").toObject();
+    QJsonObject daily = obj.value("daily").toObject();
+
+
+    QString location = QString::fromStdString("Belgrade"); // test, TODO
+
+    QTimeZone timeZone = QTimeZone(timezoneId.toLatin1());
+
+    int temperature = qRound(current.value("temperature_2m").toDouble());
+    int weatherCode = current.value("weather_code").toInt();
+    bool isDay = current.value("is_day").toInt();
+
+    QJsonArray dailyMaxTemperature = daily.value("temperature_2m_max").toArray();
+    int maxTemperature = qRound(dailyMaxTemperature[0].toDouble());
+
+    QJsonArray dailyMinTemperature = daily.value("temperature_2m_min").toArray();
+    int minTemperature = qRound(dailyMinTemperature[0].toDouble());
+
+    QSharedPointer<DetailedWeatherData> data(new DetailedWeatherData(location,
+                                                     temperature,
+                                                     maxTemperature,
+                                                     minTemperature,
+                                                     weatherCode,
+                                                     isDay,
+                                                     timeZone));
+
+    return data;
 }

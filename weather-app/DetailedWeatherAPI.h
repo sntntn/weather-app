@@ -3,6 +3,8 @@
 
 #include "WeatherAPI.h"
 
+class DetailedWeatherData;
+
 class DetailedWeatherAPI : public WeatherAPI
 {
 public:
@@ -12,8 +14,15 @@ public:
 private slots:
     void replyFinished(QNetworkReply *reply) override;
 
-private:
+protected:
+    void run() override;
+
+protected:
+    QString location;
+
     void fetchData(const QGeoCoordinate &coordinates);
+    QGeoCoordinate locationToCoordinate(const QString &location);
+
 };
 
 #endif // DETAILEDWEATHERAPI_H

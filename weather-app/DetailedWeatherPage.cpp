@@ -22,6 +22,7 @@ DetailedWeatherPage::DetailedWeatherPage(QWidget *parent)
     widgetsScrollAreaContents->setLayout(widgetsLayout);
     widgetsScrollArea->setWidget(widgetsScrollAreaContents);
     widgetsScrollArea->setWidgetResizable(true);
+    widgetsLayout->setAlignment(Qt::AlignTop);
     mainLayout->addWidget(widgetsScrollArea);
 
     connect(returnToHomePage, &QPushButton::clicked, this->mainWindow, &MainWindow::showHomePage);
@@ -46,6 +47,7 @@ void DetailedWeatherPage::resizeEvent(QResizeEvent* event) {
     QWidget::resizeEvent(event);
     int newWidth = this->width() / 3;
     widgetsScrollArea->setFixedWidth(newWidth);
+
 }
 
 void DetailedWeatherPage::addNewWidget(const QSharedPointer<Data> &data)
@@ -54,7 +56,7 @@ void DetailedWeatherPage::addNewWidget(const QSharedPointer<Data> &data)
     connect(widget, &WeatherWidget::clicked, this, &DetailedWeatherPage::setData);
     m_widgets.push_back(widget);
 
-    widget->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Preferred);
+    widget->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Preferred);
     widgetsLayout->addWidget(widget);
 }
 

@@ -80,7 +80,7 @@ HomePage::HomePage(QWidget *parent)
 
     connect(searchBar, &QLineEdit::textChanged, this, &HomePage::onSearchBarTextChanged);
 
-    lastTextChangedTime = QDateTime::currentDateTime();
+    //lastTextChangedTime = QDateTime::currentDateTime();
 
     connect(this, &HomePage::searchBarPressed, &geocodingApi, &GeocodingAPI::testCityFunction);
 }
@@ -126,7 +126,7 @@ void HomePage::onSearchBarTextChanged(const QString& text) {
     }
     lastTextChangedTime=currentTime;
     */
-
+    completer->complete();
     emit searchBarPressed(text);
     //completer->setCompletionPrefix(text);
     completer->complete();
@@ -142,8 +142,7 @@ void HomePage::updateCompleter(const QList<LocationData>& locations) {
     }
 
     completer->setModel(new QStringListModel(places, completer));
-    //completer->complete();
-    //qDebug() << "Updated completer with places:" << places;
+    completer->complete();
 }
 
 void HomePage::onCompletionActivated(const QString& text) {

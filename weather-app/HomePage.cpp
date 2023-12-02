@@ -8,6 +8,7 @@
 #include <QCompleter>
 #include <QStringListModel>
 
+bool pom=false;
 
 HomePage::HomePage(QWidget *parent)
     : Page{parent}
@@ -21,7 +22,6 @@ HomePage::HomePage(QWidget *parent)
     , leftVBox(new QVBoxLayout())
     , rightVBox(new QVBoxLayout())
     , completer(new QCompleter(this))
-    , completionTimer(new QTimer(this))
 {
     searchBar->setStyleSheet(
         "QLineEdit {"
@@ -80,10 +80,7 @@ HomePage::HomePage(QWidget *parent)
 
     connect(searchBar, &QLineEdit::textChanged, this, &HomePage::onSearchBarTextChanged);
 
-    completionTimer->setInterval(500);          //500 ms    odnosno pola sekunde
-    completionTimer->setSingleShot(true);
-    connect(completionTimer, &QTimer::timeout, this, &HomePage::onCompletionTimerTimeout);
-
+    //lastTextChangedTime = QDateTime::currentDateTime();
 
     connect(this, &HomePage::searchBarPressed, &geocodingApi, &GeocodingAPI::testCityFunction);
 
@@ -110,15 +107,21 @@ void HomePage::addNewWidget(const QSharedPointer<Data> &data)
     leftWidget->setProperty("inserttoLeft", !inserttoLeft);
 }
 
-
-void HomePage::onCompletionTimerTimeout() {
-    completer->setCompletionPrefix(searchBar->text());
-    completer->complete();
-}
 void HomePage::onSearchBarTextChanged(const QString& text) {
+    /*
+    QDateTime currentTime = QDateTime::currentDateTime();
+    qint64 milisecondsSinceLastChange = lastTextChangedTime.msecsTo(currentTime);
+
+
+    if(milisecondsSinceLastChange<100){
+        return;
+    }
+    lastTextChangedTime=currentTime;
+    */
+    completer->complete();
     emit searchBarPressed(text);
-    //completer->setCompletionPrefix(text);  // Postavi prefiks za kompleter na trenutni tekst
-    completionTimer->start();
+    //completer->setCompletionPrefix(text);
+    completer->complete();
 }
 
 void HomePage::updateCompleter(const QList<LocationData>& locations) {
@@ -131,7 +134,7 @@ void HomePage::updateCompleter(const QList<LocationData>& locations) {
     }
 
     completer->setModel(new QStringListModel(places, completer));
-    //qDebug() << "Updated completer with places:" << places;
+    completer->complete();
 }
 
 void HomePage::onCompletionActivated(const QString& text) {

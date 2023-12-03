@@ -57,7 +57,4 @@ void MainWindow::showDetailedWeatherPage(const QSharedPointer<WeatherData> &data
 MainWindow::~MainWindow()
 {
     delete ui;
-    delete homePage;
-    delete detailedWeather;
-    delete stackedWidget;
 }

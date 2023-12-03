@@ -103,13 +103,13 @@ void HomePage::onSearchBarTextChanged(const QString& text) {
     completer->complete();
 }
 
-void HomePage::updateCompleter(const QList<LocationData>& locations) {
+void HomePage::updateCompleter(const QList<GeoLocationData>& locations) {
     this->locations = locations;
     QStringList places;
     qDebug()<<"----------------------------------"<< locations.size();
     for (const auto& location : locations) {
-        qDebug() << "Selected Place:" << location.place << "Latitude:" << location.latitude << "Longitude:" << location.longitude;
-        places.append(location.place);
+        qDebug() << "Selected Place:" << location.getPlace() << "Latitude:" << location.getCoordinates().latitude() << "Longitude:" << location.getCoordinates().longitude();
+        places.append(location.getPlace());
     }
 
     completer->setModel(new QStringListModel(places, completer));
@@ -118,9 +118,9 @@ void HomePage::updateCompleter(const QList<LocationData>& locations) {
 
 void HomePage::onCompletionActivated(const QString& text) {
     for (const auto& location : locations) {
-        if (location.place == text) {
-//            double latitude = location.latitude;
-//            double longitude = location.longitude;
+        if (location.getPlace() == text) {
+//            double latitude = location.getCoordinates().latitude();
+//            double longitude = location.getCoordinates().longitude();
 
             //TO DO -> ovde implementiram sta ce da se desi kada kliknemo predlog
             //qDebug() << "Selected Place:" << text << "Latitude:" << latitude << "Longitude:" << longitude;

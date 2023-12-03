@@ -53,7 +53,7 @@ void GeocodingAPI::handleGeocodingResponse(QNetworkReply* reply) {
 
     // json za https://api.opencagedata.com/geocode/v1/json?q=Be&key=0741d020f58441f6b58ae4dc4128740d       formatted
 
-    QList<LocationData> locations;
+    QList<GeoLocationData> locations;
     for (const QJsonValue& resultValue : resultsArray) {
         QJsonObject resultObject = resultValue.toObject();
 
@@ -81,11 +81,8 @@ void GeocodingAPI::handleGeocodingResponse(QNetworkReply* reply) {
         double latitude = geometryObject["lat"].toDouble();
         double longitude = geometryObject["lng"].toDouble();
 
-        LocationData ld;
-        ld.place=place;
-        ld.latitude=latitude;
-        ld.longitude=longitude;
-        locations.append(ld);
+        GeoLocationData gld{place, "", QGeoCoordinate(latitude,longitude)};
+        locations.append(gld);
     }
     emit geocodingDataUpdated(locations);
     reply->deleteLater();

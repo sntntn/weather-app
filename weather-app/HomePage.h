@@ -11,9 +11,8 @@
 
 #include "Page.h"
 #include "geocodingapi.h"
+#include "GeoLocationData.h"
 #include "customcompleter.h"
-
-struct LocationData;
 
 class WeatherWidget;
 class WeatherData;
@@ -45,9 +44,9 @@ private:
     QVBoxLayout *rightVBox;
     CustomCompleter *completer;
 
-    QList<LocationData> locations;   //strukturu uzimamo direktno
+    QList<GeoLocationData> locations;   //strukturu uzimamo direktno
 
-    void updateCompleter(const QList<LocationData>& locations);
+    void updateCompleter(const QList<GeoLocationData>& locations);
     void onCompletionActivated(const QString& text);
 
 

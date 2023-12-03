@@ -81,7 +81,16 @@ void GeocodingAPI::handleGeocodingResponse(QNetworkReply* reply) {
         double latitude = geometryObject["lat"].toDouble();
         double longitude = geometryObject["lng"].toDouble();
 
-        GeoLocationData gld{place, "", QGeoCoordinate(latitude,longitude)};
+        QString renamedPlace;
+        int commaIndex=place.indexOf(',');
+        if(commaIndex !=-1 ){
+            renamedPlace=place.left(commaIndex).trimmed();
+        }
+        else{
+            renamedPlace=place;
+        }
+
+        GeoLocationData gld{place, renamedPlace, QGeoCoordinate(latitude,longitude)};
         locations.append(gld);
     }
     emit geocodingDataUpdated(locations);

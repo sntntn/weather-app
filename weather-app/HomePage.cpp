@@ -108,7 +108,7 @@ void HomePage::updateCompleter(const QList<GeoLocationData>& locations) {
     QStringList places;
     qDebug()<<"----------------------------------"<< locations.size();
     for (const auto& location : locations) {
-        qDebug() << "Selected Place:" << location.getPlace() << "Latitude:" << location.getCoordinates().latitude() << "Longitude:" << location.getCoordinates().longitude();
+        //qDebug() << "Selected Place:" << location.getPlace() << "Latitude:" << location.getCoordinates().latitude() << "Longitude:" << location.getCoordinates().longitude();
         places.append(location.getPlace());
     }
 
@@ -119,11 +119,11 @@ void HomePage::updateCompleter(const QList<GeoLocationData>& locations) {
 void HomePage::onCompletionActivated(const QString& text) {
     for (const auto& location : locations) {
         if (location.getPlace() == text) {
-//            double latitude = location.getCoordinates().latitude();
-//            double longitude = location.getCoordinates().longitude();
+            double latitude = location.getCoordinates().latitude();
+            double longitude = location.getCoordinates().longitude();
 
             //TO DO -> ovde implementiram sta ce da se desi kada kliknemo predlog
-            //qDebug() << "Selected Place:" << text << "Latitude:" << latitude << "Longitude:" << longitude;
+            qDebug() << "---Selected Place:" << text << "Latitude:" << latitude << "Longitude:" << longitude;
             break;
         }
     }

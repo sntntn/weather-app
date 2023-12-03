@@ -8,8 +8,6 @@
 #include <QCompleter>
 #include <QStringListModel>
 
-bool pom=false;
-
 HomePage::HomePage(QWidget *parent)
     : Page{parent}
     , mainLayout(new QVBoxLayout(this))
@@ -80,8 +78,6 @@ HomePage::HomePage(QWidget *parent)
 
     connect(searchBar, &QLineEdit::textChanged, this, &HomePage::onSearchBarTextChanged);
 
-    //lastTextChangedTime = QDateTime::currentDateTime();
-
     connect(this, &HomePage::searchBarPressed, &geocodingApi, &GeocodingAPI::testCityFunction);
 
 }
@@ -101,16 +97,6 @@ void HomePage::addNewWidget(const QSharedPointer<Data> &data)
 }
 
 void HomePage::onSearchBarTextChanged(const QString& text) {
-    /*
-    QDateTime currentTime = QDateTime::currentDateTime();
-    qint64 milisecondsSinceLastChange = lastTextChangedTime.msecsTo(currentTime);
-
-
-    if(milisecondsSinceLastChange<100){
-        return;
-    }
-    lastTextChangedTime=currentTime;
-    */
     completer->complete();
     emit searchBarPressed(text);
     //completer->setCompletionPrefix(text);

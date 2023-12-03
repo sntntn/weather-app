@@ -8,7 +8,6 @@
 #include <QHBoxLayout>
 #include <QSharedPointer>
 #include <QCompleter>
-//#include <QDateTime>
 
 #include "Page.h"
 #include "geocodingapi.h"
@@ -51,7 +50,6 @@ private:
     void updateCompleter(const QList<LocationData>& locations);
     void onCompletionActivated(const QString& text);
 
-    //QDateTime lastTextChangedTime;
 
     GeocodingAPI geocodingApi;
 };

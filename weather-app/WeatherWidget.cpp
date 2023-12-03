@@ -10,9 +10,9 @@
 
 #include "WeatherData.h"
 
-WeatherWidget::WeatherWidget(const QSharedPointer<WeatherData> &data_, QWidget *parent)
+WeatherWidget::WeatherWidget(const QSharedPointer<WeatherData> &data, QWidget *parent)
     : QWidget{parent}
-    , data(data_)
+    , data(data)
     , hBox(new QHBoxLayout(this))
     , leftVBox(new QVBoxLayout())
     , rightVBox(new QVBoxLayout())
@@ -42,7 +42,8 @@ WeatherWidget::WeatherWidget(const QSharedPointer<WeatherData> &data_, QWidget *
     timeLabel->setStyleSheet(labelStyle);
     temperatureLabel->setStyleSheet(labelStyle);
 
-    QHBoxLayout* hLayout = new QHBoxLayout();
+    //TODO
+    auto* hLayout = new QHBoxLayout();
     //QSpacerItem* spacer = new QSpacerItem();
     hLayout->addStretch();
     hLayout->addWidget(temperatureLabel);
@@ -63,17 +64,6 @@ WeatherWidget::WeatherWidget(const QSharedPointer<WeatherData> &data_, QWidget *
 void WeatherWidget::mousePressEvent(QMouseEvent *event) {
     QWidget::mousePressEvent(event);
     emit clicked(data);
-}
-
-WeatherWidget::~WeatherWidget()
-{
-    delete hBox;
-    delete leftVBox;
-    delete rightVBox;
-    delete locationLabel;
-    delete temperatureLabel;
-    delete timeLabel;
-    delete iconLabel;
 }
 
 QString WeatherWidget::weatherCodeToIcon(int weatherCode, bool isDay) {

@@ -36,7 +36,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         DetailedWeatherPage.h DetailedWeatherPage.cpp
         Page.h Page.cpp
         geocodingapi.h geocodingapi.cpp
-        Data.h Data.cpp
+        Data.h
         GeoLocationData.h GeoLocationData.cpp
         DetailedWeatherData.h DetailedWeatherData.cpp
         ApiHandler.h ApiHandler.cpp

@@ -12,7 +12,7 @@ public:
                                  int lowestTemperature,
                                  int weatherCode,
                                  bool isDay,
-                                 QTimeZone timezone);
+                                 QTimeZone &timezone);
 };
 
 #endif // DETAILEDWEATHERDATA_H

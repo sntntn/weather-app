@@ -14,7 +14,7 @@ class WeatherAPI : public ApiHandler
     Q_OBJECT
 public:
     explicit WeatherAPI(QString& location, QObject *parent = nullptr);
-    ~WeatherAPI();
+    ~WeatherAPI() = default;
 
 public slots:
     void replyFinished(QNetworkReply* reply) override;

@@ -16,7 +16,7 @@ public:
                 int lowestTemperature,
                 int weatherCode,
                 bool isDay,
-                QTimeZone timezone);
+                QTimeZone &timezone);
 
     QString location;
     int temperature;

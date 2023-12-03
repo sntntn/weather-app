@@ -14,39 +14,40 @@ DetailedWeatherPage::DetailedWeatherPage(QWidget *parent)
     , widgetsScrollAreaContents(new QWidget())
     , weatherScrollAreaContents(new QWidget())
     , widgetsLayout(new QVBoxLayout())
-    , weatherLayout(new QVBoxLayout())
-    , buttonsLayout(new QHBoxLayout())
+    , weatherLayout(new QGridLayout())
     , returnToHomePage(new QPushButton())
+    , horizontalSpacer(new QSpacerItem(40, 0, QSizePolicy::Expanding, QSizePolicy::Minimum))
     , addToSavedLocations(new QPushButton())
 {
     widgetsScrollAreaContents->setLayout(widgetsLayout);
     widgetsScrollArea->setWidget(widgetsScrollAreaContents);
     widgetsScrollArea->setWidgetResizable(true);
+    widgetsLayout->setAlignment(Qt::AlignTop);
     mainLayout->addWidget(widgetsScrollArea);
 
     connect(returnToHomePage, &QPushButton::clicked, this->mainWindow, &MainWindow::showHomePage);
     // TODO: add location button: connect(addToSavedLocations, &QPushButton::clicked, this, &DetailedWeatherPage::addLocation);
 
-    returnToHomePage->setText("< Home Page");
+    returnToHomePage->setText("< Home");
     addToSavedLocations->setText("Add");
 
-    buttonsLayout->addWidget(returnToHomePage);
-    buttonsLayout->addStretch();
-    buttonsLayout->addWidget(addToSavedLocations);
+    weatherLayout->addWidget(returnToHomePage, 0, 0);
+    weatherLayout->addItem(horizontalSpacer, 0, 1);
+    weatherLayout->addWidget(addToSavedLocations, 0, 2);
 
     weatherLayout->setAlignment(Qt::AlignTop);
-    weatherLayout->addLayout(buttonsLayout);
-
     weatherScrollAreaContents->setLayout(weatherLayout);
     weatherScrollArea->setWidget(weatherScrollAreaContents);
     weatherScrollArea->setWidgetResizable(true);
     mainLayout->addWidget(weatherScrollArea);
+
 }
 
 void DetailedWeatherPage::resizeEvent(QResizeEvent* event) {
     QWidget::resizeEvent(event);
     int newWidth = this->width() / 3;
     widgetsScrollArea->setFixedWidth(newWidth);
+
 }
 
 void DetailedWeatherPage::addNewWidget(const QSharedPointer<Data> &data)
@@ -55,29 +56,11 @@ void DetailedWeatherPage::addNewWidget(const QSharedPointer<Data> &data)
     connect(widget, &WeatherWidget::clicked, this, &DetailedWeatherPage::setData);
     m_widgets.push_back(widget);
 
-    widget->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Preferred);
+    widget->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Preferred);
     widgetsLayout->addWidget(widget);
 }
 
 void DetailedWeatherPage::setData(const QSharedPointer<WeatherData> &data)
 {
     std::cout << data->location.toStdString() << std::endl;
-}
-
-DetailedWeatherPage::~DetailedWeatherPage()
-{
-    delete mainLayout;
-    delete widgetsScrollArea;
-    delete weatherScrollArea;
-    delete widgetsScrollAreaContents;
-    delete weatherScrollAreaContents;
-    delete widgetsLayout;
-    delete weatherLayout;
-    delete buttonsLayout;
-    delete returnToHomePage;
-    delete addToSavedLocations;
-
-    for(auto *widget : m_widgets){
-        delete widget;
-    }
 }

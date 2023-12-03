@@ -7,6 +7,7 @@
 
 #include "WeatherData.h"
 #include "Parser.h"
+#include "Settings.h"
 
 WeatherAPI::WeatherAPI(QString& location, QObject *parent)
     : ApiHandler{parent}
@@ -44,6 +45,8 @@ void WeatherAPI::fetchData(const QGeoCoordinate &coordinates)
     query.addQueryItem("current", "temperature_2m,weather_code,is_day");
     query.addQueryItem("daily", "temperature_2m_max,temperature_2m_min");
     query.addQueryItem("timezone", "auto");
+    query.addQueryItem("temperature_unit", Settings::instance().temperatureUnitApiParameter());
+
     url.setQuery(query);
     QNetworkRequest request(url);
     networkManager->get(request);

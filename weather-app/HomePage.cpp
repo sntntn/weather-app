@@ -21,7 +21,7 @@ HomePage::HomePage(QWidget *parent)
     , rightWidget(new QWidget())
     , leftVBox(new QVBoxLayout())
     , rightVBox(new QVBoxLayout())
-    , completer(new QCompleter(this))
+    , completer(new CustomCompleter(this)) //koristi nas CustomCompleter umesto QCompleter
 {
     searchBar->setStyleSheet(
         "QLineEdit {"

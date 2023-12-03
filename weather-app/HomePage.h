@@ -8,10 +8,10 @@
 #include <QHBoxLayout>
 #include <QSharedPointer>
 #include <QCompleter>
-//#include <QDateTime>
 
 #include "Page.h"
 #include "geocodingapi.h"
+#include "customcompleter.h"
 
 struct LocationData;
 
@@ -43,13 +43,13 @@ private:
     QWidget *rightWidget;
     QVBoxLayout *leftVBox;
     QVBoxLayout *rightVBox;
-    QCompleter *completer;
+    CustomCompleter *completer;
+
     QList<LocationData> locations;   //strukturu uzimamo direktno
 
     void updateCompleter(const QList<LocationData>& locations);
     void onCompletionActivated(const QString& text);
 
-    //QDateTime lastTextChangedTime;
 
     GeocodingAPI geocodingApi;
 };

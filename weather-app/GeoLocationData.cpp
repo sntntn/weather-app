@@ -4,11 +4,10 @@
 #include <QJsonObject>
 #include <QSharedPointer>
 
-GeoLocationData::GeoLocationData(QString& location, QString& country, QGeoCoordinate& coordinates)
-    : location(location)
-    , country(country)
+GeoLocationData::GeoLocationData(QString& location, QString& renamedPlace, QGeoCoordinate& coordinates)
+    : place(location)
+    , renamedPlace(renamedPlace)
     , coordinates(coordinates)
 {
 
 }
-

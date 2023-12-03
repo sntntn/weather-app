@@ -10,8 +10,8 @@ class GeoLocationData : public Data
 public:
     GeoLocationData(QString& location, QString& country, QGeoCoordinate& coordinates);
 
-    QString location;
-    QString country;
+    QString place;
+    QString renamedPlace;
     QGeoCoordinate coordinates;
 };
 

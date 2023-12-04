@@ -59,10 +59,14 @@ void MainWindow::showDetailedWeatherPage(const QSharedPointer<WeatherData> &data
 
 void MainWindow::handleLocationObjectSelected(const GeoLocationData& locationData)
 {
-    qDebug()<<"Location:" << locationData.getPlace()
-             << "Latitude:"<< locationData.getCoordinates().latitude()
-             << "Longitude:" << locationData.getCoordinates().longitude()
-             << "Renamed place: " <<locationData.getRenamedPlace();
+    GeoLocationData mutableLocationData = locationData;     //da bih zadrzao const i referencu na signalu - stabilniji prenos
+    qDebug()<<"Location:" << mutableLocationData.getPlace()
+             << "Latitude:"<< mutableLocationData.getCoordinates().latitude()
+             << "Longitude:" << mutableLocationData.getCoordinates().longitude();
+    qDebug()<< "Default renamed place: " <<mutableLocationData.getRenamedPlace();
+    mutableLocationData.setRenamedPlace("Moj Rodni Grad");
+    qDebug()<< "after renaming - renamed place: " <<mutableLocationData.getRenamedPlace();
+
 }
 
 MainWindow::~MainWindow()

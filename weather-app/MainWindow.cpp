@@ -10,6 +10,7 @@
 #include "HomePage.h"
 #include "DetailedWeatherPage.h"
 #include "geocodingapi.h"
+#include "GeoLocationData.h"
 
 #include <iostream>
 
@@ -42,6 +43,8 @@ MainWindow::MainWindow(QWidget *parent)
 
         api->start();
     }
+
+    connect(homePage, &HomePage::locationObjectSelected,this,&MainWindow::handleLocationObjectSelected);
 }
 
 void MainWindow::showHomePage(){
@@ -52,6 +55,14 @@ void MainWindow::showDetailedWeatherPage(const QSharedPointer<WeatherData> &data
 {
     stackedWidget->setCurrentWidget(detailedWeather);
     emit detailedWeatherPageShown(data);
+}
+
+void MainWindow::handleLocationObjectSelected(const GeoLocationData& locationData)
+{
+    qDebug()<<"Location:" << locationData.getPlace()
+             << "Latitude:"<< locationData.getCoordinates().latitude()
+             << "Longitude:" << locationData.getCoordinates().longitude()
+             << "Renamed place: " <<locationData.getRenamedPlace();
 }
 
 MainWindow::~MainWindow()

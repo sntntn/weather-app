@@ -119,11 +119,9 @@ void HomePage::updateCompleter(const QList<GeoLocationData>& locations) {
 void HomePage::onCompletionActivated(const QString& text) {
     for (const auto& location : locations) {
         if (location.getPlace() == text) {
-            double latitude = location.getCoordinates().latitude();
-            double longitude = location.getCoordinates().longitude();
 
-            //TO DO -> ovde implementiram sta ce da se desi kada kliknemo predlog
-            qDebug() << "---Selected Place:" << text << "Latitude:" << latitude << "Longitude:" << longitude;
+            emit locationObjectSelected(location);
+            qDebug() << "------------emitovano----------------";
             break;
         }
     }

@@ -22,6 +22,7 @@ MainWindow::MainWindow(QWidget *parent)
     , stackedWidget(new QStackedWidget(this))
 {
     connect(this, &MainWindow::detailedWeatherPageShown, detailedWeather, &DetailedWeatherPage::setData);
+    connect(homePage, &HomePage::locationObjectSelected,this,&MainWindow::handleLocationObjectSelected);
 
     ui->setupUi(this);
     resize(900,600);
@@ -44,7 +45,7 @@ MainWindow::MainWindow(QWidget *parent)
         api->start();
     }
 
-    connect(homePage, &HomePage::locationObjectSelected,this,&MainWindow::handleLocationObjectSelected);
+
 }
 
 void MainWindow::showHomePage(){

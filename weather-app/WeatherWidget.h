@@ -23,7 +23,7 @@ public:
 signals:
     void clicked(const QSharedPointer<WeatherData> &data);
 
-private:
+protected:
     QString weatherCodeToIcon(int weatherCode, bool isDay);
 
     QHBoxLayout *hBox;

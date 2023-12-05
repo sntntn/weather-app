@@ -11,7 +11,7 @@
 
 Parser::Parser() = default;
 
-QSharedPointer<WeatherData> Parser::parseWeatherData(const QString& jsonData)
+QSharedPointer<WeatherData> Parser::parseWeatherData(const QString& jsonData, const QString& renamedPlace)
 {
     QJsonDocument doc = QJsonDocument::fromJson(jsonData.toUtf8());
     QJsonObject obj = doc.object();
@@ -20,7 +20,7 @@ QSharedPointer<WeatherData> Parser::parseWeatherData(const QString& jsonData)
     QJsonObject daily = obj.value("daily").toObject();
 
 
-    QString location = QString::fromStdString("Belgrade"); // test, TODO                -> ovo treba promeniti
+    QString location = renamedPlace;
 
     QTimeZone timeZone = QTimeZone(timezoneId.toLatin1());
 

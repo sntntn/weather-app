@@ -74,7 +74,7 @@ void MainWindow::handleLocationObjectSelected(const GeoLocationData& locationDat
              << "Latitude:"<< mutableLocationData.getCoordinates().latitude()
              << "Longitude:" << mutableLocationData.getCoordinates().longitude();
     qDebug()<< "Default renamed place: " <<mutableLocationData.getRenamedPlace();
-    mutableLocationData.setRenamedPlace("Moj Rodni Grad");
+    //mutableLocationData.setRenamedPlace("Moj Rodni Grad");
     qDebug()<< "after renaming - renamed place: " <<mutableLocationData.getRenamedPlace();
 
     auto* api = new WeatherAPI(mutableLocationData, this);

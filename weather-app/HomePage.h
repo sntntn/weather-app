@@ -8,6 +8,7 @@
 #include <QHBoxLayout>
 #include <QSharedPointer>
 #include <QCompleter>
+#include <QPushButton>
 //#include <QDateTime>
 
 #include "Page.h"
@@ -31,11 +32,14 @@ signals:
 public slots:
     void addNewWidget(const QSharedPointer<Data> &data) override;
     void onSearchBarTextChanged(const QString& text);
+    void openSettingsDialog();
 
 private:
 
     QVBoxLayout *mainLayout;
+    QHBoxLayout *upperLayout;
     QLineEdit *searchBar;
+    QPushButton *settings;
     QScrollArea *scrollArea;
     QHBoxLayout *scrollLayout;
     QWidget *scrollAreaContents;

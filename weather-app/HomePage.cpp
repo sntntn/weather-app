@@ -3,6 +3,7 @@
 #include "MainWindow.h"
 #include "WeatherData.h"
 #include "WeatherWidget.h"
+#include "SettingsDialog.h"
 
 #include <QShortcut>
 #include <QCompleter>
@@ -13,7 +14,9 @@ bool pom=false;
 HomePage::HomePage(QWidget *parent)
     : Page{parent}
     , mainLayout(new QVBoxLayout(this))
+    , upperLayout(new QHBoxLayout())
     , searchBar(new QLineEdit())
+    , settings(new QPushButton)
     , scrollArea(new QScrollArea())
     , scrollLayout(new QHBoxLayout())
     , scrollAreaContents(new QWidget())
@@ -39,7 +42,12 @@ HomePage::HomePage(QWidget *parent)
         );
     searchBar->setPlaceholderText("Enter location...");
     searchBar->setCompleter(completer);
-    mainLayout->addWidget(searchBar);
+    upperLayout->addWidget(searchBar);
+
+    connect(settings, &QPushButton::clicked, this, &HomePage::openSettingsDialog);
+    upperLayout->addWidget(settings);
+
+    mainLayout->addLayout(upperLayout);
 
     int leftMargin = 25;
     int rightMargin = 25;
@@ -99,6 +107,12 @@ void HomePage::addNewWidget(const QSharedPointer<Data> &data)
     widget->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Preferred);
     leftWidget->setProperty("inserttoLeft", !inserttoLeft);
 }
+
+void HomePage::openSettingsDialog(){
+    SettingsDialog settingsDialog(this);
+    settingsDialog.exec();
+}
+
 
 void HomePage::onSearchBarTextChanged(const QString& text) {
     /*

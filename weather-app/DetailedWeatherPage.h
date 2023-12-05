@@ -22,7 +22,7 @@ class DetailedWeatherPage : public Page
 
 public:
     explicit DetailedWeatherPage(QWidget *parent = nullptr);
-    ~DetailedWeatherPage();
+    ~DetailedWeatherPage() = default;
 
     void resizeEvent(QResizeEvent *event) override;
 
@@ -38,9 +38,9 @@ private:
     QWidget *widgetsScrollAreaContents;
     QWidget *weatherScrollAreaContents;
     QVBoxLayout *widgetsLayout;
-    QVBoxLayout *weatherLayout;
-    QHBoxLayout *buttonsLayout;
+    QGridLayout *weatherLayout;
     QPushButton *returnToHomePage;
+    QSpacerItem *horizontalSpacer;
     QPushButton *addToSavedLocations;
 };
 

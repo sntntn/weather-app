@@ -6,7 +6,7 @@
 class Data
 {
 public:
-    Data();
+    Data() = default;
 
 public:
     virtual ~Data() = default;

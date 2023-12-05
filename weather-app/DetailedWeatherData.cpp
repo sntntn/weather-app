@@ -6,6 +6,6 @@ DetailedWeatherData::DetailedWeatherData(QString& location,
                                          int lowestTemperature,
                                          int weatherCode,
                                          bool isDay,
-                                         QTimeZone timezone)
+                                         QTimeZone &timezone)
     : WeatherData(location, temperature, highestTemperature, lowestTemperature, weatherCode, isDay, timezone)
 { }

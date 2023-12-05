@@ -3,12 +3,14 @@
 
 #include <QMainWindow>
 
-
+class QStackedWidget;
+class QGeoPositionInfo;
 class WeatherData;
 class WeatherWidget;
-class QStackedWidget;
 class HomePage;
 class DetailedWeatherPage;
+class UserLocation;
+class GeoLocationData;
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -25,6 +27,7 @@ public:
 public slots:
     void showHomePage();
     void showDetailedWeatherPage(const QSharedPointer<WeatherData> &data);
+    void fetchUserLocationData(const QSharedPointer<GeoLocationData> &data);
 
 signals:
     void detailedWeatherPageShown(const QSharedPointer<WeatherData> &data);
@@ -35,6 +38,7 @@ private:
     HomePage *homePage;
     DetailedWeatherPage *detailedWeather;
     QStackedWidget *stackedWidget;
+    UserLocation *userLocation;
 
     double m_lastLongitude;
     double m_lastLatitude;

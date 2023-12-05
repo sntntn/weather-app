@@ -11,8 +11,8 @@
 
 #include "Page.h"
 #include "geocodingapi.h"
-
-struct LocationData;
+#include "GeoLocationData.h"
+#include "customcompleter.h"
 
 class WeatherWidget;
 class WeatherData;
@@ -23,13 +23,13 @@ class HomePage : public Page
     Q_OBJECT
 public:
     explicit HomePage(QWidget *parent = nullptr);
-    ~HomePage();
+    ~HomePage() = default;
 
 signals:
     void searchBarPressed(const QString& location);
 public slots:
     void addNewWidget(const QSharedPointer<Data> &data) override;
-    void searchBarEnter();
+    void onSearchBarTextChanged(const QString& text);
 
 private:
 
@@ -42,10 +42,11 @@ private:
     QWidget *rightWidget;
     QVBoxLayout *leftVBox;
     QVBoxLayout *rightVBox;
-    QCompleter *completer;
-    QList<LocationData> locations;   //strukturu uzimamo direktno
+    CustomCompleter *completer;
 
-    void updateCompleter(const QList<LocationData>& locations);
+    QList<GeoLocationData> locations;   //strukturu uzimamo direktno
+
+    void updateCompleter(const QList<GeoLocationData>& locations);
     void onCompletionActivated(const QString& text);
 
 

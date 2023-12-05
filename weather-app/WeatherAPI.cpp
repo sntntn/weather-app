@@ -6,9 +6,10 @@
 #include <QString>
 
 #include "WeatherData.h"
+#include "GeoLocationData.h"
 #include "Parser.h"
 
-WeatherAPI::WeatherAPI(QString& location, QObject *parent)
+WeatherAPI::WeatherAPI(const QSharedPointer<GeoLocationData> &location, QObject *parent)
     : ApiHandler{parent}
     , location(location)
 {
@@ -16,22 +17,10 @@ WeatherAPI::WeatherAPI(QString& location, QObject *parent)
 //    networkManager->moveToThread(this);   // TODO?
 }
 
-WeatherAPI::~WeatherAPI() { }
-
 void WeatherAPI::run()
 {
-    QGeoCoordinate coordinates = locationToCoordinate(location);
-    fetchData(coordinates);
+    fetchData(location.data()->getCoordinates());
     exec();
-}
-
-QGeoCoordinate WeatherAPI::locationToCoordinate(const QString &location){ // test
-    if(location == "Belgrade"){
-        return QGeoCoordinate(44.8125, 20.4375);
-        //return QGeoCoordinate(35.6764, 139.6500);  //Tokio
-
-    }
-    return QGeoCoordinate(0,0);
 }
 
 void WeatherAPI::fetchData(const QGeoCoordinate &coordinates)
@@ -58,8 +47,9 @@ void WeatherAPI::replyFinished(QNetworkReply *reply){
     }
 
     QString jsonData = reply->readAll();
-    auto data = Parser::parseWeatherData(jsonData);
+    auto data = Parser::parseWeatherData(jsonData, location.data()->getPlace());
     emit dataFetched(data);
+    this->quit();
 
     reply->deleteLater();
 }

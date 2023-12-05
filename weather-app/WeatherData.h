@@ -10,13 +10,13 @@ class WeatherData : public Data
 {
 public:
 
-    WeatherData(QString& location,
+    WeatherData(const QString& location,
                 int temperature,
                 int highestTemperature,
                 int lowestTemperature,
                 int weatherCode,
                 bool isDay,
-                QTimeZone timezone);
+                QTimeZone &timezone);
 
     QString location;
     int temperature;

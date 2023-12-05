@@ -44,6 +44,10 @@ HomePage::HomePage(QWidget *parent)
     searchBar->setCompleter(completer);
     upperLayout->addWidget(searchBar);
 
+    settings->setStyleSheet("QPushButton { background-color: #d7d6d5; }");
+    QPixmap pixmap("../Resources/settings.png");
+    QIcon settingsIcon(pixmap);
+    settings->setIcon(settingsIcon);
     connect(settings, &QPushButton::clicked, this, &HomePage::openSettingsDialog);
     upperLayout->addWidget(settings);
 

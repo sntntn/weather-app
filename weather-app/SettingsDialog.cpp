@@ -36,6 +36,7 @@ SettingsDialog::SettingsDialog(QWidget *parent)
     save->setText("Save");
     cancel->setText("Cancel");
     connect(save, &QPushButton::clicked, this, &SettingsDialog::changeSettings);
+    //TODO fix grandparent
     connect(this, &SettingsDialog::settingsChanged, qobject_cast<MainWindow*>(this->parent()->parent()->parent()), &MainWindow::getSavedLocationsData);
     buttonLayout->addWidget(save);
     buttonLayout->addStretch();

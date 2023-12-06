@@ -16,7 +16,7 @@ HomePage::HomePage(QWidget *parent)
     , mainLayout(new QVBoxLayout(this))
     , upperLayout(new QHBoxLayout())
     , searchBar(new QLineEdit())
-    , settings(new QPushButton)
+    , settingsButton(new QPushButton)
     , scrollArea(new QScrollArea())
     , scrollLayout(new QHBoxLayout())
     , scrollAreaContents(new QWidget())
@@ -44,12 +44,12 @@ HomePage::HomePage(QWidget *parent)
     searchBar->setCompleter(completer);
     upperLayout->addWidget(searchBar);
 
-    settings->setStyleSheet("QPushButton { background-color: #d7d6d5; }");
+    settingsButton->setStyleSheet("QPushButton { background-color: #d7d6d5; }");
     QPixmap pixmap("../Resources/settings.png");
     QIcon settingsIcon(pixmap);
-    settings->setIcon(settingsIcon);
-    connect(settings, &QPushButton::clicked, this, &HomePage::openSettingsDialog);
-    upperLayout->addWidget(settings);
+    settingsButton->setIcon(settingsIcon);
+    connect(settingsButton, &QPushButton::clicked, this, &HomePage::openSettingsDialog);
+    upperLayout->addWidget(settingsButton);
 
     mainLayout->addLayout(upperLayout);
 

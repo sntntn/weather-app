@@ -10,12 +10,14 @@
 #include "HomePage.h"
 #include "DetailedWeatherPage.h"
 #include "geocodingapi.h"
+#include "Settings.h"
 
 #include <iostream>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
+    , settings(Settings::instance())
     , homePage(new HomePage(this))
     , detailedWeather(new DetailedWeatherPage(this))
     , stackedWidget(new QStackedWidget(this))

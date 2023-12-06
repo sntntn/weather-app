@@ -3,7 +3,7 @@
 
 #include <QMainWindow>
 
-
+class Settings;
 class WeatherData;
 class WeatherWidget;
 class QStackedWidget;
@@ -32,6 +32,7 @@ signals:
 
 private:
     Ui::MainWindow *ui;
+    Settings &settings;
     HomePage *homePage;
     DetailedWeatherPage *detailedWeather;
     QStackedWidget *stackedWidget;

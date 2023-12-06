@@ -13,6 +13,7 @@
 
 #include "Page.h"
 #include "geocodingapi.h"
+#include "Settings.h"
 
 struct LocationData;
 
@@ -35,11 +36,10 @@ public slots:
     void openSettingsDialog();
 
 private:
-
     QVBoxLayout *mainLayout;
     QHBoxLayout *upperLayout;
     QLineEdit *searchBar;
-    QPushButton *settings;
+    QPushButton *settingsButton;
     QScrollArea *scrollArea;
     QHBoxLayout *scrollLayout;
     QWidget *scrollAreaContents;

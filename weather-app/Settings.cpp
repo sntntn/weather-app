@@ -39,6 +39,27 @@ QMap<PrecipitationUnit, QString> Settings::precipitationUnitToString
     {PrecipitationUnit::INCHES, "in"}
 };
 
+QMap<TemperatureUnit, QString> Settings::temperatureUnitsNames{
+    {TemperatureUnit::CELSIUS, "Celsius"},
+    {TemperatureUnit::FAHRENHEIT, "Fahrenheit"}
+};
+
+QMap<WindSpeedUnit, QString> Settings::windSpeedUnitsNames
+    {
+        {WindSpeedUnit::KMH, "Kilometres per hour"},
+        {WindSpeedUnit::MPH, "Miles per hour"},
+        {WindSpeedUnit::MS, "Metres per second"},
+        {WindSpeedUnit::KNOTS, "Knots"}
+    };
+
+QMap<PrecipitationUnit, QString> Settings::precipitationUnitsNames
+    {
+        {PrecipitationUnit::MILLIMETRES, "Millimetres"},
+        {PrecipitationUnit::INCHES, "Inches"}
+    };
+
+
+//TODO serijalizacija
 Settings::Settings()
     : shareLocation(false)
     , temperatureUnit(TemperatureUnit::CELSIUS)
@@ -80,4 +101,19 @@ QString Settings::windSpeedUnitString()
 QString Settings::precipitationUnitString()
 {
     return precipitationUnitToString[precipitationUnit];
+}
+
+QString Settings::temperatureUnitName()
+{
+    return temperatureUnitsNames[temperatureUnit];
+}
+
+QString Settings::windSpeedUnitName()
+{
+    return windSpeedUnitsNames[windSpeedUnit];
+}
+
+QString Settings::precipitationUnitName()
+{
+    return precipitationUnitsNames[precipitationUnit];
 }

@@ -8,6 +8,7 @@
 #include <QPixmap>
 
 class WeatherData;
+class GeoLocationData;
 
 class WeatherWidget : public QWidget
 {
@@ -21,7 +22,7 @@ public:
     const QSharedPointer<WeatherData> data;
 
 signals:
-    void clicked(const QSharedPointer<WeatherData> &data);
+    void clicked(const GeoLocationData &data);
 
 private:
     QString weatherCodeToIcon(int weatherCode, bool isDay);
@@ -29,8 +30,8 @@ private:
     QHBoxLayout *hBox;
     QVBoxLayout *leftVBox;
     QVBoxLayout *rightVBox;
-    QLabel* locationLabel;
     QLabel* temperatureLabel;
+    QLabel* locationLabel;
     QLabel* minmaxTemperatureLabel;
     QLabel* timeLabel;
     QLabel* iconLabel;

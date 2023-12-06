@@ -15,6 +15,7 @@
 class WeatherData;
 class MainWindow;
 class WeatherWidget;
+class GeoLocationData;
 
 class DetailedWeatherPage : public Page
 {
@@ -28,10 +29,17 @@ public:
 
 
 public slots:
-    void setData(const QSharedPointer<WeatherData> &data);
+    void setData(const GeoLocationData &data); // todo shared ptr
     void addNewWidget(const QSharedPointer<Data> &data) override;
 
+private slots:
+    void addButtonClicked();
+
+signals:
+    void locationSaved(const GeoLocationData &data);
+
 private:
+    GeoLocationData &data; // todo sharedptr
     QHBoxLayout *mainLayout;
     QScrollArea *widgetsScrollArea;
     QScrollArea *weatherScrollArea;
@@ -42,6 +50,8 @@ private:
     QPushButton *returnToHomePage;
     QSpacerItem *horizontalSpacer;
     QPushButton *addToSavedLocations;
+
+
 };
 
 #endif // DETAILEDWEATHERPAGE_H

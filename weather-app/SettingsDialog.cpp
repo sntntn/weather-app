@@ -1,6 +1,7 @@
 #include "SettingsDialog.h"
 #include "Settings.h"
 #include "MainWindow.h"
+#include "HomePage.h"
 
 SettingsDialog::SettingsDialog(QWidget *parent)
     : QDialog(parent)
@@ -35,7 +36,7 @@ SettingsDialog::SettingsDialog(QWidget *parent)
     save->setText("Save");
     cancel->setText("Cancel");
     connect(save, &QPushButton::clicked, this, &SettingsDialog::changeSettings);
-    connect(this, &SettingsDialog::settingsChanged, this->getMainWindow(), &MainWindow::getSavedLocationsData);
+    connect(this, &SettingsDialog::settingsChanged, qobject_cast<MainWindow*>(this->parent()->parent()->parent()), &MainWindow::getSavedLocationsData);
     buttonLayout->addWidget(save);
     buttonLayout->addStretch();
     buttonLayout->addWidget(cancel);
@@ -49,16 +50,16 @@ SettingsDialog::SettingsDialog(QWidget *parent)
     setLayout(mainLayout);
 }
 
-MainWindow* SettingsDialog::getMainWindow() {
-    QObject* parentObj = this->parent();
+//MainWindow* SettingsDialog::getMainWindow() {
+//    QObject* parentObj = this->parent();
 
-    if (HomePage* homePage = qobject_cast<HomePage*>(parentObj)) {
-        QObject* grandparentObj = homePage->parent();
-        return qobject_cast<MainWindow*>(grandparentObj);
-    }
-
-    return nullptr;
-}
+//    if (HomePage* homePage = qobject_cast<HomePage*>(parentObj)) {
+//        QObject* grandparentObj = homePage->parent();
+//        return qobject_cast<MainWindow*>(grandparentObj);
+//    }
+//    //return qobject_cast<MainWindow*>(this->parent()->parent());
+//    return nullptr;
+//}
 
 void SettingsDialog::changeSettings(){
     TemperatureUnit selectedTempUnit = static_cast<TemperatureUnit>(temperatureUnit->itemData(temperatureUnit->currentIndex()).toInt());

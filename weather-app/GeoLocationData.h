@@ -23,6 +23,8 @@ public:
         m_renamedPlace=renamedPlace;
     }
 
+    bool operator==(const GeoLocationData &other) const;
+
 private:
     QString m_place;
     QString m_renamedPlace;

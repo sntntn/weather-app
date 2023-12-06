@@ -85,13 +85,12 @@ HomePage::HomePage(QWidget *parent)
 
     completer->setCaseSensitivity(Qt::CaseInsensitive);
     completer->setCompletionMode(QCompleter::PopupCompletion);
+
     connect(&geocodingApi, &GeocodingAPI::geocodingDataUpdated, this, &HomePage::updateCompleter);
     connect(completer, QOverload<const QString&>::of(&QCompleter::activated), this, &HomePage::onCompletionActivated);
-
     connect(searchBar, &QLineEdit::textChanged, this, &HomePage::onSearchBarTextChanged);
-
     connect(this, &HomePage::searchBarPressed, &geocodingApi, &GeocodingAPI::testCityFunction);
-
+    connect(this, &HomePage::locationObjectSelected, mainWindow, &MainWindow::showDetailedWeatherPage);
 }
 
 void HomePage::addNewWidget(const QSharedPointer<Data> &data)
@@ -137,7 +136,6 @@ void HomePage::updateCompleter(const QList<GeoLocationData>& locations) {
 void HomePage::onCompletionActivated(const QString& text) {
     for (const auto& location : locations) {
         if (location.getPlace() == text) {
-
             emit locationObjectSelected(location);
             qDebug() << "------------emitovano----------------";
             break;

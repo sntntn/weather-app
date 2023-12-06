@@ -43,6 +43,7 @@ private:
     double m_lastLatitude;
 
     void getSavedLocationsData();
+    void refreshPages();
 
 public:
     QVector<GeoLocationData> savedLocations; // todo sharedptr

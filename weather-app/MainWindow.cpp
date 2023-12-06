@@ -56,17 +56,6 @@ void MainWindow::getSavedLocationsData()
     }
 }
 
-void MainWindow::getLocationData(const GeoLocationData &location) // todo sharedptr
-{
-    auto* api = new WeatherAPI(location, this);
-
-    connect(api, &ApiHandler::finished, api, &WeatherAPI::deleteLater);
-    connect(api, &ApiHandler::dataFetched, homePage, &HomePage::addNewWidget);
-    connect(api, &ApiHandler::dataFetched, detailedWeather, &DetailedWeatherPage::addNewWidget);
-
-    api->start();
-}
-
 void MainWindow::showHomePage(){
     stackedWidget->setCurrentWidget(homePage);
 }
@@ -77,11 +66,41 @@ void MainWindow::showDetailedWeatherPage(const GeoLocationData &data) // todo sh
     emit detailedWeatherPageShown(data);
 }
 
+void MainWindow::refreshPages()
+{
+    // todo?
+
+    stackedWidget->removeWidget(homePage);
+    stackedWidget->removeWidget(detailedWeather);
+    delete homePage;
+    delete detailedWeather;
+
+    homePage = new HomePage(this);
+    detailedWeather = new DetailedWeatherPage(this);
+
+    stackedWidget->addWidget(homePage);
+    stackedWidget->addWidget(detailedWeather);
+
+    getSavedLocationsData();
+}
+
+
 void MainWindow::saveNewLocation(const GeoLocationData& location) // todo sharedptr
 {
     // todo serijalizacija
     savedLocations.push_back(location);
     getLocationData(location);
+}
+
+void MainWindow::getLocationData(const GeoLocationData &location) // todo sharedptr
+{
+    auto* api = new WeatherAPI(location, this);
+
+    connect(api, &ApiHandler::finished, api, &WeatherAPI::deleteLater);
+    connect(api, &ApiHandler::dataFetched, homePage, &HomePage::addNewWidget);
+    connect(api, &ApiHandler::dataFetched, detailedWeather, &DetailedWeatherPage::addNewWidget);
+
+    api->start();
 }
 
 void MainWindow::handleLocationObjectSelected(const GeoLocationData& locationData)

@@ -20,6 +20,7 @@ MainWindow::MainWindow(QWidget *parent)
     , homePage(new HomePage(this))
     , detailedWeather(new DetailedWeatherPage(this))
     , stackedWidget(new QStackedWidget(this))
+    , savedLocations(QVector<GeoLocationData>()) // todo serijalizacija
 {
     connect(this, &MainWindow::detailedWeatherPageShown, detailedWeather, &DetailedWeatherPage::setData);
     connect(homePage, &HomePage::locationObjectSelected,this,&MainWindow::handleLocationObjectSelected);
@@ -30,41 +31,54 @@ MainWindow::MainWindow(QWidget *parent)
     stackedWidget->addWidget(homePage);
     stackedWidget->addWidget(detailedWeather);
     setCentralWidget(stackedWidget);
-
     stackedWidget->setCurrentWidget(homePage);
 
-    //TEST
-    QVector<GeoLocationData> locations;
-    GeoLocationData belgradeLocation1("Belgrade, City of Belgrade, Serbia", "Belgrade", QGeoCoordinate(44.8178, 20.4569));
-    GeoLocationData belgradeLocation2("Berlin, Germany", "Berlin", QGeoCoordinate(52.517, 12.3889));
-    GeoLocationData belgradeLocation3("Paris, Ile-de-France, France", "Paris", QGeoCoordinate(48.8589, 2.32004));
-    GeoLocationData belgradeLocation4("Athens, Central Athens, Greece", "Athens", QGeoCoordinate(37.9756,23.7348));
-    locations.append(belgradeLocation1);
-    locations.append(belgradeLocation2);
-    locations.append(belgradeLocation3);
-    locations.append(belgradeLocation4);
+    // TEST: tmp memory leak
+    auto location1 = GeoLocationData("Belgrade, City of Belgrade, Serbia", "Belgrade", QGeoCoordinate(44.8178, 20.4569));
+    auto location2 = GeoLocationData("Berlin, Germany", "Berlin", QGeoCoordinate(52.517, 12.3889));
+    auto location3 = GeoLocationData("Paris, Ile-de-France, France", "Paris", QGeoCoordinate(48.8589, 2.32004));
+    auto location4 = GeoLocationData("Athens, Central Athens, Greece", "Athens", QGeoCoordinate(37.9756,23.7348));
+    savedLocations.push_back(location1);
+    savedLocations.push_back(location2);
+    savedLocations.push_back(location3);
+    savedLocations.push_back(location4);
 
-    for(auto location : locations){
-        auto* api = new WeatherAPI(location, this);
-        connect(api, &ApiHandler::finished, api, &WeatherAPI::deleteLater);
+    getSavedLocationsData();
+}
 
-        connect(api, &ApiHandler::dataFetched, homePage, &HomePage::addNewWidget);
-        connect(api, &ApiHandler::dataFetched, detailedWeather, &DetailedWeatherPage::addNewWidget);
-
-        api->start();
+void MainWindow::getSavedLocationsData()
+{
+    for(auto location : savedLocations){
+        getLocationData(location);
     }
+}
 
+void MainWindow::getLocationData(const GeoLocationData &location) // todo sharedptr
+{
+    auto* api = new WeatherAPI(location, this);
 
+    connect(api, &ApiHandler::finished, api, &WeatherAPI::deleteLater);
+    connect(api, &ApiHandler::dataFetched, homePage, &HomePage::addNewWidget);
+    connect(api, &ApiHandler::dataFetched, detailedWeather, &DetailedWeatherPage::addNewWidget);
+
+    api->start();
 }
 
 void MainWindow::showHomePage(){
     stackedWidget->setCurrentWidget(homePage);
 }
 
-void MainWindow::showDetailedWeatherPage(const QSharedPointer<WeatherData> &data)
+void MainWindow::showDetailedWeatherPage(const GeoLocationData &data) // todo sharedptr
 {
     stackedWidget->setCurrentWidget(detailedWeather);
     emit detailedWeatherPageShown(data);
+}
+
+void MainWindow::saveNewLocation(const GeoLocationData& location) // todo sharedptr
+{
+    // todo serijalizacija
+    savedLocations.push_back(location);
+    getLocationData(location);
 }
 
 void MainWindow::handleLocationObjectSelected(const GeoLocationData& locationData)
@@ -76,15 +90,9 @@ void MainWindow::handleLocationObjectSelected(const GeoLocationData& locationDat
     qDebug()<< "Default renamed place: " <<mutableLocationData.getRenamedPlace();
     //mutableLocationData.setRenamedPlace("Moj Rodni Grad");
     qDebug()<< "after renaming - renamed place: " <<mutableLocationData.getRenamedPlace();
-
     auto* api = new WeatherAPI(mutableLocationData, this);
     connect(api, &ApiHandler::finished, api, &WeatherAPI::deleteLater);
-
-    connect(api, &ApiHandler::dataFetched, homePage, &HomePage::addNewWidget);
-    connect(api, &ApiHandler::dataFetched, detailedWeather, &DetailedWeatherPage::addNewWidget);
-
     api->start();
-
 }
 
 MainWindow::~MainWindow()

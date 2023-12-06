@@ -4,8 +4,9 @@
 #include <QJsonObject>
 #include <QSharedPointer>
 
+#include "GeoLocationData.h"
 
-WeatherData::WeatherData(QString& location, int temperature, int highestTemperature, int lowestTemperature, int weatherCode, bool isDay, QTimeZone& timezone)
+WeatherData::WeatherData(const GeoLocationData &location, int temperature, int highestTemperature, int lowestTemperature, int weatherCode, bool isDay, QTimeZone& timezone)
     : location(location)
     , temperature(temperature)
     , highestTemperature(highestTemperature)

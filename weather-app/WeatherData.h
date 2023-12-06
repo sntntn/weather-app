@@ -5,12 +5,13 @@
 #include <QTimeZone>
 
 #include "Data.h"
+#include "GeoLocationData.h"
 
 class WeatherData : public Data
 {
 public:
 
-    WeatherData(QString& location,
+    WeatherData(const GeoLocationData &location, // todo sharedptr, const sve
                 int temperature,
                 int highestTemperature,
                 int lowestTemperature,
@@ -18,7 +19,7 @@ public:
                 bool isDay,
                 QTimeZone &timezone);
 
-    QString location;
+    GeoLocationData location; // todo sharedptr
     int temperature;
     int highestTemperature;
     int lowestTemperature;

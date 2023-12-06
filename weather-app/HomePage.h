@@ -36,6 +36,7 @@ public slots:
     void addNewWidget(const QSharedPointer<Data> &data) override;
     void onSearchBarTextChanged(const QString& text);
     void openSettingsDialog();
+    void resetInsertToLeft();
 
 private:
     QVBoxLayout *mainLayout;

@@ -29,10 +29,11 @@ public slots:
     void saveNewLocation(const GeoLocationData& location); // todo sharedptr
     void handleLocationObjectSelected(const GeoLocationData& locationData);
     void getLocationData(const GeoLocationData &location);
-    void getSavedLocationsData();
+    void refreshPages();
 
 signals:
     void detailedWeatherPageShown(const GeoLocationData &data); // todo sharedptr
+    void deletePageWidgets();
 
 private:
     Ui::MainWindow *ui;
@@ -44,7 +45,7 @@ private:
     double m_lastLongitude; // todo?
     double m_lastLatitude;
 
-    void refreshPages();
+    void getSavedLocationsData();
 
 public:
     QVector<GeoLocationData> savedLocations; // todo sharedptr

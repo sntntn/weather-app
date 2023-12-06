@@ -86,6 +86,7 @@ HomePage::HomePage(QWidget *parent)
     completer->setCaseSensitivity(Qt::CaseInsensitive);
     completer->setCompletionMode(QCompleter::PopupCompletion);
 
+    connect(mainWindow, &MainWindow::deletePageWidgets, this, &HomePage::resetInsertToLeft);
     connect(&geocodingApi, &GeocodingAPI::geocodingDataUpdated, this, &HomePage::updateCompleter);
     connect(completer, QOverload<const QString&>::of(&QCompleter::activated), this, &HomePage::onCompletionActivated);
     connect(searchBar, &QLineEdit::textChanged, this, &HomePage::onSearchBarTextChanged);
@@ -106,6 +107,20 @@ void HomePage::addNewWidget(const QSharedPointer<Data> &data)
     widget->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Preferred);
     leftWidget->setProperty("inserttoLeft", !inserttoLeft);
 }
+
+//void HomePage::deleteWidgets()
+//{
+//    while ((item = leftVBox->takeAt(0)) != nullptr) {
+//        item->widget() ? delete item->widget() : delete item;
+//    }
+
+//    while ((item = rightVBox->takeAt(0)) != nullptr) {
+//        item->widget() ? delete item->widget() : delete item;
+//    }
+
+
+
+//}
 
 void HomePage::openSettingsDialog(){
     SettingsDialog settingsDialog(this);
@@ -141,4 +156,9 @@ void HomePage::onCompletionActivated(const QString& text) {
             break;
         }
     }
+}
+
+void HomePage::resetInsertToLeft()
+{
+    leftWidget->setProperty("inserttoLeft", true);
 }

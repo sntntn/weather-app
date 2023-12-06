@@ -68,22 +68,12 @@ void MainWindow::showDetailedWeatherPage(const GeoLocationData &data) // todo sh
 
 void MainWindow::refreshPages()
 {
-    // todo?
+    connect(this, &MainWindow::deletePageWidgets, homePage, &Page::deleteWidgets);
+    connect(this, &MainWindow::deletePageWidgets, detailedWeather, &Page::deleteWidgets);
 
-    stackedWidget->removeWidget(homePage);
-    stackedWidget->removeWidget(detailedWeather);
-    delete homePage;
-    delete detailedWeather;
-
-    homePage = new HomePage(this);
-    detailedWeather = new DetailedWeatherPage(this);
-
-    stackedWidget->addWidget(homePage);
-    stackedWidget->addWidget(detailedWeather);
-
+    emit deletePageWidgets();
     getSavedLocationsData();
 }
-
 
 void MainWindow::saveNewLocation(const GeoLocationData& location) // todo sharedptr
 {

@@ -51,7 +51,7 @@ MainWindow::MainWindow(QWidget *parent)
 
 void MainWindow::getSavedLocationsData()
 {
-    for(auto location : savedLocations){
+    for(const auto &location : savedLocations){
         getLocationData(location);
     }
 }

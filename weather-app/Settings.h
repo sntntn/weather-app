@@ -32,6 +32,7 @@ class Settings : public QObject
 
 public:
     static Settings& instance();
+    // TODO setters and getters or public variables
     // void setLocationSharing(const bool);
     // void setTemperatureUnit(const TemperatureUnit);
     // void setWindSpeedUnit(const WindSpeedUnit);

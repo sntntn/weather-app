@@ -49,6 +49,17 @@ SettingsDialog::SettingsDialog(QWidget *parent)
     setLayout(mainLayout);
 }
 
+MainWindow* SettingsDialog::getMainWindow() {
+    QObject* parentObj = this->parent();
+
+    if (HomePage* homePage = qobject_cast<HomePage*>(parentObj)) {
+        QObject* grandparentObj = homePage->parent();
+        return qobject_cast<MainWindow*>(grandparentObj);
+    }
+
+    return nullptr;
+}
+
 void SettingsDialog::changeSettings(){
     TemperatureUnit selectedTempUnit = static_cast<TemperatureUnit>(temperatureUnit->itemData(temperatureUnit->currentIndex()).toInt());
     WindSpeedUnit selectedWindUnit= static_cast<WindSpeedUnit>(windSpeedUnit->itemData(windSpeedUnit->currentIndex()).toInt());

@@ -42,6 +42,8 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         ApiHandler.h ApiHandler.cpp
         Settings.h Settings.cpp
         SettingsDialog.h SettingsDialog.cpp
+        customcompleter.h customcompleter.cpp
+
 
     )
 # Define target properties for Android with Qt 6 as:

@@ -12,8 +12,7 @@ class Parser
 {
 public:
     explicit Parser();
-    static QSharedPointer<WeatherData> parseWeatherData(const QString& jsonData);
-    static QSharedPointer<GeoLocationData> parseGeoLocationData(const QString& jsonData);
+    static QSharedPointer<WeatherData> parseWeatherData(const QString& jsonData, const QString& renamedPlace);
 };
 
 #endif // PARSER_H

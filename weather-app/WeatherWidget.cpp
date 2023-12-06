@@ -37,6 +37,7 @@ WeatherWidget::WeatherWidget(const QSharedPointer<WeatherData> &data, QWidget *p
     temperatureLabel->setFont(QFont("Arial", 24, QFont::Bold));
     minmaxTemperatureLabel->setFont(QFont("Arial", 14, QFont::Normal));
     iconLabel->setPixmap(weatherIcon.scaled(50, 50, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+    iconLabel->setFixedSize(50,50);
 
     QString labelStyle = "QLabel { color: white; }";
     locationLabel->setStyleSheet(labelStyle);

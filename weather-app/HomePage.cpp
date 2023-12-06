@@ -9,8 +9,6 @@
 #include <QCompleter>
 #include <QStringListModel>
 
-bool pom=false;
-
 HomePage::HomePage(QWidget *parent)
     : Page{parent}
     , mainLayout(new QVBoxLayout(this))
@@ -24,7 +22,7 @@ HomePage::HomePage(QWidget *parent)
     , rightWidget(new QWidget())
     , leftVBox(new QVBoxLayout())
     , rightVBox(new QVBoxLayout())
-    , completer(new QCompleter(this))
+    , completer(new CustomCompleter(this)) //koristi nas CustomCompleter umesto QCompleter
 {
     searchBar->setStyleSheet(
         "QLineEdit {"
@@ -92,8 +90,6 @@ HomePage::HomePage(QWidget *parent)
 
     connect(searchBar, &QLineEdit::textChanged, this, &HomePage::onSearchBarTextChanged);
 
-    //lastTextChangedTime = QDateTime::currentDateTime();
-
     connect(this, &HomePage::searchBarPressed, &geocodingApi, &GeocodingAPI::testCityFunction);
 
 }
@@ -119,29 +115,19 @@ void HomePage::openSettingsDialog(){
 
 
 void HomePage::onSearchBarTextChanged(const QString& text) {
-    /*
-    QDateTime currentTime = QDateTime::currentDateTime();
-    qint64 milisecondsSinceLastChange = lastTextChangedTime.msecsTo(currentTime);
-
-
-    if(milisecondsSinceLastChange<100){
-        return;
-    }
-    lastTextChangedTime=currentTime;
-    */
     completer->complete();
     emit searchBarPressed(text);
     //completer->setCompletionPrefix(text);
     completer->complete();
 }
 
-void HomePage::updateCompleter(const QList<LocationData>& locations) {
+void HomePage::updateCompleter(const QList<GeoLocationData>& locations) {
     this->locations = locations;
     QStringList places;
     qDebug()<<"----------------------------------"<< locations.size();
     for (const auto& location : locations) {
-        qDebug() << "Selected Place:" << location.place << "Latitude:" << location.latitude << "Longitude:" << location.longitude;
-        places.append(location.place);
+        //qDebug() << "Selected Place:" << location.getPlace() << "Latitude:" << location.getCoordinates().latitude() << "Longitude:" << location.getCoordinates().longitude();
+        places.append(location.getPlace());
     }
 
     completer->setModel(new QStringListModel(places, completer));
@@ -150,12 +136,10 @@ void HomePage::updateCompleter(const QList<LocationData>& locations) {
 
 void HomePage::onCompletionActivated(const QString& text) {
     for (const auto& location : locations) {
-        if (location.place == text) {
-//            double latitude = location.latitude;
-//            double longitude = location.longitude;
+        if (location.getPlace() == text) {
 
-            //TO DO -> ovde implementiram sta ce da se desi kada kliknemo predlog
-            //qDebug() << "Selected Place:" << text << "Latitude:" << latitude << "Longitude:" << longitude;
+            emit locationObjectSelected(location);
+            qDebug() << "------------emitovano----------------";
             break;
         }
     }

@@ -7,13 +7,7 @@
 #include <QDebug>
 
 #include <QObject>
-
-struct LocationData {
-    QString place;
-    double latitude;
-    double longitude;
-};
-
+#include "GeoLocationData.h"
 
 class GeocodingAPI : public QObject
 {
@@ -26,15 +20,13 @@ public:
     void handleGeocodingResponse(QNetworkReply* reply);
 
 signals:
-    void geocodingDataUpdated(const QList<LocationData>& locations);
+    void geocodingDataUpdated(const QList<GeoLocationData>& locations);
 public slots:
     void testCityFunction(const QString &location);
 
 private:
     const QString OPEN_CAGE_API_KEY = "0741d020f58441f6b58ae4dc4128740d";  // TODO za config fajl
     QNetworkAccessManager* m_networkManager;
-
-
 };
 
 #endif // GEOCODINGAPI_H

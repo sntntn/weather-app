@@ -5,6 +5,7 @@
 
 class Settings;
 class WeatherData;
+class GeoLocationData;
 class WeatherWidget;
 class QStackedWidget;
 class HomePage;
@@ -25,6 +26,8 @@ public:
 public slots:
     void showHomePage();
     void showDetailedWeatherPage(const QSharedPointer<WeatherData> &data);
+    void handleLocationObjectSelected(const GeoLocationData& locationData);
+
 
 signals:
     void detailedWeatherPageShown(const QSharedPointer<WeatherData> &data);

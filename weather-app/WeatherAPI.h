@@ -6,6 +6,7 @@
 #include <QString>
 
 #include "ApiHandler.h"
+#include "GeoLocationData.h"
 
 class WeatherData;
 
@@ -13,7 +14,7 @@ class WeatherAPI : public ApiHandler
 {
     Q_OBJECT
 public:
-    explicit WeatherAPI(QString& location, QObject *parent = nullptr);
+    explicit WeatherAPI(GeoLocationData& location, QObject *parent = nullptr);
     ~WeatherAPI() = default;
 
 public slots:
@@ -23,10 +24,10 @@ protected:
     void run() override;
 
 protected:
-    QString location;
+    GeoLocationData location;
 
     void fetchData(const QGeoCoordinate &coordinates);
-    QGeoCoordinate locationToCoordinate(const QString &location); // test
+    QGeoCoordinate locationToCoordinate(GeoLocationData& location); // test
 };
 
 #endif // WEATHERAPI_H

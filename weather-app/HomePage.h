@@ -10,13 +10,13 @@
 #include <QCompleter>
 #include <QPushButton>
 //#include <QDateTime>
-
 #include "Page.h"
 #include "geocodingapi.h"
 #include "Settings.h"
+#include "GeoLocationData.h"
+#include "customcompleter.h"
 
 struct LocationData;
-
 class WeatherWidget;
 class WeatherData;
 class MainWindow;
@@ -30,6 +30,8 @@ public:
 
 signals:
     void searchBarPressed(const QString& location);
+    void locationObjectSelected(const GeoLocationData& locationData);
+
 public slots:
     void addNewWidget(const QSharedPointer<Data> &data) override;
     void onSearchBarTextChanged(const QString& text);
@@ -47,13 +49,13 @@ private:
     QWidget *rightWidget;
     QVBoxLayout *leftVBox;
     QVBoxLayout *rightVBox;
-    QCompleter *completer;
-    QList<LocationData> locations;   //strukturu uzimamo direktno
+    CustomCompleter *completer;
 
-    void updateCompleter(const QList<LocationData>& locations);
+    QList<GeoLocationData> locations;   //strukturu uzimamo direktno
+
+    void updateCompleter(const QList<GeoLocationData>& locations);
     void onCompletionActivated(const QString& text);
 
-    //QDateTime lastTextChangedTime;
 
     GeocodingAPI geocodingApi;
 };

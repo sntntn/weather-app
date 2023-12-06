@@ -10,6 +10,8 @@
 
 #include "Settings.h"
 
+class MainWindow;
+
 
 class SettingsDialog : public QDialog
 {
@@ -19,6 +21,7 @@ public:
     QString temperatureUnitToString(TemperatureUnit unit);
     QString windSpeedUnitToString(WindSpeedUnit unit);
     QString precipitationUnitToString(PrecipitationUnit unit);
+    MainWindow* getMainWindow();
     SettingsDialog(QWidget *parent = nullptr);
     ~SettingsDialog() = default;
     void changeSettings();

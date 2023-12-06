@@ -3,10 +3,12 @@
 
 #include "WeatherData.h"
 
+class GeoLocationData;
+
 class DetailedWeatherData : public WeatherData
 {
 public:
-    explicit DetailedWeatherData(QString& location,
+    explicit DetailedWeatherData(GeoLocationData &location,
                                  int temperature,
                                  int highestTemperature,
                                  int lowestTemperature,

@@ -1,6 +1,7 @@
 #include "DetailedWeatherData.h"
 
-DetailedWeatherData::DetailedWeatherData(QString& location,
+
+DetailedWeatherData::DetailedWeatherData(GeoLocationData &location,
                                          int temperature,
                                          int highestTemperature,
                                          int lowestTemperature,

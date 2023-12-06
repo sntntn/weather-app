@@ -3,11 +3,13 @@
 #include "MainWindow.h"
 #include "WeatherData.h"
 #include "WeatherWidget.h"
+#include "GeoLocationData.h"
 
 #include <iostream>
 
 DetailedWeatherPage::DetailedWeatherPage(QWidget *parent)
     : Page{parent}
+    , data(*(new GeoLocationData("test", "test", QGeoCoordinate()))) // test, todo sharedptr (?)
     , mainLayout(new QHBoxLayout(this))
     , widgetsScrollArea(new QScrollArea())
     , weatherScrollArea(new QScrollArea())
@@ -26,7 +28,8 @@ DetailedWeatherPage::DetailedWeatherPage(QWidget *parent)
     mainLayout->addWidget(widgetsScrollArea);
 
     connect(returnToHomePage, &QPushButton::clicked, this->mainWindow, &MainWindow::showHomePage);
-    // TODO: add location button: connect(addToSavedLocations, &QPushButton::clicked, this, &DetailedWeatherPage::addLocation);
+    connect(addToSavedLocations, &QPushButton::clicked, this, &DetailedWeatherPage::addButtonClicked);
+    connect(this, &DetailedWeatherPage::locationSaved, this->mainWindow, &MainWindow::saveNewLocation);
 
     returnToHomePage->setText("< Home");
     addToSavedLocations->setText("Add");
@@ -40,7 +43,6 @@ DetailedWeatherPage::DetailedWeatherPage(QWidget *parent)
     weatherScrollArea->setWidget(weatherScrollAreaContents);
     weatherScrollArea->setWidgetResizable(true);
     mainLayout->addWidget(weatherScrollArea);
-
 }
 
 void DetailedWeatherPage::resizeEvent(QResizeEvent* event) {
@@ -54,13 +56,26 @@ void DetailedWeatherPage::addNewWidget(const QSharedPointer<Data> &data)
 {
     auto *widget = new WeatherWidget(qSharedPointerCast<WeatherData>(data), widgetsScrollAreaContents);
     connect(widget, &WeatherWidget::clicked, this, &DetailedWeatherPage::setData);
-    m_widgets.push_back(widget);
-
     widget->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Preferred);
     widgetsLayout->addWidget(widget);
+
+    m_widgets.emplaceBack(widget);
 }
 
-void DetailedWeatherPage::setData(const QSharedPointer<WeatherData> &data)
+void DetailedWeatherPage::setData(const GeoLocationData &data) // todo sharedptr
 {
-    std::cout << data->location.toStdString() << std::endl;
+    this->data = data;
+    // test
+    std::cout << data.getRenamedPlace().toStdString() << " "
+              << data.getCoordinates().toString().toStdString() << std::endl;
+
+    // test, todo
+    mainWindow->savedLocations.indexOf(data) == -1 ? this->addToSavedLocations->setVisible(true)
+                                                   : this->addToSavedLocations->setVisible(false);
+}
+
+void DetailedWeatherPage::addButtonClicked()
+{
+    emit locationSaved(this->data);
+    this->addToSavedLocations->setVisible(false);
 }

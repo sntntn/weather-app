@@ -25,13 +25,13 @@ public:
 
 public slots:
     void showHomePage();
-    void showDetailedWeatherPage(const QSharedPointer<WeatherData> &data);
+    void showDetailedWeatherPage(const GeoLocationData &data); // todo sharedptr
+    void saveNewLocation(const GeoLocationData& location); // todo sharedptr
     void handleLocationObjectSelected(const GeoLocationData& locationData);
-
+    void getLocationData(const GeoLocationData &location);
 
 signals:
-    void detailedWeatherPageShown(const QSharedPointer<WeatherData> &data);
-
+    void detailedWeatherPageShown(const GeoLocationData &data); // todo sharedptr
 
 private:
     Ui::MainWindow *ui;
@@ -39,7 +39,13 @@ private:
     DetailedWeatherPage *detailedWeather;
     QStackedWidget *stackedWidget;
 
-    double m_lastLongitude;
+    double m_lastLongitude; // todo?
     double m_lastLatitude;
+
+    void getSavedLocationsData();
+
+public:
+    QVector<GeoLocationData> savedLocations; // todo sharedptr
+
 };
 #endif // MAINWINDOW_H

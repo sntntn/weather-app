@@ -8,7 +8,7 @@
 #include "WeatherData.h"
 #include "Parser.h"
 
-WeatherAPI::WeatherAPI(GeoLocationData& location, QObject *parent)
+WeatherAPI::WeatherAPI(const GeoLocationData& location, QObject *parent)
     : ApiHandler{parent}
     , location(location)
 {
@@ -51,7 +51,7 @@ void WeatherAPI::replyFinished(QNetworkReply *reply){
     }
 
     QString jsonData = reply->readAll();
-    auto data = Parser::parseWeatherData(jsonData, location.getRenamedPlace());
+    auto data = Parser::parseWeatherData(jsonData, location);
 
     emit dataFetched(data);
     this->quit();

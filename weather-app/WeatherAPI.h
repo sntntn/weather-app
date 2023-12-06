@@ -14,7 +14,7 @@ class WeatherAPI : public ApiHandler
 {
     Q_OBJECT
 public:
-    explicit WeatherAPI(GeoLocationData& location, QObject *parent = nullptr);
+    explicit WeatherAPI(const GeoLocationData& location, QObject *parent = nullptr);
     ~WeatherAPI() = default;
 
 public slots:

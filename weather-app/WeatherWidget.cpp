@@ -16,7 +16,7 @@ WeatherWidget::WeatherWidget(const QSharedPointer<WeatherData> &data, QWidget *p
     , hBox(new QHBoxLayout(this))
     , leftVBox(new QVBoxLayout())
     , rightVBox(new QVBoxLayout())
-    , locationLabel(new QLabel(data->location, this))
+    , locationLabel(new QLabel(data->location.getRenamedPlace(), this))
     , temperatureLabel(new QLabel(QString::number(data->temperature), this))
     , minmaxTemperatureLabel(new QLabel("H:" + QString::number(data->highestTemperature) + " L:" + QString::number(data->lowestTemperature), this))
     , timeLabel(new QLabel(QDateTime::currentDateTime().toTimeZone(data->timezone).toString("HH:mm"), this))
@@ -64,7 +64,7 @@ WeatherWidget::WeatherWidget(const QSharedPointer<WeatherData> &data, QWidget *p
 
 void WeatherWidget::mousePressEvent(QMouseEvent *event) {
     QWidget::mousePressEvent(event);
-    emit clicked(data);
+    emit clicked(data->location);
 }
 
 QString WeatherWidget::weatherCodeToIcon(int weatherCode, bool isDay) {

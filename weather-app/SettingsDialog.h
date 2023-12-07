@@ -30,6 +30,9 @@ public:
 signals:
     void settingsChanged();
 
+public slots:
+    void changeOrder(const QList<QString> &newOrder);
+    void resetOrder();
 private:
     Settings &settings;
     QVBoxLayout *mainLayout;
@@ -40,10 +43,10 @@ private:
     QHBoxLayout *buttonLayout;
     QPushButton *save;
     QPushButton *cancel;
-
+    QList<QString> widgetOrder;
+    QPixmap trashCan;
 
     void setupUi();
-
 
 };
 

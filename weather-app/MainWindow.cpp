@@ -36,23 +36,30 @@ MainWindow::MainWindow(QWidget *parent)
     setCentralWidget(stackedWidget);
     stackedWidget->setCurrentWidget(homePage);
 
+    for(auto &location : settings.locationNames){
+        savedLocations.append(GeoLocationData(location, location, QGeoCoordinate(44.8178, 20.4569)));
+    }
+
     // TEST: tmp memory leak
-    auto location1 = GeoLocationData("Belgrade, City of Belgrade, Serbia", "Belgrade", QGeoCoordinate(44.8178, 20.4569));
-    auto location2 = GeoLocationData("Berlin, Germany", "Berlin", QGeoCoordinate(52.517, 12.3889));
-    auto location3 = GeoLocationData("Paris, Ile-de-France, France", "Paris", QGeoCoordinate(48.8589, 2.32004));
-    auto location4 = GeoLocationData("Athens, Central Athens, Greece", "Athens", QGeoCoordinate(37.9756,23.7348));
-    savedLocations.push_back(location1);
-    savedLocations.push_back(location2);
-    savedLocations.push_back(location3);
-    savedLocations.push_back(location4);
+//    auto location1 = GeoLocationData("Belgrade, City of Belgrade, Serbia", "Belgrade", QGeoCoordinate(44.8178, 20.4569));
+//    auto location2 = GeoLocationData("Berlin, Germany", "Berlin", QGeoCoordinate(52.517, 12.3889));
+//    auto location3 = GeoLocationData("Paris, Ile-de-France, France", "Paris", QGeoCoordinate(48.8589, 2.32004));
+//    auto location4 = GeoLocationData("Athens, Central Athens, Greece", "Athens", QGeoCoordinate(37.9756,23.7348));
+//    savedLocations.push_back(location1);
+//    savedLocations.push_back(location2);
+//    savedLocations.push_back(location3);
+//    savedLocations.push_back(location4);
 
     getSavedLocationsData();
 }
 
 void MainWindow::getSavedLocationsData()
 {
-    for(const auto &location : savedLocations){
-        getLocationData(location);
+//    for(const auto &location : savedLocations){
+//        getLocationData(location);
+//    }
+    for(const auto& location : settings.locationNames){
+        getLocationData(GeoLocationData(location, location, QGeoCoordinate(44.8178, 20.4569)));
     }
 }
 

@@ -1,7 +1,12 @@
 #include "SettingsDialog.h"
+
+#include <QListView>
+#include <QListWidget>
+
 #include "Settings.h"
 #include "MainWindow.h"
 #include "HomePage.h"
+#include "WidgetsManager.h"
 
 SettingsDialog::SettingsDialog(QWidget *parent)
     : QDialog(parent)
@@ -14,8 +19,9 @@ SettingsDialog::SettingsDialog(QWidget *parent)
     , buttonLayout(new QHBoxLayout())
     , save(new QPushButton())
     , cancel(new QPushButton())
+    , widgetOrder(settings.locationNames)
+    , trashCan("../Resources/whiteTrash.png")
 {
-    //it.key() je odgovarajuca vrednost enuma koja odgovara ovom sto se ispise u datom comboboxu
     for (auto it = Settings::temperatureUnitsNames.cbegin(); it != Settings::temperatureUnitsNames.cend(); ++it) {
         temperatureUnit->addItem(it.value(), QVariant::fromValue(it.key()));
     }
@@ -38,6 +44,8 @@ SettingsDialog::SettingsDialog(QWidget *parent)
     connect(save, &QPushButton::clicked, this, &SettingsDialog::changeSettings);
     //TODO fix grandparent
     connect(this, &SettingsDialog::settingsChanged, qobject_cast<MainWindow*>(this->parent()->parent()->parent()), &MainWindow::refreshPages);
+    connect(cancel, &QPushButton::clicked, this, &SettingsDialog::resetOrder);
+    connect(cancel, &QPushButton::clicked, this, &SettingsDialog::close);
     buttonLayout->addWidget(save);
     buttonLayout->addStretch();
     buttonLayout->addWidget(cancel);
@@ -46,21 +54,61 @@ SettingsDialog::SettingsDialog(QWidget *parent)
     mainLayout->addWidget(temperatureUnit);
     mainLayout->addWidget(windSpeedUnit);
     mainLayout->addWidget(precipitationUnit);
-    mainLayout->addLayout(buttonLayout);
 
+    WidgetsManager* listWidget = new WidgetsManager(this);
+    listWidget->setDragDropMode(QAbstractItemView::InternalMove);
+
+    for (const QString& location : settings.locationNames) {
+
+        QListWidgetItem* listItem = new QListWidgetItem();
+        listWidget->addItem(listItem);
+
+        QWidget* customWidget = new QWidget();
+        QHBoxLayout* layout = new QHBoxLayout(customWidget);
+
+        QLabel* label = new QLabel(location);
+        QPushButton* deleteButton = new QPushButton();
+        QIcon trashIcon(trashCan);
+        deleteButton->setIcon(trashIcon);
+        //deleteButton->setStyleSheet("background-color: transparent;");
+
+        layout->addWidget(label, 1);
+        layout->addWidget(deleteButton);
+
+        connect(deleteButton, &QPushButton::clicked, this, [this, listWidget, listItem]() {
+
+            QWidget* customWidget = listWidget->itemWidget(listItem);
+            QHBoxLayout* layout = qobject_cast<QHBoxLayout*>(customWidget->layout());
+            QLabel* label = qobject_cast<QLabel*>(layout->itemAt(0)->widget());
+            QString itemText = label->text();
+
+            delete listItem;
+            widgetOrder.removeAll(itemText);
+        });
+
+        listWidget->setItemWidget(listItem, customWidget);
+        listItem->setSizeHint(customWidget->minimumSizeHint());
+    }
+
+    connect(listWidget, &WidgetsManager::itemsRearranged, this, [this, listWidget](){
+        widgetOrder.clear();
+
+        for (int i = 0; i < listWidget->count(); ++i) {
+            QWidget* customWidget = listWidget->itemWidget(listWidget->item(i));
+            QHBoxLayout* layout = qobject_cast<QHBoxLayout*>(customWidget->layout());
+            if (layout && layout->count() > 0) {
+                QLabel* label = qobject_cast<QLabel*>(layout->itemAt(0)->widget());
+                if (label) {
+                    widgetOrder.append(label->text());
+                }
+            }
+        }
+    });
+
+    mainLayout->addWidget(listWidget);
+    mainLayout->addLayout(buttonLayout);
     setLayout(mainLayout);
 }
-
-//MainWindow* SettingsDialog::getMainWindow() {
-//    QObject* parentObj = this->parent();
-
-//    if (HomePage* homePage = qobject_cast<HomePage*>(parentObj)) {
-//        QObject* grandparentObj = homePage->parent();
-//        return qobject_cast<MainWindow*>(grandparentObj);
-//    }
-//    //return qobject_cast<MainWindow*>(this->parent()->parent());
-//    return nullptr;
-//}
 
 void SettingsDialog::changeSettings(){
     TemperatureUnit selectedTempUnit = static_cast<TemperatureUnit>(temperatureUnit->itemData(temperatureUnit->currentIndex()).toInt());
@@ -72,46 +120,18 @@ void SettingsDialog::changeSettings(){
     settings.windSpeedUnit = selectedWindUnit;
     settings.precipitationUnit = selectedPrecUnit;
     settings.shareLocation = locationSwitch->isChecked();
-
-    // test
-    // qDebug() << temperatureUnitToString(settings.temperatureUnit)
-    //         << windSpeedUnitToString(settings.windSpeedUnit)
-    //         << precipitationUnitToString(settings.precipitationUnit)
-    //         << settings.shareLocation;
-
+    settings.locationNames = widgetOrder;
 
     emit settingsChanged();
     this->close();
 }
 
-//test
-//QString SettingsDialog::temperatureUnitToString(TemperatureUnit unit) {
-//    switch (unit) {
-//    case TemperatureUnit::CELSIUS: return "Celsius";
-//    case TemperatureUnit::FAHRENHEIT: return "Fahrenheit";
-//    default: return "Unknown";
+void SettingsDialog::changeOrder(const QList<QString> &newOrder){
+    qDebug() << widgetOrder;
+    widgetOrder = newOrder;
+    qDebug() << widgetOrder;
+}
 
-//    }
-//}
-
-//QString SettingsDialog::windSpeedUnitToString(WindSpeedUnit unit) {
-//    switch (unit) {
-//    case WindSpeedUnit::KMH: return "Kilometres per hour";
-//    case WindSpeedUnit::MPH: return "Miles per hour";
-//    case WindSpeedUnit::MS: return "Metres per second";
-//    case WindSpeedUnit::KNOTS: return "Knots";
-//    default: return "Unknown";
-//    }
-//}
-
-//QString SettingsDialog::precipitationUnitToString(PrecipitationUnit unit) {
-//    switch (unit) {
-//    case PrecipitationUnit::MILLIMETRES: return "Millimetres";
-//    case PrecipitationUnit::INCHES: return "Inches";
-//    default: return "Unknown";
-//    }
-//}
-
-
-
-
+void SettingsDialog::resetOrder(){
+    widgetOrder = settings.locationNames;
+}

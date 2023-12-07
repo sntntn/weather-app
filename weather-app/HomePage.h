@@ -56,7 +56,7 @@ private:
 
     void updateCompleter(const QList<GeoLocationData>& locations);
     void onCompletionActivated(const QString& text);
-
+    QList<QString> getLocationNames();
 
     GeocodingAPI geocodingApi;
 };

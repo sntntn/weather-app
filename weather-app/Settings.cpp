@@ -65,6 +65,7 @@ Settings::Settings()
     , temperatureUnit(TemperatureUnit::CELSIUS)
     , windSpeedUnit(WindSpeedUnit::KMH)
     , precipitationUnit(PrecipitationUnit::MILLIMETRES)
+    , locationNames({"Belgrade", "Berlin", "Paris", "Athens"})
 { }
 
 Settings& Settings::instance()

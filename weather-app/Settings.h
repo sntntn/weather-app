@@ -54,6 +54,7 @@ public:
     TemperatureUnit temperatureUnit;
     WindSpeedUnit windSpeedUnit;
     PrecipitationUnit precipitationUnit;
+    QList<QString> locationNames;
 
     static QMap<TemperatureUnit, QString> temperatureUnitToString;
     static QMap<WindSpeedUnit, QString> windSpeedUnitToString;

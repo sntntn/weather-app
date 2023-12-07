@@ -43,6 +43,8 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         Settings.h Settings.cpp
         SettingsDialog.h SettingsDialog.cpp
         customcompleter.h customcompleter.cpp
+        WidgetsManager.h
+
 
 
     )

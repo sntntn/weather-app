@@ -12,12 +12,12 @@ class WeatherData : public Data
 public:
 
     WeatherData(const GeoLocationData &location, // todo sharedptr, const sve
-                int temperature,
-                int highestTemperature,
-                int lowestTemperature,
-                int weatherCode,
-                bool isDay,
-                QTimeZone &timezone);
+                const int temperature,
+                const int highestTemperature,
+                const int lowestTemperature,
+                const int weatherCode,
+                const bool isDay,
+                const QTimeZone &timezone);
 
     GeoLocationData location; // todo sharedptr
     int temperature;

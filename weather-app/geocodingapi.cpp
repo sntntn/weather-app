@@ -16,7 +16,6 @@ GeocodingAPI::~GeocodingAPI()
 }
 
 void GeocodingAPI::geocodeCity(const QString& cityName) {
-
     QString apiUrl = QString("https://api.opencagedata.com/geocode/v1/json?q=%1&key=%2")
                          .arg(cityName)
                          .arg(OPEN_CAGE_API_KEY);

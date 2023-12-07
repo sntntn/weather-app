@@ -17,39 +17,32 @@ DetailedWeatherPage::DetailedWeatherPage(QWidget *parent)
     , weatherScrollAreaContents(new QWidget())
     , widgetsLayout(new QVBoxLayout())
     , weatherLayout(new QGridLayout())
-    , returnToHomePage(new QPushButton())
+    , returnToHomePage(new QPushButton("< Home"))
     , horizontalSpacer(new QSpacerItem(40, 0, QSizePolicy::Expanding, QSizePolicy::Minimum))
-    , addToSavedLocations(new QPushButton())
+    , addToSavedLocations(new QPushButton("Add"))
 {
     widgetsScrollAreaContents->setLayout(widgetsLayout);
+    widgetsLayout->setAlignment(Qt::AlignTop);
+
     widgetsScrollArea->setWidget(widgetsScrollAreaContents);
     widgetsScrollArea->setWidgetResizable(true);
-    widgetsLayout->setAlignment(Qt::AlignTop);
-    mainLayout->addWidget(widgetsScrollArea);
-
-    connect(returnToHomePage, &QPushButton::clicked, this->mainWindow, &MainWindow::showHomePage);
-    connect(addToSavedLocations, &QPushButton::clicked, this, &DetailedWeatherPage::addButtonClicked);
-    connect(this, &DetailedWeatherPage::locationSaved, this->mainWindow, &MainWindow::saveNewLocation);
-
-    returnToHomePage->setText("< Home");
-    addToSavedLocations->setText("Add");
+    widgetsScrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
     weatherLayout->addWidget(returnToHomePage, 0, 0);
     weatherLayout->addItem(horizontalSpacer, 0, 1);
     weatherLayout->addWidget(addToSavedLocations, 0, 2);
-
     weatherLayout->setAlignment(Qt::AlignTop);
+
     weatherScrollAreaContents->setLayout(weatherLayout);
     weatherScrollArea->setWidget(weatherScrollAreaContents);
     weatherScrollArea->setWidgetResizable(true);
+
+    mainLayout->addWidget(widgetsScrollArea);
     mainLayout->addWidget(weatherScrollArea);
-}
 
-void DetailedWeatherPage::resizeEvent(QResizeEvent* event) {
-    QWidget::resizeEvent(event);
-    int newWidth = this->width() / 3;
-    widgetsScrollArea->setFixedWidth(newWidth);
-
+    connect(returnToHomePage, &QPushButton::clicked, this->mainWindow, &MainWindow::showHomePage);
+    connect(addToSavedLocations, &QPushButton::clicked, this, &DetailedWeatherPage::addButtonClicked);
+    connect(this, &DetailedWeatherPage::locationSaved, this->mainWindow, &MainWindow::saveNewLocation);
 }
 
 void DetailedWeatherPage::addNewWidget(const QSharedPointer<Data> &data)
@@ -72,6 +65,12 @@ void DetailedWeatherPage::setData(const GeoLocationData &data) // todo sharedptr
     // test, todo
     mainWindow->savedLocations.indexOf(data) == -1 ? this->addToSavedLocations->setVisible(true)
                                                    : this->addToSavedLocations->setVisible(false);
+}
+
+void DetailedWeatherPage::resizeEvent(QResizeEvent* event) {
+    QWidget::resizeEvent(event);
+    int newWidth = this->width() / 3;
+    widgetsScrollArea->setFixedWidth(newWidth);
 }
 
 void DetailedWeatherPage::addButtonClicked()

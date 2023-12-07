@@ -7,6 +7,7 @@
 #include <QFont>
 #include <QPalette>
 #include <QFrame>
+#include <QMargins>
 
 #include "WeatherData.h"
 
@@ -23,19 +24,20 @@ WeatherWidget::WeatherWidget(const QSharedPointer<WeatherData> &data, QWidget *p
     , iconLabel(new QLabel(this))
     , weatherIcon(weatherCodeToIcon(data->weatherCode, data->isDay))
 {
-    hBox->setSpacing(5);
-    hBox->setContentsMargins(10, 10, 10, 10);
+    hBox->setSpacing(hBoxSpacing);
+    hBox->setContentsMargins(hBoxMarginSize, hBoxMarginSize, hBoxMarginSize, hBoxMarginSize);
     hBox->addLayout(leftVBox);
     hBox->addLayout(rightVBox);
 
     setAttribute(Qt::WA_StyledBackground, true);
     setStyleSheet("WeatherWidget { border-radius: 20px; background-color: #598be0; }");
 
-    locationLabel->setFont(QFont("Arial", 18, QFont::Bold));
-    timeLabel->setFont(QFont("Arial", 14, QFont::Normal));
-    temperatureLabel->setFont(QFont("Arial", 24, QFont::Bold));
-    minmaxTemperatureLabel->setFont(QFont("Arial", 14, QFont::Normal));
-    iconLabel->setPixmap(weatherIcon.scaled(50, 50, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+    const QString fontName = "Arial";
+    locationLabel->setFont(QFont(fontName, locationFontSize, QFont::Bold));
+    timeLabel->setFont(QFont(fontName, timeFontSize, QFont::Normal));
+    temperatureLabel->setFont(QFont(fontName, temperatureFontSize, QFont::Bold));
+    minmaxTemperatureLabel->setFont(QFont(fontName, minmaxTemperatureFontSize, QFont::Normal));
+    iconLabel->setPixmap(weatherIcon.scaled(iconWidth, iconHeight, Qt::KeepAspectRatio, Qt::SmoothTransformation));
 
     QString labelStyle = "QLabel { color: white; }";
     locationLabel->setStyleSheet(labelStyle);

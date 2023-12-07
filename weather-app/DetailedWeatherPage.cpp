@@ -18,7 +18,7 @@ DetailedWeatherPage::DetailedWeatherPage(QWidget *parent)
     , widgetsLayout(new QVBoxLayout())
     , weatherLayout(new QGridLayout())
     , returnToHomePage(new QPushButton("< Home"))
-    , horizontalSpacer(new QSpacerItem(40, 0, QSizePolicy::Expanding, QSizePolicy::Minimum))
+    , horizontalSpacer(new QSpacerItem(spacerWidth, 0, QSizePolicy::Expanding, QSizePolicy::Minimum))
     , addToSavedLocations(new QPushButton("Add"))
 {
     widgetsScrollAreaContents->setLayout(widgetsLayout);

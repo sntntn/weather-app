@@ -61,36 +61,6 @@ HomePage::HomePage(QWidget *parent)
     connect(this, &HomePage::locationObjectSelected, mainWindow, &MainWindow::showDetailedWeatherPage);
 }
 
-void HomePage::styleSheetsSetup()
-{
-    searchBar->setStyleSheet(
-        "QLineEdit {"
-        "    border: 3px solid gray;"
-        "    border-radius: 4px;"
-        "    padding: 0 8px;"
-        "    background-color: rgb(28, 28, 28);"
-        "    selection-background-color: darkgray;"
-        "    color: white;"
-        "}"
-        "QLineEdit:focus {"
-        "    border-color: rgb(28, 28, 28);"
-        "    background-color: rgb(40, 40, 40);"
-        "}"
-    );
-
-    scrollArea->setStyleSheet(
-        "QScrollBar:vertical {"
-        "    width: 7px;"
-        "    border-radius: 30px;"
-        "}"
-        "QScrollBar::handle:vertical {"
-        "    background: gray;"
-        "    min-height: 20px;"
-        "    border-radius: 30px;"
-        "}"
-    );
-}
-
 void HomePage::addNewWidget(const QSharedPointer<Data> &data)
 {
     auto *widget = new WeatherWidget(qSharedPointerCast<WeatherData>(data), scrollAreaContents);
@@ -123,7 +93,7 @@ void HomePage::updateCompleter(const QList<GeoLocationData>& locations)
         places.append(location.getPlace());
     }
 
-    completer->setModel(new QStringListModel(places, completer));
+    completer->setModel(new QStringListModel(places, completer)); // todo leak
     completer->complete();
 }
 
@@ -136,4 +106,34 @@ void HomePage::onCompletionActivated(const QString& text)
             break;
         }
     }
+}
+
+void HomePage::styleSheetsSetup()
+{
+    searchBar->setStyleSheet(
+        "QLineEdit {"
+        "    border: 3px solid gray;"
+        "    border-radius: 4px;"
+        "    padding: 0 8px;"
+        "    background-color: rgb(28, 28, 28);"
+        "    selection-background-color: darkgray;"
+        "    color: white;"
+        "}"
+        "QLineEdit:focus {"
+        "    border-color: rgb(28, 28, 28);"
+        "    background-color: rgb(40, 40, 40);"
+        "}"
+        );
+
+    scrollArea->setStyleSheet(
+        "QScrollBar:vertical {"
+        "    width: 7px;"
+        "    border-radius: 30px;"
+        "}"
+        "QScrollBar::handle:vertical {"
+        "    background: gray;"
+        "    min-height: 20px;"
+        "    border-radius: 30px;"
+        "}"
+        );
 }

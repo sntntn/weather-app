@@ -8,7 +8,7 @@
 class GeoLocationData : public Data
 {
 public:
-    GeoLocationData(const QString place, QString renamedPlace, const QGeoCoordinate coordinates);
+    GeoLocationData(const QString &place, const QString &renamedPlace, const QGeoCoordinate &coordinates);
     inline QString getPlace() const{
         return m_place;
     }

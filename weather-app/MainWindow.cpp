@@ -20,7 +20,7 @@ MainWindow::MainWindow(QWidget *parent)
     , homePage(new HomePage(this))
     , detailedWeather(new DetailedWeatherPage(this))
     , stackedWidget(new QStackedWidget(this))
-    , savedLocations(QVector<GeoLocationData>()) // todo serijalizacija
+    /*, savedLocations(QVector<GeoLocationData>())*/ // todo serijalizacija
 {
     ui->setupUi(this);
     resize(900,600);
@@ -43,6 +43,7 @@ MainWindow::MainWindow(QWidget *parent)
     getSavedLocationsData();
 
     connect(this, &MainWindow::detailedWeatherPageShown, detailedWeather, &DetailedWeatherPage::setData);
+    // todo obrisati?
     connect(homePage, &HomePage::locationObjectSelected,this,&MainWindow::handleLocationObjectSelected);
 }
 
@@ -76,7 +77,6 @@ void MainWindow::saveNewLocation(const GeoLocationData& location) // todo shared
     getLocationData(location);
 }
 
-
 void MainWindow::showHomePage(){
     stackedWidget->setCurrentWidget(homePage);
 }
@@ -87,33 +87,13 @@ void MainWindow::showDetailedWeatherPage(const GeoLocationData &data) // todo sh
     emit detailedWeatherPageShown(data);
 }
 
-void MainWindow::refreshPages()
-{
-    // todo?
-    stackedWidget->removeWidget(homePage);
-    stackedWidget->removeWidget(detailedWeather);
-    delete homePage;
-    delete detailedWeather;
-
-    homePage = new HomePage(this);
-    detailedWeather = new DetailedWeatherPage(this);
-
-    stackedWidget->addWidget(homePage);
-    stackedWidget->addWidget(detailedWeather);
-
-    getSavedLocationsData();
-}
-
+// todo obrisati?
 void MainWindow::handleLocationObjectSelected(const GeoLocationData& locationData)
 {
-    GeoLocationData mutableLocationData = locationData;     //da bih zadrzao const i referencu na signalu - stabilniji prenos
-    qDebug()<<"Location:" << mutableLocationData.getPlace()
-             << "Latitude:"<< mutableLocationData.getCoordinates().latitude()
-             << "Longitude:" << mutableLocationData.getCoordinates().longitude();
-    qDebug()<< "Default renamed place: " <<mutableLocationData.getRenamedPlace();
+    qDebug()<<"Location:" << locationData.getPlace()
+             << "Latitude:"<< locationData.getCoordinates().latitude()
+             << "Longitude:" << locationData.getCoordinates().longitude();
+    qDebug()<< "Default renamed place: " << locationData.getRenamedPlace();
     //mutableLocationData.setRenamedPlace("Moj Rodni Grad");
-    qDebug()<< "after renaming - renamed place: " <<mutableLocationData.getRenamedPlace();
-    auto* api = new WeatherAPI(mutableLocationData, this);
-    connect(api, &ApiHandler::finished, api, &WeatherAPI::deleteLater);
-    api->start();
+    qDebug()<< "after renaming - renamed place: " << locationData.getRenamedPlace();
 }

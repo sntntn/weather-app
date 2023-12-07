@@ -39,6 +39,8 @@ signals:
     void locationSaved(const GeoLocationData &data);
 
 private:
+    static const int spacerWidth = 40;
+
     GeoLocationData &data; // todo sharedptr
     QHBoxLayout *mainLayout;
     QScrollArea *widgetsScrollArea;

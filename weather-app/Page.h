@@ -16,6 +16,7 @@ public:
 
 public slots:
     virtual void addNewWidget(const QSharedPointer<Data> &data) = 0;
+    void deleteWidgets();
 
 protected:
     explicit Page(QWidget *parent = nullptr);

@@ -4,6 +4,7 @@
 #include "WeatherData.h"
 #include "WeatherWidget.h"
 #include "GeoLocationData.h"
+#include "Settings.h"
 
 #include <iostream>
 
@@ -63,8 +64,8 @@ void DetailedWeatherPage::setData(const GeoLocationData &data) // todo sharedptr
               << data.getCoordinates().toString().toStdString() << std::endl;
 
     // test, todo
-    mainWindow->savedLocations.indexOf(data) == -1 ? this->addToSavedLocations->setVisible(true)
-                                                   : this->addToSavedLocations->setVisible(false);
+    Settings::instance().savedLocations.indexOf(data) == -1 ? this->addToSavedLocations->setVisible(true)
+                                                            : this->addToSavedLocations->setVisible(false);
 }
 
 void DetailedWeatherPage::resizeEvent(QResizeEvent* event) {
@@ -77,4 +78,5 @@ void DetailedWeatherPage::addButtonClicked()
 {
     emit locationSaved(this->data);
     this->addToSavedLocations->setVisible(false);
+    Settings::instance().savedLocations.push_back(this->data);
 }

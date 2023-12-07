@@ -10,6 +10,7 @@
 #include <QMargins>
 
 #include "WeatherData.h"
+#include "Settings.h"
 
 WeatherWidget::WeatherWidget(const QSharedPointer<WeatherData> &data, QWidget *parent)
     : QWidget{parent}
@@ -17,8 +18,8 @@ WeatherWidget::WeatherWidget(const QSharedPointer<WeatherData> &data, QWidget *p
     , hBox(new QHBoxLayout(this))
     , leftVBox(new QVBoxLayout())
     , rightVBox(new QVBoxLayout())
+    , temperatureLabel(new QLabel(QString::number(data->temperature) + Settings::instance().temperatureUnitString(), this))
     , locationLabel(new QLabel(data->location.getRenamedPlace(), this))
-    , temperatureLabel(new QLabel(QString::number(data->temperature), this))
     , minmaxTemperatureLabel(new QLabel("H:" + QString::number(data->highestTemperature) + " L:" + QString::number(data->lowestTemperature), this))
     , timeLabel(new QLabel(QDateTime::currentDateTime().toTimeZone(data->timezone).toString("HH:mm"), this))
     , iconLabel(new QLabel(this))

@@ -8,9 +8,12 @@ GeoLocationData::GeoLocationData(const QString &place, const QString &renamedPla
     : m_place(place)
     , m_renamedPlace(renamedPlace)
     , m_coordinates(coordinates)
-{}
+{
+    qRegisterMetaType<GeoLocationData>("GeoLocationData");
+}
 
 bool GeoLocationData::operator==(const GeoLocationData &other) const
 {
     return this->m_coordinates == other.m_coordinates;
 }
+

@@ -3,6 +3,7 @@
 #include "MainWindow.h"
 #include "WeatherData.h"
 #include "WeatherWidget.h"
+#include "SettingsDialog.h"
 
 #include <QShortcut>
 #include <QCompleter>
@@ -11,7 +12,9 @@
 HomePage::HomePage(QWidget *parent)
     : Page{parent}
     , mainLayout(new QVBoxLayout(this))
+    , upperLayout(new QHBoxLayout())
     , searchBar(new QLineEdit())
+    , settingsButton(new QPushButton)
     , scrollArea(new QScrollArea())
     , scrollLayout(new QHBoxLayout())
     , scrollAreaContents(new QWidget())
@@ -21,9 +24,12 @@ HomePage::HomePage(QWidget *parent)
     , rightVBox(new QVBoxLayout())
     , completer(new CustomCompleter(this))
     , debounceTimer(new QTimer(this))
+    , settingsPixmap("../Resources/settings.png")
+    , settingsIcon(settingsPixmap)
 {
     searchBar->setPlaceholderText("Enter location...");
     searchBar->setCompleter(completer);
+    upperLayout->addWidget(searchBar);
 
     completer->setCaseSensitivity(Qt::CaseInsensitive);
     completer->setCompletionMode(QCompleter::PopupCompletion);
@@ -31,12 +37,15 @@ HomePage::HomePage(QWidget *parent)
     debounceTimer->setInterval(timerInterval);
     debounceTimer->setSingleShot(true);
 
+    settingsButton->setIcon(settingsIcon);
+    upperLayout->addWidget(settingsButton);
+    mainLayout->addLayout(upperLayout);
+
     scrollLayout->setContentsMargins(leftMargin, topMargin, rightMargin, bottomMargin);
     scrollAreaContents->setLayout(scrollLayout);
     scrollArea->setWidget(scrollAreaContents);
     scrollArea->setWidgetResizable(true);
 
-    mainLayout->addWidget(searchBar);
     mainLayout->addWidget(scrollArea);
 
     leftVBox->setAlignment(Qt::AlignTop);
@@ -52,6 +61,8 @@ HomePage::HomePage(QWidget *parent)
 
     styleSheetsSetup();
 
+    connect(settingsButton, &QPushButton::clicked, this, &HomePage::openSettingsDialog);
+    connect(mainWindow, &MainWindow::deletePageWidgets, this, &HomePage::resetInsertToLeft);
     connect(&geocodingApi, &GeocodingAPI::geocodingDataUpdated, this, &HomePage::updateCompleter);
     connect(completer, QOverload<const QString&>::of(&QCompleter::activated), this, &HomePage::onCompletionActivated);
     connect(searchBar, &QLineEdit::textChanged, this, [this]() { debounceTimer->start(); });
@@ -72,7 +83,14 @@ void HomePage::addNewWidget(const QSharedPointer<Data> &data)
     inserttoLeft ? leftVBox->addWidget(widget) : rightVBox->addWidget(widget);
 
     widget->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Preferred);
+
     leftWidget->setProperty("inserttoLeft", !inserttoLeft);
+}
+
+void HomePage::openSettingsDialog()
+{
+    SettingsDialog settingsDialog(this);
+    settingsDialog.exec();
 }
 
 void HomePage::onSearchBarTextChanged()
@@ -108,6 +126,11 @@ void HomePage::onCompletionActivated(const QString& text)
     }
 }
 
+void HomePage::resetInsertToLeft()
+{
+    leftWidget->setProperty("inserttoLeft", true);
+}
+
 void HomePage::styleSheetsSetup()
 {
     searchBar->setStyleSheet(
@@ -134,6 +157,12 @@ void HomePage::styleSheetsSetup()
         "    background: gray;"
         "    min-height: 20px;"
         "    border-radius: 30px;"
+        "}"
+        );
+
+    settingsButton->setStyleSheet(
+        "QPushButton { "
+        "    background-color: #d7d6d5;"
         "}"
         );
 }

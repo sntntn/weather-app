@@ -37,8 +37,8 @@ private:
     QHBoxLayout *hBox;
     QVBoxLayout *leftVBox;
     QVBoxLayout *rightVBox;
-    QLabel* locationLabel;
     QLabel* temperatureLabel;
+    QLabel* locationLabel;
     QLabel* minmaxTemperatureLabel;
     QLabel* timeLabel;
     QLabel* iconLabel;

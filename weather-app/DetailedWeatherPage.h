@@ -29,8 +29,8 @@ public:
 
 
 public slots:
-    void setData(const GeoLocationData &data); // todo shared ptr
     void addNewWidget(const QSharedPointer<Data> &data) override;
+    void setData(const GeoLocationData &data); // todo shared ptr
 
 private slots:
     void addButtonClicked();
@@ -52,8 +52,6 @@ private:
     QPushButton *returnToHomePage;
     QSpacerItem *horizontalSpacer;
     QPushButton *addToSavedLocations;
-
-
 };
 
 #endif // DETAILEDWEATHERPAGE_H

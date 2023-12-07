@@ -10,17 +10,19 @@
 #include "HomePage.h"
 #include "DetailedWeatherPage.h"
 #include "geocodingapi.h"
+#include "Settings.h"
 #include "GeoLocationData.h"
+
 
 #include <iostream>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
+    , settings(Settings::instance())
     , homePage(new HomePage(this))
     , detailedWeather(new DetailedWeatherPage(this))
     , stackedWidget(new QStackedWidget(this))
-    /*, savedLocations(QVector<GeoLocationData>())*/ // todo serijalizacija
 {
     ui->setupUi(this);
     resize(900,600);
@@ -30,21 +32,13 @@ MainWindow::MainWindow(QWidget *parent)
     setCentralWidget(stackedWidget);
     stackedWidget->setCurrentWidget(homePage);
 
-    // TEST: tmp memory leak
-    auto location1 = GeoLocationData("Belgrade, City of Belgrade, Serbia", "Belgrade", QGeoCoordinate(44.8178, 20.4569));
-    auto location2 = GeoLocationData("Berlin, Germany", "Berlin", QGeoCoordinate(52.517, 12.3889));
-    auto location3 = GeoLocationData("Paris, Ile-de-France, France", "Paris", QGeoCoordinate(48.8589, 2.32004));
-    auto location4 = GeoLocationData("Athens, Central Athens, Greece", "Athens", QGeoCoordinate(37.9756,23.7348));
-    savedLocations.push_back(location1);
-    savedLocations.push_back(location2);
-    savedLocations.push_back(location3);
-    savedLocations.push_back(location4);
-
     getSavedLocationsData();
 
     connect(this, &MainWindow::detailedWeatherPageShown, detailedWeather, &DetailedWeatherPage::setData);
     // todo obrisati?
     connect(homePage, &HomePage::locationObjectSelected,this,&MainWindow::handleLocationObjectSelected);
+    connect(this, &MainWindow::deletePageWidgets, homePage, &Page::deleteWidgets);
+    connect(this, &MainWindow::deletePageWidgets, detailedWeather, &Page::deleteWidgets);
 }
 
 MainWindow::~MainWindow()
@@ -54,9 +48,14 @@ MainWindow::~MainWindow()
 
 void MainWindow::getSavedLocationsData()
 {
-    for(const GeoLocationData &location : savedLocations){
+    for(const auto& location : settings.savedLocations){
         getLocationData(location);
     }
+}
+
+void MainWindow::saveNewLocation(const GeoLocationData& location) // todo sharedptr
+{
+    getLocationData(location);
 }
 
 void MainWindow::getLocationData(const GeoLocationData &location) // todo sharedptr
@@ -70,13 +69,6 @@ void MainWindow::getLocationData(const GeoLocationData &location) // todo shared
     api->start();
 }
 
-void MainWindow::saveNewLocation(const GeoLocationData& location) // todo sharedptr
-{
-    // todo serijalizacija
-    savedLocations.push_back(location);
-    getLocationData(location);
-}
-
 void MainWindow::showHomePage(){
     stackedWidget->setCurrentWidget(homePage);
 }
@@ -85,6 +77,12 @@ void MainWindow::showDetailedWeatherPage(const GeoLocationData &data) // todo sh
 {
     stackedWidget->setCurrentWidget(detailedWeather);
     emit detailedWeatherPageShown(data);
+}
+
+void MainWindow::refreshPages()
+{
+    emit deletePageWidgets();
+    getSavedLocationsData();
 }
 
 // todo obrisati?

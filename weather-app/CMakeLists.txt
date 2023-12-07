@@ -40,7 +40,12 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         GeoLocationData.h GeoLocationData.cpp
         DetailedWeatherData.h DetailedWeatherData.cpp
         ApiHandler.h ApiHandler.cpp
+        Settings.h Settings.cpp
+        SettingsDialog.h SettingsDialog.cpp
         customcompleter.h customcompleter.cpp
+        WidgetsManager.h
+
+
 
     )
 # Define target properties for Android with Qt 6 as:

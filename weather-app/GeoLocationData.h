@@ -8,7 +8,12 @@
 class GeoLocationData : public Data
 {
 public:
+    GeoLocationData() = default;
+    GeoLocationData(const GeoLocationData &other) = default;
+    GeoLocationData& operator=(const GeoLocationData& other) = default;
     GeoLocationData(const QString &place, const QString &renamedPlace, const QGeoCoordinate &coordinates);
+    ~GeoLocationData() = default;
+
     inline QString getPlace() const{
         return m_place;
     }
@@ -30,5 +35,7 @@ private:
     QString m_renamedPlace;
     QGeoCoordinate m_coordinates;
 };
+
+Q_DECLARE_METATYPE(GeoLocationData)
 
 #endif // GEOLOCATIONDATA_H

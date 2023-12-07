@@ -4,6 +4,4 @@
 Page::Page(QWidget *parent)
     : QWidget{parent}
     , mainWindow(qobject_cast<MainWindow*>(this->parent()))
-{
-
-}
+{ }

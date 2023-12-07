@@ -19,64 +19,44 @@ HomePage::HomePage(QWidget *parent)
     , rightWidget(new QWidget())
     , leftVBox(new QVBoxLayout())
     , rightVBox(new QVBoxLayout())
-    , completer(new CustomCompleter(this)) //koristi nas CustomCompleter umesto QCompleter
+    , completer(new CustomCompleter(this))
+    , debounceTimer(new QTimer(this))
 {
-    searchBar->setStyleSheet(
-        "QLineEdit {"
-        "    border: 3px solid gray;"
-        "    border-radius: 4px;"
-        "    padding: 0 8px;"
-        "    background-color: rgb(28, 28, 28);"
-        "    selection-background-color: darkgray;"
-        "    color: white;"
-        "}"
-        "QLineEdit:focus {"
-        "    border-color: rgb(28, 28, 28);"
-        "    background-color: rgb(40, 40, 40);"
-        "}"
-        );
     searchBar->setPlaceholderText("Enter location...");
     searchBar->setCompleter(completer);
-    mainLayout->addWidget(searchBar);
-
-    int leftMargin = 25;
-    int rightMargin = 25;
-    int topMargin = 0;
-    int bottomMargin = 0;
-    scrollLayout->setContentsMargins(leftMargin, topMargin, rightMargin, bottomMargin);
-
-    scrollAreaContents->setLayout(scrollLayout);
-    scrollArea->setWidget(scrollAreaContents);
-    scrollArea->setWidgetResizable(true);
-    scrollArea->setStyleSheet(
-        "QScrollBar:vertical {"
-        "    width: 7px;"
-        "    border-radius: 30px;"
-        "}"
-        "QScrollBar::handle:vertical {"
-        "    background: gray;"
-        "    min-height: 20px;"
-        "    border-radius: 30px;"
-        "}");
-
-    mainLayout->addWidget(scrollArea);
-
-    leftVBox->setAlignment(Qt::AlignTop);
-    leftWidget->setLayout(leftVBox);
-    leftWidget->setProperty("inserttoLeft", true);
-
-    rightVBox->setAlignment(Qt::AlignTop);
-    rightWidget->setLayout(rightVBox);
-
-    scrollLayout->addWidget(leftWidget);
-    scrollLayout->addWidget(rightWidget);
 
     completer->setCaseSensitivity(Qt::CaseInsensitive);
     completer->setCompletionMode(QCompleter::PopupCompletion);
 
+    debounceTimer->setInterval(timerInterval);
+    debounceTimer->setSingleShot(true);
+
+    scrollLayout->setContentsMargins(leftMargin, topMargin, rightMargin, bottomMargin);
+    scrollAreaContents->setLayout(scrollLayout);
+    scrollArea->setWidget(scrollAreaContents);
+    scrollArea->setWidgetResizable(true);
+
+    mainLayout->addWidget(searchBar);
+    mainLayout->addWidget(scrollArea);
+
+    leftVBox->setAlignment(Qt::AlignTop);
+    rightVBox->setAlignment(Qt::AlignTop);
+
+    leftWidget->setLayout(leftVBox);
+    rightWidget->setLayout(rightVBox);
+
+    leftWidget->setProperty("inserttoLeft", true);
+
+    scrollLayout->addWidget(leftWidget);
+    scrollLayout->addWidget(rightWidget);
+
+    styleSheetsSetup();
+
     connect(&geocodingApi, &GeocodingAPI::geocodingDataUpdated, this, &HomePage::updateCompleter);
     connect(completer, QOverload<const QString&>::of(&QCompleter::activated), this, &HomePage::onCompletionActivated);
-    connect(searchBar, &QLineEdit::textChanged, this, &HomePage::onSearchBarTextChanged);
+    connect(searchBar, &QLineEdit::textChanged, this, [this]() { debounceTimer->start(); });
+    connect(debounceTimer, &QTimer::timeout, this, &HomePage::onSearchBarTextChanged);
+//    connect(searchBar, &QLineEdit::textChanged, this, &HomePage::onSearchBarTextChanged);
     connect(this, &HomePage::searchBarPressed, &geocodingApi, &GeocodingAPI::testCityFunction);
     connect(this, &HomePage::locationObjectSelected, mainWindow, &MainWindow::showDetailedWeatherPage);
 }
@@ -95,14 +75,16 @@ void HomePage::addNewWidget(const QSharedPointer<Data> &data)
     leftWidget->setProperty("inserttoLeft", !inserttoLeft);
 }
 
-void HomePage::onSearchBarTextChanged(const QString& text) {
+void HomePage::onSearchBarTextChanged()
+{
     completer->complete();
-    emit searchBarPressed(text);
+    emit searchBarPressed(searchBar->text());
     //completer->setCompletionPrefix(text);
-    completer->complete();
+    completer->complete(); // todo?
 }
 
-void HomePage::updateCompleter(const QList<GeoLocationData>& locations) {
+void HomePage::updateCompleter(const QList<GeoLocationData>& locations)
+{
     this->locations = locations;
     QStringList places;
     qDebug()<<"----------------------------------"<< locations.size();
@@ -111,11 +93,12 @@ void HomePage::updateCompleter(const QList<GeoLocationData>& locations) {
         places.append(location.getPlace());
     }
 
-    completer->setModel(new QStringListModel(places, completer));
+    completer->setModel(new QStringListModel(places, completer)); // todo leak
     completer->complete();
 }
 
-void HomePage::onCompletionActivated(const QString& text) {
+void HomePage::onCompletionActivated(const QString& text)
+{
     for (const auto& location : locations) {
         if (location.getPlace() == text) {
             emit locationObjectSelected(location);
@@ -123,4 +106,34 @@ void HomePage::onCompletionActivated(const QString& text) {
             break;
         }
     }
+}
+
+void HomePage::styleSheetsSetup()
+{
+    searchBar->setStyleSheet(
+        "QLineEdit {"
+        "    border: 3px solid gray;"
+        "    border-radius: 4px;"
+        "    padding: 0 8px;"
+        "    background-color: rgb(28, 28, 28);"
+        "    selection-background-color: darkgray;"
+        "    color: white;"
+        "}"
+        "QLineEdit:focus {"
+        "    border-color: rgb(28, 28, 28);"
+        "    background-color: rgb(40, 40, 40);"
+        "}"
+        );
+
+    scrollArea->setStyleSheet(
+        "QScrollBar:vertical {"
+        "    width: 7px;"
+        "    border-radius: 30px;"
+        "}"
+        "QScrollBar::handle:vertical {"
+        "    background: gray;"
+        "    min-height: 20px;"
+        "    border-radius: 30px;"
+        "}"
+        );
 }

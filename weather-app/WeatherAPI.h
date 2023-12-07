@@ -27,7 +27,6 @@ protected:
     GeoLocationData location;
 
     void fetchData(const QGeoCoordinate &coordinates);
-    QGeoCoordinate locationToCoordinate(GeoLocationData& location); // test
 };
 
 #endif // WEATHERAPI_H

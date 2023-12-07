@@ -8,7 +8,7 @@
 #include "WeatherData.h"
 #include "Parser.h"
 
-WeatherAPI::WeatherAPI(const GeoLocationData& location, QObject *parent)
+WeatherAPI::WeatherAPI(const GeoLocationData &location, QObject *parent)
     : ApiHandler{parent}
     , location(location)
 {
@@ -18,13 +18,8 @@ WeatherAPI::WeatherAPI(const GeoLocationData& location, QObject *parent)
 
 void WeatherAPI::run()
 {
-    QGeoCoordinate coordinates = locationToCoordinate(location);
-    fetchData(coordinates);
+    fetchData(location.getCoordinates());
     exec();
-}
-
-QGeoCoordinate WeatherAPI::locationToCoordinate(GeoLocationData& location){ // test
-    return location.getCoordinates();
 }
 
 void WeatherAPI::fetchData(const QGeoCoordinate &coordinates)

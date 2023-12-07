@@ -8,6 +8,7 @@
 #include <QHBoxLayout>
 #include <QSharedPointer>
 #include <QCompleter>
+#include <QTimer>
 
 #include "Page.h"
 #include "geocodingapi.h"
@@ -31,9 +32,14 @@ signals:
 
 public slots:
     void addNewWidget(const QSharedPointer<Data> &data) override;
-    void onSearchBarTextChanged(const QString& text);
+    void onSearchBarTextChanged();
 
 private:
+    static const int leftMargin = 25;
+    static const int rightMargin = 25;
+    static const int topMargin = 0;
+    static const int bottomMargin = 0;
+    static const int timerInterval = 300;
 
     QVBoxLayout *mainLayout;
     QLineEdit *searchBar;
@@ -45,11 +51,13 @@ private:
     QVBoxLayout *leftVBox;
     QVBoxLayout *rightVBox;
     CustomCompleter *completer;
+    QTimer *debounceTimer;
 
     QList<GeoLocationData> locations;   //strukturu uzimamo direktno
 
     void updateCompleter(const QList<GeoLocationData>& locations);
     void onCompletionActivated(const QString& text);
+    void styleSheetsSetup();
 
 
     GeocodingAPI geocodingApi;

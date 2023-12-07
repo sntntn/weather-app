@@ -16,7 +16,6 @@ GeocodingAPI::~GeocodingAPI()
 }
 
 void GeocodingAPI::geocodeCity(const QString& cityName) {
-
     QString apiUrl = QString("https://api.opencagedata.com/geocode/v1/json?q=%1&key=%2")
                          .arg(cityName)
                          .arg(OPEN_CAGE_API_KEY);
@@ -54,7 +53,7 @@ void GeocodingAPI::handleGeocodingResponse(QNetworkReply* reply) {
     // json za https://api.opencagedata.com/geocode/v1/json?q=Be&key=0741d020f58441f6b58ae4dc4128740d       formatted
 
     QList<GeoLocationData> locations;
-    for (const QJsonValue& resultValue : resultsArray) {
+    for (auto resultValue : resultsArray) {
         QJsonObject resultObject = resultValue.toObject();
 
         if (!resultObject.contains("formatted") || !resultObject["formatted"].isString()) {
@@ -82,13 +81,8 @@ void GeocodingAPI::handleGeocodingResponse(QNetworkReply* reply) {
         double longitude = geometryObject["lng"].toDouble();
 
         QString renamedPlace;
-        int commaIndex=place.indexOf(',');
-        if(commaIndex !=-1 ){
-            renamedPlace=place.left(commaIndex).trimmed();
-        }
-        else{
-            renamedPlace=place;
-        }
+        auto commaIndex=place.indexOf(',');
+        commaIndex == -1 ? renamedPlace = place : renamedPlace = place.left(commaIndex).trimmed();
 
         GeoLocationData gld{place, renamedPlace, QGeoCoordinate(latitude,longitude)};
         locations.append(gld);

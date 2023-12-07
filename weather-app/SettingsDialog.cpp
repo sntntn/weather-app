@@ -73,8 +73,8 @@ SettingsDialog::SettingsDialog(QWidget *parent)
         listItem->setSizeHint(customWidget->minimumSizeHint());
     }
 
+    // todo bug fix
     connect(listWidget, &WidgetsManager::itemsRearranged, this, [this, listWidget](){
-
         widgetOrder.clear();
 
         for (int i = 0; i < listWidget->count(); i++) {

@@ -105,22 +105,9 @@ void HomePage::addNewWidget(const QSharedPointer<Data> &data)
     inserttoLeft ? leftVBox->addWidget(widget) : rightVBox->addWidget(widget);
 
     widget->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Preferred);
+
     leftWidget->setProperty("inserttoLeft", !inserttoLeft);
 }
-
-//void HomePage::deleteWidgets()
-//{
-//    while ((item = leftVBox->takeAt(0)) != nullptr) {
-//        item->widget() ? delete item->widget() : delete item;
-//    }
-
-//    while ((item = rightVBox->takeAt(0)) != nullptr) {
-//        item->widget() ? delete item->widget() : delete item;
-//    }
-
-
-
-//}
 
 void HomePage::openSettingsDialog(){
     SettingsDialog settingsDialog(this);

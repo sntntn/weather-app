@@ -3,7 +3,6 @@
 #include <QListView>
 #include <QListWidget>
 
-#include "Settings.h"
 #include "MainWindow.h"
 #include "HomePage.h"
 #include "WidgetsManager.h"
@@ -17,11 +16,15 @@ SettingsDialog::SettingsDialog(QWidget *parent)
     , windSpeedUnit(new QComboBox(this))
     , precipitationUnit(new QComboBox(this))
     , buttonLayout(new QHBoxLayout())
-    , save(new QPushButton())
-    , cancel(new QPushButton())
+    , save(new QPushButton("Save"))
+    , cancel(new QPushButton("Cancel"))
     , widgetOrder(settings.locationNames)
     , trashCan("../Resources/redTrash.png")
+    , trashIcon(trashCan)
 {
+    locationSwitch->setChecked(settings.shareLocation);
+    mainLayout->addWidget(locationSwitch);
+
     for (auto it = Settings::temperatureUnitsNames.cbegin(); it != Settings::temperatureUnitsNames.cend(); ++it) {
         temperatureUnit->addItem(it.value(), QVariant::fromValue(it.key()));
     }
@@ -37,20 +40,6 @@ SettingsDialog::SettingsDialog(QWidget *parent)
     }
     precipitationUnit->setCurrentText(settings.precipitationUnitName());
 
-    locationSwitch->setChecked(settings.shareLocation);
-
-    save->setText("Save");
-    cancel->setText("Cancel");
-    connect(save, &QPushButton::clicked, this, &SettingsDialog::changeSettings);
-    //TODO fix grandparent
-    connect(this, &SettingsDialog::settingsChanged, qobject_cast<MainWindow*>(this->parent()->parent()->parent()), &MainWindow::refreshPages);
-    connect(cancel, &QPushButton::clicked, this, &SettingsDialog::resetOrder);
-    connect(cancel, &QPushButton::clicked, this, &SettingsDialog::close);
-    buttonLayout->addWidget(save);
-    buttonLayout->addStretch();
-    buttonLayout->addWidget(cancel);
-
-    mainLayout->addWidget(locationSwitch);
     mainLayout->addWidget(temperatureUnit);
     mainLayout->addWidget(windSpeedUnit);
     mainLayout->addWidget(precipitationUnit);
@@ -68,7 +57,6 @@ SettingsDialog::SettingsDialog(QWidget *parent)
 
         QLabel* label = new QLabel(location);
         QPushButton* deleteButton = new QPushButton();
-        QIcon trashIcon(trashCan);
         deleteButton->setIcon(trashIcon);
         //deleteButton->setStyleSheet("background-color: transparent;");
 
@@ -77,8 +65,7 @@ SettingsDialog::SettingsDialog(QWidget *parent)
 
         connect(deleteButton, &QPushButton::clicked, this, [this, listWidget, listItem]() {
 
-            QWidget* customWidget = listWidget->itemWidget(listItem);
-            QHBoxLayout* layout = qobject_cast<QHBoxLayout*>(customWidget->layout());
+            QHBoxLayout* layout = qobject_cast<QHBoxLayout*>(listWidget->itemWidget(listItem)->layout());
             QLabel* label = qobject_cast<QLabel*>(layout->itemAt(0)->widget());
             QString itemText = label->text();
 
@@ -94,19 +81,26 @@ SettingsDialog::SettingsDialog(QWidget *parent)
         widgetOrder.clear();
 
         for (int i = 0; i < listWidget->count(); ++i) {
-            QWidget* customWidget = listWidget->itemWidget(listWidget->item(i));
-            QHBoxLayout* layout = qobject_cast<QHBoxLayout*>(customWidget->layout());
-            if (layout && layout->count() > 0) {
-                QLabel* label = qobject_cast<QLabel*>(layout->itemAt(0)->widget());
-                if (label) {
-                    widgetOrder.append(label->text());
-                }
-            }
+            QHBoxLayout* layout = qobject_cast<QHBoxLayout*>(listWidget->itemWidget(listWidget->item(i))->layout());
+            QLabel* label = qobject_cast<QLabel*>(layout->itemAt(0)->widget());
+            widgetOrder.append(label->text());
         }
     });
 
     mainLayout->addWidget(listWidget);
+
+    connect(save, &QPushButton::clicked, this, &SettingsDialog::changeSettings);
+    //TODO fix grandparent
+    connect(this, &SettingsDialog::settingsChanged, qobject_cast<MainWindow*>(this->parent()->parent()->parent()), &MainWindow::refreshPages);
+    connect(cancel, &QPushButton::clicked, this, &SettingsDialog::resetOrder);
+    connect(cancel, &QPushButton::clicked, this, &SettingsDialog::close);
+
+    buttonLayout->addWidget(save);
+    buttonLayout->addStretch();
+    buttonLayout->addWidget(cancel);
+
     mainLayout->addLayout(buttonLayout);
+
     setLayout(mainLayout);
 }
 
@@ -127,9 +121,7 @@ void SettingsDialog::changeSettings(){
 }
 
 void SettingsDialog::changeOrder(const QList<QString> &newOrder){
-    qDebug() << widgetOrder;
     widgetOrder = newOrder;
-    qDebug() << widgetOrder;
 }
 
 void SettingsDialog::resetOrder(){

@@ -12,7 +12,6 @@
 
 class MainWindow;
 
-
 class SettingsDialog : public QDialog
 {
     Q_OBJECT
@@ -45,6 +44,8 @@ private:
     QPushButton *cancel;
     QList<QString> widgetOrder;
     QPixmap trashCan;
+    QIcon trashIcon;
+
 
     void setupUi();
 

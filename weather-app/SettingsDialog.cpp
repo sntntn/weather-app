@@ -20,7 +20,7 @@ SettingsDialog::SettingsDialog(QWidget *parent)
     , save(new QPushButton())
     , cancel(new QPushButton())
     , widgetOrder(settings.locationNames)
-    , trashCan("../Resources/whiteTrash.png")
+    , trashCan("../Resources/redTrash.png")
 {
     for (auto it = Settings::temperatureUnitsNames.cbegin(); it != Settings::temperatureUnitsNames.cend(); ++it) {
         temperatureUnit->addItem(it.value(), QVariant::fromValue(it.key()));

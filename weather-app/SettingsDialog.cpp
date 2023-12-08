@@ -24,6 +24,8 @@ SettingsDialog::SettingsDialog(QWidget *parent)
     , trashCan("../Resources/redTrash.png")
     , trashIcon(trashCan)
 {
+    listWidget->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+
     locationSwitch->setChecked(settings.shareLocation);
     mainLayout->addWidget(locationSwitch);
 

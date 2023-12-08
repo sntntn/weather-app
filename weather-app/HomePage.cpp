@@ -84,7 +84,7 @@ void HomePage::openSettingsDialog()
 
 void HomePage::onSearchBarTextChanged()
 {
-     emit searchBarPressed(searchBar->text());
+    emit searchBarPressed(searchBar->text());
 }
 
 void HomePage::updateCompleter(const QList<GeoLocationData>& locations)

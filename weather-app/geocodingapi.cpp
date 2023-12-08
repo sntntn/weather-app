@@ -53,6 +53,10 @@ void GeocodingAPI::handleGeocodingResponse(QNetworkReply* reply) {
     // json za https://api.opencagedata.com/geocode/v1/json?q=Be&key=0741d020f58441f6b58ae4dc4128740d       formatted
 
     QList<GeoLocationData> locations;
+    locations.reserve(resultsArray.size());
+
+    processResultsArray(resultsArray, locations);
+    /*
     for (auto resultValue : resultsArray) {
         QJsonObject resultObject = resultValue.toObject();
 
@@ -84,16 +88,53 @@ void GeocodingAPI::handleGeocodingResponse(QNetworkReply* reply) {
         auto commaIndex=place.indexOf(',');
         commaIndex == -1 ? renamedPlace = place : renamedPlace = place.left(commaIndex).trimmed();
 
-        GeoLocationData gld{place, renamedPlace, QGeoCoordinate(latitude,longitude)};
-        locations.append(gld);
+        //GeoLocationData gld{place, renamedPlace, QGeoCoordinate(latitude,longitude)};
+        locations.emplace_back(place, renamedPlace, QGeoCoordinate(latitude,longitude));
     }
+    */
+
     emit geocodingDataUpdated(locations);
     reply->deleteLater();
 }
 
-//Test
-//Bern          Latitude: 46.9485 Longitude: 7.45217
-//Belgrade      Latitude: 44.8178 Longitude: 20.4569
+void GeocodingAPI::processResultsArray(const QJsonArray &resultsArray, QList<GeoLocationData> &locations)
+{
+    for (auto resultValue : resultsArray) {
+        QJsonObject resultObject = resultValue.toObject();
+
+        if (!resultObject.contains("formatted") || !resultObject["formatted"].isString()) {
+            qDebug() << "Error: Missing or invalid 'formatted' string in JSON response";
+            continue;  // Preskoči ovaj rezultat i idi na sledeći
+        }
+
+        QString place = resultObject["formatted"].toString();
+        if(!place.isEmpty() && place.at(0).isDigit()){
+            continue;       //preskacemo postanske brojeve  -> prikazuje opstine
+        }
+
+        if (!resultObject.contains("geometry") || !resultObject["geometry"].isObject()) {
+            qDebug() << "Error: Missing or invalid 'geometry' object in JSON response";
+            continue;
+        }
+
+        QJsonObject geometryObject = resultObject["geometry"].toObject();
+        if (!geometryObject.contains("lat") || !geometryObject.contains("lng")) {
+            qDebug() << "Error: Missing 'lat' or 'lng' in 'geometry' object";
+            continue;
+        }
+
+        double latitude = geometryObject["lat"].toDouble();
+        double longitude = geometryObject["lng"].toDouble();
+
+        QString renamedPlace;
+        auto commaIndex=place.indexOf(',');
+        commaIndex == -1 ? renamedPlace = place : renamedPlace = place.left(commaIndex).trimmed();
+
+        //GeoLocationData gld{place, renamedPlace, QGeoCoordinate(latitude,longitude)};
+        locations.emplace_back(place, renamedPlace, QGeoCoordinate(latitude,longitude));
+    }
+}
+
 void GeocodingAPI::testCityFunction(const QString &location) {
     geocodeCity(location);
 }

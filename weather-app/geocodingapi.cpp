@@ -56,42 +56,6 @@ void GeocodingAPI::handleGeocodingResponse(QNetworkReply* reply) {
     locations.reserve(resultsArray.size());
 
     processResultsArray(resultsArray, locations);
-    /*
-    for (auto resultValue : resultsArray) {
-        QJsonObject resultObject = resultValue.toObject();
-
-        if (!resultObject.contains("formatted") || !resultObject["formatted"].isString()) {
-            qDebug() << "Error: Missing or invalid 'formatted' string in JSON response";
-            continue;  // Preskoči ovaj rezultat i idi na sledeći
-        }
-
-        QString place = resultObject["formatted"].toString();
-        if(!place.isEmpty() && place.at(0).isDigit()){
-            continue;       //preskacemo postanske brojeve  -> prikazuje opstine
-        }
-
-        if (!resultObject.contains("geometry") || !resultObject["geometry"].isObject()) {
-            qDebug() << "Error: Missing or invalid 'geometry' object in JSON response";
-            continue;
-        }
-
-        QJsonObject geometryObject = resultObject["geometry"].toObject();
-        if (!geometryObject.contains("lat") || !geometryObject.contains("lng")) {
-            qDebug() << "Error: Missing 'lat' or 'lng' in 'geometry' object";
-            continue;
-        }
-
-        double latitude = geometryObject["lat"].toDouble();
-        double longitude = geometryObject["lng"].toDouble();
-
-        QString renamedPlace;
-        auto commaIndex=place.indexOf(',');
-        commaIndex == -1 ? renamedPlace = place : renamedPlace = place.left(commaIndex).trimmed();
-
-        //GeoLocationData gld{place, renamedPlace, QGeoCoordinate(latitude,longitude)};
-        locations.emplace_back(place, renamedPlace, QGeoCoordinate(latitude,longitude));
-    }
-    */
 
     emit geocodingDataUpdated(locations);
     reply->deleteLater();

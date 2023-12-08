@@ -8,6 +8,10 @@
 #include <QVector>
 #include <QPushButton>
 #include <QSharedPointer>
+#include <QScrollBar>
+#include <QTimer>
+
+#include <QResizeEvent>
 
 #include "Page.h"
 
@@ -30,6 +34,8 @@ public:
 public slots:
     void addNewWidget(const QSharedPointer<Data> &data) override;
     void setData(const GeoLocationData &data); // todo shared ptr
+    void scrollToMaximum();
+    void scrollToMinimum();
 
 private slots:
     void addButtonClicked();
@@ -39,6 +45,9 @@ signals:
 
 private:
     static const int spacerWidth = 40;
+    static const int addButtonScrollTime = 550;
+    QTimer *scrollTimer;
+    QScrollBar* widgetsScrollBar;
 
     GeoLocationData &data; // todo sharedptr
     QHBoxLayout *mainLayout;

@@ -53,12 +53,13 @@ private:
     QLineEdit *searchBar;
     QPushButton *settingsButton;
     QScrollArea *scrollArea;
-    QHBoxLayout *scrollLayout;
+//    QHBoxLayout *scrollLayout;
     QWidget *scrollAreaContents;
-    QWidget *leftWidget;
-    QWidget *rightWidget;
-    QVBoxLayout *leftVBox;
-    QVBoxLayout *rightVBox;
+    QGridLayout *widgetsLayout;
+//    QWidget *leftWidget;
+//    QWidget *rightWidget;
+//    QVBoxLayout *leftVBox;
+//    QVBoxLayout *rightVBox;
     CustomCompleter *completer;
     QTimer *debounceTimer;
     QPixmap settingsPixmap;

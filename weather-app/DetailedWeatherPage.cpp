@@ -16,7 +16,7 @@ DetailedWeatherPage::DetailedWeatherPage(QWidget *parent)
     , weatherScrollArea(new QScrollArea())
     , widgetsScrollAreaContents(new QWidget())
     , weatherScrollAreaContents(new QWidget())
-    , widgetsLayout(new QVBoxLayout())
+    , widgetsLayout(new QGridLayout())
     , weatherLayout(new QGridLayout())
     , returnToHomePage(new QPushButton("< Home"))
     , horizontalSpacer(new QSpacerItem(spacerWidth, 0, QSizePolicy::Expanding, QSizePolicy::Minimum))
@@ -51,7 +51,8 @@ void DetailedWeatherPage::addNewWidget(const QSharedPointer<Data> &data)
     auto *widget = new WeatherWidget(qSharedPointerCast<WeatherData>(data), widgetsScrollAreaContents);
     connect(widget, &WeatherWidget::clicked, this, &DetailedWeatherPage::setData);
     widget->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Preferred);
-    widgetsLayout->addWidget(widget);
+    int position = Settings::instance().savedLocations.indexOf(widget->data->location);
+    widgetsLayout->addWidget(widget, position, 0, 1, 1);
 
     m_widgets.emplaceBack(widget);
 }

@@ -9,7 +9,6 @@
 #include <QPushButton>
 #include <QSharedPointer>
 
-
 #include "Page.h"
 
 class WeatherData;
@@ -47,7 +46,7 @@ private:
     QScrollArea *weatherScrollArea;
     QWidget *widgetsScrollAreaContents;
     QWidget *weatherScrollAreaContents;
-    QVBoxLayout *widgetsLayout;
+    QGridLayout *widgetsLayout;
     QGridLayout *weatherLayout;
     QPushButton *returnToHomePage;
     QSpacerItem *horizontalSpacer;

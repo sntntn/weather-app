@@ -44,8 +44,6 @@ private:
     QLabel* iconLabel;
     QPixmap weatherIcon;
 
-
-
     QString weatherCodeToIcon(int weatherCode, bool isDay);
 };
 

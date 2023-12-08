@@ -1,27 +1,29 @@
 #include "HomePage.h"
 
+#include <QShortcut>
+#include <QCompleter>
+#include <QStringListModel>
+
 #include "MainWindow.h"
 #include "WeatherData.h"
 #include "WeatherWidget.h"
 #include "SettingsDialog.h"
-
-#include <QShortcut>
-#include <QCompleter>
-#include <QStringListModel>
+#include "Settings.h"
 
 HomePage::HomePage(QWidget *parent)
     : Page{parent}
     , mainLayout(new QVBoxLayout(this))
     , upperLayout(new QHBoxLayout())
     , searchBar(new QLineEdit())
-    , settingsButton(new QPushButton)
+    , settingsButton(new QPushButton())
     , scrollArea(new QScrollArea())
-    , scrollLayout(new QHBoxLayout())
+//    , scrollLayout(new QHBoxLayout())
     , scrollAreaContents(new QWidget())
-    , leftWidget(new QWidget())
-    , rightWidget(new QWidget())
-    , leftVBox(new QVBoxLayout())
-    , rightVBox(new QVBoxLayout())
+    , widgetsLayout(new QGridLayout())
+//    , leftWidget(new QWidget())
+//    , rightWidget(new QWidget())
+//    , leftVBox(new QVBoxLayout())
+//    , rightVBox(new QVBoxLayout())
     , completer(new CustomCompleter(this))
     , debounceTimer(new QTimer(this))
     , settingsPixmap("../Resources/settings.png")
@@ -41,23 +43,26 @@ HomePage::HomePage(QWidget *parent)
     upperLayout->addWidget(settingsButton);
     mainLayout->addLayout(upperLayout);
 
-    scrollLayout->setContentsMargins(leftMargin, topMargin, rightMargin, bottomMargin);
-    scrollAreaContents->setLayout(scrollLayout);
+//    scrollLayout->setContentsMargins(leftMargin, topMargin, rightMargin, bottomMargin);
+    widgetsLayout->setContentsMargins(leftMargin, topMargin, rightMargin, bottomMargin);
+    widgetsLayout->setAlignment(Qt::AlignTop);
+//    scrollAreaContents->setLayout(scrollLayout);
+    scrollAreaContents->setLayout(widgetsLayout);
     scrollArea->setWidget(scrollAreaContents);
     scrollArea->setWidgetResizable(true);
 
     mainLayout->addWidget(scrollArea);
 
-    leftVBox->setAlignment(Qt::AlignTop);
-    rightVBox->setAlignment(Qt::AlignTop);
+//    leftVBox->setAlignment(Qt::AlignTop);
+//    rightVBox->setAlignment(Qt::AlignTop);
 
-    leftWidget->setLayout(leftVBox);
-    rightWidget->setLayout(rightVBox);
+//    leftWidget->setLayout(leftVBox);
+//    rightWidget->setLayout(rightVBox);
 
-    leftWidget->setProperty("inserttoLeft", true);
+//    leftWidget->setProperty("inserttoLeft", true);
 
-    scrollLayout->addWidget(leftWidget);
-    scrollLayout->addWidget(rightWidget);
+//    scrollLayout->addWidget(leftWidget);
+//    scrollLayout->addWidget(rightWidget);
 
     styleSheetsSetup();
 
@@ -79,12 +84,14 @@ void HomePage::addNewWidget(const QSharedPointer<Data> &data)
 
     connect(widget, &WeatherWidget::clicked, this->mainWindow, &MainWindow::showDetailedWeatherPage);
 
-    bool inserttoLeft = leftWidget->property("inserttoLeft").toBool();
-    inserttoLeft ? leftVBox->addWidget(widget) : rightVBox->addWidget(widget);
+//    bool inserttoLeft = leftWidget->property("inserttoLeft").toBool();
+//    inserttoLeft ? leftVBox->addWidget(widget) : rightVBox->addWidget(widget);
+    int position = Settings::instance().savedLocations.indexOf(widget->data->location);
+    widgetsLayout->addWidget(widget, position / 2, position % 2, 1, 1);
 
     widget->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Preferred);
 
-    leftWidget->setProperty("inserttoLeft", !inserttoLeft);
+//    leftWidget->setProperty("inserttoLeft", !inserttoLeft);
 }
 
 void HomePage::openSettingsDialog()
@@ -128,7 +135,7 @@ void HomePage::onCompletionActivated(const QString& text)
 
 void HomePage::resetInsertToLeft()
 {
-    leftWidget->setProperty("inserttoLeft", true);
+//    leftWidget->setProperty("inserttoLeft", true);
 }
 
 void HomePage::styleSheetsSetup()

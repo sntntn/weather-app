@@ -53,6 +53,16 @@ void GeocodingAPI::handleGeocodingResponse(QNetworkReply* reply) {
     // json za https://api.opencagedata.com/geocode/v1/json?q=Be&key=0741d020f58441f6b58ae4dc4128740d       formatted
 
     QList<GeoLocationData> locations;
+    locations.reserve(resultsArray.size());
+
+    processResultsArray(resultsArray, locations);
+
+    emit geocodingDataUpdated(locations);
+    reply->deleteLater();
+}
+
+void GeocodingAPI::processResultsArray(const QJsonArray &resultsArray, QList<GeoLocationData> &locations)
+{
     for (auto resultValue : resultsArray) {
         QJsonObject resultObject = resultValue.toObject();
 
@@ -84,16 +94,11 @@ void GeocodingAPI::handleGeocodingResponse(QNetworkReply* reply) {
         auto commaIndex=place.indexOf(',');
         commaIndex == -1 ? renamedPlace = place : renamedPlace = place.left(commaIndex).trimmed();
 
-        GeoLocationData gld{place, renamedPlace, QGeoCoordinate(latitude,longitude)};
-        locations.append(gld);
+        //GeoLocationData gld{place, renamedPlace, QGeoCoordinate(latitude,longitude)};
+        locations.emplace_back(place, renamedPlace, QGeoCoordinate(latitude,longitude));
     }
-    emit geocodingDataUpdated(locations);
-    reply->deleteLater();
 }
 
-//Test
-//Bern          Latitude: 46.9485 Longitude: 7.45217
-//Belgrade      Latitude: 44.8178 Longitude: 20.4569
 void GeocodingAPI::testCityFunction(const QString &location) {
     geocodeCity(location);
 }

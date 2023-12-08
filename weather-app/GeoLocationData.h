@@ -9,10 +9,10 @@ class GeoLocationData : public Data
 {
 public:
     GeoLocationData() = default;
-    GeoLocationData(const GeoLocationData &other) = default;
-    GeoLocationData& operator=(const GeoLocationData& other) = default;
-    GeoLocationData(const QString &place, const QString &renamedPlace, const QGeoCoordinate &coordinates);
     ~GeoLocationData() = default;
+    GeoLocationData(const GeoLocationData &other) = default;
+    GeoLocationData(const QString &place, const QString &renamedPlace, const QGeoCoordinate &coordinates);
+
 
     inline QString getPlace() const{
         return m_place;
@@ -28,7 +28,9 @@ public:
         m_renamedPlace=renamedPlace;
     }
 
-    bool operator==(const GeoLocationData &other) const;
+
+    GeoLocationData& operator= (const GeoLocationData& other) = default;
+    bool operator== (const GeoLocationData &other) const;
 
 private:
     QString m_place;

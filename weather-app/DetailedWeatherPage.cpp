@@ -7,6 +7,8 @@
 #include "Settings.h"
 
 #include <iostream>
+//#include <QMetaObject>
+
 
 DetailedWeatherPage::DetailedWeatherPage(QWidget *parent)
     : Page{parent}
@@ -21,6 +23,7 @@ DetailedWeatherPage::DetailedWeatherPage(QWidget *parent)
     , returnToHomePage(new QPushButton("< Home"))
     , horizontalSpacer(new QSpacerItem(spacerWidth, 0, QSizePolicy::Expanding, QSizePolicy::Minimum))
     , addToSavedLocations(new QPushButton("Add"))
+    , scrollTimer(new QTimer(this))
 {
     widgetsScrollAreaContents->setLayout(widgetsLayout);
     widgetsLayout->setAlignment(Qt::AlignTop);
@@ -44,6 +47,11 @@ DetailedWeatherPage::DetailedWeatherPage(QWidget *parent)
     connect(returnToHomePage, &QPushButton::clicked, this->mainWindow, &MainWindow::showHomePage);
     connect(addToSavedLocations, &QPushButton::clicked, this, &DetailedWeatherPage::addButtonClicked);
     connect(this, &DetailedWeatherPage::locationSaved, this->mainWindow, &MainWindow::saveNewLocation);
+
+    widgetsScrollBar = widgetsScrollArea->verticalScrollBar();
+    scrollTimer->setSingleShot(true);
+    connect(scrollTimer, &QTimer::timeout, this, &DetailedWeatherPage::scrollToMaximum);
+    connect(returnToHomePage, &QPushButton::clicked, this, &DetailedWeatherPage::scrollToMinimum);
 }
 
 void DetailedWeatherPage::addNewWidget(const QSharedPointer<Data> &data)
@@ -83,4 +91,16 @@ void DetailedWeatherPage::addButtonClicked()
     emit locationSaved(this->data);
     this->addToSavedLocations->setVisible(false);
     Settings::instance().savedLocations.push_back(this->data);
+
+    scrollTimer->start(addButtonScrollTime);
+}
+
+void DetailedWeatherPage::scrollToMaximum()
+{
+    widgetsScrollBar->setValue(widgetsScrollBar->maximum());
+//    QMetaObject::invokeMethod(widgetsScrollBar, "setValue", Qt::QueuedConnection, Q_ARG(int, widgetsScrollBar->maximum()));
+}
+
+void DetailedWeatherPage::scrollToMinimum() {
+    widgetsScrollBar->setValue(0);
 }

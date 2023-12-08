@@ -46,7 +46,7 @@ private:
     static const int rightMargin = 25;
     static const int topMargin = 0;
     static const int bottomMargin = 0;
-    static const int timerInterval = 300;
+    static const int timerInterval = 200;
 
     QVBoxLayout *mainLayout;
     QHBoxLayout *upperLayout;
@@ -65,7 +65,7 @@ private:
     QPixmap settingsPixmap;
     QIcon settingsIcon;
 
-    QList<GeoLocationData> locations;   //strukturu uzimamo direktno
+    QList<GeoLocationData> locations;
 
     void openSettingsDialog();
     void resetInsertToLeft();

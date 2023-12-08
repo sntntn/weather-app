@@ -89,9 +89,9 @@ void MainWindow::refreshPages()
 void MainWindow::handleLocationObjectSelected(const GeoLocationData& locationData)
 {
     qDebug()<<"Location:" << locationData.getPlace()
-             << "Latitude:"<< locationData.getCoordinates().latitude()
-             << "Longitude:" << locationData.getCoordinates().longitude();
-    qDebug()<< "Default renamed place: " << locationData.getRenamedPlace();
+            <<"Latitude:" << locationData.getCoordinates().latitude()
+            <<"Longitude:" << locationData.getCoordinates().longitude();
+    qDebug()<<"Default renamed place: " << locationData.getRenamedPlace();
     //mutableLocationData.setRenamedPlace("Moj Rodni Grad");
-    qDebug()<< "after renaming - renamed place: " << locationData.getRenamedPlace();
+    qDebug()<<"after renaming - renamed place: " << locationData.getRenamedPlace();
 }

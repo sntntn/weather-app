@@ -12,6 +12,7 @@
 
 class GeoLocationData;
 class MainWindow;
+class WidgetsManager;
 
 class SettingsDialog : public QDialog
 {
@@ -40,6 +41,7 @@ private:
     QComboBox *temperatureUnit;
     QComboBox *windSpeedUnit;
     QComboBox *precipitationUnit;
+    WidgetsManager *listWidget;
     QHBoxLayout *buttonLayout;
     QPushButton *save;
     QPushButton *cancel;

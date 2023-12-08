@@ -17,13 +17,8 @@ HomePage::HomePage(QWidget *parent)
     , searchBar(new QLineEdit())
     , settingsButton(new QPushButton())
     , scrollArea(new QScrollArea())
-//    , scrollLayout(new QHBoxLayout())
     , scrollAreaContents(new QWidget())
     , widgetsLayout(new QGridLayout())
-//    , leftWidget(new QWidget())
-//    , rightWidget(new QWidget())
-//    , leftVBox(new QVBoxLayout())
-//    , rightVBox(new QVBoxLayout())
     , completer(new CustomCompleter(this))
     , debounceTimer(new QTimer(this))
     , settingsPixmap("../Resources/settings.png")
@@ -43,26 +38,13 @@ HomePage::HomePage(QWidget *parent)
     upperLayout->addWidget(settingsButton);
     mainLayout->addLayout(upperLayout);
 
-//    scrollLayout->setContentsMargins(leftMargin, topMargin, rightMargin, bottomMargin);
     widgetsLayout->setContentsMargins(leftMargin, topMargin, rightMargin, bottomMargin);
     widgetsLayout->setAlignment(Qt::AlignTop);
-//    scrollAreaContents->setLayout(scrollLayout);
     scrollAreaContents->setLayout(widgetsLayout);
     scrollArea->setWidget(scrollAreaContents);
     scrollArea->setWidgetResizable(true);
-
+    scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     mainLayout->addWidget(scrollArea);
-
-//    leftVBox->setAlignment(Qt::AlignTop);
-//    rightVBox->setAlignment(Qt::AlignTop);
-
-//    leftWidget->setLayout(leftVBox);
-//    rightWidget->setLayout(rightVBox);
-
-//    leftWidget->setProperty("inserttoLeft", true);
-
-//    scrollLayout->addWidget(leftWidget);
-//    scrollLayout->addWidget(rightWidget);
 
     styleSheetsSetup();
 

@@ -50,7 +50,10 @@ void DetailedWeatherPage::addNewWidget(const QSharedPointer<Data> &data)
 {
     auto *widget = new WeatherWidget(qSharedPointerCast<WeatherData>(data), widgetsScrollAreaContents);
     connect(widget, &WeatherWidget::clicked, this, &DetailedWeatherPage::setData);
-    widget->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Preferred);
+
+    widget->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Preferred);
+    widget->setMaximumWidth(widgetsScrollArea->viewport()->width());
+
     int position = Settings::instance().savedLocations.indexOf(widget->data->location);
     widgetsLayout->addWidget(widget, position, 0, 1, 1);
 

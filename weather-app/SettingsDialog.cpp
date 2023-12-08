@@ -16,6 +16,7 @@ SettingsDialog::SettingsDialog(QWidget *parent)
     , temperatureUnit(new QComboBox(this))
     , windSpeedUnit(new QComboBox(this))
     , precipitationUnit(new QComboBox(this))
+    , listWidget(new WidgetsManager(this))
     , buttonLayout(new QHBoxLayout())
     , save(new QPushButton("Save"))
     , cancel(new QPushButton("Cancel"))
@@ -45,7 +46,6 @@ SettingsDialog::SettingsDialog(QWidget *parent)
     mainLayout->addWidget(windSpeedUnit);
     mainLayout->addWidget(precipitationUnit);
 
-    WidgetsManager* listWidget = new WidgetsManager(this);
     listWidget->setDragDropMode(QAbstractItemView::InternalMove);
 
     for (const auto& location : settings.savedLocations) {
@@ -64,7 +64,7 @@ SettingsDialog::SettingsDialog(QWidget *parent)
         layout->addWidget(label, 1);
         layout->addWidget(deleteButton);
 
-        connect(deleteButton, &QPushButton::clicked, this, [this, listWidget, listItem]() {
+        connect(deleteButton, &QPushButton::clicked, this, [this, listItem]() {
             widgetOrder.removeOne(listItem->data(Qt::UserRole).value<GeoLocationData>());
             delete listItem;
         });
@@ -74,7 +74,7 @@ SettingsDialog::SettingsDialog(QWidget *parent)
     }
 
     // todo bug fix
-    connect(listWidget, &WidgetsManager::itemsRearranged, this, [this, listWidget](){
+    connect(listWidget, &WidgetsManager::itemsRearranged, this, [this](){
         widgetOrder.clear();
 
         for (int i = 0; i < listWidget->count(); i++) {

@@ -16,7 +16,6 @@ GeocodingAPI::~GeocodingAPI()
 }
 
 void GeocodingAPI::geocodeCity(const QString& cityName) {
-
     QString apiUrl = QString("https://api.opencagedata.com/geocode/v1/json?q=%1&key=%2")
                          .arg(cityName)
                          .arg(OPEN_CAGE_API_KEY);
@@ -53,8 +52,18 @@ void GeocodingAPI::handleGeocodingResponse(QNetworkReply* reply) {
 
     // json za https://api.opencagedata.com/geocode/v1/json?q=Be&key=0741d020f58441f6b58ae4dc4128740d       formatted
 
-    QList<LocationData> locations;
-    for (const QJsonValue& resultValue : resultsArray) {
+    QList<GeoLocationData> locations;
+    locations.reserve(resultsArray.size());
+
+    processResultsArray(resultsArray, locations);
+
+    emit geocodingDataUpdated(locations);
+    reply->deleteLater();
+}
+
+void GeocodingAPI::processResultsArray(const QJsonArray &resultsArray, QList<GeoLocationData> &locations)
+{
+    for (auto resultValue : resultsArray) {
         QJsonObject resultObject = resultValue.toObject();
 
         if (!resultObject.contains("formatted") || !resultObject["formatted"].isString()) {
@@ -81,21 +90,15 @@ void GeocodingAPI::handleGeocodingResponse(QNetworkReply* reply) {
         double latitude = geometryObject["lat"].toDouble();
         double longitude = geometryObject["lng"].toDouble();
 
-        LocationData ld;
-        ld.place=place;
-        ld.latitude=latitude;
-        ld.longitude=longitude;
-        locations.append(ld);
+        QString renamedPlace;
+        auto commaIndex=place.indexOf(',');
+        commaIndex == -1 ? renamedPlace = place : renamedPlace = place.left(commaIndex).trimmed();
 
-        emit geocodingDataUpdated(locations);
-        //qDebug() << "-----> City:" << place << "Latitude:" << latitude << "Longitude:" << longitude;
+        //GeoLocationData gld{place, renamedPlace, QGeoCoordinate(latitude,longitude)};
+        locations.emplace_back(place, renamedPlace, QGeoCoordinate(latitude,longitude));
     }
-    reply->deleteLater();
 }
 
-//Test
-//Bern          Latitude: 46.9485 Longitude: 7.45217
-//Belgrade      Latitude: 44.8178 Longitude: 20.4569
 void GeocodingAPI::testCityFunction(const QString &location) {
     geocodeCity(location);
 }

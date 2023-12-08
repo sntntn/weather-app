@@ -8,13 +8,17 @@
 #include <QVector>
 #include <QPushButton>
 #include <QSharedPointer>
+#include <QScrollBar>
+#include <QTimer>
 
+#include <QResizeEvent>
 
 #include "Page.h"
 
 class WeatherData;
 class MainWindow;
 class WeatherWidget;
+class GeoLocationData;
 
 class DetailedWeatherPage : public Page
 {
@@ -22,26 +26,39 @@ class DetailedWeatherPage : public Page
 
 public:
     explicit DetailedWeatherPage(QWidget *parent = nullptr);
-    ~DetailedWeatherPage();
+    ~DetailedWeatherPage() = default;
 
     void resizeEvent(QResizeEvent *event) override;
 
 
 public slots:
-    void setData(const QSharedPointer<WeatherData> &data);
     void addNewWidget(const QSharedPointer<Data> &data) override;
+    void setData(const GeoLocationData &data); // todo shared ptr
+    void scrollToMaximum();
+    void scrollToMinimum();
+
+private slots:
+    void addButtonClicked();
+
+signals:
+    void locationSaved(const GeoLocationData &data);
 
 private:
+    static const int spacerWidth = 40;
+    static const int addButtonScrollTime = 550;
+
+    GeoLocationData &data; // todo sharedptr
     QHBoxLayout *mainLayout;
     QScrollArea *widgetsScrollArea;
     QScrollArea *weatherScrollArea;
     QWidget *widgetsScrollAreaContents;
     QWidget *weatherScrollAreaContents;
-    QVBoxLayout *widgetsLayout;
-    QVBoxLayout *weatherLayout;
-    QHBoxLayout *buttonsLayout;
+    QGridLayout *widgetsLayout;
+    QGridLayout *weatherLayout;
     QPushButton *returnToHomePage;
+    QSpacerItem *horizontalSpacer;
     QPushButton *addToSavedLocations;
+    QTimer *scrollTimer;
 };
 
 #endif // DETAILEDWEATHERPAGE_H

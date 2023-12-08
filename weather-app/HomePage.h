@@ -8,12 +8,15 @@
 #include <QHBoxLayout>
 #include <QSharedPointer>
 #include <QCompleter>
-
+#include <QTimer>
+#include <QPushButton>
 #include "Page.h"
 #include "geocodingapi.h"
+#include "Settings.h"
+#include "GeoLocationData.h"
+#include "customcompleter.h"
 
 struct LocationData;
-
 class WeatherWidget;
 class WeatherData;
 class MainWindow;
@@ -23,32 +26,54 @@ class HomePage : public Page
     Q_OBJECT
 public:
     explicit HomePage(QWidget *parent = nullptr);
-    ~HomePage();
+    ~HomePage() = default;
 
 signals:
     void searchBarPressed(const QString& location);
+    void locationObjectSelected(const GeoLocationData& locationData);
+
 public slots:
     void addNewWidget(const QSharedPointer<Data> &data) override;
-    void searchBarEnter();
+    void onSearchBarTextChanged();
 
 private:
 
+
+
+
+private:
+    static const int leftMargin = 25;
+    static const int rightMargin = 25;
+    static const int topMargin = 0;
+    static const int bottomMargin = 0;
+    static const int timerInterval = 200;
+
     QVBoxLayout *mainLayout;
+    QHBoxLayout *upperLayout;
     QLineEdit *searchBar;
+    QPushButton *settingsButton;
     QScrollArea *scrollArea;
-    QHBoxLayout *scrollLayout;
+//    QHBoxLayout *scrollLayout;
     QWidget *scrollAreaContents;
-    QWidget *leftWidget;
-    QWidget *rightWidget;
-    QVBoxLayout *leftVBox;
-    QVBoxLayout *rightVBox;
-    QCompleter *completer;
-    QList<LocationData> locations;   //strukturu uzimamo direktno
+    QGridLayout *widgetsLayout;
+//    QWidget *leftWidget;
+//    QWidget *rightWidget;
+//    QVBoxLayout *leftVBox;
+//    QVBoxLayout *rightVBox;
+    CustomCompleter *completer;
+    QTimer *debounceTimer;
+    QPixmap settingsPixmap;
+    QIcon settingsIcon;
 
-    void updateCompleter(const QList<LocationData>& locations);
+    QList<GeoLocationData> locations;
+
+    void openSettingsDialog();
+    void resetInsertToLeft();
+    void updateCompleter(const QList<GeoLocationData>& locations);
     void onCompletionActivated(const QString& text);
+    void styleSheetsSetup();
 
-
+    QList<QString> getLocationNames();
     GeocodingAPI geocodingApi;
 };
 

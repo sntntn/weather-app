@@ -4,11 +4,16 @@
 #include <QJsonObject>
 #include <QSharedPointer>
 
-GeoLocationData::GeoLocationData(QString location, QString country, QGeoCoordinate coordinates)
-    : location(location)
-    , country(country)
-    , coordinates(coordinates)
+GeoLocationData::GeoLocationData(const QString &place, const QString &renamedPlace, const QGeoCoordinate &coordinates)
+    : m_place(place)
+    , m_renamedPlace(renamedPlace)
+    , m_coordinates(coordinates)
 {
+    qRegisterMetaType<GeoLocationData>("GeoLocationData");
+}
 
+bool GeoLocationData::operator==(const GeoLocationData &other) const
+{
+    return this->m_coordinates == other.m_coordinates;
 }
 

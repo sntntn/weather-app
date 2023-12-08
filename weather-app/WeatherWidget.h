@@ -8,33 +8,43 @@
 #include <QPixmap>
 
 class WeatherData;
+class GeoLocationData;
 
 class WeatherWidget : public QWidget
 {
     Q_OBJECT
 
 public:
-    explicit WeatherWidget(const QSharedPointer<WeatherData> &data_, QWidget *parent = nullptr);
-    ~WeatherWidget();
+    explicit WeatherWidget(const QSharedPointer<WeatherData> &data, QWidget *parent = nullptr);
+    ~WeatherWidget() = default;
     void mousePressEvent(QMouseEvent *event) override;
 
     const QSharedPointer<WeatherData> data;
 
 signals:
-    void clicked(const QSharedPointer<WeatherData> &data);
+    void clicked(const GeoLocationData &data);
 
 private:
-    QString weatherCodeToIcon(int weatherCode, bool isDay);
+    static const int hBoxSpacing = 5;
+    static const int hBoxMarginSize = 10;
+    static const int locationFontSize = 18;
+    static const int timeFontSize = 14;
+    static const int temperatureFontSize = 24;
+    static const int minmaxTemperatureFontSize = 14;
+    static const int iconWidth = 50;
+    static const int iconHeight = 50;
 
     QHBoxLayout *hBox;
     QVBoxLayout *leftVBox;
     QVBoxLayout *rightVBox;
-    QLabel* locationLabel;
     QLabel* temperatureLabel;
+    QLabel* locationLabel;
     QLabel* minmaxTemperatureLabel;
     QLabel* timeLabel;
     QLabel* iconLabel;
     QPixmap weatherIcon;
+
+    QString weatherCodeToIcon(int weatherCode, bool isDay);
 };
 
 #endif // WEATHERWIDGET_H

@@ -7,42 +7,48 @@
 #include <QFont>
 #include <QPalette>
 #include <QFrame>
+#include <QMargins>
 
 #include "WeatherData.h"
+#include "Settings.h"
 
-WeatherWidget::WeatherWidget(const QSharedPointer<WeatherData> &data_, QWidget *parent)
+WeatherWidget::WeatherWidget(const QSharedPointer<WeatherData> &data, QWidget *parent)
     : QWidget{parent}
-    , data(data_)
+    , data(data)
     , hBox(new QHBoxLayout(this))
     , leftVBox(new QVBoxLayout())
     , rightVBox(new QVBoxLayout())
-    , locationLabel(new QLabel(data->location, this))
-    , temperatureLabel(new QLabel(QString::number(data->temperature), this))
+    , temperatureLabel(new QLabel(QString::number(data->temperature) + Settings::instance().temperatureUnitString(), this))
+    , locationLabel(new QLabel(data->location.getRenamedPlace(), this))
     , minmaxTemperatureLabel(new QLabel("H:" + QString::number(data->highestTemperature) + " L:" + QString::number(data->lowestTemperature), this))
     , timeLabel(new QLabel(QDateTime::currentDateTime().toTimeZone(data->timezone).toString("HH:mm"), this))
     , iconLabel(new QLabel(this))
     , weatherIcon(weatherCodeToIcon(data->weatherCode, data->isDay))
 {
-    hBox->setSpacing(5);
-    hBox->setContentsMargins(10, 10, 10, 10);
+    hBox->setSpacing(hBoxSpacing);
+    hBox->setContentsMargins(hBoxMarginSize, hBoxMarginSize, hBoxMarginSize, hBoxMarginSize);
     hBox->addLayout(leftVBox);
     hBox->addLayout(rightVBox);
 
     setAttribute(Qt::WA_StyledBackground, true);
     setStyleSheet("WeatherWidget { border-radius: 20px; background-color: #598be0; }");
 
-    locationLabel->setFont(QFont("Arial", 18, QFont::Bold));
-    timeLabel->setFont(QFont("Arial", 14, QFont::Normal));
-    temperatureLabel->setFont(QFont("Arial", 24, QFont::Bold));
-    minmaxTemperatureLabel->setFont(QFont("Arial", 14, QFont::Normal));
-    iconLabel->setPixmap(weatherIcon.scaled(50, 50, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+    const QString fontName = "Arial";
+    locationLabel->setFont(QFont(fontName, locationFontSize, QFont::Bold));
+    timeLabel->setFont(QFont(fontName, timeFontSize, QFont::Normal));
+    temperatureLabel->setFont(QFont(fontName, temperatureFontSize, QFont::Bold));
+    minmaxTemperatureLabel->setFont(QFont(fontName, minmaxTemperatureFontSize, QFont::Normal));
+    iconLabel->setPixmap(weatherIcon.scaled(iconWidth, iconHeight, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+    iconLabel->setFixedSize(50,50);
 
     QString labelStyle = "QLabel { color: white; }";
     locationLabel->setStyleSheet(labelStyle);
+    locationLabel->setWordWrap(true);
     timeLabel->setStyleSheet(labelStyle);
     temperatureLabel->setStyleSheet(labelStyle);
 
-    QHBoxLayout* hLayout = new QHBoxLayout();
+    //TODO
+    auto* hLayout = new QHBoxLayout();
     //QSpacerItem* spacer = new QSpacerItem();
     hLayout->addStretch();
     hLayout->addWidget(temperatureLabel);
@@ -62,18 +68,7 @@ WeatherWidget::WeatherWidget(const QSharedPointer<WeatherData> &data_, QWidget *
 
 void WeatherWidget::mousePressEvent(QMouseEvent *event) {
     QWidget::mousePressEvent(event);
-    emit clicked(data);
-}
-
-WeatherWidget::~WeatherWidget()
-{
-    delete hBox;
-    delete leftVBox;
-    delete rightVBox;
-    delete locationLabel;
-    delete temperatureLabel;
-    delete timeLabel;
-    delete iconLabel;
+    emit clicked(data->location);
 }
 
 QString WeatherWidget::weatherCodeToIcon(int weatherCode, bool isDay) {

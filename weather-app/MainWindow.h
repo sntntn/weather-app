@@ -3,8 +3,9 @@
 
 #include <QMainWindow>
 
-
+class Settings;
 class WeatherData;
+class GeoLocationData;
 class WeatherWidget;
 class QStackedWidget;
 class HomePage;
@@ -24,19 +25,26 @@ public:
 
 public slots:
     void showHomePage();
-    void showDetailedWeatherPage(const QSharedPointer<WeatherData> &data);
+    void showDetailedWeatherPage(const GeoLocationData &data); // todo sharedptr
+    void saveNewLocation(const GeoLocationData& location); // todo sharedptr
+    void handleLocationObjectSelected(const GeoLocationData& locationData);
+    void getLocationData(const GeoLocationData &location);
+    void refreshPages();
 
 signals:
-    void detailedWeatherPageShown(const QSharedPointer<WeatherData> &data);
-
+    void detailedWeatherPageShown(const GeoLocationData &data); // todo sharedptr
+    void deletePageWidgets();
 
 private:
     Ui::MainWindow *ui;
+    Settings &settings;
     HomePage *homePage;
     DetailedWeatherPage *detailedWeather;
     QStackedWidget *stackedWidget;
 
-    double m_lastLongitude;
+    double m_lastLongitude; // todo?
     double m_lastLatitude;
+
+    void getSavedLocationsData();
 };
 #endif // MAINWINDOW_H

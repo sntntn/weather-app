@@ -6,6 +6,7 @@
 #include <QString>
 
 #include "WeatherData.h"
+#include "DetailedWeatherData.h"
 #include "Parser.h"
 
 DetailedWeatherAPI::DetailedWeatherAPI(QString& location, QObject *parent)
@@ -62,7 +63,7 @@ void DetailedWeatherAPI::replyFinished(QNetworkReply *reply){
     }
 
     QString jsonData = reply->readAll();
-    auto data = Parser::parseWeatherData(jsonData);
+    auto data = Parser::parseDetailedWeatherData(jsonData);
 
     // Emit the signal with a QSharedPointer pointing to the new Data object
     emit dataFetched(data);

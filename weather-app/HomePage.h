@@ -31,15 +31,12 @@ public:
 signals:
     void searchBarPressed(const QString& location);
     void locationObjectSelected(const GeoLocationData& locationData);
+    void widgetClicked(const GeoLocationData& locationData);
+
 
 public slots:
     void addNewWidget(const QSharedPointer<Data> &data) override;
     void onSearchBarTextChanged();
-
-private:
-
-
-
 
 private:
     static const int leftMargin = 25;

@@ -67,6 +67,18 @@ void DetailedWeatherPage::addNewWidget(const QSharedPointer<Data> &data)
 
     m_widgets.emplaceBack(widget);
 }
+void DetailedWeatherPage::scrollToWidget(const GeoLocationData& locationData)
+{
+    for (auto widget : m_widgets) {
+        if (widget->data->location == locationData) {
+            // Pronašli smo widget -> pa pomeramo scroll bar na njegov položaj
+            widgetsScrollArea->ensureWidgetVisible(widget);
+//            int scrollValue = widgetsScrollBar->value();
+//            std::cout << "Current scroll value: " << scrollValue << std::endl;
+            break;
+        }
+    }
+}
 
 void DetailedWeatherPage::setData(const GeoLocationData &data) // todo sharedptr
 {
@@ -98,7 +110,6 @@ void DetailedWeatherPage::addButtonClicked()
 void DetailedWeatherPage::scrollToMaximum()
 {
     widgetsScrollBar->setValue(widgetsScrollBar->maximum());
-//    QMetaObject::invokeMethod(widgetsScrollBar, "setValue", Qt::QueuedConnection, Q_ARG(int, widgetsScrollBar->maximum()));
 }
 
 void DetailedWeatherPage::scrollToMinimum() {

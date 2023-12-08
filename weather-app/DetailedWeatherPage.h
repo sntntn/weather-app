@@ -36,9 +36,12 @@ public slots:
     void setData(const GeoLocationData &data); // todo shared ptr
     void scrollToMaximum();
     void scrollToMinimum();
+    void scrollToWidget(const GeoLocationData& locationData);
+
 
 private slots:
     void addButtonClicked();
+
 
 signals:
     void locationSaved(const GeoLocationData &data);

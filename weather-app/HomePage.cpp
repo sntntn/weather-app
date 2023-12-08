@@ -64,6 +64,7 @@ void HomePage::addNewWidget(const QSharedPointer<Data> &data)
     auto *widget = new WeatherWidget(qSharedPointerCast<WeatherData>(data), scrollAreaContents);
     m_widgets.push_back(widget);
 
+    connect(widget, &WeatherWidget::clicked, this, &HomePage::widgetClicked);
     connect(widget, &WeatherWidget::clicked, this->mainWindow, &MainWindow::showDetailedWeatherPage);
 
 //    bool inserttoLeft = leftWidget->property("inserttoLeft").toBool();
@@ -114,6 +115,7 @@ void HomePage::onCompletionActivated(const QString& text)
     completer->setModel(new QStringListModel());
     completer->complete();
 }
+
 
 void HomePage::resetInsertToLeft()
 {

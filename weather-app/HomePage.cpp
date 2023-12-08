@@ -40,6 +40,8 @@ HomePage::HomePage(QWidget *parent)
 
     widgetsLayout->setContentsMargins(leftMargin, topMargin, rightMargin, bottomMargin);
     widgetsLayout->setAlignment(Qt::AlignTop);
+    widgetsLayout->setColumnStretch(0, 1);
+    widgetsLayout->setColumnStretch(1, 1);
     scrollAreaContents->setLayout(widgetsLayout);
     scrollArea->setWidget(scrollAreaContents);
     scrollArea->setWidgetResizable(true);
@@ -62,18 +64,13 @@ HomePage::HomePage(QWidget *parent)
 void HomePage::addNewWidget(const QSharedPointer<Data> &data)
 {
     auto *widget = new WeatherWidget(qSharedPointerCast<WeatherData>(data), scrollAreaContents);
-    m_widgets.push_back(widget);
-
     connect(widget, &WeatherWidget::clicked, this->mainWindow, &MainWindow::showDetailedWeatherPage);
 
-//    bool inserttoLeft = leftWidget->property("inserttoLeft").toBool();
-//    inserttoLeft ? leftVBox->addWidget(widget) : rightVBox->addWidget(widget);
     int position = Settings::instance().savedLocations.indexOf(widget->data->location);
     widgetsLayout->addWidget(widget, position / 2, position % 2, 1, 1);
 
     widget->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Preferred);
-
-//    leftWidget->setProperty("inserttoLeft", !inserttoLeft);
+    m_widgets.emplaceBack(widget);
 }
 
 void HomePage::openSettingsDialog()

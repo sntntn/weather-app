@@ -53,7 +53,7 @@ HomePage::HomePage(QWidget *parent)
     connect(&geocodingApi, &GeocodingAPI::geocodingDataUpdated, this, &HomePage::updateCompleter);
     connect(completer, QOverload<const QString&>::of(&QCompleter::activated), this, &HomePage::onCompletionActivated);
     connect(searchBar, &QLineEdit::textChanged, this, [this]() { debounceTimer->start(); });
-    connect(debounceTimer, &QTimer::timeout, this, &HomePage::onSearchBarTextChanged);
+    connect(debounceTimer, &QTimer::timeout, this, &HomePage::onSearchBarTextChanged);          //trenutna verzija je prilagodjena tajmeru
 //    connect(searchBar, &QLineEdit::textChanged, this, &HomePage::onSearchBarTextChanged);
     connect(this, &HomePage::searchBarPressed, &geocodingApi, &GeocodingAPI::testCityFunction);
     connect(this, &HomePage::locationObjectSelected, mainWindow, &MainWindow::showDetailedWeatherPage);
@@ -84,10 +84,7 @@ void HomePage::openSettingsDialog()
 
 void HomePage::onSearchBarTextChanged()
 {
-    completer->complete();
-    emit searchBarPressed(searchBar->text());
-    //completer->setCompletionPrefix(text);
-    completer->complete(); // todo?
+     emit searchBarPressed(searchBar->text());
 }
 
 void HomePage::updateCompleter(const QList<GeoLocationData>& locations)
@@ -96,7 +93,6 @@ void HomePage::updateCompleter(const QList<GeoLocationData>& locations)
     QStringList places;
     qDebug()<<"----------------------------------"<< locations.size();
     for (const auto& location : locations) {
-        //qDebug() << "Selected Place:" << location.getPlace() << "Latitude:" << location.getCoordinates().latitude() << "Longitude:" << location.getCoordinates().longitude();
         places.append(location.getPlace());
     }
 
@@ -113,6 +109,10 @@ void HomePage::onCompletionActivated(const QString& text)
             break;
         }
     }
+    searchBar->clear();
+    delete completer->model();
+    completer->setModel(new QStringListModel());
+    completer->complete();
 }
 
 void HomePage::resetInsertToLeft()

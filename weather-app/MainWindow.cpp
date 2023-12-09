@@ -34,6 +34,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     getSavedLocationsData();
 
+    connect(homePage, &HomePage::widgetClicked, detailedWeather, &DetailedWeatherPage::scrollToWidget);
     connect(this, &MainWindow::detailedWeatherPageShown, detailedWeather, &DetailedWeatherPage::setData);
     // todo obrisati?
     connect(homePage, &HomePage::locationObjectSelected,this,&MainWindow::handleLocationObjectSelected);

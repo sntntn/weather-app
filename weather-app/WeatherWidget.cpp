@@ -71,6 +71,16 @@ void WeatherWidget::mousePressEvent(QMouseEvent *event) {
     emit clicked(data->location);
 }
 
+void WeatherWidget::setHighlighted()
+{
+    setStyleSheet("WeatherWidget { border-radius: 20px; background-color: #0848F3; }");
+}
+
+void WeatherWidget::resetHighlight()
+{
+    setStyleSheet("WeatherWidget { border-radius: 20px; background-color: #598be0; }");
+}
+
 QString WeatherWidget::weatherCodeToIcon(int weatherCode, bool isDay) {
     QString iconBasePath = "../Resources/weatherIcons/";
 

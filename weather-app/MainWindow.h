@@ -42,9 +42,6 @@ private:
     DetailedWeatherPage *detailedWeather;
     QStackedWidget *stackedWidget;
 
-    double m_lastLongitude; // todo?
-    double m_lastLatitude;
-
     void getSavedLocationsData();
 };
 #endif // MAINWINDOW_H

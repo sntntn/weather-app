@@ -59,7 +59,7 @@ void DetailedWeatherPage::addNewWidget(const QSharedPointer<Data> &data)
     widget->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Preferred);
     widget->setMaximumWidth(widgetsScrollArea->viewport()->width());
 
-    int position = Settings::instance().savedLocations.indexOf(widget->data->location);
+    int position = static_cast<int>(Settings::instance().savedLocations.indexOf(widget->data->location));
     widgetsLayout->addWidget(widget, position, 0, 1, 1);
 
     m_widgets.emplaceBack(widget);
@@ -94,12 +94,11 @@ void DetailedWeatherPage::addButtonClicked()
 
 void DetailedWeatherPage::scrollToMaximum()
 {
-    auto widgetsScrollBar = widgetsScrollArea->verticalScrollBar();
+    auto *widgetsScrollBar = widgetsScrollArea->verticalScrollBar();
     widgetsScrollBar->setValue(widgetsScrollBar->maximum());
-//    QMetaObject::invokeMethod(widgetsScrollBar, "setValue", Qt::QueuedConnection, Q_ARG(int, widgetsScrollBar->maximum()));
 }
 
-void DetailedWeatherPage::scrollToMinimum() {
-    auto widgetsScrollBar = widgetsScrollArea->verticalScrollBar();
-    widgetsScrollBar->setValue(0);
+void DetailedWeatherPage::scrollToMinimum()
+{
+    widgetsScrollArea->verticalScrollBar()->setValue(0);
 }

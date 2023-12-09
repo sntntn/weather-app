@@ -40,17 +40,17 @@ public:
     // void setWindSpeedUnit(const WindSpeedUnit);
     // void setPrecipitationUnit(const PrecipitationUnit);
 
-    QString temperatureUnitApiParameter();
-    QString windSpeedUnitApiParameter();
-    QString precipitationUnitApiParameter();
+    QString temperatureUnitApiParameter() const;
+    QString windSpeedUnitApiParameter() const;
+    QString precipitationUnitApiParameter() const;
 
-    QString temperatureUnitString();
-    QString windSpeedUnitString();
-    QString precipitationUnitString();
+    QString temperatureUnitString() const;
+    QString windSpeedUnitString() const;
+    QString precipitationUnitString() const;
 
-    QString temperatureUnitName();
-    QString windSpeedUnitName();
-    QString precipitationUnitName();
+    QString temperatureUnitName() const;
+    QString windSpeedUnitName() const;
+    QString precipitationUnitName() const;
 
     bool shareLocation;
     TemperatureUnit temperatureUnit;
@@ -58,17 +58,17 @@ public:
     PrecipitationUnit precipitationUnit;
     QList<GeoLocationData> savedLocations;
 
-    static QMap<TemperatureUnit, QString> temperatureUnitToString;
-    static QMap<WindSpeedUnit, QString> windSpeedUnitToString;
-    static QMap<PrecipitationUnit, QString> precipitationUnitToString;
+    static const QMap<TemperatureUnit, QString> temperatureUnitToString;
+    static const QMap<WindSpeedUnit, QString> windSpeedUnitToString;
+    static const QMap<PrecipitationUnit, QString> precipitationUnitToString;
 
-    static QMap<TemperatureUnit, QString> temperatureUnitToApiParameter;
-    static QMap<WindSpeedUnit, QString> windSpeedUnitToApiParameter;
-    static QMap<PrecipitationUnit, QString> precipitationUnitToApiParameter;
+    static const QMap<TemperatureUnit, QString> temperatureUnitToApiParameter;
+    static const QMap<WindSpeedUnit, QString> windSpeedUnitToApiParameter;
+    static const QMap<PrecipitationUnit, QString> precipitationUnitToApiParameter;
 
-    static QMap<TemperatureUnit, QString> temperatureUnitsNames;
-    static QMap<WindSpeedUnit, QString> windSpeedUnitsNames;
-    static QMap<PrecipitationUnit, QString> precipitationUnitsNames;
+    static const QMap<TemperatureUnit, QString> temperatureUnitsNames;
+    static const QMap<WindSpeedUnit, QString> windSpeedUnitsNames;
+    static const QMap<PrecipitationUnit, QString> precipitationUnitsNames;
 
 private:
     Settings();

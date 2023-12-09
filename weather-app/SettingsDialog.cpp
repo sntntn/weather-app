@@ -29,18 +29,21 @@ SettingsDialog::SettingsDialog(QWidget *parent)
     locationSwitch->setChecked(settings.shareLocation);
     mainLayout->addWidget(locationSwitch);
 
-    for (auto it = Settings::temperatureUnitsNames.cbegin(); it != Settings::temperatureUnitsNames.cend(); ++it) {
-        temperatureUnit->addItem(it.value(), QVariant::fromValue(it.key()));
+    for (const auto& name : Settings::temperatureUnitsNames) {
+        auto unit = Settings::temperatureUnitsNames.key(name);
+        temperatureUnit->addItem(name, QVariant::fromValue(unit));
     }
     temperatureUnit->setCurrentText(settings.temperatureUnitName());
 
-    for (auto it = Settings::windSpeedUnitsNames.cbegin(); it != Settings::windSpeedUnitsNames.cend(); ++it) {
-        windSpeedUnit->addItem(it.value(), QVariant::fromValue(it.key()));
+    for (const auto& name : Settings::windSpeedUnitsNames) {
+        auto unit = Settings::windSpeedUnitsNames.key(name);
+        windSpeedUnit->addItem(name, QVariant::fromValue(unit));
     }
     windSpeedUnit->setCurrentText(settings.windSpeedUnitName());
 
-    for (auto it = Settings::precipitationUnitsNames.cbegin(); it != Settings::precipitationUnitsNames.cend(); ++it) {
-        precipitationUnit->addItem(it.value(), QVariant::fromValue(it.key()));
+    for (const auto& name : Settings::precipitationUnitsNames) {
+        auto unit = Settings::precipitationUnitsNames.key(name);
+        precipitationUnit->addItem(name, QVariant::fromValue(unit));
     }
     precipitationUnit->setCurrentText(settings.precipitationUnitName());
 
@@ -52,15 +55,15 @@ SettingsDialog::SettingsDialog(QWidget *parent)
 
     for (const auto& location : settings.savedLocations) {
 
-        QListWidgetItem* listItem = new QListWidgetItem();
+        auto *listItem = new QListWidgetItem();
         listItem->setData(Qt::UserRole, QVariant::fromValue(location));
         listWidget->addItem(listItem);
 
-        QWidget* customWidget = new QWidget();
-        QHBoxLayout* layout = new QHBoxLayout(customWidget);
+        auto *customWidget = new QWidget();
+        auto *layout = new QHBoxLayout(customWidget);
 
-        QLabel* label = new QLabel(location.getRenamedPlace());
-        QPushButton* deleteButton = new QPushButton();
+        auto *label = new QLabel(location.getRenamedPlace());
+        auto *deleteButton = new QPushButton();
         deleteButton->setIcon(trashIcon);
 
         layout->addWidget(label, 1);
@@ -80,7 +83,7 @@ SettingsDialog::SettingsDialog(QWidget *parent)
         widgetOrder.clear();
 
         for (int i = 0; i < listWidget->count(); i++) {
-            GeoLocationData location = listWidget->item(i)->data(Qt::UserRole).value<GeoLocationData>();
+            auto location = listWidget->item(i)->data(Qt::UserRole).value<GeoLocationData>();
             widgetOrder.append(location);
         }
     });

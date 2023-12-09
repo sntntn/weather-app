@@ -49,7 +49,7 @@ DetailedWeatherPage::DetailedWeatherPage(QWidget *parent)
 
     scrollTimer->setSingleShot(true);
     connect(scrollTimer, &QTimer::timeout, this, &DetailedWeatherPage::scrollToMaximum);
-    connect(returnToHomePage, &QPushButton::clicked, this, &DetailedWeatherPage::afterHomeButton);
+    connect(returnToHomePage, &QPushButton::clicked, this, &DetailedWeatherPage::afterHomeButtonPressed);
 }
 
 void DetailedWeatherPage::addNewWidget(const QSharedPointer<Data> &data)
@@ -119,7 +119,7 @@ void DetailedWeatherPage::scrollToMaximum()
     widgetsScrollBar->setValue(widgetsScrollBar->maximum());
 }
 
-void DetailedWeatherPage::afterHomeButton() {
+void DetailedWeatherPage::afterHomeButtonPressed() {
     auto widgetsScrollBar = widgetsScrollArea->verticalScrollBar();
     widgetsScrollBar->setValue(0);
     if (selectedWidget) {

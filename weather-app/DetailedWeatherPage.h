@@ -35,7 +35,7 @@ public slots:
     void addNewWidget(const QSharedPointer<Data> &data) override;
     void setData(const GeoLocationData &data); // todo shared ptr
     void scrollToMaximum();
-    void afterHomeButton();
+    void afterHomeButtonPressed();
     void scrollToWidget(const GeoLocationData& locationData);
 
 

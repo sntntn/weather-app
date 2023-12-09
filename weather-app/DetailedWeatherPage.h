@@ -49,8 +49,6 @@ signals:
 private:
     static const int spacerWidth = 40;
     static const int addButtonScrollTime = 550;
-    QTimer *scrollTimer;
-    QScrollBar* widgetsScrollBar;
 
     GeoLocationData &data; // todo sharedptr
     QHBoxLayout *mainLayout;
@@ -63,6 +61,7 @@ private:
     QPushButton *returnToHomePage;
     QSpacerItem *horizontalSpacer;
     QPushButton *addToSavedLocations;
+    QTimer *scrollTimer;
 };
 
 #endif // DETAILEDWEATHERPAGE_H

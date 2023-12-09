@@ -7,8 +7,6 @@
 #include "Settings.h"
 
 #include <iostream>
-//#include <QMetaObject>
-
 
 DetailedWeatherPage::DetailedWeatherPage(QWidget *parent)
     : Page{parent}
@@ -48,7 +46,6 @@ DetailedWeatherPage::DetailedWeatherPage(QWidget *parent)
     connect(addToSavedLocations, &QPushButton::clicked, this, &DetailedWeatherPage::addButtonClicked);
     connect(this, &DetailedWeatherPage::locationSaved, this->mainWindow, &MainWindow::saveNewLocation);
 
-    widgetsScrollBar = widgetsScrollArea->verticalScrollBar();
     scrollTimer->setSingleShot(true);
     connect(scrollTimer, &QTimer::timeout, this, &DetailedWeatherPage::scrollToMaximum);
     connect(returnToHomePage, &QPushButton::clicked, this, &DetailedWeatherPage::scrollToMinimum);
@@ -109,9 +106,11 @@ void DetailedWeatherPage::addButtonClicked()
 
 void DetailedWeatherPage::scrollToMaximum()
 {
+    auto widgetsScrollBar = widgetsScrollArea->verticalScrollBar();
     widgetsScrollBar->setValue(widgetsScrollBar->maximum());
 }
 
 void DetailedWeatherPage::scrollToMinimum() {
+    auto widgetsScrollBar = widgetsScrollArea->verticalScrollBar();
     widgetsScrollBar->setValue(0);
 }

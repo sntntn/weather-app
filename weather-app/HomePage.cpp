@@ -40,6 +40,8 @@ HomePage::HomePage(QWidget *parent)
 
     widgetsLayout->setContentsMargins(leftMargin, topMargin, rightMargin, bottomMargin);
     widgetsLayout->setAlignment(Qt::AlignTop);
+    widgetsLayout->setColumnStretch(0, 1);
+    widgetsLayout->setColumnStretch(1, 1);
     scrollAreaContents->setLayout(widgetsLayout);
     scrollArea->setWidget(scrollAreaContents);
     scrollArea->setWidgetResizable(true);
@@ -73,8 +75,7 @@ void HomePage::addNewWidget(const QSharedPointer<Data> &data)
     widgetsLayout->addWidget(widget, position / 2, position % 2, 1, 1);
 
     widget->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Preferred);
-
-//    leftWidget->setProperty("inserttoLeft", !inserttoLeft);
+    m_widgets.emplaceBack(widget);
 }
 
 void HomePage::openSettingsDialog()
@@ -115,7 +116,6 @@ void HomePage::onCompletionActivated(const QString& text)
     completer->setModel(new QStringListModel());
     completer->complete();
 }
-
 
 void HomePage::resetInsertToLeft()
 {

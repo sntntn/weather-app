@@ -62,6 +62,7 @@ private:
     QSpacerItem *horizontalSpacer;
     QPushButton *addToSavedLocations;
     QTimer *scrollTimer;
+    WeatherWidget* selectedWidget;
 };
 
 #endif // DETAILEDWEATHERPAGE_H

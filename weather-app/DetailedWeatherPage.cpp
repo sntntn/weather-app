@@ -22,6 +22,7 @@ DetailedWeatherPage::DetailedWeatherPage(QWidget *parent)
     , horizontalSpacer(new QSpacerItem(spacerWidth, 0, QSizePolicy::Expanding, QSizePolicy::Minimum))
     , addToSavedLocations(new QPushButton("Add"))
     , scrollTimer(new QTimer(this))
+    , selectedWidget(nullptr)
 {
     widgetsScrollAreaContents->setLayout(widgetsLayout);
     widgetsLayout->setAlignment(Qt::AlignTop);
@@ -68,10 +69,18 @@ void DetailedWeatherPage::scrollToWidget(const GeoLocationData& locationData)
 {
     for (auto widget : m_widgets) {
         if (widget->data->location == locationData) {
-            // Pronašli smo widget -> pa pomeramo scroll bar na njegov položaj
+            // Ponistimo prethodno odabrani widget
+            if (selectedWidget) {
+                selectedWidget->resetHighlight();
+            }
+            // Postavimo novi odabrani widget
+            selectedWidget = widget;
+            if (selectedWidget) {
+                selectedWidget->setHighlighted();
+            }
+
+            // Pronasli smo widget -> pa pomeramo scroll bar na njegov položaj
             widgetsScrollArea->ensureWidgetVisible(widget);
-//            int scrollValue = widgetsScrollBar->value();
-//            std::cout << "Current scroll value: " << scrollValue << std::endl;
             break;
         }
     }

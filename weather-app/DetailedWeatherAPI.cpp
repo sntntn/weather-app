@@ -7,38 +7,23 @@
 
 #include "WeatherData.h"
 #include "DetailedWeatherData.h"
+#include "ApiHandler.h"
 #include "Parser.h"
 
-DetailedWeatherAPI::DetailedWeatherAPI(QString& location, QObject *parent)
+DetailedWeatherAPI::DetailedWeatherAPI(const GeoLocationData &location, QObject *parent)
     : WeatherAPI{location, parent}
 {
-    connect(networkManager, &QNetworkAccessManager::finished, this, &WeatherAPI::replyFinished);
+    connect(networkManager, &QNetworkAccessManager::finished, this, &DetailedWeatherAPI::replyFinished);
 }
-
-DetailedWeatherAPI::~DetailedWeatherAPI() {}
 
 void DetailedWeatherAPI::run()
 {
-    QGeoCoordinate coordinates = locationToCoordinate(location);
-    fetchData(coordinates);
+    fetchData(location.getCoordinates());
     exec();
 }
 
-QGeoCoordinate DetailedWeatherAPI::locationToCoordinate(const QString &location){ // test
-    if(location == "Belgrade"){
-        return QGeoCoordinate(44.8125, 20.4375);
-        //return QGeoCoordinate(35.6764, 139.6500);  //Tokio
-
-    }
-    return QGeoCoordinate(0,0);
-}
-
-
 void DetailedWeatherAPI::fetchData(const QGeoCoordinate &coordinates)
 {
-//    QUrl url("https://api.open-meteo.com/v1/forecast");
-//    QUrlQuery query;
-    // todo
     QString latitude  = QString::number(coordinates.latitude());
     QString longitude = QString::number(coordinates.longitude());
 
@@ -49,24 +34,24 @@ void DetailedWeatherAPI::fetchData(const QGeoCoordinate &coordinates)
     query.addQueryItem("current", "temperature_2m,weather_code,is_day");
     query.addQueryItem("daily", "temperature_2m_max,temperature_2m_min");
     query.addQueryItem("timezone", "auto");
+    //query.addQueryItem("temperature_unit", Settings::instance().temperatureUnitApiParameter());
+
     url.setQuery(query);
     QNetworkRequest request(url);
     networkManager->get(request);
-
 }
 
 void DetailedWeatherAPI::replyFinished(QNetworkReply *reply){
-
     if (reply->error() != QNetworkReply::NoError) {
         std::cerr << "Error: " << reply->errorString().toStdString() << std::endl;
-        return;
+        return; // TODO
     }
 
     QString jsonData = reply->readAll();
-    auto data = Parser::parseDetailedWeatherData(jsonData);
+    auto data = Parser::parseWeatherData(jsonData, location);
 
-    // Emit the signal with a QSharedPointer pointing to the new Data object
     emit dataFetched(data);
+    this->quit();
 
     reply->deleteLater();
 }

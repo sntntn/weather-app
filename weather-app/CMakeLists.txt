@@ -39,6 +39,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         Data.h
         GeoLocationData.h GeoLocationData.cpp
         DetailedWeatherData.h DetailedWeatherData.cpp
+        DetailedWeatherAPI.h DetailedWeatherAPI.cpp
         ApiHandler.h ApiHandler.cpp
         Settings.h Settings.cpp
         SettingsDialog.h SettingsDialog.cpp

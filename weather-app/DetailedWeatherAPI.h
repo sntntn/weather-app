@@ -1,15 +1,21 @@
 #ifndef DETAILEDWEATHERAPI_H
 #define DETAILEDWEATHERAPI_H
 
+#include <QGeoCoordinate>
+#include <QThread>
+#include <QString>
+
+#include "GeoLocationData.h"
 #include "WeatherAPI.h"
 
 class DetailedWeatherData;
 
 class DetailedWeatherAPI : public WeatherAPI
 {
+    Q_OBJECT
 public:
-    explicit DetailedWeatherAPI(QString& location, QObject *parent = nullptr);
-    ~DetailedWeatherAPI();
+    explicit DetailedWeatherAPI(const GeoLocationData& location, QObject *parent = nullptr);
+    ~DetailedWeatherAPI() = default;
 
 private slots:
     void replyFinished(QNetworkReply *reply) override;
@@ -18,11 +24,11 @@ protected:
     void run() override;
 
 protected:
-    QString location;
+    GeoLocationData location;
 
     void fetchData(const QGeoCoordinate &coordinates);
-    QGeoCoordinate locationToCoordinate(const QString &location);
 
 };
 
 #endif // DETAILEDWEATHERAPI_H
+

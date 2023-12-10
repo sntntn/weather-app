@@ -6,7 +6,8 @@
 #include "GeoLocationData.h"
 #include "Serializer.h"
 
-const QMap<Settings::TemperatureUnit, QString> Settings::temperatureUnitToApiParameter{
+const QMap<Settings::TemperatureUnit, QString> Settings::temperatureUnitToApiParameter
+{
     {Settings::TemperatureUnit::CELSIUS, "celsius"},
     {Settings::TemperatureUnit::FAHRENHEIT, "fahrenheit"}
 };
@@ -51,28 +52,24 @@ const QMap<Settings::TemperatureUnit, QString> Settings::temperatureUnitsNames{
 };
 
 const QMap<Settings::WindSpeedUnit, QString> Settings::windSpeedUnitsNames
-    {
+{
         {Settings::WindSpeedUnit::KMH, "Kilometres per hour"},
         {Settings::WindSpeedUnit::MPH, "Miles per hour"},
         {Settings::WindSpeedUnit::MS, "Metres per second"},
         {Settings::WindSpeedUnit::KNOTS, "Knots"}
-    };
+};
 
 const QMap<Settings::PrecipitationUnit, QString> Settings::precipitationUnitsNames
-    {
+{
         {Settings::PrecipitationUnit::MILLIMETRES, "Millimetres"},
         {Settings::PrecipitationUnit::INCHES, "Inches"}
-    };
+};
 
 
 Settings::Settings()
-    : shareLocation(false)
-    , temperatureUnit(TemperatureUnit::CELSIUS)
-    , windSpeedUnit(WindSpeedUnit::KMH)
-    , precipitationUnit(PrecipitationUnit::MILLIMETRES)
 {
     Serializer serializer;
-    serializer.load(*this, "../Serialization/saved-locations.json");
+    serializer.load(*this, "../Serialization/settings.json");
 }
 
 Settings& Settings::instance()
@@ -81,7 +78,8 @@ Settings& Settings::instance()
     return instance;
 }
 
-QVariant Settings::toVariant() const{
+QVariant Settings::toVariant() const
+{
     QVariantMap map;
     map.insert("shareLocation", shareLocation);
     map.insert("temperatureUnit", temperatureUnit);
@@ -102,7 +100,8 @@ QVariant Settings::toVariant() const{
     return map;
 }
 
-void Settings::fromVariant(const QVariant & variant){
+void Settings::fromVariant(const QVariant & variant)
+{
     const auto map = variant.toMap();
     shareLocation = map.value("shareLocation").toBool();
     temperatureUnit = map.value("temperatureUnit").value<Settings::TemperatureUnit>();

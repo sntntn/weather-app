@@ -62,10 +62,10 @@ public:
     QVariant toVariant() const override;
     void fromVariant(const QVariant & variant) override;
 
-    bool shareLocation;
-    Settings::TemperatureUnit temperatureUnit;
-    Settings::WindSpeedUnit windSpeedUnit;
-    Settings::PrecipitationUnit precipitationUnit;
+    bool shareLocation = false;
+    Settings::TemperatureUnit temperatureUnit = TemperatureUnit::CELSIUS;
+    Settings::WindSpeedUnit windSpeedUnit = WindSpeedUnit::KMH;
+    Settings::PrecipitationUnit precipitationUnit = PrecipitationUnit::MILLIMETRES;
     QList<GeoLocationData> savedLocations;
 
     static const QMap<TemperatureUnit, QString> temperatureUnitToString;

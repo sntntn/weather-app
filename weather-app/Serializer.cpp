@@ -3,10 +3,8 @@
 #include <QJsonDocument>
 #include <QFile>
 
-void Serializer::save(const Serializable &serializable, const QString &filepath, const QString &rootName)
+void Serializer::save(const Serializable &serializable, const QString &filepath)
 {
-    Q_UNUSED(rootName);
-
     QJsonDocument doc = QJsonDocument::fromVariant(serializable.toVariant());
     QFile file(filepath);
     file.open(QFile::WriteOnly);

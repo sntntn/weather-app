@@ -12,7 +12,6 @@ GeoLocationData::GeoLocationData(const QString &place, const QString &renamedPla
     , m_coordinates(coordinates)
 {
     qRegisterMetaType<GeoLocationData>("GeoLocationData");
-    //qRegisterMetaType<QGeoCoordinate>("QGeoCoordinate");
 }
 
 bool GeoLocationData::operator==(const GeoLocationData &other) const

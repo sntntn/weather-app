@@ -31,6 +31,7 @@ public:
 
     QVariant toVariant() const override;
     void fromVariant(const QVariant & variant) override;
+    static GeoLocationData& fromVariantMap(const QVariantMap& geoLocation);
 
     GeoLocationData& operator= (const GeoLocationData& other) = default;
     bool operator== (const GeoLocationData &other) const;

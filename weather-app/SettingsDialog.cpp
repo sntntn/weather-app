@@ -56,7 +56,7 @@ SettingsDialog::SettingsDialog(QWidget *parent)
     for (const auto& location : settings.savedLocations) {
 
         auto *listItem = new QListWidgetItem();
-        listItem->setData(Qt::UserRole, QVariant::fromValue(location));
+        listItem->setData(Qt::UserRole, location.toVariant());
         listWidget->addItem(listItem);
 
         auto *customWidget = new QWidget();
@@ -70,7 +70,11 @@ SettingsDialog::SettingsDialog(QWidget *parent)
         layout->addWidget(deleteButton);
 
         connect(deleteButton, &QPushButton::clicked, this, [this, listItem]() {
-            widgetOrder.removeOne(listItem->data(Qt::UserRole).value<GeoLocationData>());
+            //todo
+            auto locationMap = listItem->data(Qt::UserRole).toMap();
+            const auto geoLocation = GeoLocationData::fromVariantMap(locationMap);
+            widgetOrder.removeOne(geoLocation);
+
             delete listItem;
         });
 
@@ -78,13 +82,14 @@ SettingsDialog::SettingsDialog(QWidget *parent)
         listItem->setSizeHint(customWidget->minimumSizeHint());
     }
 
-    // todo bug fix
     connect(listWidget, &WidgetsManager::itemsRearranged, this, [this](){
         widgetOrder.clear();
 
+        //todo
         for (int i = 0; i < listWidget->count(); i++) {
-            auto location = listWidget->item(i)->data(Qt::UserRole).value<GeoLocationData>();
-            widgetOrder.append(location);
+            auto locationMap = listWidget->item(i)->data(Qt::UserRole).toMap();
+            const auto geoLocation = GeoLocationData::fromVariantMap(locationMap);
+            widgetOrder.append(geoLocation);
         }
     });
 

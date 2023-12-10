@@ -7,26 +7,20 @@
             "renamedPlace": "Belgrade"
         },
         {
-            "latitude": 45.2551338,
-            "longitude": 19.8451756,
-            "place": "Novi Sad, South Backa Administrative District, Serbia",
-            "renamedPlace": "Novi Sad"
+            "latitude": 43.5675155,
+            "longitude": 22.2556547,
+            "place": "Knjazevac Municipality, Zajecar Administrative District, Serbia",
+            "renamedPlace": "Knjazevac Municipality"
         },
         {
             "latitude": 41.3281482,
             "longitude": 19.8184435,
             "place": "Tirana, Tirana County, Albania",
             "renamedPlace": "Tirana"
-        },
-        {
-            "latitude": 43.5675155,
-            "longitude": 22.2556547,
-            "place": "Knjazevac Municipality, Zajecar Administrative District, Serbia",
-            "renamedPlace": "Knjazevac Municipality"
         }
     ],
     "precipitationUnit": 0,
-    "shareLocation": true,
+    "shareLocation": false,
     "temperatureUnit": 0,
     "windSpeedUnit": 0
 }

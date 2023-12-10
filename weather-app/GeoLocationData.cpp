@@ -23,7 +23,8 @@ QVariant GeoLocationData::toVariant() const{
     QVariantMap map;
     map.insert("place", m_place);
     map.insert("renamedPlace", m_renamedPlace);
-    map.insert("coordinates", QVariant::fromValue(m_coordinates));
+    map.insert("latitude", m_coordinates.latitude());
+    map.insert("longitude", m_coordinates.longitude());
 
     return map;
 }
@@ -32,6 +33,18 @@ void GeoLocationData::fromVariant(const QVariant & variant){
     const auto map = variant.toMap();
     m_place = map.value("place").toString();
     m_renamedPlace = map.value("renamedPlace").toString();
-    m_coordinates = map.value("coordinates").value<QGeoCoordinate>();
+    auto latitude = map.value("latitude").toDouble();
+    auto longitude = map.value("longitude").toDouble();
+    m_coordinates = QGeoCoordinate(latitude, longitude);
+}
+
+// todo leak
+GeoLocationData& GeoLocationData::fromVariantMap(const QVariantMap& geoLocation)
+{
+    auto data = new GeoLocationData(geoLocation.value("place").toString(),
+                                    geoLocation.value("renamedPlace").toString(),
+                                    QGeoCoordinate(geoLocation.value("latitude").toDouble(),
+                                                   geoLocation.value("longitude").toDouble()));
+    return *data;
 }
 

@@ -87,12 +87,7 @@ QVariant Settings::toVariant() const
     map.insert("precipitationUnit", precipitationUnit);
     QVariantList locations;
     for (const auto &savedLocation : savedLocations){
-        QVariantMap location;
-        location.insert("place", savedLocation.getPlace());
-        location.insert("renamedPlace", savedLocation.getRenamedPlace());
-        location.insert("latitude", savedLocation.getCoordinates().latitude());
-        location.insert("longitude", savedLocation.getCoordinates().longitude());
-
+        QVariantMap location = savedLocation.toVariant().toMap();
         locations.append(location);
     }
     map.insert("locations", locations);
@@ -100,7 +95,7 @@ QVariant Settings::toVariant() const
     return map;
 }
 
-void Settings::fromVariant(const QVariant & variant)
+void Settings::fromVariant(const QVariant &variant)
 {
     const auto map = variant.toMap();
     shareLocation = map.value("shareLocation").toBool();
@@ -108,18 +103,13 @@ void Settings::fromVariant(const QVariant & variant)
     windSpeedUnit = map.value("precipitationUnit").value<Settings::WindSpeedUnit>();
     precipitationUnit = map.value("precipitationUnit").value<Settings::PrecipitationUnit>();
 
-    //qDeleteAll(savedLocations);
-    //savedLocations.clear();
-
     const auto locations = map.value("locations").toList();
     for(const auto& location : locations){
         const auto geoLocation = location.toMap();
-        savedLocations.append(GeoLocationData(geoLocation.value("place").toString(),
-                                              geoLocation.value("renamedPlace").toString(),
-                                              QGeoCoordinate(geoLocation.value("latitude").toDouble(),
-                                                             geoLocation.value("longitude").toDouble())));
+        savedLocations.append(GeoLocationData::fromVariantMap(geoLocation));
     }
 }
+
 
 
 QString Settings::temperatureUnitApiParameter() const

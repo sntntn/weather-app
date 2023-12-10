@@ -72,18 +72,11 @@ Settings::Settings()
         auto location1 = GeoLocationData("Belgrade, City of Belgrade, Serbia", "Belgrade", QGeoCoordinate(44.8178, 20.4569));
         auto location2 = GeoLocationData("Berlin, Germany", "Berlin", QGeoCoordinate(52.517, 12.3889));
         auto location3 = GeoLocationData("Paris, Ile-de-France, France", "Paris", QGeoCoordinate(48.8589, 2.32004));
-        auto location4 = GeoLocationData("Athens, Central Athens, Greece", "Athens", QGeoCoordinate(37.9756, 23.7348));
-        auto location5 = GeoLocationData("London, United Kingdom", "London", QGeoCoordinate(51.5074, -0.127765));
-        auto location6 = GeoLocationData("Tokyo, Japan", "Tokyo", QGeoCoordinate(35.6822, 139.762));
-        auto location7 = GeoLocationData("Bari, Italy", "Bari", QGeoCoordinate(41.1258, 16.862));
-
+        auto location4 = GeoLocationData("Athens, Central Athens, Greece", "Athens", QGeoCoordinate(37.9756,23.7348));
         savedLocations.push_back(location1);
         savedLocations.push_back(location2);
         savedLocations.push_back(location3);
         savedLocations.push_back(location4);
-        savedLocations.push_back(location5);
-        savedLocations.push_back(location6);
-        savedLocations.push_back(location7);
 }
 
 Settings& Settings::instance()

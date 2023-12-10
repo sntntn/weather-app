@@ -19,9 +19,6 @@ public:
     ~WeatherWidget() = default;
     void mousePressEvent(QMouseEvent *event) override;
 
-    void setHighlighted();
-    void resetHighlight();
-
     const QSharedPointer<WeatherData> data;
 
 signals:

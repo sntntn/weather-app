@@ -35,13 +35,10 @@ public slots:
     void addNewWidget(const QSharedPointer<Data> &data) override;
     void setData(const GeoLocationData &data); // todo shared ptr
     void scrollToMaximum();
-    void afterHomeButtonPressed();
-    void scrollToWidget(const GeoLocationData& locationData);
-
+    void scrollToMinimum();
 
 private slots:
     void addButtonClicked();
-
 
 signals:
     void locationSaved(const GeoLocationData &data);
@@ -62,7 +59,6 @@ private:
     QSpacerItem *horizontalSpacer;
     QPushButton *addToSavedLocations;
     QTimer *scrollTimer;
-    WeatherWidget* selectedWidget;
 };
 
 #endif // DETAILEDWEATHERPAGE_H

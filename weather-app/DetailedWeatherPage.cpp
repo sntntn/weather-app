@@ -22,6 +22,7 @@ DetailedWeatherPage::DetailedWeatherPage(QWidget *parent)
     , horizontalSpacer(new QSpacerItem(spacerWidth, 0, QSizePolicy::Expanding, QSizePolicy::Minimum))
     , addToSavedLocations(new QPushButton("Add"))
     , scrollTimer(new QTimer(this))
+    , selectedWidget(nullptr)
 {
     widgetsScrollAreaContents->setLayout(widgetsLayout);
     widgetsLayout->setAlignment(Qt::AlignTop);
@@ -48,7 +49,7 @@ DetailedWeatherPage::DetailedWeatherPage(QWidget *parent)
 
     scrollTimer->setSingleShot(true);
     connect(scrollTimer, &QTimer::timeout, this, &DetailedWeatherPage::scrollToMaximum);
-    connect(returnToHomePage, &QPushButton::clicked, this, &DetailedWeatherPage::scrollToMinimum);
+    connect(returnToHomePage, &QPushButton::clicked, this, &DetailedWeatherPage::afterHomePressed);
 }
 
 void DetailedWeatherPage::addNewWidget(const QSharedPointer<Data> &data)
@@ -74,6 +75,8 @@ void DetailedWeatherPage::setData(const GeoLocationData &data) // todo sharedptr
 
     Settings::instance().savedLocations.indexOf(data) == -1 ? this->addToSavedLocations->setVisible(true)
                                                             : this->addToSavedLocations->setVisible(false);
+
+    highlightWidget(data);
 }
 
 void DetailedWeatherPage::resizeEvent(QResizeEvent* event) {
@@ -91,13 +94,31 @@ void DetailedWeatherPage::addButtonClicked()
     scrollTimer->start(addButtonScrollTime);
 }
 
+void DetailedWeatherPage::highlightWidget(const GeoLocationData &locationData)
+{
+    for(auto widget : m_widgets){
+        if(widget->data->location == locationData){
+
+            selectedWidget=widget;
+            if(selectedWidget){
+                selectedWidget->setHighlight();
+            }
+        }
+    }
+
+}
+
 void DetailedWeatherPage::scrollToMaximum()
 {
     auto *widgetsScrollBar = widgetsScrollArea->verticalScrollBar();
     widgetsScrollBar->setValue(widgetsScrollBar->maximum());
 }
 
-void DetailedWeatherPage::scrollToMinimum()
+void DetailedWeatherPage::afterHomePressed()
 {
     widgetsScrollArea->verticalScrollBar()->setValue(0);
+    //ako je prethodno selektovan neki widget
+    if(selectedWidget){
+        selectedWidget->resetHighlight();
+    }
 }

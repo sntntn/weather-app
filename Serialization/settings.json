@@ -23,6 +23,12 @@
             "longitude": 22.2556547,
             "place": "Knjazevac Municipality, Zajecar Administrative District, Serbia",
             "renamedPlace": "Knjazevac Municipality"
+        },
+        {
+            "latitude": 43.2689885,
+            "longitude": 20.826741,
+            "place": "Kopaonik, 36354 Brus Municipality, Serbia",
+            "renamedPlace": "Kopaonik"
         }
     ],
     "precipitationUnit": 0,

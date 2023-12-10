@@ -1,82 +1,78 @@
 #include "Settings.h"
 
+#include <QVariantMap>
+#include <QVariantList>
+
 #include "GeoLocationData.h"
+#include "Serializer.h"
 
-const QMap<TemperatureUnit, QString> Settings::temperatureUnitToApiParameter{
-    {TemperatureUnit::CELSIUS, "celsius"},
-    {TemperatureUnit::FAHRENHEIT, "fahrenheit"}
+const QMap<Settings::TemperatureUnit, QString> Settings::temperatureUnitToApiParameter{
+    {Settings::TemperatureUnit::CELSIUS, "celsius"},
+    {Settings::TemperatureUnit::FAHRENHEIT, "fahrenheit"}
 };
 
-const QMap<WindSpeedUnit, QString> Settings::windSpeedUnitToApiParameter
+const QMap<Settings::WindSpeedUnit, QString> Settings::windSpeedUnitToApiParameter
 {
-    {WindSpeedUnit::KMH, "kmh"},
-    {WindSpeedUnit::MPH, "mph"},
-    {WindSpeedUnit::MS, "ms"},
-    {WindSpeedUnit::KNOTS, "kn"}
+    {Settings::WindSpeedUnit::KMH, "kmh"},
+    {Settings::WindSpeedUnit::MPH, "mph"},
+    {Settings::WindSpeedUnit::MS, "ms"},
+    {Settings::WindSpeedUnit::KNOTS, "kn"}
 };
 
-const QMap<PrecipitationUnit, QString> Settings::precipitationUnitToApiParameter
+const QMap<Settings::PrecipitationUnit, QString> Settings::precipitationUnitToApiParameter
 {
-    {PrecipitationUnit::MILLIMETRES, "mm"},
-    {PrecipitationUnit::INCHES, "inch"}
+    {Settings::PrecipitationUnit::MILLIMETRES, "mm"},
+    {Settings::PrecipitationUnit::INCHES, "inch"}
 };
 
-const QMap<TemperatureUnit, QString> Settings::temperatureUnitToString
+const QMap<Settings::TemperatureUnit, QString> Settings::temperatureUnitToString
 {
-    {TemperatureUnit::CELSIUS, "°C"},
-    {TemperatureUnit::FAHRENHEIT, "°F"}
+    {Settings::TemperatureUnit::CELSIUS, "°C"},
+    {Settings::TemperatureUnit::FAHRENHEIT, "°F"}
 };
 
-const QMap<WindSpeedUnit, QString> Settings::windSpeedUnitToString
+const QMap<Settings::WindSpeedUnit, QString> Settings::windSpeedUnitToString
 {
-    {WindSpeedUnit::KMH, "km/h"},
-    {WindSpeedUnit::MPH, "mph"},
-    {WindSpeedUnit::MS, "m/s"},
-    {WindSpeedUnit::KNOTS, "kn"}
+    {Settings::WindSpeedUnit::KMH, "km/h"},
+    {Settings::WindSpeedUnit::MPH, "mph"},
+    {Settings::WindSpeedUnit::MS, "m/s"},
+    {Settings::WindSpeedUnit::KNOTS, "kn"}
 };
 
-const QMap<PrecipitationUnit, QString> Settings::precipitationUnitToString
+const QMap<Settings::PrecipitationUnit, QString> Settings::precipitationUnitToString
 {
-    {PrecipitationUnit::MILLIMETRES, "mm"},
-    {PrecipitationUnit::INCHES, "in"}
+    {Settings::PrecipitationUnit::MILLIMETRES, "mm"},
+    {Settings::PrecipitationUnit::INCHES, "in"}
 };
 
-const QMap<TemperatureUnit, QString> Settings::temperatureUnitsNames{
-    {TemperatureUnit::CELSIUS, "Celsius"},
-    {TemperatureUnit::FAHRENHEIT, "Fahrenheit"}
+const QMap<Settings::TemperatureUnit, QString> Settings::temperatureUnitsNames{
+    {Settings::TemperatureUnit::CELSIUS, "Celsius"},
+    {Settings::TemperatureUnit::FAHRENHEIT, "Fahrenheit"}
 };
 
-const QMap<WindSpeedUnit, QString> Settings::windSpeedUnitsNames
+const QMap<Settings::WindSpeedUnit, QString> Settings::windSpeedUnitsNames
     {
-        {WindSpeedUnit::KMH, "Kilometres per hour"},
-        {WindSpeedUnit::MPH, "Miles per hour"},
-        {WindSpeedUnit::MS, "Metres per second"},
-        {WindSpeedUnit::KNOTS, "Knots"}
+        {Settings::WindSpeedUnit::KMH, "Kilometres per hour"},
+        {Settings::WindSpeedUnit::MPH, "Miles per hour"},
+        {Settings::WindSpeedUnit::MS, "Metres per second"},
+        {Settings::WindSpeedUnit::KNOTS, "Knots"}
     };
 
-const QMap<PrecipitationUnit, QString> Settings::precipitationUnitsNames
+const QMap<Settings::PrecipitationUnit, QString> Settings::precipitationUnitsNames
     {
-        {PrecipitationUnit::MILLIMETRES, "Millimetres"},
-        {PrecipitationUnit::INCHES, "Inches"}
+        {Settings::PrecipitationUnit::MILLIMETRES, "Millimetres"},
+        {Settings::PrecipitationUnit::INCHES, "Inches"}
     };
 
 
-//TODO serijalizacija
 Settings::Settings()
     : shareLocation(false)
     , temperatureUnit(TemperatureUnit::CELSIUS)
     , windSpeedUnit(WindSpeedUnit::KMH)
     , precipitationUnit(PrecipitationUnit::MILLIMETRES)
 {
-    //TODO serijalizacija
-        auto location1 = GeoLocationData("Belgrade, City of Belgrade, Serbia", "Belgrade", QGeoCoordinate(44.8178, 20.4569));
-        auto location2 = GeoLocationData("Berlin, Germany", "Berlin", QGeoCoordinate(52.517, 12.3889));
-        auto location3 = GeoLocationData("Paris, Ile-de-France, France", "Paris", QGeoCoordinate(48.8589, 2.32004));
-        auto location4 = GeoLocationData("Athens, Central Athens, Greece", "Athens", QGeoCoordinate(37.9756,23.7348));
-        savedLocations.push_back(location1);
-        savedLocations.push_back(location2);
-        savedLocations.push_back(location3);
-        savedLocations.push_back(location4);
+    Serializer serializer;
+    serializer.load(*this, "../Serialization/saved-locations.json");
 }
 
 Settings& Settings::instance()
@@ -84,6 +80,48 @@ Settings& Settings::instance()
     static Settings instance;
     return instance;
 }
+
+QVariant Settings::toVariant() const{
+    QVariantMap map;
+    map.insert("shareLocation", shareLocation);
+    map.insert("temperatureUnit", temperatureUnit);
+    map.insert("windSpeedUnit", windSpeedUnit);
+    map.insert("precipitationUnit", precipitationUnit);
+    QVariantList locations;
+    for (const auto &savedLocation : savedLocations){
+        QVariantMap location;
+        location.insert("place", savedLocation.getPlace());
+        location.insert("renamedPlace", savedLocation.getRenamedPlace());
+        location.insert("latitude", savedLocation.getCoordinates().latitude());
+        location.insert("longitude", savedLocation.getCoordinates().longitude());
+
+        locations.append(location);
+    }
+    map.insert("locations", locations);
+
+    return map;
+}
+
+void Settings::fromVariant(const QVariant & variant){
+    const auto map = variant.toMap();
+    shareLocation = map.value("shareLocation").toBool();
+    temperatureUnit = map.value("temperatureUnit").value<Settings::TemperatureUnit>();
+    windSpeedUnit = map.value("precipitationUnit").value<Settings::WindSpeedUnit>();
+    precipitationUnit = map.value("precipitationUnit").value<Settings::PrecipitationUnit>();
+
+    //qDeleteAll(savedLocations);
+    //savedLocations.clear();
+
+    const auto locations = map.value("locations").toList();
+    for(const auto& location : locations){
+        const auto geoLocation = location.toMap();
+        savedLocations.append(GeoLocationData(geoLocation.value("place").toString(),
+                                              geoLocation.value("renamedPlace").toString(),
+                                              QGeoCoordinate(geoLocation.value("latitude").toDouble(),
+                                                             geoLocation.value("longitude").toDouble())));
+    }
+}
+
 
 QString Settings::temperatureUnitApiParameter() const
 {

@@ -19,9 +19,6 @@ class SettingsDialog : public QDialog
     Q_OBJECT
 
 public:
-    QString temperatureUnitToString(TemperatureUnit unit);
-    QString windSpeedUnitToString(WindSpeedUnit unit);
-    QString precipitationUnitToString(PrecipitationUnit unit);
     MainWindow* getMainWindow();
     SettingsDialog(QWidget *parent = nullptr);
     ~SettingsDialog() = default;

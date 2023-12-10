@@ -12,7 +12,7 @@
 #include "geocodingapi.h"
 #include "Settings.h"
 #include "GeoLocationData.h"
-
+#include "Serializer.h"
 
 #include <iostream>
 
@@ -83,6 +83,16 @@ void MainWindow::refreshPages()
 {
     emit deletePageWidgets();
     getSavedLocationsData();
+}
+
+void MainWindow::closeEvent(QCloseEvent *event){
+    serializeData();
+    QMainWindow::closeEvent(event);
+}
+
+void MainWindow::serializeData(){
+    Serializer* serializer = new Serializer();
+    serializer->save(settings, "../Serialization/saved-locations.json");
 }
 
 // todo obrisati?

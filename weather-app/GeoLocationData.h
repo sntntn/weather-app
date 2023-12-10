@@ -3,9 +3,10 @@
 
 #include <QGeoCoordinate>
 
+#include "Serializable.h"
 #include "Data.h"
 
-class GeoLocationData : public Data
+class GeoLocationData : public Data, public Serializable
 {
 public:
     GeoLocationData() = default;
@@ -28,6 +29,8 @@ public:
         m_renamedPlace=renamedPlace;
     }
 
+    QVariant toVariant() const override;
+    void fromVariant(const QVariant & variant) override;
 
     GeoLocationData& operator= (const GeoLocationData& other) = default;
     bool operator== (const GeoLocationData &other) const;
@@ -37,7 +40,6 @@ private:
     QString m_renamedPlace;
     QGeoCoordinate m_coordinates;
 };
-
 Q_DECLARE_METATYPE(GeoLocationData)
 
 #endif // GEOLOCATIONDATA_H

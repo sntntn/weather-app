@@ -2,38 +2,45 @@
 #define SETTINGS_H
 
 #include <QObject>
+#include <QVariant>
 #include <QString>
 #include <QMap>
 
+#include "Serializable.h"
+
 class GeoLocationData;
 
-enum class TemperatureUnit
-{
-    CELSIUS,
-    FAHRENHEIT
-};
-
-enum class WindSpeedUnit
-{
-    KMH,
-    MPH,
-    MS,
-    KNOTS
-};
-
-enum class PrecipitationUnit
-{
-    MILLIMETRES,
-    INCHES
-};
-
-
-class Settings : public QObject
+class Settings : public QObject, public Serializable
 {
     Q_OBJECT
 
 public:
     static Settings& instance();
+
+    enum TemperatureUnit
+    {
+        CELSIUS,
+        FAHRENHEIT
+    };
+    Q_ENUM(TemperatureUnit)
+
+    enum WindSpeedUnit
+    {
+        KMH,
+        MPH,
+        MS,
+        KNOTS
+    };
+    Q_ENUM(WindSpeedUnit)
+
+    enum PrecipitationUnit
+    {
+        MILLIMETRES,
+        INCHES
+    };
+    Q_ENUM(PrecipitationUnit)
+
+
     // TODO setters and getters or public variables
     // void setLocationSharing(const bool);
     // void setTemperatureUnit(const TemperatureUnit);
@@ -52,10 +59,13 @@ public:
     QString windSpeedUnitName() const;
     QString precipitationUnitName() const;
 
+    QVariant toVariant() const override;
+    void fromVariant(const QVariant & variant) override;
+
     bool shareLocation;
-    TemperatureUnit temperatureUnit;
-    WindSpeedUnit windSpeedUnit;
-    PrecipitationUnit precipitationUnit;
+    Settings::TemperatureUnit temperatureUnit;
+    Settings::WindSpeedUnit windSpeedUnit;
+    Settings::PrecipitationUnit precipitationUnit;
     QList<GeoLocationData> savedLocations;
 
     static const QMap<TemperatureUnit, QString> temperatureUnitToString;

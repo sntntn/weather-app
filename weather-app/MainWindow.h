@@ -35,6 +35,9 @@ signals:
     void detailedWeatherPageShown(const GeoLocationData &data); // todo sharedptr
     void deletePageWidgets();
 
+protected:
+    void closeEvent(QCloseEvent *event) override;
+
 private:
     Ui::MainWindow *ui;
     Settings &settings;
@@ -43,5 +46,7 @@ private:
     QStackedWidget *stackedWidget;
 
     void getSavedLocationsData();
+    void serializeData();
+
 };
 #endif // MAINWINDOW_H

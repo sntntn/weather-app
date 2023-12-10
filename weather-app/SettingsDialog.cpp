@@ -106,9 +106,9 @@ SettingsDialog::SettingsDialog(QWidget *parent)
 }
 
 void SettingsDialog::changeSettings(){
-    TemperatureUnit selectedTempUnit = static_cast<TemperatureUnit>(temperatureUnit->itemData(temperatureUnit->currentIndex()).toInt());
-    WindSpeedUnit selectedWindUnit= static_cast<WindSpeedUnit>(windSpeedUnit->itemData(windSpeedUnit->currentIndex()).toInt());
-    PrecipitationUnit selectedPrecUnit = static_cast<PrecipitationUnit>(precipitationUnit->itemData(precipitationUnit->currentIndex()).toInt());
+    Settings::TemperatureUnit selectedTempUnit = static_cast<Settings::TemperatureUnit>(temperatureUnit->itemData(temperatureUnit->currentIndex()).toInt());
+    Settings::WindSpeedUnit selectedWindUnit= static_cast<Settings::WindSpeedUnit>(windSpeedUnit->itemData(windSpeedUnit->currentIndex()).toInt());
+    Settings::PrecipitationUnit selectedPrecUnit = static_cast<Settings::PrecipitationUnit>(precipitationUnit->itemData(precipitationUnit->currentIndex()).toInt());
 
     //TODO maybe impelement setters
     settings.temperatureUnit = selectedTempUnit;

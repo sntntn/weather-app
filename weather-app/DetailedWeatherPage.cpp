@@ -120,4 +120,5 @@ void DetailedWeatherPage::afterHomePressed()
     if(selectedWidget){
         selectedWidget->resetHighlight();
     }
+    selectedWidget=nullptr;
 }

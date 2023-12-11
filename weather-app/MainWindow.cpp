@@ -91,8 +91,7 @@ void MainWindow::closeEvent(QCloseEvent *event){
 }
 
 void MainWindow::serializeData(){
-    Serializer* serializer = new Serializer();
-    serializer->save(settings, "../Serialization/settings.json");
+    Serializer::save(settings, "../Serialization/settings.json");
 }
 
 // todo obrisati?

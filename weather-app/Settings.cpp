@@ -68,8 +68,7 @@ const QMap<Settings::PrecipitationUnit, QString> Settings::precipitationUnitsNam
 
 Settings::Settings()
 {
-    Serializer serializer;
-    serializer.load(*this, "../Serialization/settings.json");
+    Serializer::load(*this, "../Serialization/settings.json");
 }
 
 Settings& Settings::instance()

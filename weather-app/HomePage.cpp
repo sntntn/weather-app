@@ -51,7 +51,6 @@ HomePage::HomePage(QWidget *parent)
     styleSheetsSetup();
 
     connect(settingsButton, &QPushButton::clicked, this, &HomePage::openSettingsDialog);
-    connect(mainWindow, &MainWindow::deletePageWidgets, this, &HomePage::resetInsertToLeft);
     connect(&geocodingApi, &GeocodingAPI::geocodingDataUpdated, this, &HomePage::updateCompleter);
     connect(completer, QOverload<const QString&>::of(&QCompleter::activated), this, &HomePage::onCompletionActivated);
     connect(searchBar, &QLineEdit::textChanged, this, [this]() { debounceTimer->start(); });
@@ -110,11 +109,6 @@ void HomePage::onCompletionActivated(const QString& text)
     delete completer->model();
     completer->setModel(new QStringListModel());
     completer->complete();
-}
-
-void HomePage::resetInsertToLeft()
-{
-//    leftWidget->setProperty("inserttoLeft", true);
 }
 
 void HomePage::styleSheetsSetup()

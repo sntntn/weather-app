@@ -79,4 +79,4 @@ build*
 config.ini
 
 #Serialization files
-Serialization/*
+Serialization/*.json

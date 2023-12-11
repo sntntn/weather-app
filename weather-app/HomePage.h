@@ -37,11 +37,6 @@ public slots:
     void onSearchBarTextChanged();
 
 private:
-
-
-
-
-private:
     static const int leftMargin = 25;
     static const int rightMargin = 25;
     static const int topMargin = 0;

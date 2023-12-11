@@ -11,7 +11,7 @@ class WeatherData : public Data
 {
 public:
 
-    WeatherData(const GeoLocationData &location, // todo sharedptr, const sve
+    WeatherData(const GeoLocationData &location, // todo sharedptr, const sve ;  todo skinuti const sa GeoLocationData  ako primenjujemo rename u DetailedPage ili u setingsu
                 const int temperature,
                 const int highestTemperature,
                 const int lowestTemperature,

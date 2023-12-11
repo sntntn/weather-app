@@ -9,9 +9,6 @@
 #include <QPushButton>
 #include <QSharedPointer>
 #include <QScrollBar>
-#include <QTimer>
-
-#include <QResizeEvent>
 
 #include "Page.h"
 
@@ -30,12 +27,10 @@ public:
 
     void resizeEvent(QResizeEvent *event) override;
 
-
 public slots:
     void addNewWidget(const QSharedPointer<Data> &data) override;
     void setData(const GeoLocationData &data); // todo shared ptr
-    void scrollToMaximum();
-    void scrollToMinimum();
+    void afterHomePressed();
 
 private slots:
     void addButtonClicked();
@@ -45,7 +40,6 @@ signals:
 
 private:
     static const int spacerWidth = 40;
-    static const int addButtonScrollTime = 550;
 
     GeoLocationData &data; // todo sharedptr
     QHBoxLayout *mainLayout;
@@ -58,7 +52,12 @@ private:
     QPushButton *returnToHomePage;
     QSpacerItem *horizontalSpacer;
     QPushButton *addToSavedLocations;
-    QTimer *scrollTimer;
+    WeatherWidget *selectedWidget;
+
+    void highlightWidget(const GeoLocationData& locationData);
+    void scrollToMaximum(); // todo kada se stvarno doda widget u ScrollAreaContenst
+
+
 };
 
 #endif // DETAILEDWEATHERPAGE_H

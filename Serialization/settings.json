@@ -13,12 +13,6 @@
             "renamedPlace": "Novi Sad"
         },
         {
-            "latitude": 52.5170365,
-            "longitude": 13.3888599,
-            "place": "Berlin, Germany",
-            "renamedPlace": "Berlin"
-        },
-        {
             "latitude": 42.0979745,
             "longitude": 19.0954528,
             "place": "Bar, Bar Municipality, Montenegro",
@@ -41,6 +35,12 @@
             "longitude": 115.0906401,
             "place": "Bali, Indonesia",
             "renamedPlace": "Bali"
+        },
+        {
+            "latitude": 52.5170365,
+            "longitude": 13.3888599,
+            "place": "Berlin, Germany",
+            "renamedPlace": "Berlin"
         },
         {
             "latitude": 35.5120831,

@@ -25,26 +25,28 @@ signals:
     void clicked(const GeoLocationData &data);
 
 private:
-    static const int hBoxSpacing = 5;
+    static const int hBoxSpacing = 10;
     static const int hBoxMarginSize = 10;
-    static const int locationFontSize = 18;
+    static const int locationFontSize = 20;
     static const int timeFontSize = 14;
-    static const int temperatureFontSize = 24;
+    static const int temperatureFontSize = 45;
     static const int minmaxTemperatureFontSize = 14;
-    static const int iconWidth = 50;
-    static const int iconHeight = 50;
+    static const int iconWidth = 80;
+    static const int iconHeight = 80;
 
-    QHBoxLayout *hBox;
-    QVBoxLayout *leftVBox;
-    QVBoxLayout *rightVBox;
+    QHBoxLayout *mainLayout;
+    QVBoxLayout *leftLayout;
+    QVBoxLayout *rightLayout;
     QLabel* temperatureLabel;
     QLabel* locationLabel;
-    QLabel* minmaxTemperatureLabel;
+    QLabel* maxTemperatureLabel;
+    QLabel* minTemperatureLabel;
     QLabel* timeLabel;
     QLabel* iconLabel;
     QPixmap weatherIcon;
 
     QString weatherCodeToIcon(int weatherCode, bool isDay);
+    int adjustLabelFontSize(QString fontName);
 };
 
 #endif // WEATHERWIDGET_H

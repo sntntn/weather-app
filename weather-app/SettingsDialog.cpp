@@ -21,13 +21,14 @@ SettingsDialog::SettingsDialog(QWidget *parent)
     , save(new QPushButton("Save"))
     , cancel(new QPushButton("Cancel"))
     , widgetOrder(settings.savedLocations)
-    , trashCan("../Resources/redTrash.png")
+    , trashCan("../Resources/trashCan/redTrash.png")
     , trashIcon(trashCan)
 {
-    listWidget->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-
     locationSwitch->setChecked(settings.shareLocation);
     mainLayout->addWidget(locationSwitch);
+
+    listWidget->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    listWidget->setDragDropMode(QAbstractItemView::InternalMove);
 
     for (const auto& name : Settings::temperatureUnitsNames) {
         auto unit = Settings::temperatureUnitsNames.key(name);
@@ -51,8 +52,6 @@ SettingsDialog::SettingsDialog(QWidget *parent)
     mainLayout->addWidget(windSpeedUnit);
     mainLayout->addWidget(precipitationUnit);
 
-    listWidget->setDragDropMode(QAbstractItemView::InternalMove);
-
     for (const auto& location : settings.savedLocations) {
 
         auto *listItem = new QListWidgetItem();
@@ -61,7 +60,6 @@ SettingsDialog::SettingsDialog(QWidget *parent)
 
         auto *customWidget = new QWidget();
         auto *layout = new QHBoxLayout(customWidget);
-
         auto *label = new QLabel(location.getRenamedPlace());
         auto *deleteButton = new QPushButton();
         deleteButton->setIcon(trashIcon);
@@ -70,7 +68,6 @@ SettingsDialog::SettingsDialog(QWidget *parent)
         layout->addWidget(deleteButton);
 
         connect(deleteButton, &QPushButton::clicked, this, [this, listItem]() {
-            //todo
             auto locationMap = listItem->data(Qt::UserRole).toMap();
             const auto geoLocation = GeoLocationData::fromVariantMap(locationMap);
             widgetOrder.removeOne(geoLocation);
@@ -85,7 +82,6 @@ SettingsDialog::SettingsDialog(QWidget *parent)
     connect(listWidget, &WidgetsManager::itemsRearranged, this, [this](){
         widgetOrder.clear();
 
-        //todo
         for (int i = 0; i < listWidget->count(); i++) {
             auto locationMap = listWidget->item(i)->data(Qt::UserRole).toMap();
             const auto geoLocation = GeoLocationData::fromVariantMap(locationMap);
@@ -95,19 +91,18 @@ SettingsDialog::SettingsDialog(QWidget *parent)
 
     mainLayout->addWidget(listWidget);
 
-    connect(save, &QPushButton::clicked, this, &SettingsDialog::changeSettings);
-    //TODO fix grandparent
-    connect(this, &SettingsDialog::settingsChanged, qobject_cast<MainWindow*>(this->parent()->parent()->parent()), &MainWindow::refreshPages);
-    connect(cancel, &QPushButton::clicked, this, &SettingsDialog::resetOrder);
-    connect(cancel, &QPushButton::clicked, this, &SettingsDialog::close);
-
     buttonLayout->addWidget(save);
     buttonLayout->addStretch();
     buttonLayout->addWidget(cancel);
 
     mainLayout->addLayout(buttonLayout);
-
     setLayout(mainLayout);
+
+    connect(save, &QPushButton::clicked, this, &SettingsDialog::changeSettings);
+    //TODO fix grandparent
+    connect(this, &SettingsDialog::settingsChanged, qobject_cast<MainWindow*>(this->parent()->parent()->parent()), &MainWindow::refreshPages);
+    connect(cancel, &QPushButton::clicked, this, &SettingsDialog::resetOrder);
+    connect(cancel, &QPushButton::clicked, this, &SettingsDialog::close);
 }
 
 void SettingsDialog::changeSettings(){

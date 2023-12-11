@@ -21,7 +21,7 @@ HomePage::HomePage(QWidget *parent)
     , widgetsLayout(new QGridLayout())
     , completer(new CustomCompleter(this))
     , debounceTimer(new QTimer(this))
-    , settingsPixmap("../Resources/settings.png")
+    , settingsPixmap("../Resources/settingsIcon/settings.png")
     , settingsIcon(settingsPixmap)
 {
     searchBar->setPlaceholderText("Enter location...");
@@ -69,7 +69,7 @@ void HomePage::addNewWidget(const QSharedPointer<Data> &data)
     int position = static_cast<int>(Settings::instance().savedLocations.indexOf(widget->data->location));
     widgetsLayout->addWidget(widget, position / 2, position % 2, 1, 1);
 
-    widget->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Preferred);
+    widget->setMaximumHeight(160);
     m_widgets.emplaceBack(widget);
 }
 

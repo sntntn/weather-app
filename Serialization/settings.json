@@ -13,22 +13,34 @@
             "renamedPlace": "Novi Sad"
         },
         {
-            "latitude": 41.3281482,
-            "longitude": 19.8184435,
-            "place": "Tirana, Tirana County, Albania",
-            "renamedPlace": "Tirana"
+            "latitude": 52.5170365,
+            "longitude": 13.3888599,
+            "place": "Berlin, Germany",
+            "renamedPlace": "Berlin"
         },
         {
-            "latitude": 43.5675155,
-            "longitude": 22.2556547,
-            "place": "Knjazevac Municipality, Zajecar Administrative District, Serbia",
-            "renamedPlace": "Knjazevac Municipality"
+            "latitude": 42.0979745,
+            "longitude": 19.0954528,
+            "place": "Bar, Bar Municipality, Montenegro",
+            "renamedPlace": "Bar"
         },
         {
-            "latitude": 43.2689885,
-            "longitude": 20.826741,
-            "place": "Kopaonik, 36354 Brus Municipality, Serbia",
-            "renamedPlace": "Kopaonik"
+            "latitude": 35.6821936,
+            "longitude": 139.762221,
+            "place": "Tokyo, Japan",
+            "renamedPlace": "Tokyo"
+        },
+        {
+            "latitude": 40.4167047,
+            "longitude": -3.7035825,
+            "place": "Madrid, Spain",
+            "renamedPlace": "Madrid"
+        },
+        {
+            "latitude": -8.3304977,
+            "longitude": 115.0906401,
+            "place": "Bali, Indonesia",
+            "renamedPlace": "Bali"
         }
     ],
     "precipitationUnit": 0,

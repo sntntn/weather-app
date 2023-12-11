@@ -26,7 +26,7 @@ public slots:
 
 private:
     void processResultsArray(const QJsonArray& resultsArray, QList<GeoLocationData>& locations);
-    const QString OPEN_CAGE_API_KEY = "0741d020f58441f6b58ae4dc4128740d";  // TODO za config fajl
+    QString OPEN_CAGE_API_KEY;
     QNetworkAccessManager* m_networkManager;
 };
 

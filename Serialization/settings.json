@@ -41,6 +41,12 @@
             "longitude": 115.0906401,
             "place": "Bali, Indonesia",
             "renamedPlace": "Bali"
+        },
+        {
+            "latitude": 35.5120831,
+            "longitude": 24.0191544,
+            "place": "Chania, Chania Regional Unit, Greece",
+            "renamedPlace": "Chania"
         }
     ],
     "precipitationUnit": 0,

@@ -4,10 +4,15 @@
 #include <QJsonArray>
 
 #include <QList>
+#include <QCoreApplication>
+#include <QSettings>
 
 GeocodingAPI::GeocodingAPI()
     :m_networkManager(new QNetworkAccessManager(this))
 {
+    QString configFilePath = QCoreApplication::applicationDirPath() + "/config.ini";
+    QSettings settings(configFilePath, QSettings::IniFormat);
+    OPEN_CAGE_API_KEY = settings.value("API/Key").toString();
     connect(m_networkManager, &QNetworkAccessManager::finished, this, &GeocodingAPI::handleGeocodingResponse);
 }
 GeocodingAPI::~GeocodingAPI()

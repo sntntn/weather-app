@@ -15,6 +15,11 @@ void Serializer::save(const Serializable &serializable, const QString &filepath)
 void Serializer::load(Serializable &serializable, const QString &filepath)
 {
     QFile file(filepath);
+
+    if(!file.exists()){
+        return;
+    }
+
     file.open(QFile::ReadOnly);
     QJsonDocument doc = QJsonDocument::fromJson(file.readAll());
     file.close();

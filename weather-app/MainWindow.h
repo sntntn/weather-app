@@ -27,7 +27,6 @@ public slots:
     void showHomePage();
     void showDetailedWeatherPage(const GeoLocationData &data); // todo sharedptr
     void saveNewLocation(const GeoLocationData& location); // todo sharedptr
-    void handleLocationObjectSelected(const GeoLocationData& locationData);
     void getLocationData(const GeoLocationData &location);
     void refreshPages();
 

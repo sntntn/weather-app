@@ -38,13 +38,12 @@ void GeoLocationData::fromVariant(const QVariant & variant){
     m_coordinates = QGeoCoordinate(latitude, longitude);
 }
 
-// todo leak
-GeoLocationData& GeoLocationData::fromVariantMap(const QVariantMap& geoLocation)
+// todo sharedptr
+GeoLocationData GeoLocationData::fromVariantMap(const QVariantMap& geoLocation)
 {
-    auto data = new GeoLocationData(geoLocation.value("place").toString(),
-                                    geoLocation.value("renamedPlace").toString(),
-                                    QGeoCoordinate(geoLocation.value("latitude").toDouble(),
-                                                   geoLocation.value("longitude").toDouble()));
-    return *data;
+    return GeoLocationData(geoLocation.value("place").toString(),
+                           geoLocation.value("renamedPlace").toString(),
+                           QGeoCoordinate(geoLocation.value("latitude").toDouble(),
+                                          geoLocation.value("longitude").toDouble()));
 }
 

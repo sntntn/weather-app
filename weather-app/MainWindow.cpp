@@ -35,8 +35,6 @@ MainWindow::MainWindow(QWidget *parent)
     getSavedLocationsData();
 
     connect(this, &MainWindow::detailedWeatherPageShown, detailedWeather, &DetailedWeatherPage::setData);
-    // todo obrisati?
-    connect(homePage, &HomePage::locationObjectSelected,this,&MainWindow::handleLocationObjectSelected);
     connect(this, &MainWindow::deletePageWidgets, homePage, &Page::deleteWidgets);
     connect(this, &MainWindow::deletePageWidgets, detailedWeather, &Page::deleteWidgets);
 }
@@ -92,15 +90,4 @@ void MainWindow::closeEvent(QCloseEvent *event){
 
 void MainWindow::serializeData(){
     Serializer::save(settings, "../Serialization/settings.json");
-}
-
-// todo obrisati?
-void MainWindow::handleLocationObjectSelected(const GeoLocationData& locationData)
-{
-    qDebug()<<"Location:" << locationData.getPlace()
-            <<"Latitude:" << locationData.getCoordinates().latitude()
-            <<"Longitude:" << locationData.getCoordinates().longitude();
-    qDebug()<<"Default renamed place: " << locationData.getRenamedPlace();
-    //mutableLocationData.setRenamedPlace("Moj Rodni Grad");
-    qDebug()<<"after renaming - renamed place: " << locationData.getRenamedPlace();
 }

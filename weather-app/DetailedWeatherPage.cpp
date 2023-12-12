@@ -10,7 +10,6 @@
 
 DetailedWeatherPage::DetailedWeatherPage(QWidget *parent)
     : Page{parent}
-    , data(*(new GeoLocationData("test", "test", QGeoCoordinate()))) // test, todo sharedptr (?)
     , mainLayout(new QHBoxLayout(this))
     , widgetsScrollArea(new QScrollArea())
     , weatherScrollArea(new QScrollArea())
@@ -74,7 +73,7 @@ void DetailedWeatherPage::setData(const GeoLocationData &data) // todo sharedptr
     Settings::instance().savedLocations.indexOf(data) == -1 ? this->addToSavedLocations->setVisible(true)
                                                             : this->addToSavedLocations->setVisible(false);
 
-    highlightWidget(data);
+    highlightWidget();
 }
 
 void DetailedWeatherPage::resizeEvent(QResizeEvent* event) {
@@ -90,17 +89,15 @@ void DetailedWeatherPage::addButtonClicked()
     Settings::instance().savedLocations.push_back(this->data);
 }
 
-void DetailedWeatherPage::highlightWidget(const GeoLocationData &locationData)
+void DetailedWeatherPage::highlightWidget()
 {
     if(selectedWidget){
         selectedWidget->resetHighlight();
     }
     for(auto widget : m_widgets){
-        if(widget->data->location == locationData){
-            //scroll to widget
+        if(widget->data->location == this->data){
             widgetsScrollArea->ensureWidgetVisible(widget);
-            //highlight widget
-            selectedWidget=widget;
+            selectedWidget = widget;
             if(selectedWidget){
                 selectedWidget->setHighlight();
             }
@@ -120,5 +117,5 @@ void DetailedWeatherPage::afterHomePressed()
     if(selectedWidget){
         selectedWidget->resetHighlight();
     }
-    selectedWidget=nullptr;
+    selectedWidget = nullptr;
 }

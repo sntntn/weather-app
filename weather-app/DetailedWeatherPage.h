@@ -1,6 +1,8 @@
 #ifndef DETAILEDWEATHERPAGE_H
 #define DETAILEDWEATHERPAGE_H
 
+#include "Page.h"
+
 #include <QWidget>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
@@ -10,12 +12,11 @@
 #include <QSharedPointer>
 #include <QScrollBar>
 
-#include "Page.h"
+#include "GeoLocationData.h"
 
 class WeatherData;
 class MainWindow;
 class WeatherWidget;
-class GeoLocationData;
 
 class DetailedWeatherPage : public Page
 {
@@ -41,7 +42,7 @@ signals:
 private:
     static const int spacerWidth = 40;
 
-    GeoLocationData &data; // todo sharedptr
+    GeoLocationData data; // todo sharedptr
     QHBoxLayout *mainLayout;
     QScrollArea *widgetsScrollArea;
     QScrollArea *weatherScrollArea;
@@ -54,7 +55,7 @@ private:
     QPushButton *addToSavedLocations;
     WeatherWidget *selectedWidget;
 
-    void highlightWidget(const GeoLocationData& locationData);
+    void highlightWidget();
     void scrollToMaximum(); // todo kada se stvarno doda widget u ScrollAreaContenst
 
 

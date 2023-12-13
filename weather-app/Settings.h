@@ -68,6 +68,11 @@ public:
     Settings::PrecipitationUnit precipitationUnit = PrecipitationUnit::MILLIMETRES;
     QList<GeoLocationData> savedLocations;
 
+private:
+    Settings();
+    Settings(const Settings&) = delete;
+    Settings& operator=(const Settings&) = delete;
+
     static const QMap<TemperatureUnit, QString> temperatureUnitToString;
     static const QMap<WindSpeedUnit, QString> windSpeedUnitToString;
     static const QMap<PrecipitationUnit, QString> precipitationUnitToString;
@@ -80,10 +85,7 @@ public:
     static const QMap<WindSpeedUnit, QString> windSpeedUnitsNames;
     static const QMap<PrecipitationUnit, QString> precipitationUnitsNames;
 
-private:
-    Settings();
-    Settings(const Settings&) = delete;
-    Settings& operator=(const Settings&) = delete;
+    friend class SettingsDialog;
 };
 
 #endif // SETTINGS_H

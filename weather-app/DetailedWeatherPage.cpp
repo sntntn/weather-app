@@ -69,8 +69,8 @@ void DetailedWeatherPage::setData(const GeoLocationData &data) // todo sharedptr
 {
     this->data = data;
     // test
-    std::cout << data.getRenamedPlace().toStdString() << " "
-              << data.getCoordinates().toString().toStdString() << std::endl;
+    /*std::cout << data.getRenamedPlace().toStdString() << " "
+              << data.getCoordinates().toString().toStdString() << std::endl;*/
 
     // test, todo
     Settings::instance().savedLocations.indexOf(data) == -1 ? this->addToSavedLocations->setVisible(true)

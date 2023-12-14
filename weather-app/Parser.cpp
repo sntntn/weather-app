@@ -58,6 +58,9 @@ QSharedPointer<DetailedWeatherData> Parser::parseDetailedWeatherData(const QStri
     int windSpeed = static_cast<int>(qRound(current.value("wind_speed_10m").toDouble()));
     int apparentTemperature = static_cast<int>(qRound(current.value("apparent_temperature").toDouble()));
     int precipitation = static_cast<int>(qRound(current.value("precipitation").toDouble()));
+    int humidity = static_cast<int>(qRound(current.value("relative_humidity_2m").toDouble()));
+    int visibility = static_cast<int>(qRound(current.value("visibility").toDouble()));
+    int pressure =  static_cast<int>(qRound(current.value("pressure_msl").toDouble()));
 
     /*qDebug() << "temperature:" << temperature;
     qDebug() << "weatherCode:" << weatherCode;
@@ -103,7 +106,10 @@ QSharedPointer<DetailedWeatherData> Parser::parseDetailedWeatherData(const QStri
                                                                      precipitation,
                                                                      uvIndex,
                                                                      weeklyHighestTemperature,
-                                                                     weeklyLowestTemperature));
+                                                                     weeklyLowestTemperature,
+                                                                     humidity,
+                                                                     visibility,
+                                                                     pressure));
 
 
 

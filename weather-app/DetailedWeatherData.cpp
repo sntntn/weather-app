@@ -12,7 +12,11 @@ DetailedWeatherData::DetailedWeatherData(const GeoLocationData &location,
                                          const int precipitation,
                                          const int uvIndex,
                                          const int weeklyHighestTemperature,
-                                         const int weeklyLowestTemperature)
+                                         const int weeklyLowestTemperature,
+                                         const int humidity,
+                                         const int visibility,
+                                         const int pressure)
+
     : WeatherData(location, temperature, highestTemperature, lowestTemperature, weatherCode, isDay, timezone)
     , location(location)
     , temperature(temperature)
@@ -27,5 +31,8 @@ DetailedWeatherData::DetailedWeatherData(const GeoLocationData &location,
     , uvIndex(uvIndex)
     , weeklyHighestTemperature(weeklyHighestTemperature)
     , weeklyLowestTemperature(weeklyLowestTemperature)
+    , humidity(humidity)
+    , visibility(visibility)
+    , pressure(pressure)
 { }
 

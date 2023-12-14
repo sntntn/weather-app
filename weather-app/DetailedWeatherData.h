@@ -20,7 +20,10 @@ public:
                                  const int precipitation,
                                  const int uvIndex,
                                  const int weeklyHighestTemperature,
-                                 const int weeklyLowestTemperature);
+                                 const int weeklyLowestTemperature,
+                                 const int humidity,
+                                 const int visibility,
+                                 const int pressure);
 
     GeoLocationData location;
     int temperature;
@@ -35,6 +38,9 @@ public:
     int uvIndex;
     int weeklyHighestTemperature;
     int weeklyLowestTemperature;
+    int humidity;
+    int visibility;
+    int pressure;
 };
 
 #endif // DETAILEDWEATHERDATA_H

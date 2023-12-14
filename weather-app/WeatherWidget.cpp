@@ -19,13 +19,13 @@ WeatherWidget::WeatherWidget(const QSharedPointer<WeatherData> &data, QWidget *p
     , mainLayout(new QHBoxLayout(this))
     , leftLayout(new QVBoxLayout())
     , rightLayout(new QVBoxLayout())
-    , temperatureLabel(new QLabel(QString::number(data->temperature) + "°", this))
-    , locationLabel(new QLabel(data->location.getRenamedPlace().toUpper(), this))
-    , maxTemperatureLabel(new QLabel("H:" + QString::number(data->highestTemperature) + "°", this))
-    , minTemperatureLabel(new QLabel("L:" + QString::number(data->lowestTemperature) + "°", this))
-    , timeLabel(new QLabel(QDateTime::currentDateTime().toTimeZone(data->timezone).toString("HH:mm"), this))
+    , temperatureLabel(new QLabel(QString::number(data->temperature()) + "°", this))
+    , locationLabel(new QLabel(data->location().getRenamedPlace().toUpper(), this))
+    , maxTemperatureLabel(new QLabel("H:" + QString::number(data->highestTemperature()) + "°", this))
+    , minTemperatureLabel(new QLabel("L:" + QString::number(data->lowestTemperature()) + "°", this))
+    , timeLabel(new QLabel(QDateTime::currentDateTime().toTimeZone(data->timezone()).toString("HH:mm"), this))
     , iconLabel(new QLabel(this))
-    , weatherIcon(weatherCodeToIcon(data->weatherCode, data->isDay))
+    , weatherIcon(weatherCodeToIcon(data->weatherCode(), data->isDay()))
 {
     setAttribute(Qt::WA_StyledBackground, true);
     setStyleSheet("WeatherWidget { border-radius: 20px; background-color: #598be0; }");
@@ -86,7 +86,7 @@ int WeatherWidget::adjustLabelFontSize(QString fontName)
 void WeatherWidget::mousePressEvent(QMouseEvent *event)
 {
     QWidget::mousePressEvent(event);
-    emit clicked(data->location);
+    emit clicked(data->location());
 }
 
 void WeatherWidget::setHighlight()

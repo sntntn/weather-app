@@ -18,9 +18,11 @@ public:
     inline QString getPlace() const{
         return m_place;
     }
+
     inline QString getRenamedPlace() const{
         return m_renamedPlace;
     }
+
     inline QGeoCoordinate getCoordinates() const{
         return m_coordinates;
     }

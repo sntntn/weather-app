@@ -56,7 +56,7 @@ void DetailedWeatherPage::addNewWidget(const QSharedPointer<Data> &data)
     widget->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Preferred);
     widget->setMaximumWidth(widgetsScrollArea->viewport()->width());
 
-    int position = static_cast<int>(Settings::instance().savedLocations.indexOf(widget->data->location));
+    int position = static_cast<int>(Settings::instance().savedLocations.indexOf(widget->data->location()));
     widgetsLayout->addWidget(widget, position, 0, 1, 1);
 
     m_widgets.emplaceBack(widget);
@@ -95,7 +95,7 @@ void DetailedWeatherPage::highlightWidget()
         selectedWidget->resetHighlight();
     }
     for(auto widget : m_widgets){
-        if(widget->data->location == this->data){
+        if(widget->data->location() == this->data){
             widgetsScrollArea->ensureWidgetVisible(widget);
             selectedWidget = widget;
             if(selectedWidget){

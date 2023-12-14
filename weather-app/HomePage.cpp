@@ -65,7 +65,7 @@ void HomePage::addNewWidget(const QSharedPointer<Data> &data)
     auto *widget = new WeatherWidget(qSharedPointerCast<WeatherData>(data), scrollAreaContents);
     connect(widget, &WeatherWidget::clicked, this->mainWindow, &MainWindow::showDetailedWeatherPage);
 
-    int position = static_cast<int>(Settings::instance().savedLocations.indexOf(widget->data->location));
+    int position = static_cast<int>(Settings::instance().savedLocations.indexOf(widget->data->location()));
     widgetsLayout->addWidget(widget, position / 2, position % 2, 1, 1);
 
     widget->setMaximumHeight(160);

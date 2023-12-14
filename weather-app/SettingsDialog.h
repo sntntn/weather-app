@@ -24,7 +24,6 @@ public:
     ~SettingsDialog() = default;
     void changeSettings();
 
-//TODO : make a function in mainWindow that reacts to this signal
 signals:
     void settingsChanged();
 

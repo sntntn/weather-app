@@ -54,7 +54,7 @@ HomePage::HomePage(QWidget *parent)
     connect(&geocodingApi, &GeocodingAPI::geocodingDataUpdated, this, &HomePage::updateCompleter);
     connect(completer, QOverload<const QString&>::of(&QCompleter::activated), this, &HomePage::onCompletionActivated);
     connect(searchBar, &QLineEdit::textChanged, this, [this]() { debounceTimer->start(); });
-    connect(debounceTimer, &QTimer::timeout, this, &HomePage::onSearchBarTextChanged);          //trenutna verzija je prilagodjena tajmeru
+    connect(debounceTimer, &QTimer::timeout, this, &HomePage::onSearchBarTextChanged);
 //    connect(searchBar, &QLineEdit::textChanged, this, &HomePage::onSearchBarTextChanged);
     connect(this, &HomePage::searchBarPressed, &geocodingApi, &GeocodingAPI::testCityFunction);
     connect(this, &HomePage::locationObjectSelected, mainWindow, &MainWindow::showDetailedWeatherPage);

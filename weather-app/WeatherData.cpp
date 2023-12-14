@@ -6,14 +6,14 @@
 
 #include "GeoLocationData.h"
 
-WeatherData::WeatherData(GeoLocationData location,
+WeatherData::WeatherData(const GeoLocationData &location,
                          const int temperature,
                          const int highestTemperature,
                          const int lowestTemperature,
                          const int weatherCode,
                          const bool isDay,
                          QTimeZone timezone)
-    : m_location(std::move(location))
+    : m_location(location)
     , m_temperature(temperature)
     , m_highestTemperature(highestTemperature)
     , m_lowestTemperature(lowestTemperature)

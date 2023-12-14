@@ -10,7 +10,7 @@
 class WeatherData : public Data
 {
 public:
-    WeatherData(GeoLocationData location, // todo sharedptr
+    WeatherData(const GeoLocationData &location, // todo sharedptr
                 const int temperature,
                 const int highestTemperature,
                 const int lowestTemperature,

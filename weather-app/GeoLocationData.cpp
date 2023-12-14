@@ -6,10 +6,10 @@
 #include <QVariantMap>
 #include <QVariantList>
 
-GeoLocationData::GeoLocationData(const QString &place, const QString &renamedPlace, const QGeoCoordinate &coordinates)
-    : m_place(place)
-    , m_renamedPlace(renamedPlace)
-    , m_coordinates(coordinates)
+GeoLocationData::GeoLocationData(QString place, QString renamedPlace, QGeoCoordinate coordinates)
+    : m_place(std::move(place))
+    , m_renamedPlace(std::move(renamedPlace))
+    , m_coordinates(std::move(coordinates))
 {
     qRegisterMetaType<GeoLocationData>("GeoLocationData");
 }
@@ -41,9 +41,9 @@ void GeoLocationData::fromVariant(const QVariant & variant){
 // todo sharedptr
 GeoLocationData GeoLocationData::fromVariantMap(const QVariantMap& geoLocation)
 {
-    return GeoLocationData(geoLocation.value("place").toString(),
+    return GeoLocationData{geoLocation.value("place").toString(),
                            geoLocation.value("renamedPlace").toString(),
                            QGeoCoordinate(geoLocation.value("latitude").toDouble(),
-                                          geoLocation.value("longitude").toDouble()));
+                                          geoLocation.value("longitude").toDouble())};
 }
 

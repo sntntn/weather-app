@@ -20,11 +20,11 @@ SettingsDialog::SettingsDialog(QWidget *parent)
     , buttonLayout(new QHBoxLayout())
     , save(new QPushButton("Save"))
     , cancel(new QPushButton("Cancel"))
-    , widgetOrder(settings.savedLocations)
-    , trashCan("../Resources/trashCan/redTrash.png")
+    , widgetOrder(settings.savedLocations())
+    , trashCan("../Resources/trashCan/redTrash.png") // todo
     , trashIcon(trashCan)
 {
-    locationSwitch->setChecked(settings.shareLocation);
+    locationSwitch->setChecked(settings.m_shareLocation);
     mainLayout->addWidget(locationSwitch);
 
     listWidget->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
@@ -52,7 +52,7 @@ SettingsDialog::SettingsDialog(QWidget *parent)
     mainLayout->addWidget(windSpeedUnit);
     mainLayout->addWidget(precipitationUnit);
 
-    for (const auto& location : settings.savedLocations) {
+    for (const auto& location : settings.savedLocations()) {
 
         auto *listItem = new QListWidgetItem();
         listItem->setData(Qt::UserRole, location.toVariant());
@@ -111,16 +111,16 @@ void SettingsDialog::changeSettings(){
     Settings::PrecipitationUnit selectedPrecUnit = static_cast<Settings::PrecipitationUnit>(precipitationUnit->itemData(precipitationUnit->currentIndex()).toInt());
 
     //TODO maybe impelement setters
-    settings.temperatureUnit = selectedTempUnit;
-    settings.windSpeedUnit = selectedWindUnit;
-    settings.precipitationUnit = selectedPrecUnit;
-    settings.shareLocation = locationSwitch->isChecked();
-    settings.savedLocations = widgetOrder;
+    settings.m_temperatureUnit = selectedTempUnit;
+    settings.m_windSpeedUnit = selectedWindUnit;
+    settings.m_precipitationUnit = selectedPrecUnit;
+    settings.m_shareLocation = locationSwitch->isChecked();
+    settings.m_savedLocations = widgetOrder;
 
     emit settingsChanged();
     this->close();
 }
 
 void SettingsDialog::resetOrder(){
-    widgetOrder = settings.savedLocations;
+    widgetOrder = settings.savedLocations();
 }

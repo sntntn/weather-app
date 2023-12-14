@@ -12,7 +12,7 @@ public:
     GeoLocationData() = default;
     ~GeoLocationData() = default;
     GeoLocationData(const GeoLocationData &other) = default;
-    GeoLocationData(const QString &place, const QString &renamedPlace, const QGeoCoordinate &coordinates);
+    GeoLocationData(QString place, QString renamedPlace, QGeoCoordinate coordinates);
 
 
     inline QString getPlace() const{

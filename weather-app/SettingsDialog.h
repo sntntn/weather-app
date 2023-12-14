@@ -46,6 +46,8 @@ private:
     QIcon trashIcon;
 
     void setupUi();
+
+    const QString trashIconPath = "../Resources/trashCan/redTrash.png"; // todo
 };
 
 #endif // SETTINGSDIALOG_H

@@ -48,8 +48,8 @@ private:
     QLabel* iconLabel;
     QPixmap weatherIcon;
 
-    QString weatherCodeToIcon(int weatherCode, bool isDay);
-    int adjustLabelFontSize(QString fontName);
+    QString weatherCodeToIcon(const int weatherCode, const bool isDay);
+    int adjustLabelFontSize(const QString &fontName);
 };
 
 #endif // WEATHERWIDGET_H

@@ -43,6 +43,8 @@ private:
     static const int bottomMargin = 0;
     static const int timerInterval = 200;
 
+    const QString settingsIconPath = "../Resources/settingsIcon/settings.png";
+
     QVBoxLayout *mainLayout;
     QHBoxLayout *upperLayout;
     QLineEdit *searchBar;

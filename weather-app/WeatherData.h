@@ -10,13 +10,13 @@
 class WeatherData : public Data
 {
 public:
-    WeatherData(const GeoLocationData &location, // todo sharedptr, const sve ;  todo skinuti const sa GeoLocationData  ako primenjujemo rename u DetailedPage ili u setingsu
+    WeatherData(GeoLocationData location, // todo sharedptr
                 const int temperature,
                 const int highestTemperature,
                 const int lowestTemperature,
                 const int weatherCode,
                 const bool isDay,
-                const QTimeZone &timezone);
+                QTimeZone timezone);
 
     GeoLocationData location() const
     {

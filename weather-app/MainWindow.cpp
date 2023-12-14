@@ -46,7 +46,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::getSavedLocationsData()
 {
-    for(const auto& location : settings.savedLocations){
+    for(const auto& location : settings.savedLocations()){
         getLocationData(location);
     }
 }

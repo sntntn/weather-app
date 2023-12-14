@@ -6,13 +6,13 @@
 #include "GeoLocationData.h"
 #include "Serializer.h"
 
-const QMap<Settings::TemperatureUnit, QString> Settings::temperatureUnitToApiParameter
+const QMap<Settings::TemperatureUnit, QString> Settings::temperatureUnitToApiParameter =
 {
     {Settings::TemperatureUnit::CELSIUS, "celsius"},
     {Settings::TemperatureUnit::FAHRENHEIT, "fahrenheit"}
 };
 
-const QMap<Settings::WindSpeedUnit, QString> Settings::windSpeedUnitToApiParameter
+const QMap<Settings::WindSpeedUnit, QString> Settings::windSpeedUnitToApiParameter =
 {
     {Settings::WindSpeedUnit::KMH, "kmh"},
     {Settings::WindSpeedUnit::MPH, "mph"},
@@ -20,19 +20,19 @@ const QMap<Settings::WindSpeedUnit, QString> Settings::windSpeedUnitToApiParamet
     {Settings::WindSpeedUnit::KNOTS, "kn"}
 };
 
-const QMap<Settings::PrecipitationUnit, QString> Settings::precipitationUnitToApiParameter
+const QMap<Settings::PrecipitationUnit, QString> Settings::precipitationUnitToApiParameter =
 {
     {Settings::PrecipitationUnit::MILLIMETRES, "mm"},
     {Settings::PrecipitationUnit::INCHES, "inch"}
 };
 
-const QMap<Settings::TemperatureUnit, QString> Settings::temperatureUnitToString
+const QMap<Settings::TemperatureUnit, QString> Settings::temperatureUnitToString =
 {
     {Settings::TemperatureUnit::CELSIUS, "°C"},
     {Settings::TemperatureUnit::FAHRENHEIT, "°F"}
 };
 
-const QMap<Settings::WindSpeedUnit, QString> Settings::windSpeedUnitToString
+const QMap<Settings::WindSpeedUnit, QString> Settings::windSpeedUnitToString =
 {
     {Settings::WindSpeedUnit::KMH, "km/h"},
     {Settings::WindSpeedUnit::MPH, "mph"},
@@ -40,31 +40,31 @@ const QMap<Settings::WindSpeedUnit, QString> Settings::windSpeedUnitToString
     {Settings::WindSpeedUnit::KNOTS, "kn"}
 };
 
-const QMap<Settings::PrecipitationUnit, QString> Settings::precipitationUnitToString
+const QMap<Settings::PrecipitationUnit, QString> Settings::precipitationUnitToString =
 {
     {Settings::PrecipitationUnit::MILLIMETRES, "mm"},
     {Settings::PrecipitationUnit::INCHES, "in"}
 };
 
-const QMap<Settings::TemperatureUnit, QString> Settings::temperatureUnitsNames{
+const QMap<Settings::TemperatureUnit, QString> Settings::temperatureUnitsNames =
+{
     {Settings::TemperatureUnit::CELSIUS, "Celsius"},
     {Settings::TemperatureUnit::FAHRENHEIT, "Fahrenheit"}
 };
 
-const QMap<Settings::WindSpeedUnit, QString> Settings::windSpeedUnitsNames
+const QMap<Settings::WindSpeedUnit, QString> Settings::windSpeedUnitsNames =
 {
-        {Settings::WindSpeedUnit::KMH, "Kilometres per hour"},
-        {Settings::WindSpeedUnit::MPH, "Miles per hour"},
-        {Settings::WindSpeedUnit::MS, "Metres per second"},
-        {Settings::WindSpeedUnit::KNOTS, "Knots"}
+    {Settings::WindSpeedUnit::KMH, "Kilometres per hour"},
+    {Settings::WindSpeedUnit::MPH, "Miles per hour"},
+    {Settings::WindSpeedUnit::MS, "Metres per second"},
+    {Settings::WindSpeedUnit::KNOTS, "Knots"}
 };
 
-const QMap<Settings::PrecipitationUnit, QString> Settings::precipitationUnitsNames
+const QMap<Settings::PrecipitationUnit, QString> Settings::precipitationUnitsNames =
 {
-        {Settings::PrecipitationUnit::MILLIMETRES, "Millimetres"},
-        {Settings::PrecipitationUnit::INCHES, "Inches"}
+    {Settings::PrecipitationUnit::MILLIMETRES, "Millimetres"},
+    {Settings::PrecipitationUnit::INCHES, "Inches"}
 };
-
 
 Settings::Settings()
 {
@@ -80,12 +80,12 @@ Settings& Settings::instance()
 QVariant Settings::toVariant() const
 {
     QVariantMap map;
-    map.insert("shareLocation", shareLocation);
-    map.insert("temperatureUnit", temperatureUnit);
-    map.insert("windSpeedUnit", windSpeedUnit);
-    map.insert("precipitationUnit", precipitationUnit);
+    map.insert("shareLocation", m_shareLocation);
+    map.insert("temperatureUnit", m_temperatureUnit);
+    map.insert("windSpeedUnit", m_windSpeedUnit);
+    map.insert("precipitationUnit", m_precipitationUnit);
     QVariantList locations;
-    for (const auto &savedLocation : savedLocations){
+    for (const auto &savedLocation : m_savedLocations){
         QVariantMap location = savedLocation.toVariant().toMap();
         locations.append(location);
     }
@@ -97,15 +97,15 @@ QVariant Settings::toVariant() const
 void Settings::fromVariant(const QVariant &variant)
 {
     const auto map = variant.toMap();
-    shareLocation = map.value("shareLocation").toBool();
-    temperatureUnit = map.value("temperatureUnit").value<Settings::TemperatureUnit>();
-    windSpeedUnit = map.value("precipitationUnit").value<Settings::WindSpeedUnit>();
-    precipitationUnit = map.value("precipitationUnit").value<Settings::PrecipitationUnit>();
+    m_shareLocation = map.value("shareLocation").toBool();
+    m_temperatureUnit = map.value("temperatureUnit").value<Settings::TemperatureUnit>();
+    m_windSpeedUnit = map.value("precipitationUnit").value<Settings::WindSpeedUnit>();
+    m_precipitationUnit = map.value("precipitationUnit").value<Settings::PrecipitationUnit>();
 
     const auto locations = map.value("locations").toList();
     for(const auto& location : locations){
         const auto geoLocation = location.toMap();
-        savedLocations.append(GeoLocationData::fromVariantMap(geoLocation));
+        m_savedLocations.append(GeoLocationData::fromVariantMap(geoLocation));
     }
 }
 
@@ -113,45 +113,45 @@ void Settings::fromVariant(const QVariant &variant)
 
 QString Settings::temperatureUnitApiParameter() const
 {
-    return temperatureUnitToApiParameter[temperatureUnit];
+    return temperatureUnitToApiParameter[m_temperatureUnit];
 }
 
 QString Settings::windSpeedUnitApiParameter() const
 {
-    return windSpeedUnitToApiParameter[windSpeedUnit];
+    return windSpeedUnitToApiParameter[m_windSpeedUnit];
 }
 
 QString Settings::precipitationUnitApiParameter() const
 {
-    return precipitationUnitToApiParameter[precipitationUnit];
+    return precipitationUnitToApiParameter[m_precipitationUnit];
 }
 
 QString Settings::temperatureUnitString() const
 {
-    return temperatureUnitToString[temperatureUnit];
+    return temperatureUnitToString[m_temperatureUnit];
 }
 
 QString Settings::windSpeedUnitString() const
 {
-    return windSpeedUnitToString[windSpeedUnit];
+    return windSpeedUnitToString[m_windSpeedUnit];
 }
 
 QString Settings::precipitationUnitString() const
 {
-    return precipitationUnitToString[precipitationUnit];
+    return precipitationUnitToString[m_precipitationUnit];
 }
 
 QString Settings::temperatureUnitName() const
 {
-    return temperatureUnitsNames[temperatureUnit];
+    return temperatureUnitsNames[m_temperatureUnit];
 }
 
 QString Settings::windSpeedUnitName() const
 {
-    return windSpeedUnitsNames[windSpeedUnit];
+    return windSpeedUnitsNames[m_windSpeedUnit];
 }
 
 QString Settings::precipitationUnitName() const
 {
-    return precipitationUnitsNames[precipitationUnit];
+    return precipitationUnitsNames[m_precipitationUnit];
 }

@@ -31,7 +31,7 @@ void GeocodingAPI::geocodeCity(const QString& cityName) {
 
 void GeocodingAPI::handleGeocodingResponse(QNetworkReply* reply) {
     if (reply->error() != QNetworkReply::NoError) {
-        qDebug() << "Error:" << reply->errorString();
+//        qDebug() << "Error:" << reply->errorString();
         return;
     }
 
@@ -39,19 +39,19 @@ void GeocodingAPI::handleGeocodingResponse(QNetworkReply* reply) {
     QJsonDocument jsonResponse = QJsonDocument::fromJson(responseData);
 
     if (!jsonResponse.isObject()) {
-        qDebug() << "Error: Invalid JSON response";
+//        qDebug() << "Error: Invalid JSON response";
         return;
     }
 
     QJsonObject jsonObject = jsonResponse.object();
     if (!jsonObject.contains("results") || !jsonObject["results"].isArray()) {
-        qDebug() << "Error: Missing or invalid 'results' array in JSON response";
+//        qDebug() << "Error: Missing or invalid 'results' array in JSON response";
         return;
     }
 
     QJsonArray resultsArray = jsonObject["results"].toArray();
     if (resultsArray.isEmpty()) {
-        qDebug() << "Error: Empty 'results' array in JSON response";
+//        qDebug() << "Error: Empty 'results' array in JSON response";
         return;
     }
 
@@ -72,7 +72,7 @@ void GeocodingAPI::processResultsArray(const QJsonArray &resultsArray, QList<Geo
         QJsonObject resultObject = resultValue.toObject();
 
         if (!resultObject.contains("formatted") || !resultObject["formatted"].isString()) {
-            qDebug() << "Error: Missing or invalid 'formatted' string in JSON response";
+//            qDebug() << "Error: Missing or invalid 'formatted' string in JSON response";
             continue;  // Preskoči ovaj rezultat i idi na sledeći
         }
 
@@ -82,13 +82,13 @@ void GeocodingAPI::processResultsArray(const QJsonArray &resultsArray, QList<Geo
         }
 
         if (!resultObject.contains("geometry") || !resultObject["geometry"].isObject()) {
-            qDebug() << "Error: Missing or invalid 'geometry' object in JSON response";
+//            qDebug() << "Error: Missing or invalid 'geometry' object in JSON response";
             continue;
         }
 
         QJsonObject geometryObject = resultObject["geometry"].toObject();
         if (!geometryObject.contains("lat") || !geometryObject.contains("lng")) {
-            qDebug() << "Error: Missing 'lat' or 'lng' in 'geometry' object";
+//            qDebug() << "Error: Missing 'lat' or 'lng' in 'geometry' object";
             continue;
         }
 

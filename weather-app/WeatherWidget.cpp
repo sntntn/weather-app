@@ -34,7 +34,7 @@ WeatherWidget::WeatherWidget(const QSharedPointer<WeatherData> &data, QWidget *p
     mainLayout->setContentsMargins(hBoxMarginSize, hBoxMarginSize, hBoxMarginSize, hBoxMarginSize);
 
     const QString fontName = "Roboto";
-    locationLabel->setFont(QFont(fontName, adjustLabelFontSize(fontName) , QFont::Bold));
+    locationLabel->setFont(QFont(fontName, adjustLabelFontSize(fontName), QFont::Bold));
     timeLabel->setFont(QFont(fontName, timeFontSize, QFont::Normal));
     temperatureLabel->setFont(QFont(fontName, temperatureFontSize, QFont::Bold));
     maxTemperatureLabel->setFont(QFont(fontName, minmaxTemperatureFontSize, QFont::Normal));
@@ -67,7 +67,7 @@ WeatherWidget::WeatherWidget(const QSharedPointer<WeatherData> &data, QWidget *p
     setLayout(mainLayout);
 }
 
-int WeatherWidget::adjustLabelFontSize(QString fontName)
+int WeatherWidget::adjustLabelFontSize(const QString &fontName)
 {
     QFont font(fontName, locationFontSize);
     QFontMetrics fm(font);
@@ -100,8 +100,8 @@ void WeatherWidget::resetHighlight()
 }
 
 
-QString WeatherWidget::weatherCodeToIcon(int weatherCode, bool isDay) {
-    QString iconBasePath = "../Resources/weatherIcons/";
+QString WeatherWidget::weatherCodeToIcon(const int weatherCode, const bool isDay) {
+    const QString iconBasePath = "../Resources/weatherIcons/";
 
     switch (weatherCode) {
     case 0:

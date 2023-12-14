@@ -17,6 +17,27 @@ class Settings : public QObject, public Serializable
 public:
     static Settings& instance();
 
+    // TODO setters and getters or public variables
+    // void setLocationSharing(const bool);
+    // void setTemperatureUnit(const TemperatureUnit);
+    // void setWindSpeedUnit(const WindSpeedUnit);
+    // void setPrecipitationUnit(const PrecipitationUnit);
+
+    QString temperatureUnitApiParameter() const;
+    QString windSpeedUnitApiParameter() const;
+    QString precipitationUnitApiParameter() const;
+
+    QString temperatureUnitString() const;
+    QString windSpeedUnitString() const;
+    QString precipitationUnitString() const;
+
+    QString temperatureUnitName() const;
+    QString windSpeedUnitName() const;
+    QString precipitationUnitName() const;
+
+    QVariant toVariant() const override;
+    void fromVariant(const QVariant & variant) override;
+
     enum TemperatureUnit
     {
         CELSIUS,
@@ -40,33 +61,15 @@ public:
     };
     Q_ENUM(PrecipitationUnit)
 
+    inline QList<GeoLocationData> &savedLocations()
+    {
+        return m_savedLocations;
+    }
 
-    // TODO setters and getters or public variables
-    // void setLocationSharing(const bool);
-    // void setTemperatureUnit(const TemperatureUnit);
-    // void setWindSpeedUnit(const WindSpeedUnit);
-    // void setPrecipitationUnit(const PrecipitationUnit);
-
-    QString temperatureUnitApiParameter() const;
-    QString windSpeedUnitApiParameter() const;
-    QString precipitationUnitApiParameter() const;
-
-    QString temperatureUnitString() const;
-    QString windSpeedUnitString() const;
-    QString precipitationUnitString() const;
-
-    QString temperatureUnitName() const;
-    QString windSpeedUnitName() const;
-    QString precipitationUnitName() const;
-
-    QVariant toVariant() const override;
-    void fromVariant(const QVariant & variant) override;
-
-    bool shareLocation = false;
-    Settings::TemperatureUnit temperatureUnit = TemperatureUnit::CELSIUS;
-    Settings::WindSpeedUnit windSpeedUnit = WindSpeedUnit::KMH;
-    Settings::PrecipitationUnit precipitationUnit = PrecipitationUnit::MILLIMETRES;
-    QList<GeoLocationData> savedLocations;
+    inline bool shareLocation() const
+    {
+        return m_shareLocation;
+    }
 
 private:
     Settings();
@@ -84,6 +87,13 @@ private:
     static const QMap<TemperatureUnit, QString> temperatureUnitsNames;
     static const QMap<WindSpeedUnit, QString> windSpeedUnitsNames;
     static const QMap<PrecipitationUnit, QString> precipitationUnitsNames;
+
+    Settings::TemperatureUnit m_temperatureUnit = TemperatureUnit::CELSIUS;
+    Settings::WindSpeedUnit m_windSpeedUnit = WindSpeedUnit::KMH;
+    Settings::PrecipitationUnit m_precipitationUnit = PrecipitationUnit::MILLIMETRES;
+
+    bool m_shareLocation = false;
+    QList<GeoLocationData> m_savedLocations;
 
     friend class SettingsDialog;
 };

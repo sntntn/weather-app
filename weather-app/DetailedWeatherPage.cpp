@@ -56,7 +56,7 @@ void DetailedWeatherPage::addNewWidget(const QSharedPointer<Data> &data)
     widget->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Preferred);
     widget->setMaximumWidth(widgetsScrollArea->viewport()->width());
 
-    int position = static_cast<int>(Settings::instance().savedLocations.indexOf(widget->data->location()));
+    int position = static_cast<int>(Settings::instance().savedLocations().indexOf(widget->data->location()));
     widgetsLayout->addWidget(widget, position, 0, 1, 1);
 
     m_widgets.emplaceBack(widget);
@@ -70,7 +70,7 @@ void DetailedWeatherPage::setData(const GeoLocationData &data) // todo sharedptr
     std::cout << data.getRenamedPlace().toStdString() << " "
               << data.getCoordinates().toString().toStdString() << std::endl;
 
-    Settings::instance().savedLocations.indexOf(data) == -1 ? this->addToSavedLocations->setVisible(true)
+    Settings::instance().savedLocations().indexOf(data) == -1 ? this->addToSavedLocations->setVisible(true)
                                                             : this->addToSavedLocations->setVisible(false);
 
     highlightWidget();
@@ -86,7 +86,7 @@ void DetailedWeatherPage::addButtonClicked()
 {
     emit locationSaved(this->data);
     this->addToSavedLocations->setVisible(false);
-    Settings::instance().savedLocations.push_back(this->data);
+    Settings::instance().savedLocations().push_back(this->data);
 }
 
 void DetailedWeatherPage::highlightWidget()
@@ -94,7 +94,7 @@ void DetailedWeatherPage::highlightWidget()
     if(selectedWidget){
         selectedWidget->resetHighlight();
     }
-    for(auto widget : m_widgets){
+    for(auto *widget : m_widgets){
         if(widget->data->location() == this->data){
             widgetsScrollArea->ensureWidgetVisible(widget);
             selectedWidget = widget;

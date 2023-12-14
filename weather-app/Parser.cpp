@@ -5,6 +5,8 @@
 #include <QJsonValue>
 #include <QJsonArray>
 
+#include <iostream>
+
 #include "WeatherData.h"
 #include "DetailedWeatherData.h"
 #include "GeoLocationData.h"
@@ -57,20 +59,37 @@ QSharedPointer<DetailedWeatherData> Parser::parseDetailedWeatherData(const QStri
     int apparentTemperature = static_cast<int>(qRound(current.value("apparent_temperature").toDouble()));
     int precipitation = static_cast<int>(qRound(current.value("precipitation").toDouble()));
 
+    /*qDebug() << "temperature:" << temperature;
+    qDebug() << "weatherCode:" << weatherCode;
+    qDebug() << "isDay:" << isDay;
+    qDebug() << "wind speed:" << windSpeed;
+    qDebug() << "real feel:" << apparentTemperature;
+    qDebug() << "precipitation:" << precipitation;*/
+
     QJsonArray dailyMaxTemperature = daily.value("temperature_2m_max").toArray();
     int maxTemperature = static_cast<int>(qRound(dailyMaxTemperature[0].toDouble()));
+
+    //qDebug() << "daily max:" << maxTemperature;
 
     QJsonArray dailyMinTemperature = daily.value("temperature_2m_min").toArray();
     int minTemperature = static_cast<int>(qRound(dailyMinTemperature[0].toDouble()));
 
+    //qDebug() << "daily min:" << minTemperature;
+
     QJsonArray dailyUV = daily.value("uv_index_max").toArray();
     int uvIndex = static_cast<int>(qRound(dailyUV[0].toDouble()));
+
+    //qDebug() << "uv:" << uvIndex;
 
     QJsonArray weeklyMax = daily.value("temperature_2m_max").toArray();
     int weeklyHighestTemperature = static_cast<int>(qRound(weeklyMax[0].toDouble()));
 
+    //qDebug() << "weekly max:" << weeklyHighestTemperature;
+
     QJsonArray weeklyMin = daily.value("temperature_2m_min").toArray();
     int weeklyLowestTemperature = static_cast<int>(qRound(weeklyMin[0].toDouble()));
+
+    //qDebug() << "weekly min:" << weeklyLowestTemperature;
 
     QSharedPointer<DetailedWeatherData> data(new DetailedWeatherData(geoLocation,
                                                                      temperature,

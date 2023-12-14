@@ -14,6 +14,13 @@ DetailedWeatherData::DetailedWeatherData(const GeoLocationData &location,
                                          const int weeklyHighestTemperature,
                                          const int weeklyLowestTemperature)
     : WeatherData(location, temperature, highestTemperature, lowestTemperature, weatherCode, isDay, timezone)
+    , location(location)
+    , temperature(temperature)
+    , highestTemperature(highestTemperature)
+    , lowestTemperature(lowestTemperature)
+    , weatherCode(weatherCode)
+    , isDay(isDay)
+    , timezone(timezone)
     , windSpeed(windSpeed)
     , apparentTemperature(apparentTemperature)
     , precipitation(precipitation)

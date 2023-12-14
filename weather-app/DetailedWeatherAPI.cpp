@@ -65,8 +65,6 @@ void DetailedWeatherAPI::replyFinished(QNetworkReply *reply){
     QString jsonData = reply->readAll();
     auto data = Parser::parseDetailedWeatherData(jsonData, location);
 
-    qDebug() << "Detailed Weather" << data;
-
     emit dataFetched(data);
     this->quit();
 

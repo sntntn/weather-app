@@ -53,6 +53,9 @@ QSharedPointer<DetailedWeatherData> Parser::parseDetailedWeatherData(const QStri
     int temperature = static_cast<int>(qRound(current.value("temperature_2m").toDouble()));
     int weatherCode = current.value("weather_code").toInt();
     bool isDay = static_cast<bool>(current.value("is_day").toInt());
+    int windSpeed = static_cast<int>(qRound(current.value("wind_speed_10m").toDouble()));
+    int apparentTemperature = static_cast<int>(qRound(current.value("apparent_temperature").toDouble()));
+    int precipitation = static_cast<int>(qRound(current.value("precipitation").toDouble()));
 
     QJsonArray dailyMaxTemperature = daily.value("temperature_2m_max").toArray();
     int maxTemperature = static_cast<int>(qRound(dailyMaxTemperature[0].toDouble()));
@@ -60,13 +63,30 @@ QSharedPointer<DetailedWeatherData> Parser::parseDetailedWeatherData(const QStri
     QJsonArray dailyMinTemperature = daily.value("temperature_2m_min").toArray();
     int minTemperature = static_cast<int>(qRound(dailyMinTemperature[0].toDouble()));
 
+    QJsonArray dailyUV = daily.value("uv_index_max").toArray();
+    int uvIndex = static_cast<int>(qRound(dailyUV[0].toDouble()));
+
+    QJsonArray weeklyMax = daily.value("temperature_2m_max").toArray();
+    int weeklyHighestTemperature = static_cast<int>(qRound(weeklyMax[0].toDouble()));
+
+    QJsonArray weeklyMin = daily.value("temperature_2m_min").toArray();
+    int weeklyLowestTemperature = static_cast<int>(qRound(weeklyMin[0].toDouble()));
+
     QSharedPointer<DetailedWeatherData> data(new DetailedWeatherData(geoLocation,
                                                                      temperature,
                                                                      maxTemperature,
                                                                      minTemperature,
                                                                      weatherCode,
                                                                      isDay,
-                                                                     timeZone));
+                                                                     timeZone,
+                                                                     windSpeed,
+                                                                     apparentTemperature,
+                                                                     precipitation,
+                                                                     uvIndex,
+                                                                     weeklyHighestTemperature,
+                                                                     weeklyLowestTemperature));
+
+
 
     return data;
 }

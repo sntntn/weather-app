@@ -6,24 +6,19 @@ DetailedWeatherData::DetailedWeatherData(const GeoLocationData &location,
                                          const int lowestTemperature,
                                          const int weatherCode,
                                          const bool isDay,
-                                         const QTimeZone &timezone)
+                                         const QTimeZone &timezone,
+                                         const int windSpeed,
+                                         const int apparentTemperature,
+                                         const int precipitation,
+                                         const int uvIndex,
+                                         const int weeklyHighestTemperature,
+                                         const int weeklyLowestTemperature)
     : WeatherData(location, temperature, highestTemperature, lowestTemperature, weatherCode, isDay, timezone)
+    , windSpeed(windSpeed)
+    , apparentTemperature(apparentTemperature)
+    , precipitation(precipitation)
+    , uvIndex(uvIndex)
+    , weeklyHighestTemperature(weeklyHighestTemperature)
+    , weeklyLowestTemperature(weeklyLowestTemperature)
 { }
 
-/*3. Апликација приказује име локације /
-4. Апликација приказује тренутну температуру/
-    5. Апликација приказује данашњу највишу и најнижу температуру/
-    6. Апликација приказује опис времена и прикладну иконицу за тај опис/
-    7. Апликација приказује тренутно време на тој локацији/
-    8. Апликација приказује температуру по сатима за наредна 24 сата
-    9. Апликација приказује минималну и максималну температуру за наредних 7 дана
-    10. Апликација приказује тренутан УВ индекс
-    11. Апликација приказује брзину ветра
-    12. Апликација приказује субјективан осећај температуре
-    13. Апликација приказује количину падавина
-    14. Апликација приказује информације о видљивости
-    15. Апликација приказује влажност ваздуха
-    16. Апликација приказује ваздушни притисак
-    17. Апликација приказује просечну температуру
-    18. Апликација приказује загађеност ваздуха
-    */

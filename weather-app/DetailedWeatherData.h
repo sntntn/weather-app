@@ -14,36 +14,29 @@ public:
                                  const int lowestTemperature,
                                  const int weatherCode,
                                  const bool isDay,
-                                 const QTimeZone &timezone);
+                                 const QTimeZone &timezone,
+                                 const int windSpeed,
+                                 const int apparentTemperature,
+                                 const int precipitation,
+                                 const int uvIndex,
+                                 const int weeklyHighestTemperature,
+                                 const int weeklyLowestTemperature);
 
-    QString location;
+    GeoLocationData location;
     int temperature;
     int highestTemperature;
     int lowestTemperature;
     int weatherCode;
     bool isDay;
     QTimeZone timezone;
+    int windSpeed;
+    int apparentTemperature;
+    int precipitation;
+    int uvIndex;
+    int weeklyHighestTemperature;
+    int weeklyLowestTemperature;
 };
 
 #endif // DETAILEDWEATHERDATA_H
 
-/*class WeatherData : public Data
-{
-public:
 
-    WeatherData(QString& location,
-                int temperature,
-                int highestTemperature,
-                int lowestTemperature,
-                int weatherCode,
-                bool isDay,
-                QTimeZone timezone);
-
-    QString location;
-    int temperature;
-    int highestTemperature;
-    int lowestTemperature;
-    int weatherCode;
-    bool isDay;
-    QTimeZone timezone;
-};*/

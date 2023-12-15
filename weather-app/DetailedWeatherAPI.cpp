@@ -38,12 +38,12 @@ void DetailedWeatherAPI::fetchData(const QGeoCoordinate &coordinates)
     query.addQueryItem("daily", "temperature_2m_max,temperature_2m_min,uv_index_max");
     query.addQueryItem("timezone", "auto");
 
-    //query.addQueryItem("hourly", "temperature_2m");  // Include hourly temperature forecast
+    query.addQueryItem("hourly", "temperature_2m");  // Include hourly temperature forecast
     // Add the next 24 hours as the forecast duration
     QDateTime now = QDateTime::currentDateTime();
-    /*QDateTime next24Hours = now.addSecs(24 * 60 * 60); // Add 24 hours
+    QDateTime next24Hours = now.addSecs(24 * 60 * 60); // Add 24 hours
     query.addQueryItem("start", now.toString(Qt::ISODate));
-    query.addQueryItem("end", next24Hours.toString(Qt::ISODate));*/
+    query.addQueryItem("end", next24Hours.toString(Qt::ISODate));
 
     query.addQueryItem("daily", "temperature_2m_max,temperature_2m_min");  // Include daily temperature forecast for max and min
     //Add the next 7 days as the forecast duration

@@ -12,16 +12,18 @@
 #include "Settings.h"
 
 DetailedWeatherAPI::DetailedWeatherAPI(const GeoLocationData &location, QObject *parent)
-    : WeatherAPI{location, parent}
+    : QObject(parent)
+    , location(location)
+    , networkManager(new QNetworkAccessManager(this))
 {
     connect(networkManager, &QNetworkAccessManager::finished, this, &DetailedWeatherAPI::replyFinished);
 }
 
-void DetailedWeatherAPI::run()
-{
-    fetchData(location.getCoordinates());
-    exec();
-}
+//void DetailedWeatherAPI::run()
+//{
+//    fetchData(location.getCoordinates());
+//    exec();
+//}
 
 void DetailedWeatherAPI::fetchData(const QGeoCoordinate &coordinates)
 {
@@ -67,7 +69,7 @@ void DetailedWeatherAPI::replyFinished(QNetworkReply *reply){
     auto data = Parser::parseDetailedWeatherData(jsonData, location);
 
     emit dataFetched(data);
-    this->quit();
+    //this->quit();
 
     reply->deleteLater();
 }

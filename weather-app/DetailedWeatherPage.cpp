@@ -5,6 +5,8 @@
 #include "WeatherWidget.h"
 #include "GeoLocationData.h"
 #include "Settings.h"
+#include "DetailedWeatherAPI.h"
+#include "DetailedWeatherData.h"
 
 #include <iostream>
 
@@ -22,6 +24,9 @@ DetailedWeatherPage::DetailedWeatherPage(QWidget *parent)
     , horizontalSpacer(new QSpacerItem(spacerWidth, 0, QSizePolicy::Expanding, QSizePolicy::Minimum))
     , addToSavedLocations(new QPushButton("Add"))
     , scrollTimer(new QTimer(this))
+    , locationLabel(new QLabel(this))
+    , temperatureLabel(new QLabel(this))
+    , minmaxTemperature(new QLabel(this))
 {
     widgetsScrollAreaContents->setLayout(widgetsLayout);
     widgetsLayout->setAlignment(Qt::AlignTop);
@@ -34,6 +39,14 @@ DetailedWeatherPage::DetailedWeatherPage(QWidget *parent)
     weatherLayout->addItem(horizontalSpacer, 0, 1);
     weatherLayout->addWidget(addToSavedLocations, 0, 2);
     weatherLayout->setAlignment(Qt::AlignTop);
+
+    locationLabel->setStyleSheet("font-size: 24px;");
+    temperatureLabel->setStyleSheet("font-size: 48px; font-weight: bold;");
+    minmaxTemperature->setStyleSheet("font-size: 16px;");
+
+    weatherLayout->addWidget(locationLabel, 1, 1, Qt::AlignCenter);
+    weatherLayout->addWidget(temperatureLabel, 2, 1, Qt::AlignCenter);
+    weatherLayout->addWidget(minmaxTemperature, 3, 1, Qt::AlignCenter);
 
     weatherScrollAreaContents->setLayout(weatherLayout);
     weatherScrollArea->setWidget(weatherScrollAreaContents);
@@ -68,13 +81,27 @@ void DetailedWeatherPage::addNewWidget(const QSharedPointer<Data> &data)
 void DetailedWeatherPage::setData(const GeoLocationData &data) // todo sharedptr
 {
     this->data = data;
-    // test
-    /*std::cout << data.getRenamedPlace().toStdString() << " "
-              << data.getCoordinates().toString().toStdString() << std::endl;*/
 
     // test, todo
     Settings::instance().savedLocations.indexOf(data) == -1 ? this->addToSavedLocations->setVisible(true)
                                                             : this->addToSavedLocations->setVisible(false);
+
+    //isto ko za MainWindow, saljemo data da postavi a onda u fetchData saljemo koordinate
+    auto* api = new DetailedWeatherAPI(data, this);
+    //todo ceo data umesto koordinata
+    api->fetchData(data.getCoordinates());
+    connect(api, &DetailedWeatherAPI::dataFetched, this, &DetailedWeatherPage::showData);
+}
+
+void DetailedWeatherPage::showData(const QSharedPointer<Data> &data){
+    //todo kad dobijemo novi izgled da se menja, DetailedWeatherPage da ima promenljvu svoju DetailedWeatherData?
+    auto detailedData = qSharedPointerDynamicCast<DetailedWeatherData>(data);
+
+    locationLabel->setText(detailedData->location.getRenamedPlace());
+    temperatureLabel->setText(QString::number(detailedData->temperature) + "°");
+    minmaxTemperature->setText("H:" + QString::number(detailedData->highestTemperature) + "°  L:"
+                               + QString::number(detailedData->lowestTemperature) + "°");
+
 }
 
 void DetailedWeatherPage::resizeEvent(QResizeEvent* event) {
@@ -85,6 +112,7 @@ void DetailedWeatherPage::resizeEvent(QResizeEvent* event) {
 
 void DetailedWeatherPage::addButtonClicked()
 {
+    //placeholder za mesto gde je add button ili da se postavi na ignored umesto visibility false
     emit locationSaved(this->data);
     this->addToSavedLocations->setVisible(false);
     Settings::instance().savedLocations.push_back(this->data);

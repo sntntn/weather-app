@@ -1,0 +1,26 @@
+{
+    "locations": [
+        {
+            "latitude": 48.2083537,
+            "longitude": 16.3725042,
+            "place": "Vienna, Austria",
+            "renamedPlace": "Vienna"
+        },
+        {
+            "latitude": 44.8178131,
+            "longitude": 20.4568974,
+            "place": "Belgrade, City of Belgrade, Serbia",
+            "renamedPlace": "Belgrade"
+        },
+        {
+            "latitude": 56.2676356,
+            "longitude": 14.8467616,
+            "place": "Hoka, Blekinge County, Sweden",
+            "renamedPlace": "Hoka"
+        }
+    ],
+    "precipitationUnit": 0,
+    "shareLocation": false,
+    "temperatureUnit": 1,
+    "windSpeedUnit": 0
+}

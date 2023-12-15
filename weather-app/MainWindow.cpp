@@ -59,7 +59,8 @@ void MainWindow::saveNewLocation(const GeoLocationData& location) // todo shared
 }
 
 void MainWindow::getLocationData(const GeoLocationData &location) // todo sharedptr
-{
+{   //todo maybe? sta ce weatherapi njegova promenljiva GeoLocationData ako se njemu prosledjuju koordinate
+    //ima veze sa parserom koji cemo izbrisati svakako
     auto* api = new WeatherAPI(location, this);
 
     connect(api, &ApiHandler::finished, api, &WeatherAPI::deleteLater);

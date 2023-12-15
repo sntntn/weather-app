@@ -10,6 +10,7 @@
 #include <QSharedPointer>
 #include <QScrollBar>
 #include <QTimer>
+#include <QLabel>
 
 #include <QResizeEvent>
 
@@ -19,6 +20,7 @@ class WeatherData;
 class MainWindow;
 class WeatherWidget;
 class GeoLocationData;
+class DetailedWeatherData;
 
 class DetailedWeatherPage : public Page
 {
@@ -36,6 +38,7 @@ public slots:
     void setData(const GeoLocationData &data); // todo shared ptr
     void scrollToMaximum();
     void scrollToMinimum();
+    void showData(const QSharedPointer<Data> &data);
 
 private slots:
     void addButtonClicked();
@@ -59,6 +62,9 @@ private:
     QSpacerItem *horizontalSpacer;
     QPushButton *addToSavedLocations;
     QTimer *scrollTimer;
+    QLabel *locationLabel;
+    QLabel *temperatureLabel;
+    QLabel *minmaxTemperature;
 };
 
 #endif // DETAILEDWEATHERPAGE_H

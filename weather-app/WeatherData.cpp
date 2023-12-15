@@ -12,13 +12,12 @@ WeatherData::WeatherData(const GeoLocationData &location,
                          const int lowestTemperature,
                          const int weatherCode,
                          const bool isDay,
-                         const QTimeZone& timezone)
-    : location(location)
-    , temperature(temperature)
-    , highestTemperature(highestTemperature)
-    , lowestTemperature(lowestTemperature)
-    , weatherCode(weatherCode)
-    , isDay(isDay)
-    , timezone(timezone)
+                         QTimeZone timezone)
+    : m_location(location)
+    , m_temperature(temperature)
+    , m_highestTemperature(highestTemperature)
+    , m_lowestTemperature(lowestTemperature)
+    , m_weatherCode(weatherCode)
+    , m_isDay(isDay)
+    , m_timezone(std::move(timezone))
 { }
-

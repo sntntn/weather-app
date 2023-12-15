@@ -21,7 +21,7 @@ HomePage::HomePage(QWidget *parent)
     , widgetsLayout(new QGridLayout())
     , completer(new CustomCompleter(this))
     , debounceTimer(new QTimer(this))
-    , settingsPixmap("../Resources/settings.png")
+    , settingsPixmap(settingsIconPath)
     , settingsIcon(settingsPixmap)
 {
     searchBar->setPlaceholderText("Enter location...");
@@ -51,11 +51,10 @@ HomePage::HomePage(QWidget *parent)
     styleSheetsSetup();
 
     connect(settingsButton, &QPushButton::clicked, this, &HomePage::openSettingsDialog);
-    connect(mainWindow, &MainWindow::deletePageWidgets, this, &HomePage::resetInsertToLeft);
     connect(&geocodingApi, &GeocodingAPI::geocodingDataUpdated, this, &HomePage::updateCompleter);
     connect(completer, QOverload<const QString&>::of(&QCompleter::activated), this, &HomePage::onCompletionActivated);
     connect(searchBar, &QLineEdit::textChanged, this, [this]() { debounceTimer->start(); });
-    connect(debounceTimer, &QTimer::timeout, this, &HomePage::onSearchBarTextChanged);          //trenutna verzija je prilagodjena tajmeru
+    connect(debounceTimer, &QTimer::timeout, this, &HomePage::onSearchBarTextChanged);
 //    connect(searchBar, &QLineEdit::textChanged, this, &HomePage::onSearchBarTextChanged);
     connect(this, &HomePage::searchBarPressed, &geocodingApi, &GeocodingAPI::testCityFunction);
     connect(this, &HomePage::locationObjectSelected, mainWindow, &MainWindow::showDetailedWeatherPage);
@@ -66,10 +65,10 @@ void HomePage::addNewWidget(const QSharedPointer<Data> &data)
     auto *widget = new WeatherWidget(qSharedPointerCast<WeatherData>(data), scrollAreaContents);
     connect(widget, &WeatherWidget::clicked, this->mainWindow, &MainWindow::showDetailedWeatherPage);
 
-    int position = Settings::instance().savedLocations.indexOf(widget->data->location);
+    int position = static_cast<int>(Settings::instance().savedLocations().indexOf(widget->data->location()));
     widgetsLayout->addWidget(widget, position / 2, position % 2, 1, 1);
 
-    widget->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Preferred);
+    widget->setMaximumHeight(160);
     m_widgets.emplaceBack(widget);
 }
 
@@ -88,7 +87,7 @@ void HomePage::updateCompleter(const QList<GeoLocationData>& locations)
 {
     this->locations = locations;
     QStringList places;
-    qDebug()<<"----------------------------------"<< locations.size();
+//    qDebug()<<"----------------------------------"<< locations.size();
     for (const auto& location : locations) {
         places.append(location.getPlace());
     }
@@ -102,7 +101,7 @@ void HomePage::onCompletionActivated(const QString& text)
     for (const auto& location : locations) {
         if (location.getPlace() == text) {
             emit locationObjectSelected(location);
-            qDebug() << "------------emitovano----------------";
+//            qDebug() << "------------emitovano----------------";
             break;
         }
     }
@@ -110,11 +109,6 @@ void HomePage::onCompletionActivated(const QString& text)
     delete completer->model();
     completer->setModel(new QStringListModel());
     completer->complete();
-}
-
-void HomePage::resetInsertToLeft()
-{
-//    leftWidget->setProperty("inserttoLeft", true);
 }
 
 void HomePage::styleSheetsSetup()

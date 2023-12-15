@@ -2,6 +2,9 @@ cmake_minimum_required(VERSION 3.5)
 
 project(weather-app VERSION 0.1 LANGUAGES CXX)
 
+configure_file(config.ini ${CMAKE_CURRENT_BINARY_DIR} COPYONLY)
+
+
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
@@ -45,6 +48,9 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         SettingsDialog.h SettingsDialog.cpp
         customcompleter.h customcompleter.cpp
         WidgetsManager.h
+        Serializable.h
+        Serializer.h Serializer.cpp
+
 
 
 

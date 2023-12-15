@@ -9,10 +9,6 @@ Page::Page(QWidget *parent)
 
 void Page::deleteWidgets()
 {
-    for(WeatherWidget *widget : m_widgets){
-        delete widget;
-        widget = nullptr;
-    }
-
+    qDeleteAll(m_widgets);
     m_widgets.clear();
 }

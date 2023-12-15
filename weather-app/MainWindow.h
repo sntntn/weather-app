@@ -27,13 +27,15 @@ public slots:
     void showHomePage();
     void showDetailedWeatherPage(const GeoLocationData &data); // todo sharedptr
     void saveNewLocation(const GeoLocationData& location); // todo sharedptr
-    void handleLocationObjectSelected(const GeoLocationData& locationData);
     void getLocationData(const GeoLocationData &location);
     void refreshPages();
 
 signals:
     void detailedWeatherPageShown(const GeoLocationData &data); // todo sharedptr
     void deletePageWidgets();
+
+protected:
+    void closeEvent(QCloseEvent *event) override;
 
 private:
     Ui::MainWindow *ui;
@@ -42,9 +44,8 @@ private:
     DetailedWeatherPage *detailedWeather;
     QStackedWidget *stackedWidget;
 
-    double m_lastLongitude; // todo?
-    double m_lastLatitude;
-
     void getSavedLocationsData();
+    void serializeData();
+
 };
 #endif // MAINWINDOW_H

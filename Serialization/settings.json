@@ -1,26 +1,26 @@
 {
     "locations": [
         {
+            "latitude": 56.2676356,
+            "longitude": 14.8467616,
+            "place": "Hoka, Blekinge County, Sweden",
+            "renamedPlace": "Hoka"
+        },
+        {
             "latitude": 48.2083537,
             "longitude": 16.3725042,
             "place": "Vienna, Austria",
             "renamedPlace": "Vienna"
         },
         {
-            "latitude": 44.8178131,
-            "longitude": 20.4568974,
-            "place": "Belgrade, City of Belgrade, Serbia",
-            "renamedPlace": "Belgrade"
-        },
-        {
-            "latitude": 56.2676356,
-            "longitude": 14.8467616,
-            "place": "Hoka, Blekinge County, Sweden",
-            "renamedPlace": "Hoka"
+            "latitude": 44.4308975,
+            "longitude": -89.6884637,
+            "place": "Wisconsin, United States of America",
+            "renamedPlace": "Wisconsin"
         }
     ],
     "precipitationUnit": 0,
     "shareLocation": false,
-    "temperatureUnit": 1,
+    "temperatureUnit": 0,
     "windSpeedUnit": 0
 }

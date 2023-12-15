@@ -12,7 +12,6 @@
 
 DetailedWeatherPage::DetailedWeatherPage(QWidget *parent)
     : Page{parent}
-    , data(*(new GeoLocationData("test", "test", QGeoCoordinate()))) // test, todo sharedptr (?)
     , mainLayout(new QHBoxLayout(this))
     , widgetsScrollArea(new QScrollArea())
     , weatherScrollArea(new QScrollArea())
@@ -27,6 +26,7 @@ DetailedWeatherPage::DetailedWeatherPage(QWidget *parent)
     , locationLabel(new QLabel(this))
     , temperatureLabel(new QLabel(this))
     , minmaxTemperature(new QLabel(this))
+    , selectedWidget(nullptr)
 {
     widgetsScrollAreaContents->setLayout(widgetsLayout);
     widgetsLayout->setAlignment(Qt::AlignTop);
@@ -59,9 +59,7 @@ DetailedWeatherPage::DetailedWeatherPage(QWidget *parent)
     connect(addToSavedLocations, &QPushButton::clicked, this, &DetailedWeatherPage::addButtonClicked);
     connect(this, &DetailedWeatherPage::locationSaved, this->mainWindow, &MainWindow::saveNewLocation);
 
-    scrollTimer->setSingleShot(true);
-    connect(scrollTimer, &QTimer::timeout, this, &DetailedWeatherPage::scrollToMaximum);
-    connect(returnToHomePage, &QPushButton::clicked, this, &DetailedWeatherPage::scrollToMinimum);
+    connect(returnToHomePage, &QPushButton::clicked, this, &DetailedWeatherPage::afterHomePressed);
 }
 
 void DetailedWeatherPage::addNewWidget(const QSharedPointer<Data> &data)
@@ -72,19 +70,21 @@ void DetailedWeatherPage::addNewWidget(const QSharedPointer<Data> &data)
     widget->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Preferred);
     widget->setMaximumWidth(widgetsScrollArea->viewport()->width());
 
-    int position = Settings::instance().savedLocations.indexOf(widget->data->location);
+    int position = static_cast<int>(Settings::instance().savedLocations().indexOf(widget->data->location()));
     widgetsLayout->addWidget(widget, position, 0, 1, 1);
 
     m_widgets.emplaceBack(widget);
+    scrollToMaximum();
 }
 
 void DetailedWeatherPage::setData(const GeoLocationData &data) // todo sharedptr
 {
     this->data = data;
 
-    // test, todo
-    Settings::instance().savedLocations.indexOf(data) == -1 ? this->addToSavedLocations->setVisible(true)
+    Settings::instance().savedLocations().indexOf(data) == -1 ? this->addToSavedLocations->setVisible(true)
                                                             : this->addToSavedLocations->setVisible(false);
+
+    highlightWidget();
 
     //isto ko za MainWindow, saljemo data da postavi a onda u fetchData saljemo koordinate
     auto* api = new DetailedWeatherAPI(data, this);
@@ -101,7 +101,6 @@ void DetailedWeatherPage::showData(const QSharedPointer<Data> &data){
     temperatureLabel->setText(QString::number(detailedData->temperature) + "°");
     minmaxTemperature->setText("H:" + QString::number(detailedData->highestTemperature) + "°  L:"
                                + QString::number(detailedData->lowestTemperature) + "°");
-
 }
 
 void DetailedWeatherPage::resizeEvent(QResizeEvent* event) {
@@ -115,19 +114,36 @@ void DetailedWeatherPage::addButtonClicked()
     //placeholder za mesto gde je add button ili da se postavi na ignored umesto visibility false
     emit locationSaved(this->data);
     this->addToSavedLocations->setVisible(false);
-    Settings::instance().savedLocations.push_back(this->data);
+    Settings::instance().savedLocations().push_back(this->data);
+}
 
-    scrollTimer->start(addButtonScrollTime);
+void DetailedWeatherPage::highlightWidget()
+{
+    if(selectedWidget){
+        selectedWidget->resetHighlight();
+    }
+    for(auto *widget : m_widgets){
+        if(widget->data->location() == this->data){
+            widgetsScrollArea->ensureWidgetVisible(widget);
+            selectedWidget = widget;
+            if(selectedWidget){
+                selectedWidget->setHighlight();
+            }
+        }
+    }
 }
 
 void DetailedWeatherPage::scrollToMaximum()
 {
-    auto widgetsScrollBar = widgetsScrollArea->verticalScrollBar();
+    auto *widgetsScrollBar = widgetsScrollArea->verticalScrollBar();
     widgetsScrollBar->setValue(widgetsScrollBar->maximum());
-//    QMetaObject::invokeMethod(widgetsScrollBar, "setValue", Qt::QueuedConnection, Q_ARG(int, widgetsScrollBar->maximum()));
 }
 
-void DetailedWeatherPage::scrollToMinimum() {
-    auto widgetsScrollBar = widgetsScrollArea->verticalScrollBar();
-    widgetsScrollBar->setValue(0);
+void DetailedWeatherPage::afterHomePressed()
+{
+    widgetsScrollArea->verticalScrollBar()->setValue(0);
+    if(selectedWidget){
+        selectedWidget->resetHighlight();
+    }
+    selectedWidget = nullptr;
 }

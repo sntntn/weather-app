@@ -8,6 +8,7 @@
 #include <QPalette>
 #include <QFrame>
 #include <QMargins>
+#include <QLineEdit>
 
 #include "WeatherData.h"
 #include "Settings.h"
@@ -15,31 +16,31 @@
 WeatherWidget::WeatherWidget(const QSharedPointer<WeatherData> &data, QWidget *parent)
     : QWidget{parent}
     , data(data)
-    , hBox(new QHBoxLayout(this))
-    , leftVBox(new QVBoxLayout())
-    , rightVBox(new QVBoxLayout())
-    , temperatureLabel(new QLabel(QString::number(data->temperature) + Settings::instance().temperatureUnitString(), this))
-    , locationLabel(new QLabel(data->location.getRenamedPlace(), this))
-    , minmaxTemperatureLabel(new QLabel("H:" + QString::number(data->highestTemperature) + " L:" + QString::number(data->lowestTemperature), this))
-    , timeLabel(new QLabel(QDateTime::currentDateTime().toTimeZone(data->timezone).toString("HH:mm"), this))
+    , mainLayout(new QHBoxLayout(this))
+    , leftLayout(new QVBoxLayout())
+    , rightLayout(new QVBoxLayout())
+    , temperatureLabel(new QLabel(QString::number(data->temperature()) + "°", this))
+    , locationLabel(new QLabel(data->location().getRenamedPlace().toUpper(), this))
+    , maxTemperatureLabel(new QLabel("H:" + QString::number(data->highestTemperature()) + "°", this))
+    , minTemperatureLabel(new QLabel("L:" + QString::number(data->lowestTemperature()) + "°", this))
+    , timeLabel(new QLabel(QDateTime::currentDateTime().toTimeZone(data->timezone()).toString("HH:mm"), this))
     , iconLabel(new QLabel(this))
-    , weatherIcon(weatherCodeToIcon(data->weatherCode, data->isDay))
+    , weatherIcon(weatherCodeToIcon(data->weatherCode(), data->isDay()))
 {
-    hBox->setSpacing(hBoxSpacing);
-    hBox->setContentsMargins(hBoxMarginSize, hBoxMarginSize, hBoxMarginSize, hBoxMarginSize);
-    hBox->addLayout(leftVBox);
-    hBox->addLayout(rightVBox);
-
     setAttribute(Qt::WA_StyledBackground, true);
     setStyleSheet("WeatherWidget { border-radius: 20px; background-color: #598be0; }");
 
-    const QString fontName = "Arial";
-    locationLabel->setFont(QFont(fontName, locationFontSize, QFont::Bold));
+    mainLayout->setSpacing(hBoxSpacing);
+    mainLayout->setContentsMargins(hBoxMarginSize, hBoxMarginSize, hBoxMarginSize, hBoxMarginSize);
+
+    const QString fontName = "Roboto";
+    locationLabel->setFont(QFont(fontName, adjustLabelFontSize(fontName), QFont::Bold));
     timeLabel->setFont(QFont(fontName, timeFontSize, QFont::Normal));
     temperatureLabel->setFont(QFont(fontName, temperatureFontSize, QFont::Bold));
-    minmaxTemperatureLabel->setFont(QFont(fontName, minmaxTemperatureFontSize, QFont::Normal));
+    maxTemperatureLabel->setFont(QFont(fontName, minmaxTemperatureFontSize, QFont::Normal));
+    minTemperatureLabel->setFont(QFont(fontName, minmaxTemperatureFontSize, QFont::Normal));
     iconLabel->setPixmap(weatherIcon.scaled(iconWidth, iconHeight, Qt::KeepAspectRatio, Qt::SmoothTransformation));
-    iconLabel->setFixedSize(50,50);
+    iconLabel->setFixedWidth(iconWidth);
 
     QString labelStyle = "QLabel { color: white; }";
     locationLabel->setStyleSheet(labelStyle);
@@ -47,32 +48,60 @@ WeatherWidget::WeatherWidget(const QSharedPointer<WeatherData> &data, QWidget *p
     timeLabel->setStyleSheet(labelStyle);
     temperatureLabel->setStyleSheet(labelStyle);
 
-    //TODO
-    auto* hLayout = new QHBoxLayout();
-    //QSpacerItem* spacer = new QSpacerItem();
-    hLayout->addStretch();
-    hLayout->addWidget(temperatureLabel);
-    //hLayout->addWidget(iconLabel);
+    leftLayout->addWidget(locationLabel, 0, Qt::AlignCenter);
+    leftLayout->addWidget(iconLabel, 0, Qt::AlignCenter);
+    leftLayout->addWidget(timeLabel, 0, Qt::AlignCenter);
 
-    leftVBox->addWidget(locationLabel);
-    leftVBox->addWidget(timeLabel);
-    rightVBox->addWidget(iconLabel, 0, Qt::AlignTop | Qt::AlignRight);
-    //rightVBox->addWidget(temperatureLabel, 0, Qt::AlignTop | Qt::AlignRight);
-    rightVBox->addLayout(hLayout);
-    rightVBox->addWidget(minmaxTemperatureLabel, 0, Qt::AlignBottom | Qt::AlignRight);
+    rightLayout->addWidget(maxTemperatureLabel, 0, Qt::AlignCenter);
+    rightLayout->addWidget(temperatureLabel, 0, Qt::AlignCenter);
+    rightLayout->addWidget(minTemperatureLabel, 0, Qt::AlignCenter);
 
-    setLayout(hBox);
-    setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
+    auto* separator = new QFrame();
+    separator->setFrameShape(QFrame::VLine);
+    separator->setFrameShadow(QFrame::Sunken);
+    separator->setStyleSheet("color: black;");
 
+    mainLayout->addLayout(leftLayout);
+    mainLayout->addWidget(separator);
+    mainLayout->addLayout(rightLayout);
+    setLayout(mainLayout);
 }
 
-void WeatherWidget::mousePressEvent(QMouseEvent *event) {
+int WeatherWidget::adjustLabelFontSize(const QString &fontName)
+{
+    QFont font(fontName, locationFontSize);
+    QFontMetrics fm(font);
+
+    QRect textRect = fm.boundingRect(0, 0, locationLabel->width(), locationFontSize, Qt::AlignCenter | Qt::TextWordWrap, locationLabel->text());
+    int textHeight = textRect.height();
+
+    while (textHeight > locationFontSize && fm.height() > 0) {
+        font.setPointSize(font.pointSize() - 1);
+        fm = QFontMetrics(font);
+        textHeight = fm.height();
+    }
+    return font.pointSize();
+}
+
+void WeatherWidget::mousePressEvent(QMouseEvent *event)
+{
     QWidget::mousePressEvent(event);
-    emit clicked(data->location);
+    emit clicked(data->location());
 }
 
-QString WeatherWidget::weatherCodeToIcon(int weatherCode, bool isDay) {
-    QString iconBasePath = "../Resources/weatherIcons/";
+void WeatherWidget::setHighlight()
+{
+    setStyleSheet("WeatherWidget { border-radius: 20px; background-color: #0848F3; }");
+}
+
+void WeatherWidget::resetHighlight()
+{
+    setStyleSheet("WeatherWidget { border-radius: 20px; background-color: #598be0; }");
+}
+
+
+QString WeatherWidget::weatherCodeToIcon(const int weatherCode, const bool isDay) {
+    const QString iconBasePath = "../Resources/weatherIcons/";
 
     switch (weatherCode) {
     case 0:
@@ -127,7 +156,7 @@ QString WeatherWidget::weatherCodeToIcon(int weatherCode, bool isDay) {
     case 99:
         return isDay ? iconBasePath + "PartCloudSleetSnowThunderDay.png" : iconBasePath + "PartCloudSleetSnowThunderNight.png";
     default:
-        return iconBasePath + "Cloudy.png"; // Default case if no code matches
+        return iconBasePath + "Cloudy.png";
     }
 }
 

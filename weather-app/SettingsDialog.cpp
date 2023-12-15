@@ -20,27 +20,31 @@ SettingsDialog::SettingsDialog(QWidget *parent)
     , buttonLayout(new QHBoxLayout())
     , save(new QPushButton("Save"))
     , cancel(new QPushButton("Cancel"))
-    , widgetOrder(settings.savedLocations)
-    , trashCan("../Resources/redTrash.png")
+    , widgetOrder(settings.savedLocations())
+    , trashCan("../Resources/trashCan/redTrash.png") // todo
     , trashIcon(trashCan)
 {
-    listWidget->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-
-    locationSwitch->setChecked(settings.shareLocation);
+    locationSwitch->setChecked(settings.m_shareLocation);
     mainLayout->addWidget(locationSwitch);
 
-    for (auto it = Settings::temperatureUnitsNames.cbegin(); it != Settings::temperatureUnitsNames.cend(); ++it) {
-        temperatureUnit->addItem(it.value(), QVariant::fromValue(it.key()));
+    listWidget->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    listWidget->setDragDropMode(QAbstractItemView::InternalMove);
+
+    for (const auto& name : Settings::temperatureUnitsNames) {
+        auto unit = Settings::temperatureUnitsNames.key(name);
+        temperatureUnit->addItem(name, QVariant::fromValue(unit));
     }
     temperatureUnit->setCurrentText(settings.temperatureUnitName());
 
-    for (auto it = Settings::windSpeedUnitsNames.cbegin(); it != Settings::windSpeedUnitsNames.cend(); ++it) {
-        windSpeedUnit->addItem(it.value(), QVariant::fromValue(it.key()));
+    for (const auto& name : Settings::windSpeedUnitsNames) {
+        auto unit = Settings::windSpeedUnitsNames.key(name);
+        windSpeedUnit->addItem(name, QVariant::fromValue(unit));
     }
     windSpeedUnit->setCurrentText(settings.windSpeedUnitName());
 
-    for (auto it = Settings::precipitationUnitsNames.cbegin(); it != Settings::precipitationUnitsNames.cend(); ++it) {
-        precipitationUnit->addItem(it.value(), QVariant::fromValue(it.key()));
+    for (const auto& name : Settings::precipitationUnitsNames) {
+        auto unit = Settings::precipitationUnitsNames.key(name);
+        precipitationUnit->addItem(name, QVariant::fromValue(unit));
     }
     precipitationUnit->setCurrentText(settings.precipitationUnitName());
 
@@ -48,26 +52,26 @@ SettingsDialog::SettingsDialog(QWidget *parent)
     mainLayout->addWidget(windSpeedUnit);
     mainLayout->addWidget(precipitationUnit);
 
-    listWidget->setDragDropMode(QAbstractItemView::InternalMove);
+    for (const auto& location : settings.savedLocations()) {
 
-    for (const auto& location : settings.savedLocations) {
-
-        QListWidgetItem* listItem = new QListWidgetItem();
-        listItem->setData(Qt::UserRole, QVariant::fromValue(location));
+        auto *listItem = new QListWidgetItem();
+        listItem->setData(Qt::UserRole, location.toVariant());
         listWidget->addItem(listItem);
 
-        QWidget* customWidget = new QWidget();
-        QHBoxLayout* layout = new QHBoxLayout(customWidget);
-
-        QLabel* label = new QLabel(location.getRenamedPlace());
-        QPushButton* deleteButton = new QPushButton();
+        auto *customWidget = new QWidget();
+        auto *layout = new QHBoxLayout(customWidget);
+        auto *label = new QLabel(location.getRenamedPlace());
+        auto *deleteButton = new QPushButton();
         deleteButton->setIcon(trashIcon);
 
         layout->addWidget(label, 1);
         layout->addWidget(deleteButton);
 
         connect(deleteButton, &QPushButton::clicked, this, [this, listItem]() {
-            widgetOrder.removeOne(listItem->data(Qt::UserRole).value<GeoLocationData>());
+            auto locationMap = listItem->data(Qt::UserRole).toMap();
+            const auto geoLocation = GeoLocationData::fromVariantMap(locationMap);
+            widgetOrder.removeOne(geoLocation);
+
             delete listItem;
         });
 
@@ -75,49 +79,48 @@ SettingsDialog::SettingsDialog(QWidget *parent)
         listItem->setSizeHint(customWidget->minimumSizeHint());
     }
 
-    // todo bug fix
     connect(listWidget, &WidgetsManager::itemsRearranged, this, [this](){
         widgetOrder.clear();
 
         for (int i = 0; i < listWidget->count(); i++) {
-            GeoLocationData location = listWidget->item(i)->data(Qt::UserRole).value<GeoLocationData>();
-            widgetOrder.append(location);
+            auto locationMap = listWidget->item(i)->data(Qt::UserRole).toMap();
+            const auto geoLocation = GeoLocationData::fromVariantMap(locationMap);
+            widgetOrder.append(geoLocation);
         }
     });
 
     mainLayout->addWidget(listWidget);
-
-    connect(save, &QPushButton::clicked, this, &SettingsDialog::changeSettings);
-    //TODO fix grandparent
-    connect(this, &SettingsDialog::settingsChanged, qobject_cast<MainWindow*>(this->parent()->parent()->parent()), &MainWindow::refreshPages);
-    connect(cancel, &QPushButton::clicked, this, &SettingsDialog::resetOrder);
-    connect(cancel, &QPushButton::clicked, this, &SettingsDialog::close);
 
     buttonLayout->addWidget(save);
     buttonLayout->addStretch();
     buttonLayout->addWidget(cancel);
 
     mainLayout->addLayout(buttonLayout);
-
     setLayout(mainLayout);
+
+    connect(save, &QPushButton::clicked, this, &SettingsDialog::changeSettings);
+    //TODO fix grandparent
+    connect(this, &SettingsDialog::settingsChanged, qobject_cast<MainWindow*>(this->parent()->parent()->parent()), &MainWindow::refreshPages);
+    connect(cancel, &QPushButton::clicked, this, &SettingsDialog::resetOrder);
+    connect(cancel, &QPushButton::clicked, this, &SettingsDialog::close);
 }
 
 void SettingsDialog::changeSettings(){
-    TemperatureUnit selectedTempUnit = static_cast<TemperatureUnit>(temperatureUnit->itemData(temperatureUnit->currentIndex()).toInt());
-    WindSpeedUnit selectedWindUnit= static_cast<WindSpeedUnit>(windSpeedUnit->itemData(windSpeedUnit->currentIndex()).toInt());
-    PrecipitationUnit selectedPrecUnit = static_cast<PrecipitationUnit>(precipitationUnit->itemData(precipitationUnit->currentIndex()).toInt());
+    Settings::TemperatureUnit selectedTempUnit = static_cast<Settings::TemperatureUnit>(temperatureUnit->itemData(temperatureUnit->currentIndex()).toInt());
+    Settings::WindSpeedUnit selectedWindUnit= static_cast<Settings::WindSpeedUnit>(windSpeedUnit->itemData(windSpeedUnit->currentIndex()).toInt());
+    Settings::PrecipitationUnit selectedPrecUnit = static_cast<Settings::PrecipitationUnit>(precipitationUnit->itemData(precipitationUnit->currentIndex()).toInt());
 
     //TODO maybe impelement setters
-    settings.temperatureUnit = selectedTempUnit;
-    settings.windSpeedUnit = selectedWindUnit;
-    settings.precipitationUnit = selectedPrecUnit;
-    settings.shareLocation = locationSwitch->isChecked();
-    settings.savedLocations = widgetOrder;
+    settings.m_temperatureUnit = selectedTempUnit;
+    settings.m_windSpeedUnit = selectedWindUnit;
+    settings.m_precipitationUnit = selectedPrecUnit;
+    settings.m_shareLocation = locationSwitch->isChecked();
+    settings.m_savedLocations = widgetOrder;
 
     emit settingsChanged();
     this->close();
 }
 
 void SettingsDialog::resetOrder(){
-    widgetOrder = settings.savedLocations;
+    widgetOrder = settings.savedLocations();
 }

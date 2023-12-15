@@ -12,7 +12,7 @@
 #include "geocodingapi.h"
 #include "Settings.h"
 #include "GeoLocationData.h"
-
+#include "Serializer.h"
 
 #include <iostream>
 
@@ -35,8 +35,6 @@ MainWindow::MainWindow(QWidget *parent)
     getSavedLocationsData();
 
     connect(this, &MainWindow::detailedWeatherPageShown, detailedWeather, &DetailedWeatherPage::setData);
-    // todo obrisati?
-    connect(homePage, &HomePage::locationObjectSelected,this,&MainWindow::handleLocationObjectSelected);
     connect(this, &MainWindow::deletePageWidgets, homePage, &Page::deleteWidgets);
     connect(this, &MainWindow::deletePageWidgets, detailedWeather, &Page::deleteWidgets);
 }
@@ -48,7 +46,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::getSavedLocationsData()
 {
-    for(const auto& location : settings.savedLocations){
+    for(const auto& location : settings.savedLocations()){
         getLocationData(location);
     }
 }
@@ -86,13 +84,11 @@ void MainWindow::refreshPages()
     getSavedLocationsData();
 }
 
-// todo obrisati?
-void MainWindow::handleLocationObjectSelected(const GeoLocationData& locationData)
-{
-    qDebug()<<"Location:" << locationData.getPlace()
-            <<"Latitude:" << locationData.getCoordinates().latitude()
-            <<"Longitude:" << locationData.getCoordinates().longitude();
-    qDebug()<<"Default renamed place: " << locationData.getRenamedPlace();
-    //mutableLocationData.setRenamedPlace("Moj Rodni Grad");
-    qDebug()<<"after renaming - renamed place: " << locationData.getRenamedPlace();
+void MainWindow::closeEvent(QCloseEvent *event){
+    serializeData();
+    QMainWindow::closeEvent(event);
+}
+
+void MainWindow::serializeData(){
+    Serializer::save(settings, "../Serialization/settings.json");
 }

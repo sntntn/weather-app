@@ -37,16 +37,13 @@ public slots:
     void onSearchBarTextChanged();
 
 private:
-
-
-
-
-private:
     static const int leftMargin = 25;
     static const int rightMargin = 25;
     static const int topMargin = 0;
     static const int bottomMargin = 0;
     static const int timerInterval = 200;
+
+    const QString settingsIconPath = "../Resources/settingsIcon/settings.png";
 
     QVBoxLayout *mainLayout;
     QHBoxLayout *upperLayout;
@@ -68,7 +65,6 @@ private:
     QList<GeoLocationData> locations;
 
     void openSettingsDialog();
-    void resetInsertToLeft();
     void updateCompleter(const QList<GeoLocationData>& locations);
     void onCompletionActivated(const QString& text);
     void styleSheetsSetup();

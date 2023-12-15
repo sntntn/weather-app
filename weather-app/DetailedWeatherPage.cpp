@@ -18,7 +18,8 @@ DetailedWeatherPage::DetailedWeatherPage(QWidget *parent)
     , widgetsScrollAreaContents(new QWidget())
     , weatherScrollAreaContents(new QWidget())
     , widgetsLayout(new QGridLayout())
-    , weatherLayout(new QGridLayout())
+    , weatherLayout(new QVBoxLayout())
+    , buttonsLayout(new QHBoxLayout())
     , returnToHomePage(new QPushButton("< Home"))
     , horizontalSpacer(new QSpacerItem(spacerWidth, 0, QSizePolicy::Expanding, QSizePolicy::Minimum))
     , addToSavedLocations(new QPushButton("Add"))
@@ -35,18 +36,20 @@ DetailedWeatherPage::DetailedWeatherPage(QWidget *parent)
     widgetsScrollArea->setWidgetResizable(true);
     widgetsScrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
-    weatherLayout->addWidget(returnToHomePage, 0, 0);
-    weatherLayout->addItem(horizontalSpacer, 0, 1);
-    weatherLayout->addWidget(addToSavedLocations, 0, 2);
+    buttonsLayout->addWidget(returnToHomePage);
+    buttonsLayout->addItem(horizontalSpacer);
+    buttonsLayout->addWidget(addToSavedLocations);
+
     weatherLayout->setAlignment(Qt::AlignTop);
+    weatherLayout->addLayout(buttonsLayout);
 
     locationLabel->setStyleSheet("font-size: 24px;");
     temperatureLabel->setStyleSheet("font-size: 48px; font-weight: bold;");
     minmaxTemperature->setStyleSheet("font-size: 16px;");
 
-    weatherLayout->addWidget(locationLabel, 1, 1, Qt::AlignCenter);
-    weatherLayout->addWidget(temperatureLabel, 2, 1, Qt::AlignCenter);
-    weatherLayout->addWidget(minmaxTemperature, 3, 1, Qt::AlignCenter);
+    weatherLayout->addWidget(locationLabel, 0, Qt::AlignHCenter);
+    weatherLayout->addWidget(temperatureLabel, 0, Qt::AlignHCenter);
+    weatherLayout->addWidget(minmaxTemperature, 0, Qt::AlignHCenter);
 
     weatherScrollAreaContents->setLayout(weatherLayout);
     weatherScrollArea->setWidget(weatherScrollAreaContents);

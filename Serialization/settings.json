@@ -17,6 +17,18 @@
             "longitude": -89.6884637,
             "place": "Wisconsin, United States of America",
             "renamedPlace": "Wisconsin"
+        },
+        {
+            "latitude": 30.8393483,
+            "longitude": 106.9688186,
+            "place": "Qu, Qu County, China",
+            "renamedPlace": "Qu"
+        },
+        {
+            "latitude": 46.8137431,
+            "longitude": -71.2084061,
+            "place": "Quebec, QC, Canada",
+            "renamedPlace": "Quebec"
         }
     ],
     "precipitationUnit": 0,

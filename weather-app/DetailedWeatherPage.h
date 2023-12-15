@@ -55,7 +55,8 @@ private:
     QWidget *widgetsScrollAreaContents;
     QWidget *weatherScrollAreaContents;
     QGridLayout *widgetsLayout;
-    QGridLayout *weatherLayout;
+    QVBoxLayout *weatherLayout;
+    QHBoxLayout *buttonsLayout;
     QPushButton *returnToHomePage;
     QSpacerItem *horizontalSpacer;
     QPushButton *addToSavedLocations;

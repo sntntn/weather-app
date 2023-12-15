@@ -1,4 +1,5 @@
 #include "DetailedWeatherData.h"
+#include <iostream>
 
 DetailedWeatherData::DetailedWeatherData(const GeoLocationData &location,
                                          const int temperature,
@@ -34,5 +35,5 @@ DetailedWeatherData::DetailedWeatherData(const GeoLocationData &location,
     , humidity(humidity)
     , visibility(visibility)
     , pressure(pressure)
-{ }
+{}
 

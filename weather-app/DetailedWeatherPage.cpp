@@ -44,6 +44,7 @@ DetailedWeatherPage::DetailedWeatherPage(QWidget *parent)
     mainLayout->addWidget(weatherScrollArea);
 
     connect(returnToHomePage, &QPushButton::clicked, this->mainWindow, &MainWindow::showHomePage);
+    connect(returnToHomePage, &QPushButton::clicked, this, &DetailedWeatherPage::homeButtonClicked);
     connect(addToSavedLocations, &QPushButton::clicked, this, &DetailedWeatherPage::addButtonClicked);
     connect(this, &DetailedWeatherPage::locationSaved, this->mainWindow, &MainWindow::saveNewLocation);
 }
@@ -104,18 +105,27 @@ void DetailedWeatherPage::addButtonClicked()
     Settings::instance().savedLocations().push_back(this->data);
 }
 
+void DetailedWeatherPage::homeButtonClicked()
+{
+    if(selectedWidget){
+        selectedWidget->resetHighlight();
+    }
+
+    selectedWidget = nullptr;
+}
+
 void DetailedWeatherPage::highlightWidget()
 {
     if(selectedWidget){
         selectedWidget->resetHighlight();
     }
 
-    auto it = std::find_if(m_widgets.begin(), m_widgets.end(), [this](const auto* widget) {
+    auto newSelectedWidget = std::find_if(m_widgets.begin(), m_widgets.end(), [this](const auto* widget) {
         return widget->data->location() == this->data;
     });
 
-    if (it != m_widgets.end()) {
-        selectedWidget = *it;
+    if (newSelectedWidget != m_widgets.end()) {
+        selectedWidget = *newSelectedWidget;
         widgetsScrollArea->ensureWidgetVisible(selectedWidget);
         selectedWidget->setHighlight();
     }

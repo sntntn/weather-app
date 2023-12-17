@@ -34,6 +34,7 @@ public slots:
 
 private slots:
     void addButtonClicked();
+    void homeButtonClicked();
 
 signals:
     void locationSaved(const GeoLocationData &data);

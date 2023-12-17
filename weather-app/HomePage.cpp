@@ -7,7 +7,6 @@
 #include "MainWindow.h"
 #include "WeatherData.h"
 #include "WeatherWidget.h"
-#include "UserLocationWidget.h"
 #include "SettingsDialog.h"
 #include "Settings.h"
 
@@ -67,8 +66,12 @@ void HomePage::addNewWidget(const QSharedPointer<Data> &data)
     connect(widget, &WeatherWidget::clicked, this->mainWindow, &MainWindow::showDetailedWeatherPage);
 
     int position = static_cast<int>(Settings::instance().savedLocations().indexOf(widget->data->location()));
+
+    if(Settings::instance().shareLocation())
+        position++;
+
     position == -1 ? widgetsLayout->addWidget(widget, 0, 0, 1, 1) // User location widget
-                   : widgetsLayout->addWidget(widget, (position + 1) / 2, (position + 1) % 2, 1, 1);
+                   : widgetsLayout->addWidget(widget, position / 2, position % 2, 1, 1);
 
     widget->setMaximumHeight(160);
     m_widgets.emplaceBack(widget);

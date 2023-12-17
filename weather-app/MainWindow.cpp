@@ -35,14 +35,13 @@ MainWindow::MainWindow(QWidget *parent)
     setCentralWidget(stackedWidget);
     stackedWidget->setCurrentWidget(homePage);
 
-//    requestUserLocationData();
-    userLocation->getLocation();
+    requestUserLocationData();
     getSavedLocationsData();
 
     connect(this, &MainWindow::detailedWeatherPageShown, detailedWeather, &DetailedWeatherPage::setData);
     connect(this, &MainWindow::deletePageWidgets, homePage, &Page::deleteWidgets);
     connect(this, &MainWindow::deletePageWidgets, detailedWeather, &Page::deleteWidgets);
-    connect(userLocation, &UserLocation::userLocationFetched, this, &MainWindow::getUserLocationData);
+    connect(userLocation, &UserLocation::userLocationFetched, this, &MainWindow::getLocationData);
 }
 
 MainWindow::~MainWindow()
@@ -50,19 +49,10 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-//void MainWindow::requestUserLocationData()
-//{
-//    if(settings.shareLocation())
-//        userLocation->getLocation();
-//}
-
-void MainWindow::getUserLocationData(const GeoLocationData &data)
+void MainWindow::requestUserLocationData()
 {
-    auto *api = new WeatherAPI(data, this);
-    connect(api, &ApiHandler::finished, api, &WeatherAPI::deleteLater);
-    connect(api, &ApiHandler::dataFetched, homePage, &HomePage::addNewWidget);
-    connect(api, &ApiHandler::dataFetched, detailedWeather, &DetailedWeatherPage::addNewWidget);
-    api->start();
+    if(settings.shareLocation())
+        userLocation->getLocation();
 }
 
 void MainWindow::getSavedLocationsData()
@@ -101,8 +91,7 @@ void MainWindow::showDetailedWeatherPage(const GeoLocationData &data) // todo sh
 void MainWindow::refreshPages()
 {
     emit deletePageWidgets();
-//    requestUserLocationData();
-    userLocation->getLocation();
+    requestUserLocationData();
     getSavedLocationsData();
 }
 

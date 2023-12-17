@@ -46,7 +46,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         SettingsDialog.h SettingsDialog.cpp
         customcompleter.h customcompleter.cpp
         UserLocation.h UserLocation.cpp
-        UserLocationWidget.h UserLocationWidget.cpp
+
         WidgetsManager.h
         Serializable.h
         Serializer.h Serializer.cpp

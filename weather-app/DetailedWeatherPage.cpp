@@ -7,6 +7,9 @@
 #include "Settings.h"
 
 #include <iostream>
+#include <QStackedWidget>
+#include <QTimer>
+//#include <QCoreApplication>
 
 DetailedWeatherPage::DetailedWeatherPage(QWidget *parent)
     : Page{parent}
@@ -44,13 +47,13 @@ DetailedWeatherPage::DetailedWeatherPage(QWidget *parent)
     connect(returnToHomePage, &QPushButton::clicked, this->mainWindow, &MainWindow::showHomePage);
     connect(addToSavedLocations, &QPushButton::clicked, this, &DetailedWeatherPage::addButtonClicked);
     connect(this, &DetailedWeatherPage::locationSaved, this->mainWindow, &MainWindow::saveNewLocation);
-
-    connect(returnToHomePage, &QPushButton::clicked, this, &DetailedWeatherPage::afterHomePressed);
 }
 
 void DetailedWeatherPage::addNewWidget(const QSharedPointer<Data> &data)
 {
-    auto *widget = new WeatherWidget(qSharedPointerCast<WeatherData>(data), widgetsScrollAreaContents);
+    QSharedPointer<WeatherData> weatherData = qSharedPointerCast<WeatherData>(data);
+
+    auto *widget = new WeatherWidget(weatherData, widgetsScrollAreaContents);
     connect(widget, &WeatherWidget::clicked, this, &DetailedWeatherPage::setData);
 
     widget->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Preferred);
@@ -60,18 +63,22 @@ void DetailedWeatherPage::addNewWidget(const QSharedPointer<Data> &data)
     widgetsLayout->addWidget(widget, position, 0, 1, 1);
 
     m_widgets.emplaceBack(widget);
-    scrollToMaximum();
+    QStackedWidget* stackedWidget = qobject_cast<QStackedWidget*>(this->parent());
+    if (stackedWidget->currentWidget() == this) {
+        QTimer::singleShot(100, this, &DetailedWeatherPage::highlightWidget);
+    }
 }
 
 void DetailedWeatherPage::setData(const GeoLocationData &data) // todo sharedptr
 {
+    widgetsScrollArea->verticalScrollBar()->setValue(0);
     this->data = data;
     // test
     std::cout << data.getRenamedPlace().toStdString() << " "
               << data.getCoordinates().toString().toStdString() << std::endl;
 
     Settings::instance().savedLocations().indexOf(data) == -1 ? this->addToSavedLocations->setVisible(true)
-                                                            : this->addToSavedLocations->setVisible(false);
+                                                              : this->addToSavedLocations->setVisible(false);
 
     highlightWidget();
 }
@@ -94,28 +101,14 @@ void DetailedWeatherPage::highlightWidget()
     if(selectedWidget){
         selectedWidget->resetHighlight();
     }
-    for(auto *widget : m_widgets){
-        if(widget->data->location() == this->data){
-            widgetsScrollArea->ensureWidgetVisible(widget);
-            selectedWidget = widget;
-            if(selectedWidget){
-                selectedWidget->setHighlight();
-            }
-        }
-    }
-}
 
-void DetailedWeatherPage::scrollToMaximum()
-{
-    auto *widgetsScrollBar = widgetsScrollArea->verticalScrollBar();
-    widgetsScrollBar->setValue(widgetsScrollBar->maximum());
-}
+    auto it = std::find_if(m_widgets.begin(), m_widgets.end(), [this](const auto* widget) {
+        return widget->data->location() == this->data;
+    });
 
-void DetailedWeatherPage::afterHomePressed()
-{
-    widgetsScrollArea->verticalScrollBar()->setValue(0);
-    if(selectedWidget){
-        selectedWidget->resetHighlight();
+    if (it != m_widgets.end()) {
+        selectedWidget = *it;
+        widgetsScrollArea->ensureWidgetVisible(selectedWidget);
+        selectedWidget->setHighlight();
     }
-    selectedWidget = nullptr;
 }

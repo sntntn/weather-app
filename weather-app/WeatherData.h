@@ -18,7 +18,7 @@ public:
                 const bool isDay,
                 QTimeZone timezone);
 
-    GeoLocationData location() const
+    inline GeoLocationData location() const
     {
         return m_location;
     }

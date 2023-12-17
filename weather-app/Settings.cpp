@@ -6,65 +6,111 @@
 #include "GeoLocationData.h"
 #include "Serializer.h"
 
-const QMap<Settings::TemperatureUnit, QString> Settings::temperatureUnitToApiParameter =
-{
-    {Settings::TemperatureUnit::CELSIUS, "celsius"},
-    {Settings::TemperatureUnit::FAHRENHEIT, "fahrenheit"}
-};
+QString Settings::temperatureUnitToApiParameter(TemperatureUnit tempUnit) const{
+    switch (tempUnit) {
+    case Settings::TemperatureUnit::CELSIUS:
+        return "celsius";
+    case Settings::TemperatureUnit::FAHRENHEIT:
+        return "fahrenheit";
+    default:
+        return "";
+    }
+}
+QString Settings::windSpeedUnitToApiParameter(WindSpeedUnit windSpeedUnit) const{
+    switch (windSpeedUnit) {
+    case Settings::WindSpeedUnit::KMH:
+        return "kmh";
+    case Settings::WindSpeedUnit::MPH:
+        return "mph";
+    case Settings::WindSpeedUnit::MS:
+        return "ms";
+    case Settings::WindSpeedUnit::KNOTS:
+        return "kn";
+    default:
+        return "";
+    }
+}
+QString Settings::precipitationUnitToApiParameter(PrecipitationUnit precUnit) const{
+    switch (precUnit) {
+    case Settings::PrecipitationUnit::MILLIMETRES:
+        return "mm";
+    case Settings::PrecipitationUnit::INCHES:
+        return "inch";
+    default:
+        return "";
+    }
+}
 
-const QMap<Settings::WindSpeedUnit, QString> Settings::windSpeedUnitToApiParameter =
-{
-    {Settings::WindSpeedUnit::KMH, "kmh"},
-    {Settings::WindSpeedUnit::MPH, "mph"},
-    {Settings::WindSpeedUnit::MS, "ms"},
-    {Settings::WindSpeedUnit::KNOTS, "kn"}
-};
+QString Settings::temperatureUnitToString(TemperatureUnit tempUnit) const{
+    switch (tempUnit) {
+    case Settings::TemperatureUnit::CELSIUS:
+        return "°C";
+    case Settings::TemperatureUnit::FAHRENHEIT:
+        return "°F";
+    default:
+        return "";
+    }
+}
 
-const QMap<Settings::PrecipitationUnit, QString> Settings::precipitationUnitToApiParameter =
-{
-    {Settings::PrecipitationUnit::MILLIMETRES, "mm"},
-    {Settings::PrecipitationUnit::INCHES, "inch"}
-};
+QString Settings::windSpeedUnitToString(WindSpeedUnit windSpeedUnit) const{
+    switch (windSpeedUnit) {
+    case Settings::WindSpeedUnit::KMH:
+        return "km/h";
+    case Settings::WindSpeedUnit::MPH:
+        return "mph";
+    case Settings::WindSpeedUnit::MS:
+        return "m/s";
+    case Settings::WindSpeedUnit::KNOTS:
+        return "kn";
+    default:
+        return "";
+    }
+}
+QString Settings::precipitationUnitToString(PrecipitationUnit precUnit) const{
+    switch (precUnit) {
+    case Settings::PrecipitationUnit::MILLIMETRES:
+        return "mm";
+    case Settings::PrecipitationUnit::INCHES:
+        return "in";
+    default:
+        return "";
+    }
+}
 
-const QMap<Settings::TemperatureUnit, QString> Settings::temperatureUnitToString =
-{
-    {Settings::TemperatureUnit::CELSIUS, "°C"},
-    {Settings::TemperatureUnit::FAHRENHEIT, "°F"}
-};
-
-const QMap<Settings::WindSpeedUnit, QString> Settings::windSpeedUnitToString =
-{
-    {Settings::WindSpeedUnit::KMH, "km/h"},
-    {Settings::WindSpeedUnit::MPH, "mph"},
-    {Settings::WindSpeedUnit::MS, "m/s"},
-    {Settings::WindSpeedUnit::KNOTS, "kn"}
-};
-
-const QMap<Settings::PrecipitationUnit, QString> Settings::precipitationUnitToString =
-{
-    {Settings::PrecipitationUnit::MILLIMETRES, "mm"},
-    {Settings::PrecipitationUnit::INCHES, "in"}
-};
-
-const QMap<Settings::TemperatureUnit, QString> Settings::temperatureUnitsNames =
-{
-    {Settings::TemperatureUnit::CELSIUS, "Celsius"},
-    {Settings::TemperatureUnit::FAHRENHEIT, "Fahrenheit"}
-};
-
-const QMap<Settings::WindSpeedUnit, QString> Settings::windSpeedUnitsNames =
-{
-    {Settings::WindSpeedUnit::KMH, "Kilometres per hour"},
-    {Settings::WindSpeedUnit::MPH, "Miles per hour"},
-    {Settings::WindSpeedUnit::MS, "Metres per second"},
-    {Settings::WindSpeedUnit::KNOTS, "Knots"}
-};
-
-const QMap<Settings::PrecipitationUnit, QString> Settings::precipitationUnitsNames =
-{
-    {Settings::PrecipitationUnit::MILLIMETRES, "Millimetres"},
-    {Settings::PrecipitationUnit::INCHES, "Inches"}
-};
+QString Settings::temperatureUnitsNames(TemperatureUnit tempUnit) const{
+    switch (tempUnit) {
+    case Settings::TemperatureUnit::CELSIUS:
+        return "Celsius";
+    case Settings::TemperatureUnit::FAHRENHEIT:
+        return "Fahrenheit";
+    default:
+        return "";
+    }
+}
+QString Settings::windSpeedUnitsNames(WindSpeedUnit windSpeedUnit) const{
+    switch (windSpeedUnit) {
+    case Settings::WindSpeedUnit::KMH:
+        return "Kilometres per hour";
+    case Settings::WindSpeedUnit::MPH:
+        return "Miles per hour";
+    case Settings::WindSpeedUnit::MS:
+        return "Metres per second";
+    case Settings::WindSpeedUnit::KNOTS:
+        return "Knots";
+    default:
+        return "";
+    }
+}
+QString Settings::precipitationUnitsNames(PrecipitationUnit precUnit) const{
+    switch (precUnit) {
+    case Settings::PrecipitationUnit::MILLIMETRES:
+        return "Millimetres";
+    case Settings::PrecipitationUnit::INCHES:
+        return "Inches";
+    default:
+        return "";
+    }
+}
 
 Settings::Settings()
 {
@@ -113,45 +159,45 @@ void Settings::fromVariant(const QVariant &variant)
 
 QString Settings::temperatureUnitApiParameter() const
 {
-    return temperatureUnitToApiParameter[m_temperatureUnit];
+    return temperatureUnitToApiParameter(m_temperatureUnit);
 }
 
 QString Settings::windSpeedUnitApiParameter() const
 {
-    return windSpeedUnitToApiParameter[m_windSpeedUnit];
+    return windSpeedUnitToApiParameter(m_windSpeedUnit);
 }
 
 QString Settings::precipitationUnitApiParameter() const
 {
-    return precipitationUnitToApiParameter[m_precipitationUnit];
+    return precipitationUnitToApiParameter(m_precipitationUnit);
 }
 
 QString Settings::temperatureUnitString() const
 {
-    return temperatureUnitToString[m_temperatureUnit];
+    return temperatureUnitToString(m_temperatureUnit);
 }
 
 QString Settings::windSpeedUnitString() const
 {
-    return windSpeedUnitToString[m_windSpeedUnit];
+    return windSpeedUnitToString(m_windSpeedUnit);
 }
 
 QString Settings::precipitationUnitString() const
 {
-    return precipitationUnitToString[m_precipitationUnit];
+    return precipitationUnitToString(m_precipitationUnit);
 }
 
 QString Settings::temperatureUnitName() const
 {
-    return temperatureUnitsNames[m_temperatureUnit];
+    return temperatureUnitsNames(m_temperatureUnit);
 }
 
 QString Settings::windSpeedUnitName() const
 {
-    return windSpeedUnitsNames[m_windSpeedUnit];
+    return windSpeedUnitsNames(m_windSpeedUnit);
 }
 
 QString Settings::precipitationUnitName() const
 {
-    return precipitationUnitsNames[m_precipitationUnit];
+    return precipitationUnitsNames(m_precipitationUnit);
 }

@@ -17,12 +17,6 @@ class Settings : public QObject, public Serializable
 public:
     static Settings& instance();
 
-    // TODO setters and getters or public variables
-    // void setLocationSharing(const bool);
-    // void setTemperatureUnit(const TemperatureUnit);
-    // void setWindSpeedUnit(const WindSpeedUnit);
-    // void setPrecipitationUnit(const PrecipitationUnit);
-
     QString temperatureUnitApiParameter() const;
     QString windSpeedUnitApiParameter() const;
     QString precipitationUnitApiParameter() const;
@@ -76,17 +70,17 @@ private:
     Settings(const Settings&) = delete;
     Settings& operator=(const Settings&) = delete;
 
-    static const QMap<TemperatureUnit, QString> temperatureUnitToString;
-    static const QMap<WindSpeedUnit, QString> windSpeedUnitToString;
-    static const QMap<PrecipitationUnit, QString> precipitationUnitToString;
+    QString temperatureUnitToApiParameter(TemperatureUnit tempUnit) const;
+    QString windSpeedUnitToApiParameter(WindSpeedUnit windSpeedUnit) const;
+    QString precipitationUnitToApiParameter(PrecipitationUnit precUnit) const;
 
-    static const QMap<TemperatureUnit, QString> temperatureUnitToApiParameter;
-    static const QMap<WindSpeedUnit, QString> windSpeedUnitToApiParameter;
-    static const QMap<PrecipitationUnit, QString> precipitationUnitToApiParameter;
+    QString temperatureUnitToString(TemperatureUnit tempUnit) const;
+    QString windSpeedUnitToString(WindSpeedUnit windSpeedUnit) const;
+    QString precipitationUnitToString(PrecipitationUnit precUnit) const;
 
-    static const QMap<TemperatureUnit, QString> temperatureUnitsNames;
-    static const QMap<WindSpeedUnit, QString> windSpeedUnitsNames;
-    static const QMap<PrecipitationUnit, QString> precipitationUnitsNames;
+    QString temperatureUnitsNames(TemperatureUnit tempUnit) const;
+    QString windSpeedUnitsNames(WindSpeedUnit precUnit) const;
+    QString precipitationUnitsNames(PrecipitationUnit precUnit) const;
 
     Settings::TemperatureUnit m_temperatureUnit = TemperatureUnit::CELSIUS;
     Settings::WindSpeedUnit m_windSpeedUnit = WindSpeedUnit::KMH;

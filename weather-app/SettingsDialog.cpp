@@ -2,6 +2,8 @@
 
 #include <QListView>
 #include <QListWidget>
+#include <QMetaObject>
+#include <QMetaEnum>
 
 #include "MainWindow.h"
 #include "HomePage.h"
@@ -21,36 +23,48 @@ SettingsDialog::SettingsDialog(QWidget *parent)
     , save(new QPushButton("Save"))
     , cancel(new QPushButton("Cancel"))
     , widgetOrder(settings.savedLocations())
-    , trashCan("../Resources/trashCan/redTrash.png") // todo
+    , trashCan("../Resources/trashCan/redTrash.png") //todo
     , trashIcon(trashCan)
 {
     locationSwitch->setChecked(settings.m_shareLocation);
     mainLayout->addWidget(locationSwitch);
 
-    listWidget->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    listWidget->setDragDropMode(QAbstractItemView::InternalMove);
+    const QMetaObject &meta = Settings::staticMetaObject;
 
-    for (const auto& name : Settings::temperatureUnitsNames) {
-        auto unit = Settings::temperatureUnitsNames.key(name);
-        temperatureUnit->addItem(name, QVariant::fromValue(unit));
+    QMetaEnum temperatureMetaEnum = meta.enumerator(meta.indexOfEnumerator("TemperatureUnit"));
+    for (int i = 0; i < temperatureMetaEnum.keyCount(); ++i) {
+        int enumValue = temperatureMetaEnum.keyToValue(temperatureMetaEnum.key(i));
+        Settings::TemperatureUnit tempUnit = static_cast<Settings::TemperatureUnit>(enumValue);
+
+        temperatureUnit->addItem(settings.temperatureUnitsNames(tempUnit), QVariant::fromValue(tempUnit));
     }
     temperatureUnit->setCurrentText(settings.temperatureUnitName());
 
-    for (const auto& name : Settings::windSpeedUnitsNames) {
-        auto unit = Settings::windSpeedUnitsNames.key(name);
-        windSpeedUnit->addItem(name, QVariant::fromValue(unit));
+    QMetaEnum windSpeedMetaEnum = meta.enumerator(meta.indexOfEnumerator("WindSpeedUnit"));
+    for (int i = 0; i < windSpeedMetaEnum.keyCount(); ++i) {
+        int enumValue = windSpeedMetaEnum.keyToValue(windSpeedMetaEnum.key(i));
+        Settings::WindSpeedUnit windUnit = static_cast<Settings::WindSpeedUnit>(enumValue);
+
+        windSpeedUnit->addItem(settings.windSpeedUnitsNames(windUnit), QVariant::fromValue(windUnit));
     }
     windSpeedUnit->setCurrentText(settings.windSpeedUnitName());
 
-    for (const auto& name : Settings::precipitationUnitsNames) {
-        auto unit = Settings::precipitationUnitsNames.key(name);
-        precipitationUnit->addItem(name, QVariant::fromValue(unit));
+    QMetaEnum precipitationMetaEnum = meta.enumerator(meta.indexOfEnumerator("PrecipitationUnit"));
+    for (int i = 0; i < precipitationMetaEnum.keyCount(); ++i) {
+        int enumValue = precipitationMetaEnum.keyToValue(precipitationMetaEnum.key(i));
+        Settings::PrecipitationUnit precipUnit = static_cast<Settings::PrecipitationUnit>(enumValue);
+
+        precipitationUnit->addItem(settings.precipitationUnitsNames(precipUnit),
+                                   QVariant::fromValue(precipUnit));
     }
     precipitationUnit->setCurrentText(settings.precipitationUnitName());
 
     mainLayout->addWidget(temperatureUnit);
     mainLayout->addWidget(windSpeedUnit);
     mainLayout->addWidget(precipitationUnit);
+
+    listWidget->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    listWidget->setDragDropMode(QAbstractItemView::InternalMove);
 
     for (const auto& location : settings.savedLocations()) {
 
@@ -110,7 +124,6 @@ void SettingsDialog::changeSettings(){
     Settings::WindSpeedUnit selectedWindUnit= static_cast<Settings::WindSpeedUnit>(windSpeedUnit->itemData(windSpeedUnit->currentIndex()).toInt());
     Settings::PrecipitationUnit selectedPrecUnit = static_cast<Settings::PrecipitationUnit>(precipitationUnit->itemData(precipitationUnit->currentIndex()).toInt());
 
-    //TODO maybe impelement setters
     settings.m_temperatureUnit = selectedTempUnit;
     settings.m_windSpeedUnit = selectedWindUnit;
     settings.m_precipitationUnit = selectedPrecUnit;

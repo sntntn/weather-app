@@ -31,7 +31,6 @@ public:
 public slots:
     void addNewWidget(const QSharedPointer<Data> &data) override;
     void setData(const GeoLocationData &data); // todo shared ptr
-    void afterHomePressed();
 
 private slots:
     void addButtonClicked();
@@ -56,9 +55,6 @@ private:
     WeatherWidget *selectedWidget;
 
     void highlightWidget();
-    void scrollToMaximum(); // todo kada se stvarno doda widget u ScrollAreaContenst
-
-
 };
 
 #endif // DETAILEDWEATHERPAGE_H

@@ -62,6 +62,10 @@ QSharedPointer<DetailedWeatherData> Parser::parseDetailedWeatherData(const QStri
     int humidity = static_cast<int>(qRound(current.value("relative_humidity_2m").toDouble()));
     int visibility = static_cast<int>(qRound(current.value("visibility").toDouble()));
     int pressure =  static_cast<int>(qRound(current.value("pressure_msl").toDouble()));
+    int uvIndex = static_cast<int>(qRound(current.value("uv_index").toDouble()));
+    int precipitationProbability = static_cast<int>(qRound(current.value("precipitation_probability").toDouble()));
+    int windDirection = static_cast<int>(qRound(current.value("wind_direction_10m").toDouble()));
+    int windGusts = static_cast<int>(qRound(current.value("wind_gusts_10m").toDouble()));
 
     qDebug() << "temperature:" << temperature;
     qDebug() << "weatherCode:" << weatherCode;
@@ -72,58 +76,36 @@ QSharedPointer<DetailedWeatherData> Parser::parseDetailedWeatherData(const QStri
     qDebug() << "humidity:" << humidity;
     qDebug() << "visibility:" << visibility;
     qDebug() << "pressure:" << pressure;
+    qDebug() << "uv:" << uvIndex;
+    qDebug() << "precipitation probability:" << precipitationProbability;
+    qDebug() << "wind direction:" << windDirection;
+    qDebug() << "wind gusts:" << windGusts;
 
-    QJsonArray poSatima = hourly.value("temperature_2m").toArray();
-    int h1 = static_cast<int>(qRound(poSatima[0].toDouble()));
-    int h2 = static_cast<int>(qRound(poSatima[1].toDouble()));
-    int h3 = static_cast<int>(qRound(poSatima[2].toDouble()));
-    int h4 = static_cast<int>(qRound(poSatima[3].toDouble()));
-    int h5 = static_cast<int>(qRound(poSatima[4].toDouble()));
-    int h6 = static_cast<int>(qRound(poSatima[5].toDouble()));
-    int h7 = static_cast<int>(qRound(poSatima[6].toDouble()));
-    int h8 = static_cast<int>(qRound(poSatima[7].toDouble()));
-    int h9 = static_cast<int>(qRound(poSatima[8].toDouble()));
-    int h10 = static_cast<int>(qRound(poSatima[9].toDouble()));
-    int h11 = static_cast<int>(qRound(poSatima[10].toDouble()));
-    int h12 = static_cast<int>(qRound(poSatima[11].toDouble()));
-    int h13 = static_cast<int>(qRound(poSatima[12].toDouble()));
-    int h14 = static_cast<int>(qRound(poSatima[13].toDouble()));
-    int h15 = static_cast<int>(qRound(poSatima[14].toDouble()));
-    int h16 = static_cast<int>(qRound(poSatima[15].toDouble()));
-    int h17 = static_cast<int>(qRound(poSatima[16].toDouble()));
-    int h18 = static_cast<int>(qRound(poSatima[17].toDouble()));
-    int h19 = static_cast<int>(qRound(poSatima[18].toDouble()));
-    int h20 = static_cast<int>(qRound(poSatima[19].toDouble()));
-    int h21 = static_cast<int>(qRound(poSatima[20].toDouble()));
-    int h22 = static_cast<int>(qRound(poSatima[21].toDouble()));
-    int h23 = static_cast<int>(qRound(poSatima[22].toDouble()));
-    int h24 = static_cast<int>(qRound(poSatima[23].toDouble()));
+    QJsonArray hourlyTempJ = hourly.value("temperature_2m").toArray();
+    QJsonArray hourlyCodeJ = hourly.value("weather_code").toArray();
+    QJsonArray hourlyIsDayJ = hourly.value("is_day").toArray();
 
-    qDebug() << "poSatima:" << poSatima;
-    qDebug() << "h1:" << h1;
-    qDebug() << "h2:" << h2;
-    qDebug() << "h3:" << h3;
-    qDebug() << "h4:" << h4;
-    qDebug() << "h5:" << h5;
-    qDebug() << "h6:" << h6;
-    qDebug() << "h7:" << h7;
-    qDebug() << "h8:" << h8;
-    qDebug() << "h9:" << h9;
-    qDebug() << "h10:" << h10;
-    qDebug() << "h11:" << h11;
-    qDebug() << "h12:" << h12;
-    qDebug() << "h13:" << h13;
-    qDebug() << "h14:" << h14;
-    qDebug() << "h15:" << h15;
-    qDebug() << "h16:" << h16;
-    qDebug() << "h17:" << h17;
-    qDebug() << "h18:" << h18;
-    qDebug() << "h19:" << h19;
-    qDebug() << "h20:" << h20;
-    qDebug() << "h21:" << h21;
-    qDebug() << "h22:" << h22;
-    qDebug() << "h23:" << h23;
-    qDebug() << "h24:" << h24;
+
+    //int weatherCode = current.value("weather_code").toInt();
+    //bool isDay = static_cast<bool>(current.value("is_day").toInt());
+
+    std::vector<int> ht;
+    std::vector<int> hc;
+    std::vector<bool> hd;
+    for (int i = 0; i < 24; i++){
+        int temperature = static_cast<int>(qRound(hourlyTempJ[i].toDouble()));
+        ht.push_back(temperature);
+        int code = hourlyCodeJ[i].toInt();
+        hc.push_back(code);
+        int day = static_cast<bool>(hourlyIsDayJ[i].toInt());
+        hd.push_back(day);
+    }
+
+    qDebug() << ht;
+    qDebug() << hc;
+    qDebug() << hd;
+
+    //query.addQueryItem("daily", "weather_code,sunrise,sunset");
 
     QJsonArray dailyMaxTemperature = daily.value("temperature_2m_max").toArray();
     int maxTemperature = static_cast<int>(qRound(dailyMaxTemperature[0].toDouble()));
@@ -135,20 +117,33 @@ QSharedPointer<DetailedWeatherData> Parser::parseDetailedWeatherData(const QStri
 
     qDebug() << "daily min:" << minTemperature;
 
-    QJsonArray dailyUV = daily.value("uv_index_max").toArray();
-    int uvIndex = static_cast<int>(qRound(dailyUV[0].toDouble()));
+    QJsonArray dailyCodeJ = daily.value("weather_code").toArray();
+    int dailyCode = static_cast<int>(qRound(dailyCodeJ[0].toDouble()));
 
-    qDebug() << "uv:" << uvIndex;
+    qDebug() << "daily code:" << dailyCode;
 
-    QJsonArray weeklyMax = daily.value("temperature_2m_max").toArray();
-    int weeklyHighestTemperature = static_cast<int>(qRound(weeklyMax[0].toDouble()));
+    QJsonArray dailySunriseJ = daily.value("sunrise").toArray();
+    QString dailySunrise = static_cast<QString>(dailySunriseJ[0].toString());
 
-    qDebug() << "weekly max:" << weeklyHighestTemperature;
+    int indexOfT = dailySunrise.indexOf('T');
 
-    QJsonArray weeklyMin = daily.value("temperature_2m_min").toArray();
-    int weeklyLowestTemperature = static_cast<int>(qRound(weeklyMin[0].toDouble()));
+    if (indexOfT != -1 && indexOfT < dailySunrise.length() - 1)
+        dailySunrise = dailySunrise.mid(indexOfT + 1);
 
-    qDebug() << "weekly min:" << weeklyLowestTemperature;
+
+    qDebug() << "daily sunrise:" << dailySunrise;
+
+    QJsonArray dailySunsetJ = daily.value("sunset").toArray();
+    QString dailySunset = static_cast<QString>(dailySunsetJ[0].toString());
+
+    indexOfT = dailySunset.indexOf('T');
+
+    if (indexOfT != -1 && indexOfT < dailySunset.length() - 1)
+        dailySunset = dailySunset.mid(indexOfT + 1);
+
+    qDebug() << "daily sunset:" << dailySunset;
+
+
 
     QSharedPointer<DetailedWeatherData> data(new DetailedWeatherData(geoLocation,
                                                                      temperature,
@@ -161,13 +156,15 @@ QSharedPointer<DetailedWeatherData> Parser::parseDetailedWeatherData(const QStri
                                                                      apparentTemperature,
                                                                      precipitation,
                                                                      uvIndex,
-                                                                     weeklyHighestTemperature,
-                                                                     weeklyLowestTemperature,
                                                                      humidity,
                                                                      visibility,
                                                                      pressure,
-                                                                     h1, h2, h3, h4, h5, h6, h7, h8, h9, h10,
-                                                                     h11, h12, h13, h14, h15, h16, h17, h18, h19, h20, h21, h22, h23, h24));
+                                                                     ht,
+                                                                     hc,
+                                                                     hd,
+                                                                     dailyCode,
+                                                                     dailySunrise,
+                                                                     dailySunset));
 
 
 

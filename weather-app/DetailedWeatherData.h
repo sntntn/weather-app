@@ -19,35 +19,16 @@ public:
                                  const int apparentTemperature,
                                  const int precipitation,
                                  const int uvIndex,
-                                 const int weeklyHighestTemperature,
-                                 const int weeklyLowestTemperature,
                                  const int humidity,
                                  const int visibility,
                                  const int pressure,
-                                 const int h1,
-                                 const int h2,
-                                 const int h3,
-                                 const int h4,
-                                 const int h5,
-                                 const int h6,
-                                 const int h7,
-                                 const int h8,
-                                 const int h9,
-                                 const int h10,
-                                 const int h11,
-                                 const int h12,
-                                 const int h13,
-                                 const int h14,
-                                 const int h15,
-                                 const int h16,
-                                 const int h17,
-                                 const int h18,
-                                 const int h19,
-                                 const int h20,
-                                 const int h21,
-                                 const int h22,
-                                 const int h23,
-                                 const int h24);
+                                 const std::vector<int> hourlyTemperature,
+                                 const std::vector<int> hourlyCode,
+                                 const std::vector<bool> hourlyIsDay,
+                                 const int dailyCode,
+                                 const QString dailySunrise,
+                                 const QString dailySunset
+                                 );
 
     GeoLocationData location;
     int temperature;
@@ -60,35 +41,15 @@ public:
     int apparentTemperature;
     int precipitation;
     int uvIndex;
-    int weeklyHighestTemperature;
-    int weeklyLowestTemperature;
     int humidity;
     int visibility;
     int pressure;
-    int h1;
-    int h2;
-    int h3;
-    int h4;
-    int h5;
-    int h6;
-    int h7;
-    int h8;
-    int h9;
-    int h10;
-    int h11;
-    int h12;
-    int h13;
-    int h14;
-    int h15;
-    int h16;
-    int h17;
-    int h18;
-    int h19;
-    int h20;
-    int h21;
-    int h22;
-    int h23;
-    int h24;
+    std::vector<int> hourlyTemperature;
+    std::vector<int> hourlyCode;
+    std::vector<bool> hourlyIsDay;
+    int dailyCode;
+    QString dailySunrise;
+    QString dailySunset;
 };
 
 #endif // DETAILEDWEATHERDATA_H

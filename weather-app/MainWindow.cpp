@@ -12,20 +12,21 @@
 #include "DetailedWeatherPage.h"
 #include "geocodingapi.h"
 #include "UserLocation.h"
+#include "Settings.h"
+#include "GeoLocationData.h"
+#include "Serializer.h"
 
 #include <iostream>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
+    , settings(Settings::instance())
     , homePage(new HomePage(this))
     , detailedWeather(new DetailedWeatherPage(this))
     , stackedWidget(new QStackedWidget(this))
     , userLocation(new UserLocation(this))
 {
-    connect(this, &MainWindow::detailedWeatherPageShown, detailedWeather, &DetailedWeatherPage::setData);
-    connect(userLocation, &UserLocation::userLocationFetched, this, &MainWindow::fetchUserLocationData);
-
     ui->setupUi(this);
     resize(900,600);
 
@@ -34,37 +35,29 @@ MainWindow::MainWindow(QWidget *parent)
     setCentralWidget(stackedWidget);
     stackedWidget->setCurrentWidget(homePage);
 
-    // test
-    QVector<QSharedPointer<GeoLocationData>> locations;
-    for(int i = 0; i < 10; i++){
-        QSharedPointer<GeoLocationData> data(new GeoLocationData("Belgrade", "", QGeoCoordinate(44.8125, 20.4375)));
-        locations.emplaceBack(data);
-    }
+//    requestUserLocationData();
+    userLocation->getLocation();
+    getSavedLocationsData();
 
-    for(auto &location : locations){
-        auto *api = new WeatherAPI(location, this);
-
-        connect(api, &ApiHandler::finished, api, &WeatherAPI::deleteLater);
-        connect(api, &ApiHandler::dataFetched, homePage, &HomePage::addNewWidget);
-        connect(api, &ApiHandler::dataFetched, detailedWeather, &DetailedWeatherPage::addNewWidget);
-
-        api->start();
-    }
+    connect(this, &MainWindow::detailedWeatherPageShown, detailedWeather, &DetailedWeatherPage::setData);
+    connect(this, &MainWindow::deletePageWidgets, homePage, &Page::deleteWidgets);
+    connect(this, &MainWindow::deletePageWidgets, detailedWeather, &Page::deleteWidgets);
+    connect(userLocation, &UserLocation::userLocationFetched, this, &MainWindow::getUserLocationData);
 }
 
-void MainWindow::showHomePage(){
-    stackedWidget->setCurrentWidget(homePage);
-}
-
-void MainWindow::showDetailedWeatherPage(const QSharedPointer<WeatherData> &data)
+MainWindow::~MainWindow()
 {
-    stackedWidget->setCurrentWidget(detailedWeather);
-    emit detailedWeatherPageShown(data);
+    delete ui;
 }
 
-void MainWindow::fetchUserLocationData(const QSharedPointer<GeoLocationData> &data)
+//void MainWindow::requestUserLocationData()
+//{
+//    if(settings.shareLocation())
+//        userLocation->getLocation();
+//}
+
+void MainWindow::getUserLocationData(const GeoLocationData &data)
 {
-    qDebug() << data.data()->getCoordinates();
     auto *api = new WeatherAPI(data, this);
     connect(api, &ApiHandler::finished, api, &WeatherAPI::deleteLater);
     connect(api, &ApiHandler::dataFetched, homePage, &HomePage::addNewWidget);
@@ -72,7 +65,52 @@ void MainWindow::fetchUserLocationData(const QSharedPointer<GeoLocationData> &da
     api->start();
 }
 
-MainWindow::~MainWindow()
+void MainWindow::getSavedLocationsData()
 {
-    delete ui;
+    for(const auto& location : settings.savedLocations()){
+        getLocationData(location);
+    }
+}
+
+void MainWindow::saveNewLocation(const GeoLocationData& location) // todo sharedptr
+{
+    getLocationData(location);
+}
+
+void MainWindow::getLocationData(const GeoLocationData &location) // todo sharedptr
+{
+    auto* api = new WeatherAPI(location, this);
+
+    connect(api, &ApiHandler::finished, api, &WeatherAPI::deleteLater);
+    connect(api, &ApiHandler::dataFetched, homePage, &HomePage::addNewWidget);
+    connect(api, &ApiHandler::dataFetched, detailedWeather, &DetailedWeatherPage::addNewWidget);
+
+    api->start();
+}
+
+void MainWindow::showHomePage(){
+    stackedWidget->setCurrentWidget(homePage);
+}
+
+void MainWindow::showDetailedWeatherPage(const GeoLocationData &data) // todo sharedptr
+{
+    stackedWidget->setCurrentWidget(detailedWeather);
+    emit detailedWeatherPageShown(data);
+}
+
+void MainWindow::refreshPages()
+{
+    emit deletePageWidgets();
+//    requestUserLocationData();
+    userLocation->getLocation();
+    getSavedLocationsData();
+}
+
+void MainWindow::closeEvent(QCloseEvent *event){
+    serializeData();
+    QMainWindow::closeEvent(event);
+}
+
+void MainWindow::serializeData(){
+    Serializer::save(settings, "../Serialization/settings.json");
 }

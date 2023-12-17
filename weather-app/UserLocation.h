@@ -10,6 +10,7 @@ class UserLocation : public QObject
     Q_OBJECT
 public:
     explicit UserLocation(QObject *parent = nullptr);
+    void getLocation();
 
 private:
     QGeoPositionInfoSource *source;
@@ -18,7 +19,7 @@ private slots:
     void positionUpdated(const QGeoPositionInfo &info);
 
 signals:
-    void userLocationFetched(const QSharedPointer<GeoLocationData> &data);
+    void userLocationFetched(const GeoLocationData &data);
 };
 
 #endif // USERLOCATION_H

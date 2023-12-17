@@ -11,15 +11,15 @@
 
 Parser::Parser() = default;
 
-QSharedPointer<WeatherData> Parser::parseWeatherData(const QString& jsonData, const QString& location)
+QSharedPointer<WeatherData> Parser::parseWeatherData(const QString& jsonData, const GeoLocationData &geoLocation)
 {
     QJsonDocument doc = QJsonDocument::fromJson(jsonData.toUtf8());
     QJsonObject obj = doc.object();
     QString timezoneId = obj.value("timezone").toString();
     QJsonObject current = obj.value("current").toObject();
     QJsonObject daily = obj.value("daily").toObject();
-    QTimeZone timeZone = QTimeZone(timezoneId.toLatin1());
 
+    QTimeZone timeZone = QTimeZone(timezoneId.toLatin1());
     int temperature = static_cast<int>(qRound(current.value("temperature_2m").toDouble()));
     int weatherCode = current.value("weather_code").toInt();
     bool isDay = static_cast<bool>(current.value("is_day").toInt());
@@ -30,7 +30,7 @@ QSharedPointer<WeatherData> Parser::parseWeatherData(const QString& jsonData, co
     QJsonArray dailyMinTemperature = daily.value("temperature_2m_min").toArray();
     int minTemperature = static_cast<int>(qRound(dailyMinTemperature[0].toDouble()));
 
-    QSharedPointer<WeatherData> data(new WeatherData(location,
+    QSharedPointer<WeatherData> data(new WeatherData(geoLocation,
                                                      temperature,
                                                      maxTemperature,
                                                      minTemperature,

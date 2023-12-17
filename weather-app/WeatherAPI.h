@@ -6,6 +6,7 @@
 #include <QString>
 
 #include "ApiHandler.h"
+#include "GeoLocationData.h"
 
 class WeatherData;
 class GeoLocationData;
@@ -14,14 +15,14 @@ class WeatherAPI : public ApiHandler
 {
     Q_OBJECT
 public:
-    explicit WeatherAPI(const QSharedPointer<GeoLocationData> &location, QObject *parent = nullptr);
+    explicit WeatherAPI(const GeoLocationData& location, QObject *parent = nullptr);
     ~WeatherAPI() = default;
 
 public slots:
     void replyFinished(QNetworkReply* reply) override;
 
 protected:
-    const QSharedPointer<GeoLocationData> location;
+    GeoLocationData location;
 
     void run() override;
     void fetchData(const QGeoCoordinate &coordinates);

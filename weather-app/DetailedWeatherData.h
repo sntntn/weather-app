@@ -3,16 +3,18 @@
 
 #include "WeatherData.h"
 
+class GeoLocationData;
+
 class DetailedWeatherData : public WeatherData
 {
 public:
-    explicit DetailedWeatherData(QString& location,
-                                 int temperature,
-                                 int highestTemperature,
-                                 int lowestTemperature,
-                                 int weatherCode,
-                                 bool isDay,
-                                 QTimeZone &timezone);
+    explicit DetailedWeatherData(const GeoLocationData &location,
+                                 const int temperature,
+                                 const int highestTemperature,
+                                 const int lowestTemperature,
+                                 const int weatherCode,
+                                 const bool isDay,
+                                 const QTimeZone &timezone);
 };
 
 #endif // DETAILEDWEATHERDATA_H

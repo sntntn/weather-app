@@ -1,5 +1,7 @@
 #include "UserLocation.h"
+
 #include "GeoLocationData.h"
+#include "Settings.h"
 
 UserLocation::UserLocation(QObject *parent)
     : QObject{parent}
@@ -7,12 +9,17 @@ UserLocation::UserLocation(QObject *parent)
 {
     if(source){
         connect(source, &QGeoPositionInfoSource::positionUpdated, this, &UserLocation::positionUpdated);
-        source->requestUpdate();
     }
+}
+
+void UserLocation::getLocation()
+{
+    source->requestUpdate();
 }
 
 void UserLocation::positionUpdated(const QGeoPositionInfo &info)
 {
-    QSharedPointer<GeoLocationData> data(new GeoLocationData("Current location", "", info.coordinate()));
+    // todo konstruktor geolocation
+    GeoLocationData data = GeoLocationData("User location", "User location", info.coordinate());
     emit userLocationFetched(data);
 }

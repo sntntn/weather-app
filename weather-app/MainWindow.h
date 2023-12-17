@@ -5,7 +5,9 @@
 
 class QStackedWidget;
 class QGeoPositionInfo;
+class Settings;
 class WeatherData;
+class GeoLocationData;
 class WeatherWidget;
 class HomePage;
 class DetailedWeatherPage;
@@ -26,21 +28,30 @@ public:
 
 public slots:
     void showHomePage();
-    void showDetailedWeatherPage(const QSharedPointer<WeatherData> &data);
-    void fetchUserLocationData(const QSharedPointer<GeoLocationData> &data);
+    void getUserLocationData(const GeoLocationData &data);
+    void showDetailedWeatherPage(const GeoLocationData &data); // todo sharedptr
+    void saveNewLocation(const GeoLocationData& location); // todo sharedptr
+    void getLocationData(const GeoLocationData &location);
+    void refreshPages();
 
 signals:
-    void detailedWeatherPageShown(const QSharedPointer<WeatherData> &data);
+    void detailedWeatherPageShown(const GeoLocationData &data); // todo sharedptr
+    void deletePageWidgets();
 
+protected:
+    void closeEvent(QCloseEvent *event) override;
 
 private:
     Ui::MainWindow *ui;
+    Settings &settings;
     HomePage *homePage;
     DetailedWeatherPage *detailedWeather;
     QStackedWidget *stackedWidget;
     UserLocation *userLocation;
 
-    double m_lastLongitude;
-    double m_lastLatitude;
+    void getSavedLocationsData();
+    void requestUserLocationData();
+    void serializeData();
+
 };
 #endif // MAINWINDOW_H

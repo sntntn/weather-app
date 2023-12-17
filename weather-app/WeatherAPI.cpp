@@ -8,8 +8,9 @@
 #include "WeatherData.h"
 #include "GeoLocationData.h"
 #include "Parser.h"
+#include "Settings.h"
 
-WeatherAPI::WeatherAPI(const QSharedPointer<GeoLocationData> &location, QObject *parent)
+WeatherAPI::WeatherAPI(const GeoLocationData &location, QObject *parent)
     : ApiHandler{parent}
     , location(location)
 {
@@ -19,7 +20,7 @@ WeatherAPI::WeatherAPI(const QSharedPointer<GeoLocationData> &location, QObject 
 
 void WeatherAPI::run()
 {
-    fetchData(location.data()->getCoordinates());
+    fetchData(location.getCoordinates());
     exec();
 }
 
@@ -35,6 +36,8 @@ void WeatherAPI::fetchData(const QGeoCoordinate &coordinates)
     query.addQueryItem("current", "temperature_2m,weather_code,is_day");
     query.addQueryItem("daily", "temperature_2m_max,temperature_2m_min");
     query.addQueryItem("timezone", "auto");
+    query.addQueryItem("temperature_unit", Settings::instance().temperatureUnitApiParameter());
+
     url.setQuery(query);
     QNetworkRequest request(url);
     networkManager->get(request);
@@ -47,7 +50,8 @@ void WeatherAPI::replyFinished(QNetworkReply *reply){
     }
 
     QString jsonData = reply->readAll();
-    auto data = Parser::parseWeatherData(jsonData, location.data()->getPlace());
+    auto data = Parser::parseWeatherData(jsonData, location);
+
     emit dataFetched(data);
     this->quit();
 

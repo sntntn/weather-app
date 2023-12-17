@@ -6,6 +6,7 @@
 #include <QString>
 
 #include "WeatherData.h"
+#include "GeoLocationData.h"
 #include "Parser.h"
 #include "Settings.h"
 

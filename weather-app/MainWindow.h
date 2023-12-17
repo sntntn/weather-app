@@ -3,13 +3,16 @@
 
 #include <QMainWindow>
 
+class QStackedWidget;
+class QGeoPositionInfo;
 class Settings;
 class WeatherData;
 class GeoLocationData;
 class WeatherWidget;
-class QStackedWidget;
 class HomePage;
 class DetailedWeatherPage;
+class UserLocation;
+class GeoLocationData;
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -43,8 +46,10 @@ private:
     HomePage *homePage;
     DetailedWeatherPage *detailedWeather;
     QStackedWidget *stackedWidget;
+    UserLocation *userLocation;
 
     void getSavedLocationsData();
+    void requestUserLocationData();
     void serializeData();
 
 };

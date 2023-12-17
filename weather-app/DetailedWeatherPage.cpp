@@ -9,7 +9,6 @@
 #include <iostream>
 #include <QStackedWidget>
 #include <QTimer>
-//#include <QCoreApplication>
 
 DetailedWeatherPage::DetailedWeatherPage(QWidget *parent)
     : Page{parent}
@@ -60,9 +59,15 @@ void DetailedWeatherPage::addNewWidget(const QSharedPointer<Data> &data)
     widget->setMaximumWidth(widgetsScrollArea->viewport()->width());
 
     int position = static_cast<int>(Settings::instance().savedLocations().indexOf(widget->data->location()));
-    widgetsLayout->addWidget(widget, position, 0, 1, 1);
+
+    if(Settings::instance().shareLocation())
+        position++;
+
+    position == -1 ? widgetsLayout->addWidget(widget, 0, 0, 1, 1) // User location widget
+                   : widgetsLayout->addWidget(widget, position, 0, 1, 1);
 
     m_widgets.emplaceBack(widget);
+
     QStackedWidget* stackedWidget = qobject_cast<QStackedWidget*>(this->parent());
     if (stackedWidget->currentWidget() == this) {
         QTimer::singleShot(100, this, &DetailedWeatherPage::highlightWidget);
@@ -77,8 +82,11 @@ void DetailedWeatherPage::setData(const GeoLocationData &data) // todo sharedptr
     std::cout << data.getRenamedPlace().toStdString() << " "
               << data.getCoordinates().toString().toStdString() << std::endl;
 
-    Settings::instance().savedLocations().indexOf(data) == -1 ? this->addToSavedLocations->setVisible(true)
-                                                              : this->addToSavedLocations->setVisible(false);
+    bool showAddbutton = data.getRenamedPlace() != "My location" &&
+                         Settings::instance().savedLocations().indexOf(data) == -1;
+
+    showAddbutton ? this->addToSavedLocations->setVisible(true)
+                  : this->addToSavedLocations->setVisible(false);
 
     highlightWidget();
 }

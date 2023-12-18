@@ -85,10 +85,6 @@ QSharedPointer<DetailedWeatherData> Parser::parseDetailedWeatherData(const QStri
     QJsonArray hourlyCodeJ = hourly.value("weather_code").toArray();
     QJsonArray hourlyIsDayJ = hourly.value("is_day").toArray();
 
-
-    //int weatherCode = current.value("weather_code").toInt();
-    //bool isDay = static_cast<bool>(current.value("is_day").toInt());
-
     std::vector<int> ht;
     std::vector<int> hc;
     std::vector<bool> hd;
@@ -143,6 +139,21 @@ QSharedPointer<DetailedWeatherData> Parser::parseDetailedWeatherData(const QStri
 
     qDebug() << "daily sunset:" << dailySunset;
 
+    QJsonArray weeklyMaxTempJ = daily.value("temperature_2m_max").toArray();
+    std::vector<int> weeklyMaxTemp;
+    for (int i = 0; i < 7; i++){
+        int temperature = static_cast<int>(qRound(weeklyMaxTempJ[i].toDouble()));
+        weeklyMaxTemp.push_back(temperature);
+    }
+    QJsonArray weeklyMinTempJ = daily.value("temperature_2m_min").toArray();
+    std::vector<int> weeklyMinTemp;
+    for (int i = 0; i < 7; i++){
+        int temperature = static_cast<int>(qRound(weeklyMinTempJ[i].toDouble()));
+        weeklyMinTemp.push_back(temperature);
+    }
+
+    qDebug() << weeklyMaxTemp;
+    qDebug() << weeklyMinTemp;
 
 
     QSharedPointer<DetailedWeatherData> data(new DetailedWeatherData(geoLocation,
@@ -164,7 +175,9 @@ QSharedPointer<DetailedWeatherData> Parser::parseDetailedWeatherData(const QStri
                                                                      hd,
                                                                      dailyCode,
                                                                      dailySunrise,
-                                                                     dailySunset));
+                                                                     dailySunset,
+                                                                     weeklyMaxTemp,
+                                                                     weeklyMinTemp));
 
 
 

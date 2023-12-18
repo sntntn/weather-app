@@ -27,7 +27,9 @@ public:
                                  const std::vector<bool> hourlyIsDay,
                                  const int dailyCode,
                                  const QString dailySunrise,
-                                 const QString dailySunset
+                                 const QString dailySunset,
+                                 const std::vector<int> weeklyMaxTemp,
+                                 const std::vector<int> weeklyMinTemp
                                  );
 
     GeoLocationData location;
@@ -50,6 +52,8 @@ public:
     int dailyCode;
     QString dailySunrise;
     QString dailySunset;
+    std::vector<int> weeklyMaxTemp;
+    std::vector<int> weeklyMinTemp;
 };
 
 #endif // DETAILEDWEATHERDATA_H

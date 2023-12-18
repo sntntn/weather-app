@@ -101,8 +101,8 @@ QSharedPointer<DetailedWeatherData> Parser::parseDetailedWeatherData(const QStri
     qDebug() << hc;
     qDebug() << hd;
 
-    //query.addQueryItem("daily", "weather_code,sunrise,sunset");
 
+    //dailyMaxTemperature i dailyMinTemperature treba maknuti jer se mogu izdvojiti iz weeklyMaxTemp i weeklyMinTemp
     QJsonArray dailyMaxTemperature = daily.value("temperature_2m_max").toArray();
     int maxTemperature = static_cast<int>(qRound(dailyMaxTemperature[0].toDouble()));
 
@@ -113,6 +113,7 @@ QSharedPointer<DetailedWeatherData> Parser::parseDetailedWeatherData(const QStri
 
     qDebug() << "daily min:" << minTemperature;
 
+    //TODO: weather_code, sunrise i sunset odraditi za narednih 7 dana
     QJsonArray dailyCodeJ = daily.value("weather_code").toArray();
     int dailyCode = static_cast<int>(qRound(dailyCodeJ[0].toDouble()));
 

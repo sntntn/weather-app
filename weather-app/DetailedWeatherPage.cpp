@@ -102,8 +102,8 @@ void DetailedWeatherPage::showData(const QSharedPointer<Data> &data){
 
     locationLabel->setText(detailedData->location.getRenamedPlace());
     temperatureLabel->setText(QString::number(detailedData->temperature) + "°");
-    minmaxTemperature->setText("H:" + QString::number(detailedData->highestTemperature) + "°  L:"
-                               + QString::number(detailedData->lowestTemperature) + "°");
+    minmaxTemperature->setText("H:" + QString::number(detailedData->weeklyMaxTemp[0]) + "°  L:"
+                               + QString::number(detailedData->weeklyMinTemp[0]) + "°");
 }
 
 void DetailedWeatherPage::resizeEvent(QResizeEvent* event) {

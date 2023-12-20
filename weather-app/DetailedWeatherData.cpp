@@ -3,8 +3,6 @@
 
 DetailedWeatherData::DetailedWeatherData(const GeoLocationData &location,
                                          const int temperature,
-                                         const int highestTemperature,
-                                         const int lowestTemperature,
                                          const int weatherCode,
                                          const bool isDay,
                                          const QTimeZone &timezone,
@@ -18,18 +16,16 @@ DetailedWeatherData::DetailedWeatherData(const GeoLocationData &location,
                                          const std::vector<int> hourlyTemperature,
                                          const std::vector<int> hourlyCode,
                                          const std::vector<bool> hourlyIsDay,
-                                         const int dailyCode,
-                                         const QString dailySunrise,
-                                         const QString dailySunset,
                                          const std::vector<int> weeklyMaxTemp,
-                                         const std::vector<int> weeklyMinTemp
+                                         const std::vector<int> weeklyMinTemp,
+                                         const std::vector<int> weeklyCode,
+                                         const std::vector<QString> weeklySunrise,
+                                         const std::vector<QString> weeklySunset
                                          )
 
-    : WeatherData(location, temperature, highestTemperature, lowestTemperature, weatherCode, isDay, timezone)
+    : WeatherData(location, temperature, weeklyMaxTemp[0], weeklyMinTemp[0], weatherCode, isDay, timezone)
     , location(location)
     , temperature(temperature)
-    , highestTemperature(highestTemperature)
-    , lowestTemperature(lowestTemperature)
     , weatherCode(weatherCode)
     , isDay(isDay)
     , timezone(timezone)
@@ -43,11 +39,11 @@ DetailedWeatherData::DetailedWeatherData(const GeoLocationData &location,
     , hourlyTemperature(hourlyTemperature)
     , hourlyCode(hourlyCode)
     , hourlyIsDay(hourlyIsDay)
-    , dailyCode(dailyCode)
-    , dailySunrise(dailySunrise)
-    , dailySunset(dailySunset)
     , weeklyMaxTemp(weeklyMaxTemp)
     , weeklyMinTemp(weeklyMinTemp)
+    , weeklyCode(weeklyCode)
+    , weeklySunrise(weeklySunrise)
+    , weeklySunset(weeklySunset)
 
 {}
 

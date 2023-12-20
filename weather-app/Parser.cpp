@@ -101,44 +101,34 @@ QSharedPointer<DetailedWeatherData> Parser::parseDetailedWeatherData(const QStri
     qDebug() << hc;
     qDebug() << hd;
 
-
-    //dailyMaxTemperature i dailyMinTemperature treba maknuti jer se mogu izdvojiti iz weeklyMaxTemp i weeklyMinTemp
-    QJsonArray dailyMaxTemperature = daily.value("temperature_2m_max").toArray();
-    int maxTemperature = static_cast<int>(qRound(dailyMaxTemperature[0].toDouble()));
-
-    qDebug() << "daily max:" << maxTemperature;
-
-    QJsonArray dailyMinTemperature = daily.value("temperature_2m_min").toArray();
-    int minTemperature = static_cast<int>(qRound(dailyMinTemperature[0].toDouble()));
-
-    qDebug() << "daily min:" << minTemperature;
-
     //TODO: weather_code, sunrise i sunset odraditi za narednih 7 dana
-    QJsonArray dailyCodeJ = daily.value("weather_code").toArray();
-    int dailyCode = static_cast<int>(qRound(dailyCodeJ[0].toDouble()));
+    QJsonArray weeklyCodeJ = daily.value("weather_code").toArray();
+    QJsonArray weeklySunriseJ = daily.value("sunrise").toArray();
+    QJsonArray weeklySunsetJ = daily.value("sunset").toArray();
+    std::vector<int> weeklyCode;
+    std::vector<QString> weeklySunrise;
+    std::vector<QString> weeklySunset;
+    for (int i = 0; i < 7; i++){
+        int wc = static_cast<int>(qRound(weeklyCodeJ[i].toDouble()));
+        weeklyCode.push_back(wc);
 
-    qDebug() << "daily code:" << dailyCode;
+        QString dailySunrise = static_cast<QString>(weeklySunriseJ[0].toString());
+        int indexOfT = dailySunrise.indexOf('T');
+        if (indexOfT != -1 && indexOfT < dailySunrise.length() - 1)
+            dailySunrise = dailySunrise.mid(indexOfT + 1);
+        weeklySunrise.push_back(dailySunrise);
 
-    QJsonArray dailySunriseJ = daily.value("sunrise").toArray();
-    QString dailySunrise = static_cast<QString>(dailySunriseJ[0].toString());
+        QString dailySunset = static_cast<QString>(weeklySunsetJ[0].toString());
+        indexOfT = dailySunset.indexOf('T');
+        if (indexOfT != -1 && indexOfT < dailySunset.length() - 1)
+            dailySunset = dailySunset.mid(indexOfT + 1);
+        weeklySunset.push_back(dailySunset);
 
-    int indexOfT = dailySunrise.indexOf('T');
+    }
 
-    if (indexOfT != -1 && indexOfT < dailySunrise.length() - 1)
-        dailySunrise = dailySunrise.mid(indexOfT + 1);
-
-
-    qDebug() << "daily sunrise:" << dailySunrise;
-
-    QJsonArray dailySunsetJ = daily.value("sunset").toArray();
-    QString dailySunset = static_cast<QString>(dailySunsetJ[0].toString());
-
-    indexOfT = dailySunset.indexOf('T');
-
-    if (indexOfT != -1 && indexOfT < dailySunset.length() - 1)
-        dailySunset = dailySunset.mid(indexOfT + 1);
-
-    qDebug() << "daily sunset:" << dailySunset;
+    qDebug() << "weekly code:" << weeklyCode;
+    qDebug() << "weekly sunrise:" << weeklySunrise;
+    qDebug() << "weekly sunset:" << weeklySunset;
 
     QJsonArray weeklyMaxTempJ = daily.value("temperature_2m_max").toArray();
     std::vector<int> weeklyMaxTemp;
@@ -159,8 +149,6 @@ QSharedPointer<DetailedWeatherData> Parser::parseDetailedWeatherData(const QStri
 
     QSharedPointer<DetailedWeatherData> data(new DetailedWeatherData(geoLocation,
                                                                      temperature,
-                                                                     maxTemperature,
-                                                                     minTemperature,
                                                                      weatherCode,
                                                                      isDay,
                                                                      timeZone,
@@ -174,11 +162,11 @@ QSharedPointer<DetailedWeatherData> Parser::parseDetailedWeatherData(const QStri
                                                                      ht,
                                                                      hc,
                                                                      hd,
-                                                                     dailyCode,
-                                                                     dailySunrise,
-                                                                     dailySunset,
                                                                      weeklyMaxTemp,
-                                                                     weeklyMinTemp));
+                                                                     weeklyMinTemp,
+                                                                     weeklyCode,
+                                                                     weeklySunrise,
+                                                                     weeklySunset));
 
 
 

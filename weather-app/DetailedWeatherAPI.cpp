@@ -38,8 +38,8 @@ void DetailedWeatherAPI::fetchData(const QGeoCoordinate &coordinates)
     query.addQueryItem("daily", "temperature_2m_max,temperature_2m_min,weather_code,sunrise,sunset");
     query.addQueryItem("timezone", "auto");
 
-    query.addQueryItem("hourly", "temperature_2m,weather_code,is_day");  // Include hourly temperature forecast
-    // Add the next 24 hours as the forecast duration
+    query.addQueryItem("hourly", "temperature_2m,weather_code,is_day");
+
     QDateTime now = QDateTime::currentDateTime();
     QDateTime next24Hours = now.addSecs(24 * 60 * 60); // Add 24 hours
     query.addQueryItem("start", now.toString(Qt::ISODate));

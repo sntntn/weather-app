@@ -92,12 +92,14 @@ void HomePage::updateCompleter(const QList<GeoLocationData>& locations)
 {
     this->locations = locations;
     QStringList places;
-//    qDebug()<<"----------------------------------"<< locations.size();
     for (const auto& location : locations) {
         places.append(location.getPlace());
     }
 
-    completer->setModel(new QStringListModel(places, completer)); // todo leak
+    if (completer->model()) {
+        delete completer->model();
+    }
+    completer->setModel(new QStringListModel(places, completer));
     completer->complete();
 }
 
@@ -106,7 +108,6 @@ void HomePage::onCompletionActivated(const QString& text)
     for (const auto& location : locations) {
         if (location.getPlace() == text) {
             emit locationObjectSelected(location);
-//            qDebug() << "------------emitovano----------------";
             break;
         }
     }

@@ -33,6 +33,7 @@ private:
     GeoLocationData location;
     QNetworkAccessManager* networkManager;
 
+    QSharedPointer<DetailedWeatherData> parseDetailedWeatherData(const QString& jsonData, const GeoLocationData &geoLocation);
 };
 
 #endif // DETAILEDWEATHERAPI_H

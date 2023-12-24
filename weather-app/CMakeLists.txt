@@ -30,7 +30,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(weather-app
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
-        Parser.h Parser.cpp
+
         WeatherData.h WeatherData.cpp
         WeatherAPI.h WeatherAPI.cpp
         WeatherWidget.h WeatherWidget.cpp

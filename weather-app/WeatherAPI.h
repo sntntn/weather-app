@@ -26,6 +26,9 @@ protected:
 
     void run() override;
     void fetchData(const QGeoCoordinate &coordinates);
+
+private:
+    QSharedPointer<WeatherData> parseWeatherData(const QString& jsonData, const GeoLocationData &geoLocation);
 };
 
 #endif // WEATHERAPI_H

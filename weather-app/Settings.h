@@ -70,17 +70,17 @@ private:
     Settings(const Settings&) = delete;
     Settings& operator=(const Settings&) = delete;
 
-    QString temperatureUnitToApiParameter(TemperatureUnit tempUnit) const;
-    QString windSpeedUnitToApiParameter(WindSpeedUnit windSpeedUnit) const;
-    QString precipitationUnitToApiParameter(PrecipitationUnit precUnit) const;
+    QString temperatureUnitToApiParameter(const TemperatureUnit tempUnit) const;
+    QString windSpeedUnitToApiParameter(const WindSpeedUnit windSpeedUnit) const;
+    QString precipitationUnitToApiParameter(const PrecipitationUnit precUnit) const;
 
-    QString temperatureUnitToString(TemperatureUnit tempUnit) const;
-    QString windSpeedUnitToString(WindSpeedUnit windSpeedUnit) const;
-    QString precipitationUnitToString(PrecipitationUnit precUnit) const;
+    QString temperatureUnitToString(const TemperatureUnit tempUnit) const;
+    QString windSpeedUnitToString(const WindSpeedUnit windSpeedUnit) const;
+    QString precipitationUnitToString(const PrecipitationUnit precUnit) const;
 
-    QString temperatureUnitsNames(TemperatureUnit tempUnit) const;
-    QString windSpeedUnitsNames(WindSpeedUnit precUnit) const;
-    QString precipitationUnitsNames(PrecipitationUnit precUnit) const;
+    QString temperatureUnitsNames(const TemperatureUnit tempUnit) const;
+    QString windSpeedUnitsNames(const WindSpeedUnit precUnit) const;
+    QString precipitationUnitsNames(const PrecipitationUnit precUnit) const;
 
     Settings::TemperatureUnit m_temperatureUnit = TemperatureUnit::CELSIUS;
     Settings::WindSpeedUnit m_windSpeedUnit = WindSpeedUnit::KMH;

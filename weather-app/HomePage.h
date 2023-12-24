@@ -24,6 +24,7 @@ class MainWindow;
 class HomePage : public Page
 {
     Q_OBJECT
+
 public:
     explicit HomePage(QWidget *parent = nullptr);
     ~HomePage();

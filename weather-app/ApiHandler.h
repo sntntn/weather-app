@@ -1,15 +1,15 @@
 #ifndef APIHANDLER_H
 #define APIHANDLER_H
 
-#include <QThread>
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
 
 class Data;
 
-class ApiHandler : public QThread
+class ApiHandler : public QObject
 {
     Q_OBJECT
+
 public:
     explicit ApiHandler(QObject *parent = nullptr);
     virtual ~ApiHandler();
@@ -22,7 +22,7 @@ protected slots:
 
 protected:
     QNetworkAccessManager* networkManager;
-    virtual void run() override = 0;
+//    virtual void run() override = 0; // todo
 };
 
 #endif // APIHANDLER_H

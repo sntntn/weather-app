@@ -28,7 +28,7 @@ QVariant GeoLocationData::toVariant() const{
 
     return map;
 }
-void GeoLocationData::fromVariant(const QVariant & variant){
+void GeoLocationData::fromVariant(const QVariant &variant){
 
     const auto map = variant.toMap();
     m_place = map.value("place").toString();
@@ -39,7 +39,7 @@ void GeoLocationData::fromVariant(const QVariant & variant){
 }
 
 // todo sharedptr
-GeoLocationData GeoLocationData::fromVariantMap(const QVariantMap& geoLocation)
+GeoLocationData GeoLocationData::fromVariantMap(const QVariantMap &geoLocation)
 {
     return GeoLocationData{geoLocation.value("place").toString(),
                            geoLocation.value("renamedPlace").toString(),

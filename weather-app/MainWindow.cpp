@@ -26,6 +26,7 @@ MainWindow::MainWindow(QWidget *parent)
     , detailedWeather(new DetailedWeatherPage(this))
     , stackedWidget(new QStackedWidget(this))
     , userLocation(new UserLocation(this))
+    , weatherApi(new WeatherAPI(this))
 {
     ui->setupUi(this);
     resize(900,600);
@@ -42,6 +43,8 @@ MainWindow::MainWindow(QWidget *parent)
     connect(this, &MainWindow::deletePageWidgets, homePage, &Page::deleteWidgets);
     connect(this, &MainWindow::deletePageWidgets, detailedWeather, &Page::deleteWidgets);
     connect(userLocation, &UserLocation::userLocationFetched, this, &MainWindow::getLocationData);
+    connect(weatherApi, &ApiHandler::dataFetched, homePage, &HomePage::addNewWidget);
+    connect(weatherApi, &ApiHandler::dataFetched, detailedWeather, &DetailedWeatherPage::addNewWidget);
 }
 
 MainWindow::~MainWindow()
@@ -62,27 +65,17 @@ void MainWindow::getSavedLocationsData()
     }
 }
 
-void MainWindow::saveNewLocation(const GeoLocationData& location) // todo sharedptr
+void MainWindow::getLocationData(const GeoLocationData &location)
 {
-    getLocationData(location);
+    weatherApi->fetchData(location);
 }
 
-void MainWindow::getLocationData(const GeoLocationData &location) // todo sharedptr
+void MainWindow::showHomePage()
 {
-    auto* api = new WeatherAPI(location, this);
-
-    connect(api, &ApiHandler::finished, api, &WeatherAPI::deleteLater);
-    connect(api, &ApiHandler::dataFetched, homePage, &HomePage::addNewWidget);
-    connect(api, &ApiHandler::dataFetched, detailedWeather, &DetailedWeatherPage::addNewWidget);
-
-    api->start();
-}
-
-void MainWindow::showHomePage(){
     stackedWidget->setCurrentWidget(homePage);
 }
 
-void MainWindow::showDetailedWeatherPage(const GeoLocationData &data) // todo sharedptr
+void MainWindow::showDetailedWeatherPage(const GeoLocationData &data)
 {
     stackedWidget->setCurrentWidget(detailedWeather);
     emit detailedWeatherPageShown(data);
@@ -95,11 +88,13 @@ void MainWindow::refreshPages()
     getSavedLocationsData();
 }
 
-void MainWindow::closeEvent(QCloseEvent *event){
+void MainWindow::closeEvent(QCloseEvent *event)
+{
     serializeData();
     QMainWindow::closeEvent(event);
 }
 
-void MainWindow::serializeData(){
+void MainWindow::serializeData()
+{
     Serializer::save(settings, "../Serialization/settings.json");
 }

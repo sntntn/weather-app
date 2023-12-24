@@ -46,7 +46,7 @@ DetailedWeatherPage::DetailedWeatherPage(QWidget *parent)
     connect(returnToHomePage, &QPushButton::clicked, this->mainWindow, &MainWindow::showHomePage);
     connect(returnToHomePage, &QPushButton::clicked, this, &DetailedWeatherPage::homeButtonClicked);
     connect(addToSavedLocations, &QPushButton::clicked, this, &DetailedWeatherPage::addButtonClicked);
-    connect(this, &DetailedWeatherPage::locationSaved, this->mainWindow, &MainWindow::saveNewLocation);
+    connect(this, &DetailedWeatherPage::locationSaved, this->mainWindow, &MainWindow::getLocationData);
 }
 
 void DetailedWeatherPage::addNewWidget(const QSharedPointer<Data> &data)

@@ -13,6 +13,7 @@ class HomePage;
 class DetailedWeatherPage;
 class UserLocation;
 class GeoLocationData;
+class WeatherAPI;
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -28,13 +29,12 @@ public:
 
 public slots:
     void showHomePage();
-    void showDetailedWeatherPage(const GeoLocationData &data); // todo sharedptr
-    void saveNewLocation(const GeoLocationData& location); // todo sharedptr
+    void showDetailedWeatherPage(const GeoLocationData &data);
     void getLocationData(const GeoLocationData &location);
     void refreshPages();
 
 signals:
-    void detailedWeatherPageShown(const GeoLocationData &data); // todo sharedptr
+    void detailedWeatherPageShown(const GeoLocationData &data);
     void deletePageWidgets();
 
 protected:
@@ -47,6 +47,7 @@ private:
     DetailedWeatherPage *detailedWeather;
     QStackedWidget *stackedWidget;
     UserLocation *userLocation;
+    WeatherAPI *weatherApi;
 
     void getSavedLocationsData();
     void requestUserLocationData();

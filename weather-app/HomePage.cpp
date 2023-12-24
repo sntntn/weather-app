@@ -60,6 +60,11 @@ HomePage::HomePage(QWidget *parent)
     connect(this, &HomePage::locationObjectSelected, mainWindow, &MainWindow::showDetailedWeatherPage);
 }
 
+HomePage::~HomePage()
+{
+    delete completer->model();
+}
+
 void HomePage::addNewWidget(const QSharedPointer<Data> &data)
 {
     auto *widget = new WeatherWidget(qSharedPointerCast<WeatherData>(data), scrollAreaContents);

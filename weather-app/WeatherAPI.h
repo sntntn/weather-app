@@ -9,6 +9,7 @@
 #include "GeoLocationData.h"
 
 class WeatherData;
+class GeoLocationData;
 
 class WeatherAPI : public ApiHandler
 {
@@ -21,12 +22,13 @@ public slots:
     void replyFinished(QNetworkReply* reply) override;
 
 protected:
-    void run() override;
-
-protected:
     GeoLocationData location;
 
+    void run() override;
     void fetchData(const QGeoCoordinate &coordinates);
+
+private:
+    QSharedPointer<WeatherData> parseWeatherData(const QString& jsonData, const GeoLocationData &geoLocation);
 };
 
 #endif // WEATHERAPI_H

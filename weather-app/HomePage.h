@@ -26,7 +26,7 @@ class HomePage : public Page
     Q_OBJECT
 public:
     explicit HomePage(QWidget *parent = nullptr);
-    ~HomePage() = default;
+    ~HomePage();
 
 signals:
     void searchBarPressed(const QString& location);

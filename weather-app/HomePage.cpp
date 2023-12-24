@@ -60,13 +60,23 @@ HomePage::HomePage(QWidget *parent)
     connect(this, &HomePage::locationObjectSelected, mainWindow, &MainWindow::showDetailedWeatherPage);
 }
 
+HomePage::~HomePage()
+{
+    delete completer->model();
+}
+
 void HomePage::addNewWidget(const QSharedPointer<Data> &data)
 {
     auto *widget = new WeatherWidget(qSharedPointerCast<WeatherData>(data), scrollAreaContents);
     connect(widget, &WeatherWidget::clicked, this->mainWindow, &MainWindow::showDetailedWeatherPage);
 
     int position = static_cast<int>(Settings::instance().savedLocations().indexOf(widget->data->location()));
-    widgetsLayout->addWidget(widget, position / 2, position % 2, 1, 1);
+
+    if(Settings::instance().shareLocation())
+        position++;
+
+    position == -1 ? widgetsLayout->addWidget(widget, 0, 0, 1, 1) // User location widget
+                   : widgetsLayout->addWidget(widget, position / 2, position % 2, 1, 1);
 
     widget->setMaximumHeight(160);
     m_widgets.emplaceBack(widget);
@@ -87,12 +97,14 @@ void HomePage::updateCompleter(const QList<GeoLocationData>& locations)
 {
     this->locations = locations;
     QStringList places;
-//    qDebug()<<"----------------------------------"<< locations.size();
     for (const auto& location : locations) {
         places.append(location.getPlace());
     }
 
-    completer->setModel(new QStringListModel(places, completer)); // todo leak
+    if (completer->model()) {
+        delete completer->model();
+    }
+    completer->setModel(new QStringListModel(places, completer));
     completer->complete();
 }
 
@@ -101,7 +113,6 @@ void HomePage::onCompletionActivated(const QString& text)
     for (const auto& location : locations) {
         if (location.getPlace() == text) {
             emit locationObjectSelected(location);
-//            qDebug() << "------------emitovano----------------";
             break;
         }
     }

@@ -9,6 +9,8 @@
 #include "DetailedWeatherData.h"
 
 #include <iostream>
+#include <QStackedWidget>
+#include <QTimer>
 
 DetailedWeatherPage::DetailedWeatherPage(QWidget *parent)
     : Page{parent}
@@ -59,33 +61,47 @@ DetailedWeatherPage::DetailedWeatherPage(QWidget *parent)
     mainLayout->addWidget(weatherScrollArea);
 
     connect(returnToHomePage, &QPushButton::clicked, this->mainWindow, &MainWindow::showHomePage);
+    connect(returnToHomePage, &QPushButton::clicked, this, &DetailedWeatherPage::homeButtonClicked);
     connect(addToSavedLocations, &QPushButton::clicked, this, &DetailedWeatherPage::addButtonClicked);
     connect(this, &DetailedWeatherPage::locationSaved, this->mainWindow, &MainWindow::saveNewLocation);
-
-    connect(returnToHomePage, &QPushButton::clicked, this, &DetailedWeatherPage::afterHomePressed);
 }
 
 void DetailedWeatherPage::addNewWidget(const QSharedPointer<Data> &data)
 {
-    auto *widget = new WeatherWidget(qSharedPointerCast<WeatherData>(data), widgetsScrollAreaContents);
+    QSharedPointer<WeatherData> weatherData = qSharedPointerCast<WeatherData>(data);
+
+    auto *widget = new WeatherWidget(weatherData, widgetsScrollAreaContents);
     connect(widget, &WeatherWidget::clicked, this, &DetailedWeatherPage::setData);
 
     widget->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Preferred);
     widget->setMaximumWidth(widgetsScrollArea->viewport()->width());
 
     int position = static_cast<int>(Settings::instance().savedLocations().indexOf(widget->data->location()));
-    widgetsLayout->addWidget(widget, position, 0, 1, 1);
+
+    if(Settings::instance().shareLocation())
+        position++;
+
+    position == -1 ? widgetsLayout->addWidget(widget, 0, 0, 1, 1) // User location widget
+                   : widgetsLayout->addWidget(widget, position, 0, 1, 1);
 
     m_widgets.emplaceBack(widget);
-    scrollToMaximum();
+
+    QStackedWidget* stackedWidget = qobject_cast<QStackedWidget*>(this->parent());
+    if (stackedWidget->currentWidget() == this) {
+        QTimer::singleShot(100, this, &DetailedWeatherPage::highlightWidget);
+    }
 }
 
 void DetailedWeatherPage::setData(const GeoLocationData &data) // todo sharedptr
 {
+    widgetsScrollArea->verticalScrollBar()->setValue(0);
     this->data = data;
 
-    Settings::instance().savedLocations().indexOf(data) == -1 ? this->addToSavedLocations->setVisible(true)
-                                                            : this->addToSavedLocations->setVisible(false);
+    bool showAddbutton = data.getRenamedPlace() != "My location" &&
+                         Settings::instance().savedLocations().indexOf(data) == -1;
+
+    showAddbutton ? this->addToSavedLocations->setVisible(true)
+                  : this->addToSavedLocations->setVisible(false);
 
     highlightWidget();
 
@@ -120,33 +136,28 @@ void DetailedWeatherPage::addButtonClicked()
     Settings::instance().savedLocations().push_back(this->data);
 }
 
+void DetailedWeatherPage::homeButtonClicked()
+{
+    if(selectedWidget){
+        selectedWidget->resetHighlight();
+    }
+
+    selectedWidget = nullptr;
+}
+
 void DetailedWeatherPage::highlightWidget()
 {
     if(selectedWidget){
         selectedWidget->resetHighlight();
     }
-    for(auto *widget : m_widgets){
-        if(widget->data->location() == this->data){
-            widgetsScrollArea->ensureWidgetVisible(widget);
-            selectedWidget = widget;
-            if(selectedWidget){
-                selectedWidget->setHighlight();
-            }
-        }
-    }
-}
 
-void DetailedWeatherPage::scrollToMaximum()
-{
-    auto *widgetsScrollBar = widgetsScrollArea->verticalScrollBar();
-    widgetsScrollBar->setValue(widgetsScrollBar->maximum());
-}
+    auto newSelectedWidget = std::find_if(m_widgets.begin(), m_widgets.end(), [this](const auto* widget) {
+        return widget->data->location() == this->data;
+    });
 
-void DetailedWeatherPage::afterHomePressed()
-{
-    widgetsScrollArea->verticalScrollBar()->setValue(0);
-    if(selectedWidget){
-        selectedWidget->resetHighlight();
+    if (newSelectedWidget != m_widgets.end()) {
+        selectedWidget = *newSelectedWidget;
+        widgetsScrollArea->ensureWidgetVisible(selectedWidget);
+        selectedWidget->setHighlight();
     }
-    selectedWidget = nullptr;
 }

@@ -13,14 +13,8 @@
 
 Parser::Parser() = default;
 
-QSharedPointer<WeatherData> Parser::parseWeatherData(const QString& jsonData, const GeoLocationData &geoLocation)
-{
-    QJsonDocument doc = QJsonDocument::fromJson(jsonData.toUtf8());
-    QJsonObject obj = doc.object();
-    QString timezoneId = obj.value("timezone").toString();
-    QJsonObject current = obj.value("current").toObject();
-    QJsonObject daily = obj.value("daily").toObject();
 
+<<<<<<< HEAD
     QTimeZone timeZone = QTimeZone(timezoneId.toLatin1());
     int temperature = static_cast<int>(qRound(current.value("temperature_2m").toDouble()));
     int weatherCode = current.value("weather_code").toInt();
@@ -172,3 +166,5 @@ QSharedPointer<DetailedWeatherData> Parser::parseDetailedWeatherData(const QStri
 
     return data;
 }
+=======
+>>>>>>> dev

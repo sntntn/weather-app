@@ -22,7 +22,6 @@ protected slots:
 
 protected:
     QNetworkAccessManager* networkManager;
-//    virtual void run() override = 0; // todo
 };
 
 #endif // APIHANDLER_H

@@ -14,9 +14,6 @@ public:
     explicit ApiHandler(QObject *parent = nullptr);
     virtual ~ApiHandler();
 
-signals:
-    void dataFetched(const QSharedPointer<Data> &data);
-
 protected slots:
     virtual void replyFinished(QNetworkReply* reply) = 0;
 

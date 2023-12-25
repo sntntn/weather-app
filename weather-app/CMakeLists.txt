@@ -37,7 +37,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         HomePage.h HomePage.cpp
         DetailedWeatherPage.h DetailedWeatherPage.cpp
         Page.h Page.cpp
-        geocodingapi.h geocodingapi.cpp
+        GeocodingAPI.h GeocodingAPI.cpp
         Data.h
         GeoLocationData.h GeoLocationData.cpp
         DetailedWeatherData.h DetailedWeatherData.cpp
@@ -50,6 +50,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         WidgetsManager.h
         Serializable.h
         Serializer.h Serializer.cpp
+        Parser.h Parser.cpp
     )
 # Define target properties for Android with Qt 6 as:
 #    set_property(TARGET weather-app APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR

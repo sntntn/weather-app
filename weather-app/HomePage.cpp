@@ -56,7 +56,7 @@ HomePage::HomePage(QWidget *parent)
     connect(searchBar, &QLineEdit::textChanged, this, [this]() { debounceTimer->start(); });
     connect(debounceTimer, &QTimer::timeout, this, &HomePage::onSearchBarTextChanged);
 //    connect(searchBar, &QLineEdit::textChanged, this, &HomePage::onSearchBarTextChanged);
-    connect(this, &HomePage::searchBarPressed, &geocodingApi, &GeocodingAPI::testCityFunction);
+    connect(this, &HomePage::searchBarPressed, &geocodingApi, &GeocodingAPI::geocodeCity);
     connect(this, &HomePage::locationObjectSelected, mainWindow, &MainWindow::showDetailedWeatherPage);
 }
 

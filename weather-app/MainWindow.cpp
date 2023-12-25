@@ -10,7 +10,7 @@
 #include "WeatherWidget.h"
 #include "HomePage.h"
 #include "DetailedWeatherPage.h"
-#include "geocodingapi.h"
+#include "GeocodingAPI.h"
 #include "UserLocation.h"
 #include "Settings.h"
 #include "GeoLocationData.h"

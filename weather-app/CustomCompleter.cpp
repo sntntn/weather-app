@@ -1,4 +1,4 @@
-#include "customcompleter.h"
+#include "CustomCompleter.h"
 
 CustomCompleter::CustomCompleter(QObject *parent) : QCompleter(parent) {}
 

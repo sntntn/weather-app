@@ -37,14 +37,14 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         HomePage.h HomePage.cpp
         DetailedWeatherPage.h DetailedWeatherPage.cpp
         Page.h Page.cpp
-        geocodingapi.h geocodingapi.cpp
+        GeocodingAPI.h GeocodingAPI.cpp
         Data.h
         GeoLocationData.h GeoLocationData.cpp
         DetailedWeatherData.h DetailedWeatherData.cpp
         ApiHandler.h ApiHandler.cpp
         Settings.h Settings.cpp
         SettingsDialog.h SettingsDialog.cpp
-        customcompleter.h customcompleter.cpp
+        CustomCompleter.h CustomCompleter.cpp
         UserLocation.h UserLocation.cpp
 
         WidgetsManager.h

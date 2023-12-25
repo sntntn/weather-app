@@ -16,13 +16,12 @@ public:
     GeocodingAPI();
     ~GeocodingAPI();
 
-    void geocodeCity(const QString& cityName);
     void handleGeocodingResponse(QNetworkReply* reply);
 
 signals:
     void geocodingDataUpdated(const QList<GeoLocationData>& locations);
 public slots:
-    void testCityFunction(const QString &location);
+    void geocodeCity(const QString &location);
 
 private:
     void processResultsArray(const QJsonArray& resultsArray, QList<GeoLocationData>& locations);

@@ -11,7 +11,7 @@
 #include <QTimer>
 #include <QPushButton>
 #include "Page.h"
-#include "GeocodingAPI.h"
+#include "geocodingapi.h"
 #include "Settings.h"
 #include "GeoLocationData.h"
 #include "customcompleter.h"

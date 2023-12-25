@@ -19,12 +19,11 @@ public:
     ~WeatherAPI() = default;
     void fetchData(const GeoLocationData &location);
 
-signals:
-    void dataFetched(const QSharedPointer<Data> &data);
-
 public slots:
     void replyFinished(QNetworkReply* reply) override;
 
+private:
+    QSharedPointer<WeatherData> parseWeatherData(const QString& jsonData, const GeoLocationData &geoLocation);
 };
 
 #endif // WEATHERAPI_H

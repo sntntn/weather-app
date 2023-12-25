@@ -7,6 +7,8 @@ DetailedWeatherData::DetailedWeatherData(const GeoLocationData &location,
                                          const bool isDay,
                                          const QTimeZone &timezone,
                                          const int windSpeed,
+                                         const int windGusts,
+                                         const int windDirection,
                                          const int apparentTemperature,
                                          const int precipitation,
                                          const int uvIndex,
@@ -30,6 +32,8 @@ DetailedWeatherData::DetailedWeatherData(const GeoLocationData &location,
     , isDay(isDay)
     , timezone(timezone)
     , windSpeed(windSpeed)
+    , windGusts(windGusts)
+    , windDirection(windDirection)
     , apparentTemperature(apparentTemperature)
     , precipitation(precipitation)
     , uvIndex(uvIndex)

@@ -14,6 +14,8 @@ public:
                                  const bool isDay,
                                  const QTimeZone &timezone,
                                  const int windSpeed,
+                                 const int windGusts,
+                                 const int windDirection,
                                  const int apparentTemperature,
                                  const int precipitation,
                                  const int uvIndex,
@@ -36,6 +38,8 @@ public:
     bool isDay;
     QTimeZone timezone;
     int windSpeed;
+    int windGusts;
+    int windDirection;
     int apparentTemperature;
     int precipitation;
     int uvIndex;

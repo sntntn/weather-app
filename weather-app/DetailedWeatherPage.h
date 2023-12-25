@@ -46,6 +46,8 @@ signals:
 
 private:
     static const int spacerWidth = 40;
+    static const int iconWidth = 100;
+    static const int iconHeight = 100;
 
     GeoLocationData data; // todo sharedptr
     QHBoxLayout *mainLayout;
@@ -55,6 +57,9 @@ private:
     QWidget *weatherScrollAreaContents;
     QGridLayout *widgetsLayout;
     QVBoxLayout *weatherLayout;
+    QHBoxLayout *basicInfoLayout;
+    QVBoxLayout *leftBasicInfo;
+    QVBoxLayout *rightBasicInfo;
     QHBoxLayout *buttonsLayout;
     QPushButton *returnToHomePage;
     QSpacerItem *horizontalSpacer;
@@ -63,9 +68,21 @@ private:
     QLabel *locationLabel;
     QLabel *temperatureLabel;
     QLabel *minmaxTemperature;
+    QLabel *weatherDescriptionLabel;
+    QLabel *iconLabel;
+    QPixmap *weatherIcon;
+    QLabel *dateLabel;
+    QLabel *timeLabel;
+    QLabel *feelsLikeLabel;
+    QLabel *compassLabel;
+    QPixmap *initialCompassIcon;
+    QPixmap *arrowIcon;
     WeatherWidget *selectedWidget;
 
     void highlightWidget();
+    QString getDaySuffix(const int day);
+    QString weatherCodeToDescription(const int weatherCode);
+    QString weatherCodeToIcon(const int weatherCode, const bool isDay);
 };
 
 #endif // DETAILEDWEATHERPAGE_H

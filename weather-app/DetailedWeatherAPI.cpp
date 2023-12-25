@@ -182,6 +182,8 @@ QSharedPointer<DetailedWeatherData> DetailedWeatherAPI::parseDetailedWeatherData
                                                                      isDay,
                                                                      timeZone,
                                                                      windSpeed,
+                                                                     windGusts,
+                                                                     windDirection,
                                                                      apparentTemperature,
                                                                      precipitation,
                                                                      uvIndex,

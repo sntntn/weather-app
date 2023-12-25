@@ -159,5 +159,3 @@ QString WeatherWidget::weatherCodeToIcon(const int weatherCode, const bool isDay
         return iconBasePath + "Cloudy.png";
     }
 }
-
-

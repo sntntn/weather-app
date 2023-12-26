@@ -81,6 +81,7 @@ DetailedWeatherPage::DetailedWeatherPage(QWidget *parent)
 
     weatherLayout->addWidget(locationLabel, 0, Qt::AlignHCenter);
     weatherLayout->addWidget(basicInfo);
+    basicInfo->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
 
     minmaxTemperature->setStyleSheet("font-size: 16px;");
     weatherLayout->addWidget(minmaxTemperature, 0, Qt::AlignHCenter);
@@ -256,6 +257,7 @@ DetailedWeatherPage::BasicInfoWidget::BasicInfoWidget(QWidget *parent)
     rightLayout->addWidget(feelsLikeLabel, 0, Qt::AlignRight | Qt::AlignTop);
     basicInfoLayout->addLayout(leftLayout);
     basicInfoLayout->addLayout(rightLayout);
+    this->setLayout(basicInfoLayout);
 }
 
 void DetailedWeatherPage::BasicInfoWidget::updateData(const int weatherCode, const bool isDay,

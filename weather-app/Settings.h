@@ -31,6 +31,7 @@ public:
 
     QVariant toVariant() const override;
     void fromVariant(const QVariant & variant) override;
+    QString weatherCodeToIcon(const int weatherCode, const bool isDay);
 
     enum TemperatureUnit
     {

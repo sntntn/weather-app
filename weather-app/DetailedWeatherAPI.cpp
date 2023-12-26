@@ -80,6 +80,7 @@ QSharedPointer<DetailedWeatherData> DetailedWeatherAPI::parseDetailedWeatherData
     QJsonObject current = obj.value("current").toObject();
     QJsonObject daily = obj.value("daily").toObject();
     QJsonObject hourly = obj.value("hourly").toObject();
+    qDebug() << hourly;
 
     QTimeZone timeZone = QTimeZone(timezoneId.toLatin1());
     int temperature = static_cast<int>(qRound(current.value("temperature_2m").toDouble()));
@@ -110,25 +111,44 @@ QSharedPointer<DetailedWeatherData> DetailedWeatherAPI::parseDetailedWeatherData
     qDebug() << "wind direction:" << windDirection;
     qDebug() << "wind gusts:" << windGusts;
 
+    QJsonArray hourlyTimeJ = hourly.value("time").toArray();
     QJsonArray hourlyTempJ = hourly.value("temperature_2m").toArray();
     QJsonArray hourlyCodeJ = hourly.value("weather_code").toArray();
     QJsonArray hourlyIsDayJ = hourly.value("is_day").toArray();
 
+    QDateTime currentTime = QDateTime::currentDateTime().toTimeZone(timeZone);
+    QString formattedCurrentTime = currentTime.toString(Qt::ISODate).left(16);
+
+    int matchingIndex = -1;
+    for (int i = 0; i < hourlyTimeJ.size(); ++i) {
+        QString timeEntry = hourlyTimeJ[i].toString();
+        if (formattedCurrentTime <= timeEntry) {
+            matchingIndex = i - 1;
+            break;
+        }
+    }
+
     std::vector<int> ht;
     std::vector<int> hc;
     std::vector<bool> hd;
-    for (int i = 0; i < 24; i++){
+    std::vector<QString> hts;
+
+    for (int i = matchingIndex, end = matchingIndex + 24; i < end; i++){
         int temperature = static_cast<int>(qRound(hourlyTempJ[i].toDouble()));
         ht.push_back(temperature);
         int code = hourlyCodeJ[i].toInt();
         hc.push_back(code);
         int day = static_cast<bool>(hourlyIsDayJ[i].toInt());
         hd.push_back(day);
+        QString fullTimestamp = hourlyTimeJ[i].toString();
+        QString time = fullTimestamp.mid(11, 5);
+        hts.push_back(time);
     }
 
     qDebug() << ht;
     qDebug() << hc;
     qDebug() << hd;
+    qDebug() << "TimeStamps: " << hts;
 
     //TODO: weather_code, sunrise i sunset odraditi za narednih 7 dana
     QJsonArray weeklyCodeJ = daily.value("weather_code").toArray();
@@ -193,6 +213,7 @@ QSharedPointer<DetailedWeatherData> DetailedWeatherAPI::parseDetailedWeatherData
                                                                      ht,
                                                                      hc,
                                                                      hd,
+                                                                     hts,
                                                                      weeklyMaxTemp,
                                                                      weeklyMinTemp,
                                                                      weeklyCode,

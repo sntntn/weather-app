@@ -13,6 +13,7 @@ class HomePage;
 class DetailedWeatherPage;
 class UserLocation;
 class GeoLocationData;
+class Data;
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -29,7 +30,7 @@ public:
 public slots:
     void showHomePage();
     void showDetailedWeatherPage(const GeoLocationData &data); // todo sharedptr
-    void saveNewLocation(const GeoLocationData& location); // todo sharedptr
+    void saveNewLocation(const QSharedPointer<Data> &location); // todo sharedptr
     void getLocationData(const GeoLocationData &location);
     void refreshPages();
 

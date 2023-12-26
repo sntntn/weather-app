@@ -26,6 +26,19 @@ class DetailedWeatherPage : public Page
 {
     Q_OBJECT
 
+    class HourlyWeatherWidget : public QWidget
+    {
+        QVBoxLayout *hourLayout;
+        QLabel *hourLabel;
+        QPixmap *hourWeatherIcon;
+        QLabel *hourWeatherIconLabel;
+        QLabel *hourTempLabel;
+
+    public:
+        HourlyWeatherWidget(QWidget *parent = nullptr);
+        void updateData(const int tempText, const int weatherCode, const bool isDay, const QString timeStamp);
+    };
+
 public:
     explicit DetailedWeatherPage(QWidget *parent = nullptr);
     ~DetailedWeatherPage() = default;
@@ -42,14 +55,14 @@ private slots:
     void homeButtonClicked();
 
 signals:
-    void locationSaved(const GeoLocationData &data);
+    void locationSaved(const QSharedPointer<Data> &data);
 
 private:
     static const int spacerWidth = 40;
     static const int iconWidth = 100;
     static const int iconHeight = 100;
 
-    GeoLocationData data; // todo sharedptr
+    QSharedPointer<DetailedWeatherData> data;
     QHBoxLayout *mainLayout;
     QScrollArea *widgetsScrollArea;
     QScrollArea *weatherScrollArea;
@@ -77,12 +90,20 @@ private:
     QLabel *compassLabel;
     QPixmap *initialCompassIcon;
     QPixmap *arrowIcon;
+    QScrollArea *hourlyWeatherArea;
+    QWidget *hourlyWeatherContents;
+    QHBoxLayout *hourlyLayout;
     WeatherWidget *selectedWidget;
+
+    QVBoxLayout *hourLayout;
+    QLabel *hourLabel;
+    QPixmap *hourweatherIcon;
+    QLabel *hourWeatherCode;
+    QLabel *hourTempLabel;
 
     void highlightWidget();
     QString getDaySuffix(const int day);
     QString weatherCodeToDescription(const int weatherCode);
-    QString weatherCodeToIcon(const int weatherCode, const bool isDay);
 };
 
 #endif // DETAILEDWEATHERPAGE_H

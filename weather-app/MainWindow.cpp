@@ -62,9 +62,10 @@ void MainWindow::getSavedLocationsData()
     }
 }
 
-void MainWindow::saveNewLocation(const GeoLocationData& location) // todo sharedptr
+void MainWindow::saveNewLocation(const QSharedPointer<Data> &data) // todo sharedptr
 {
-    getLocationData(location);
+    QSharedPointer<WeatherData> weatherData = qSharedPointerCast<WeatherData>(data);
+    getLocationData(weatherData->location());
 }
 
 void MainWindow::getLocationData(const GeoLocationData &location) // todo sharedptr

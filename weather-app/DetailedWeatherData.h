@@ -25,6 +25,7 @@ public:
                                  const std::vector<int> hourlyTemperature,
                                  const std::vector<int> hourlyCode,
                                  const std::vector<bool> hourlyIsDay,
+                                 const std::vector<QString> hourlyTimeStamp,
                                  const std::vector<int> weeklyMaxTemp,
                                  const std::vector<int> weeklyMinTemp,
                                  const std::vector<int> weeklyCode,
@@ -49,6 +50,7 @@ public:
     std::vector<int> hourlyTemperature;
     std::vector<int> hourlyCode;
     std::vector<bool> hourlyIsDay;
+    std::vector<QString> hourlyTimeStamp;
     std::vector<int> weeklyMaxTemp;
     std::vector<int> weeklyMinTemp;
     std::vector<int> weeklyCode;

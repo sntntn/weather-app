@@ -13,6 +13,7 @@
 #include <QScrollBar>
 #include <QTimer>
 #include <QLabel>
+#include <QTimeZone>
 
 #include "GeoLocationData.h"
 
@@ -26,6 +27,27 @@ class DetailedWeatherPage : public Page
 {
     Q_OBJECT
 
+    class BasicInfoWidget : public QWidget
+    {
+        QHBoxLayout *basicInfoLayout;
+        QVBoxLayout *leftLayout;
+        QVBoxLayout *rightLayout;
+        QPixmap *weatherIcon;
+        QLabel *iconLabel;
+        QLabel *weatherDescriptionLabel;
+        QLabel *dateLabel;
+        QLabel *timeLabel;
+        QLabel *temperatureLabel;
+        QLabel *feelsLikeLabel;
+
+    public:
+        BasicInfoWidget(QWidget *parent = nullptr);
+        void updateData(const int weatherCode, const bool isDay, const QTimeZone timezone, const int temperature,
+                        const int apparentTemperature);
+        QString getDaySuffix(const int day);
+        QString weatherCodeToDescription(const int weatherCode);
+    };
+
     class HourlyWeatherWidget : public QWidget
     {
         QVBoxLayout *hourLayout;
@@ -37,6 +59,20 @@ class DetailedWeatherPage : public Page
     public:
         HourlyWeatherWidget(QWidget *parent = nullptr);
         void updateData(const int tempText, const int weatherCode, const bool isDay, const QString timeStamp);
+    };
+
+    class DailyWeatherWidget : public QWidget
+    {
+        QHBoxLayout *dailyLayout;
+        QLabel *dayNameLabel;
+        QPixmap *dayWeatherIcon;
+        QLabel *dayWeatherIconLabel;
+        QLabel *dailyminTempLabel;
+        QLabel *dailymaxTempLabel;
+
+    public:
+        DailyWeatherWidget(QWidget *parent = nullptr);
+        void updateData(const QString dayName, const int weatherCode, const int minTemp, const int maxTemp);
     };
 
 public:
@@ -70,40 +106,24 @@ private:
     QWidget *weatherScrollAreaContents;
     QGridLayout *widgetsLayout;
     QVBoxLayout *weatherLayout;
-    QHBoxLayout *basicInfoLayout;
-    QVBoxLayout *leftBasicInfo;
-    QVBoxLayout *rightBasicInfo;
     QHBoxLayout *buttonsLayout;
     QPushButton *returnToHomePage;
     QSpacerItem *horizontalSpacer;
     QPushButton *addToSavedLocations;
     QTimer *scrollTimer;
     QLabel *locationLabel;
-    QLabel *temperatureLabel;
+    BasicInfoWidget *basicInfo;
     QLabel *minmaxTemperature;
-    QLabel *weatherDescriptionLabel;
-    QLabel *iconLabel;
-    QPixmap *weatherIcon;
-    QLabel *dateLabel;
-    QLabel *timeLabel;
-    QLabel *feelsLikeLabel;
     QLabel *compassLabel;
     QPixmap *initialCompassIcon;
     QPixmap *arrowIcon;
     QScrollArea *hourlyWeatherArea;
     QWidget *hourlyWeatherContents;
     QHBoxLayout *hourlyLayout;
+    QGridLayout *dailyLayout;
     WeatherWidget *selectedWidget;
 
-    QVBoxLayout *hourLayout;
-    QLabel *hourLabel;
-    QPixmap *hourweatherIcon;
-    QLabel *hourWeatherCode;
-    QLabel *hourTempLabel;
-
     void highlightWidget();
-    QString getDaySuffix(const int day);
-    QString weatherCodeToDescription(const int weatherCode);
 };
 
 #endif // DETAILEDWEATHERPAGE_H

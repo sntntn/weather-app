@@ -30,7 +30,8 @@ public:
                                  const std::vector<int> weeklyMinTemp,
                                  const std::vector<int> weeklyCode,
                                  const std::vector<QString> weeklySunrise,
-                                 const std::vector<QString> weeklySunset
+                                 const std::vector<QString> weeklySunset,
+                                 const std::vector<QString> weeklyDayName
                                  );
 
     GeoLocationData location;
@@ -56,6 +57,7 @@ public:
     std::vector<int> weeklyCode;
     std::vector<QString> weeklySunrise;
     std::vector<QString> weeklySunset;
+    std::vector<QString> weeklyDayName;
 };
 
 #endif // DETAILEDWEATHERDATA_H

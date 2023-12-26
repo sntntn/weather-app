@@ -23,29 +23,21 @@ DetailedWeatherPage::DetailedWeatherPage(QWidget *parent)
     , weatherScrollAreaContents(new QWidget())
     , widgetsLayout(new QGridLayout())
     , weatherLayout(new QVBoxLayout())
-    , basicInfoLayout(new QHBoxLayout())
-    , leftBasicInfo(new QVBoxLayout())
-    , rightBasicInfo(new QVBoxLayout())
     , buttonsLayout(new QHBoxLayout())
     , returnToHomePage(new QPushButton("< Home"))
     , horizontalSpacer(new QSpacerItem(spacerWidth, 0, QSizePolicy::Expanding, QSizePolicy::Minimum))
     , addToSavedLocations(new QPushButton("Add"))
     , scrollTimer(new QTimer(this))
     , locationLabel(new QLabel(this))
-    , temperatureLabel(new QLabel(this))
+    , basicInfo(new BasicInfoWidget(this))
     , minmaxTemperature(new QLabel(this))
-    , weatherDescriptionLabel(new QLabel(this))
-    , iconLabel(new QLabel(this))
-    , weatherIcon(new QPixmap())
-    , dateLabel(new QLabel(this))
-    , timeLabel(new QLabel(this))
-    , feelsLikeLabel(new QLabel(this))
     , compassLabel(new QLabel(this))
     , initialCompassIcon(new QPixmap("../Resources/compass/whiteCompass.png"))
     , arrowIcon(new QPixmap("../Resources/compass/whiteArrow.png"))
     , hourlyWeatherArea(new QScrollArea())
     , hourlyWeatherContents(new QWidget())
     , hourlyLayout(new QHBoxLayout())
+    , dailyLayout(new QGridLayout())
     , selectedWidget(nullptr)
 {
     widgetsScrollAreaContents->setLayout(widgetsLayout);
@@ -63,17 +55,6 @@ DetailedWeatherPage::DetailedWeatherPage(QWidget *parent)
     weatherLayout->addLayout(buttonsLayout);
 
     locationLabel->setStyleSheet("font-size: 24px; font-weight: bold;");
-    leftBasicInfo->addWidget(iconLabel, 0, Qt::AlignLeft);
-    leftBasicInfo->addWidget(weatherDescriptionLabel, 0, Qt::AlignLeft);
-    leftBasicInfo->addWidget(dateLabel, 0, Qt::AlignLeft | Qt::AlignBottom);
-    leftBasicInfo->addWidget(timeLabel, 0, Qt::AlignLeft | Qt::AlignTop);
-    rightBasicInfo->addWidget(temperatureLabel, 0, Qt::AlignHCenter);
-    rightBasicInfo->addWidget(feelsLikeLabel, 0, Qt::AlignRight | Qt::AlignTop);
-    basicInfoLayout->addLayout(leftBasicInfo);
-    basicInfoLayout->addLayout(rightBasicInfo);
-
-    temperatureLabel->setStyleSheet("font-size: 100px; font-weight: bold;");
-    minmaxTemperature->setStyleSheet("font-size: 16px;");
 
     //todo magic number 24
     for(int i = 0; i < 24; i++){
@@ -81,16 +62,31 @@ DetailedWeatherPage::DetailedWeatherPage(QWidget *parent)
         widget->setFixedSize(70, 100);
         hourlyLayout->addWidget(widget);
     }
-
-    hourlyWeatherContents->setFixedHeight(100);
     hourlyWeatherContents->setLayout(hourlyLayout);
     hourlyWeatherArea->setWidget(hourlyWeatherContents);
     hourlyWeatherArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    hourlyWeatherArea->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Minimum);
+
+    for(int i = 0; i < 7; i++){
+        DailyWeatherWidget *widget = new DailyWeatherWidget(this);
+        dailyLayout->addWidget(widget, 2*i, 0);
+
+        if (i < 6) {
+            QFrame *line = new QFrame();
+            line->setFrameShape(QFrame::HLine);
+            line->setFrameShadow(QFrame::Sunken);
+            dailyLayout->addWidget(line, 2*i + 1, 0, 1, -1);
+        }
+    }
 
     weatherLayout->addWidget(locationLabel, 0, Qt::AlignHCenter);
-    weatherLayout->addLayout(basicInfoLayout);
+    weatherLayout->addWidget(basicInfo);
+
+    minmaxTemperature->setStyleSheet("font-size: 16px;");
     weatherLayout->addWidget(minmaxTemperature, 0, Qt::AlignHCenter);
+
     weatherLayout->addWidget(hourlyWeatherArea);
+    weatherLayout->addLayout(dailyLayout);
     weatherLayout->addWidget(compassLabel);
 
     weatherScrollAreaContents->setLayout(weatherLayout);
@@ -150,33 +146,32 @@ void DetailedWeatherPage::setData(const GeoLocationData &data) // todo sharedptr
 }
 
 void DetailedWeatherPage::showData(const QSharedPointer<Data> &data){
-    //todo kad dobijemo novi izgled da se menja, DetailedWeatherPage da ima promenljvu svoju DetailedWeatherData?
+    //todo izbrisi SharedPointer
     QSharedPointer<DetailedWeatherData> detailedData = qSharedPointerCast<DetailedWeatherData>(data);
     this->data = detailedData;
     highlightWidget();
 
     locationLabel->setText(detailedData->location.getRenamedPlace());
     //todo (need country from api)countryLabel->setText(detailedData->location.get)
-    weatherIcon->load(Settings::instance().weatherCodeToIcon(detailedData->weatherCode, detailedData->isDay));
-    iconLabel->setPixmap(weatherIcon->scaled(iconWidth, iconHeight, Qt::KeepAspectRatio, Qt::SmoothTransformation));
-    iconLabel->setFixedWidth(iconWidth);
 
-    weatherDescriptionLabel->setText(weatherCodeToDescription(detailedData->weatherCode));
-    dateLabel->setText(QDateTime::currentDateTime().toTimeZone(detailedData->timezone).toString("'Today,' MMMM d") +
-                       getDaySuffix(QDateTime::currentDateTime().toTimeZone(detailedData->timezone).date().day()));
-    timeLabel->setText(QDateTime::currentDateTime().toTimeZone(detailedData->timezone).toString("HH:mm"));
-
-    temperatureLabel->setText(QString::number(detailedData->temperature) + "°");
-    feelsLikeLabel->setText("Feels like: " + QString::number(detailedData->apparentTemperature) + "°");
+    basicInfo->updateData(this->data->weatherCode, this->data->isDay, this->data->timezone,
+                          this->data->temperature, this->data->apparentTemperature);
 
     minmaxTemperature->setText("H:" + QString::number(detailedData->weeklyMaxTemp[0]) + "°  L:"
                                + QString::number(detailedData->weeklyMinTemp[0]) + "°");
-
-    for (int i = 0; i < hourlyLayout->count(); ++i) {
+    //todo magic number
+    for (int i = 0; i < 24; ++i) {
         QLayoutItem* item = hourlyLayout->itemAt(i);
         HourlyWeatherWidget* widget = dynamic_cast<HourlyWeatherWidget*>(item->widget());
         widget->updateData(this->data->hourlyTemperature[i], this->data->hourlyCode[i],
                            this->data->hourlyIsDay[i], this->data->hourlyTimeStamp[i]);
+    }
+    //todo magic number
+    for (int i = 0; i < 7; ++i) {
+        QLayoutItem* item = dailyLayout->itemAt(2*i);
+        DailyWeatherWidget* widget = dynamic_cast<DailyWeatherWidget*>(item->widget());
+        widget->updateData(this->data->weeklyDayName[i], this->data->weeklyCode[i],
+                           this->data->weeklyMinTemp[i], this->data->weeklyMaxTemp[i]);
     }
 
     QPixmap compassIcon = initialCompassIcon->copy();
@@ -239,6 +234,49 @@ void DetailedWeatherPage::highlightWidget()
     }
 }
 
+DetailedWeatherPage::BasicInfoWidget::BasicInfoWidget(QWidget *parent)
+    : QWidget(parent)
+    , basicInfoLayout(new QHBoxLayout())
+    , leftLayout(new QVBoxLayout())
+    , rightLayout(new QVBoxLayout())
+    , weatherIcon(new QPixmap())
+    , iconLabel(new QLabel(this))
+    , weatherDescriptionLabel(new QLabel(this))
+    , dateLabel(new QLabel(this))
+    , timeLabel(new QLabel(this))
+    , temperatureLabel(new QLabel(this))
+    , feelsLikeLabel(new QLabel(this))
+{
+    temperatureLabel->setStyleSheet("font-size: 100px; font-weight: bold;");
+    leftLayout->addWidget(iconLabel, 0, Qt::AlignLeft);
+    leftLayout->addWidget(weatherDescriptionLabel, 0, Qt::AlignLeft);
+    leftLayout->addWidget(dateLabel, 0, Qt::AlignLeft | Qt::AlignBottom);
+    leftLayout->addWidget(timeLabel, 0, Qt::AlignLeft | Qt::AlignTop);
+    rightLayout->addWidget(temperatureLabel, 0, Qt::AlignHCenter);
+    rightLayout->addWidget(feelsLikeLabel, 0, Qt::AlignRight | Qt::AlignTop);
+    basicInfoLayout->addLayout(leftLayout);
+    basicInfoLayout->addLayout(rightLayout);
+}
+
+void DetailedWeatherPage::BasicInfoWidget::updateData(const int weatherCode, const bool isDay,
+                                                      const QTimeZone timezone, const int temperature,
+                                                      const int apparentTemperature)
+{
+    weatherIcon->load(Settings::instance().weatherCodeToIcon(weatherCode, isDay));
+    iconLabel->setPixmap(weatherIcon->scaled(iconWidth, iconHeight, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+    iconLabel->setFixedWidth(iconWidth);
+
+    weatherDescriptionLabel->setText(weatherCodeToDescription(weatherCode));
+
+    QDateTime currentTimeZone = QDateTime::currentDateTime().toTimeZone(timezone);
+    dateLabel->setText(currentTimeZone.toString("'Today,' MMMM d") +
+                       getDaySuffix(currentTimeZone.date().day()));
+    timeLabel->setText(currentTimeZone.toString("HH:mm"));
+
+    temperatureLabel->setText(QString::number(temperature) + "°");
+    feelsLikeLabel->setText("Feels like: " + QString::number(apparentTemperature) + "°");
+}
+
 DetailedWeatherPage::HourlyWeatherWidget::HourlyWeatherWidget(QWidget *parent)
     : QWidget(parent)
     , hourLayout(new QVBoxLayout(this))
@@ -259,7 +297,6 @@ DetailedWeatherPage::HourlyWeatherWidget::HourlyWeatherWidget(QWidget *parent)
     hourLayout->addWidget(hourWeatherIconLabel);
     hourLayout->addWidget(hourTempLabel);
     hourLayout->addWidget(hourLabel);
-
 }
 
 void DetailedWeatherPage::HourlyWeatherWidget::updateData(const int tempText, const int weatherCode,
@@ -272,8 +309,42 @@ void DetailedWeatherPage::HourlyWeatherWidget::updateData(const int tempText, co
     hourTempLabel->setText(QString::number(tempText) + "°");
 }
 
+DetailedWeatherPage::DailyWeatherWidget::DailyWeatherWidget(QWidget *parent)
+    : QWidget(parent)
+    , dailyLayout(new QHBoxLayout(this))
+    , dayNameLabel(new QLabel())
+    , dayWeatherIcon(new QPixmap())
+    , dayWeatherIconLabel(new QLabel(this))
+    , dailyminTempLabel(new QLabel(this))
+    , dailymaxTempLabel(new QLabel(this))
+{
+    dayNameLabel->setFixedWidth(80);
+    dailyLayout->addWidget(dayNameLabel);
+    dailyLayout->addStretch(1);
 
-QString DetailedWeatherPage::getDaySuffix(const int day) {
+    dayWeatherIconLabel->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
+    dailyLayout->addWidget(dayWeatherIconLabel);
+    dailyLayout->addStretch(1);
+
+    dailyminTempLabel->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Preferred);
+    dailyLayout->addWidget(dailyminTempLabel);
+
+    dailymaxTempLabel->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Preferred);
+    dailyLayout->addWidget(dailymaxTempLabel);
+}
+
+void DetailedWeatherPage::DailyWeatherWidget::updateData(const QString dayName, const int weatherCode, const int minTemp, const int maxTemp)
+{
+    dayNameLabel->setText(dayName);
+    //todo True for isDay
+    dayWeatherIcon->load(Settings::instance().weatherCodeToIcon(weatherCode, 1));
+    dayWeatherIconLabel->setPixmap(dayWeatherIcon->scaled(30, 30,
+                                                           Qt::KeepAspectRatio, Qt::SmoothTransformation));
+    dailyminTempLabel->setText(QString::number(minTemp) + "°");
+    dailymaxTempLabel->setText(QString::number(maxTemp) + "°");
+}
+
+QString DetailedWeatherPage::BasicInfoWidget::getDaySuffix(const int day) {
     switch (day) {
     case 1: case 21: case 31:
         return "st";
@@ -286,7 +357,7 @@ QString DetailedWeatherPage::getDaySuffix(const int day) {
     }
 }
 
-QString DetailedWeatherPage::weatherCodeToDescription(const int weatherCode) {
+QString DetailedWeatherPage::BasicInfoWidget::weatherCodeToDescription(const int weatherCode) {
     switch (weatherCode) {
     case 0:
         return "Clear sky.";

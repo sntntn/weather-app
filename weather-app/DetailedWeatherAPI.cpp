@@ -9,6 +9,7 @@
 #include <QJsonObject>
 #include <QJsonValue>
 #include <QJsonArray>
+#include <QDate>
 
 #include "DetailedWeatherData.h"
 #include "ApiHandler.h"
@@ -80,7 +81,6 @@ QSharedPointer<DetailedWeatherData> DetailedWeatherAPI::parseDetailedWeatherData
     QJsonObject current = obj.value("current").toObject();
     QJsonObject daily = obj.value("daily").toObject();
     QJsonObject hourly = obj.value("hourly").toObject();
-    qDebug() << hourly;
 
     QTimeZone timeZone = QTimeZone(timezoneId.toLatin1());
     int temperature = static_cast<int>(qRound(current.value("temperature_2m").toDouble()));
@@ -140,9 +140,8 @@ QSharedPointer<DetailedWeatherData> DetailedWeatherAPI::parseDetailedWeatherData
         hc.push_back(code);
         int day = static_cast<bool>(hourlyIsDayJ[i].toInt());
         hd.push_back(day);
-        QString fullTimestamp = hourlyTimeJ[i].toString();
-        QString time = fullTimestamp.mid(11, 5);
-        hts.push_back(time);
+        QString time = hourlyTimeJ[i].toString();
+        hts.push_back(time.mid(11, 5));
     }
 
     qDebug() << ht;
@@ -154,30 +153,31 @@ QSharedPointer<DetailedWeatherData> DetailedWeatherAPI::parseDetailedWeatherData
     QJsonArray weeklyCodeJ = daily.value("weather_code").toArray();
     QJsonArray weeklySunriseJ = daily.value("sunrise").toArray();
     QJsonArray weeklySunsetJ = daily.value("sunset").toArray();
+    QJsonArray weeklyDayJ = daily.value("time").toArray();
+
     std::vector<int> weeklyCode;
     std::vector<QString> weeklySunrise;
     std::vector<QString> weeklySunset;
+    std::vector<QString> weeklyDayName;
     for (int i = 0; i < 7; i++){
         int wc = static_cast<int>(qRound(weeklyCodeJ[i].toDouble()));
         weeklyCode.push_back(wc);
 
-        QString dailySunrise = static_cast<QString>(weeklySunriseJ[0].toString());
-        int indexOfT = dailySunrise.indexOf('T');
-        if (indexOfT != -1 && indexOfT < dailySunrise.length() - 1)
-            dailySunrise = dailySunrise.mid(indexOfT + 1);
-        weeklySunrise.push_back(dailySunrise);
+        QString dailySunrise = static_cast<QString>(weeklySunriseJ[i].toString());
+        weeklySunrise.push_back(dailySunrise.mid(11,5));
 
-        QString dailySunset = static_cast<QString>(weeklySunsetJ[0].toString());
-        indexOfT = dailySunset.indexOf('T');
-        if (indexOfT != -1 && indexOfT < dailySunset.length() - 1)
-            dailySunset = dailySunset.mid(indexOfT + 1);
-        weeklySunset.push_back(dailySunset);
+        QString dailySunset = static_cast<QString>(weeklySunsetJ[i].toString());
+        weeklySunset.push_back(dailySunset.mid(11,5));
 
+        QDate date = QDate::fromString(static_cast<QString>(weeklyDayJ[i].toString()), "yyyy-MM-dd");
+        QString dayName = date.toString("dddd");
+        weeklyDayName.push_back(dayName);
     }
 
     qDebug() << "weekly code:" << weeklyCode;
     qDebug() << "weekly sunrise:" << weeklySunrise;
     qDebug() << "weekly sunset:" << weeklySunset;
+    qDebug() << "weekly day:" << weeklyDayName;
 
     QJsonArray weeklyMaxTempJ = daily.value("temperature_2m_max").toArray();
     std::vector<int> weeklyMaxTemp;
@@ -194,7 +194,6 @@ QSharedPointer<DetailedWeatherData> DetailedWeatherAPI::parseDetailedWeatherData
 
     qDebug() << weeklyMaxTemp;
     qDebug() << weeklyMinTemp;
-
 
     QSharedPointer<DetailedWeatherData> data(new DetailedWeatherData(geoLocation,
                                                                      temperature,
@@ -218,7 +217,8 @@ QSharedPointer<DetailedWeatherData> DetailedWeatherAPI::parseDetailedWeatherData
                                                                      weeklyMinTemp,
                                                                      weeklyCode,
                                                                      weeklySunrise,
-                                                                     weeklySunset));
+                                                                     weeklySunset,
+                                                                     weeklyDayName));
 
 
 

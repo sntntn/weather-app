@@ -30,6 +30,7 @@ DetailedWeatherPage::DetailedWeatherPage(QWidget *parent)
     , addToSavedLocations(new QPushButton("Add"))
     , scrollTimer(new QTimer(this))
     , locationLabel(new QLabel(this))
+    , detailedLocationLabel(new QLabel(this))
     , basicInfo(new BasicInfoWidget(this))
     , minmaxTemperature(new QLabel(this))
     , humidityUvRain(new HumidityUvRainWidget(this))
@@ -57,6 +58,10 @@ DetailedWeatherPage::DetailedWeatherPage(QWidget *parent)
 
     locationLabel->setStyleSheet("font-size: 24px; font-weight: bold;");
     weatherLayout->addWidget(locationLabel, 0, Qt::AlignHCenter);
+    detailedLocationLabel->setStyleSheet("font-family: Roboto; font-size: 16px;");
+    weatherLayout->addWidget(detailedLocationLabel, 0, Qt::AlignHCenter);
+
+
     weatherLayout->addWidget(basicInfo);
     basicInfo->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
 
@@ -145,6 +150,7 @@ void DetailedWeatherPage::setData(const QSharedPointer<Data> &data){
     highlightWidget();
 
     locationLabel->setText(detailedData->location().getRenamedPlace());
+    detailedLocationLabel->setText(detailedData->location().getDetailedPlace());
 
     basicInfo->updateData(this->data->weatherCode(), this->data->isDay(), this->data->timezone(),
                           this->data->temperature(), this->data->apparentTemperature());

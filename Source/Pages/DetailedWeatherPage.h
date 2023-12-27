@@ -64,6 +64,7 @@ private:
     QPushButton *addToSavedLocations;
     QTimer *scrollTimer;
     QLabel *locationLabel;
+    QLabel *detailedLocationLabel;
     BasicInfoWidget *basicInfo;
     QLabel *minmaxTemperature;
     HumidityUvRainWidget *humidityUvRain;

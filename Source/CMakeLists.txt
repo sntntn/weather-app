@@ -19,39 +19,54 @@ find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
 find_package(Qt6 COMPONENTS Core Network REQUIRED)
 find_package(Qt6 REQUIRED COMPONENTS Positioning)
 
+include_directories(
+    .
+    Api
+    Data
+    Pages
+    Settings
+    Utils
+    Widgets
+)
+
 set(PROJECT_SOURCES
         main.cpp
         MainWindow.cpp
         MainWindow.h
         MainWindow.ui
+
+        Api/ApiHandler.cpp Api/ApiHandler.h
+        Api/GeocodingAPI.cpp Api/GeocodingAPI.h
+        Api/WeatherAPI.cpp Api/WeatherAPI.h
+        Api/DetailedWeatherAPI.cpp Api/DetailedWeatherAPI.h
+        Api/Parser.cpp Api/Parser.h
+
+        Data/Data.h
+        Data/DetailedWeatherData.cpp Data/DetailedWeatherData.h
+        Data/GeoLocationData.cpp Data/GeoLocationData.h
+        Data/WeatherData.cpp Data/WeatherData.h
+
+        Pages/Page.cpp Pages/Page.h
+        Pages/HomePage.cpp Pages/HomePage.h
+        Pages/DetailedWeatherPage.cpp Pages/DetailedWeatherPage.h
+        Pages/CustomCompleter.cpp Pages/CustomCompleter.h
+
+        Settings/Settings.cpp Settings/Settings.h
+        Settings/SettingsDialog.cpp Settings/SettingsDialog.h
+        Settings/WidgetsManager.h
+
+        Utils/Serializable.h
+        Utils/Serializer.cpp Utils/Serializer.h
+        Utils/UserLocation.cpp Utils/UserLocation.h
+
+        Widgets/WeatherWidget.cpp Widgets/WeatherWidget.h
+        Widgets/DetailedPageWidgets.cpp Widgets/DetailedPageWidgets.h
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(weather-app
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
-
-        WeatherData.h WeatherData.cpp
-        WeatherAPI.h WeatherAPI.cpp
-        WeatherWidget.h WeatherWidget.cpp
-        HomePage.h HomePage.cpp
-        DetailedWeatherPage.h DetailedWeatherPage.cpp
-        Page.h Page.cpp
-        geocodingapi.h geocodingapi.cpp
-        Data.h
-        GeoLocationData.h GeoLocationData.cpp
-        DetailedWeatherData.h DetailedWeatherData.cpp
-        DetailedWeatherAPI.h DetailedWeatherAPI.cpp
-        ApiHandler.h ApiHandler.cpp
-        Settings.h Settings.cpp
-        SettingsDialog.h SettingsDialog.cpp
-        customcompleter.h customcompleter.cpp
-        UserLocation.h UserLocation.cpp
-
-        WidgetsManager.h
-        Serializable.h
-        Serializer.h Serializer.cpp
-        DetailedPageWidgets.h DetailedPageWidgets.cpp
     )
 # Define target properties for Android with Qt 6 as:
 #    set_property(TARGET weather-app APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR

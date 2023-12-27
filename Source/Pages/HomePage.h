@@ -11,10 +11,10 @@
 #include <QTimer>
 #include <QPushButton>
 #include "Page.h"
-#include "geocodingapi.h"
+#include "GeocodingAPI.h"
 #include "Settings.h"
 #include "GeoLocationData.h"
-#include "customcompleter.h"
+#include "CustomCompleter.h"
 
 struct LocationData;
 class WeatherWidget;

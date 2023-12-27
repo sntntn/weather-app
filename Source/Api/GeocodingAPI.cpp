@@ -1,4 +1,4 @@
-#include "geocodingapi.h"
+#include "GeocodingAPI.h"
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QJsonArray>

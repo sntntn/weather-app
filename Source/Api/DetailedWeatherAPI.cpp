@@ -113,7 +113,7 @@ QSharedPointer<DetailedWeatherData> DetailedWeatherAPI::parseDetailedWeatherData
 
     for (int i = 0; i < hourlyTimeJsize; ++i) {
         QString timeEntry = hourlyTimeJ[i].toString();
-        if (formattedCurrentTime <= timeEntry) {
+        if (formattedCurrentTime < timeEntry) {
             matchingIndex = i - 1;
             break;
         }

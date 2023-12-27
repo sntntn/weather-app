@@ -65,9 +65,9 @@ private:
     QLabel *locationLabel;
     BasicInfoWidget *basicInfo;
     QLabel *minmaxTemperature;
-    QLabel *compassLabel;
-    QPixmap initialCompassIcon;
-    QPixmap arrowIcon;
+    HumidityUvRainWidget *humidityUvRain;
+    VisibilityPressureSnowWidget *visibilityPressureSnow;
+    WindInfoWidget *windInfo;
     QLabel *hourlyLabel;
     HourlyWeatherWidget *hourlyWidget;
     QLabel *dailyLabel;

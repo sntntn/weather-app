@@ -1,6 +1,18 @@
 #include "DetailedPageWidgets.h"
 
+#include <QPainter>
+
 #include "Settings.h"
+
+namespace WidgetUtils{
+    QFrame* createLineFrame(QFrame::Shape shape) {
+        auto *line = new QFrame();
+        line->setFrameShape(shape);
+        line->setLineWidth(1);
+        line->setStyleSheet("color: black;");
+        return line;
+    }
+}
 
 BasicInfoWidget::BasicInfoWidget(QWidget *parent)
     : QWidget(parent)
@@ -53,6 +65,132 @@ void BasicInfoWidget::updateData(const int weatherCode, const bool isDay,
 
     temperatureLabel->setText(QString::number(temperature) + "°");
         feelsLikeLabel->setText("Feels like: " + QString::number(apparentTemperature) + "°");
+}
+
+HumidityUvRainWidget::HumidityUvRainWidget(QWidget *parent)
+    : QWidget{parent}
+    , mainLayout(new QHBoxLayout(this))
+    , humidity(new singleWidgetItem("../Resources/humidity/humidity.png", "Humidity", this))
+    , uvIndex(new singleWidgetItem("../Resources/uv/uv.png", "UV Index", this))
+    , rain(new singleWidgetItem("../Resources/precipitation/raindrop.png", "Rain", this))
+{
+    mainLayout->addWidget(humidity);
+    mainLayout->addWidget(WidgetUtils::createLineFrame(QFrame::VLine));
+    mainLayout->addWidget(uvIndex);
+    mainLayout->addWidget(WidgetUtils::createLineFrame(QFrame::VLine));
+    mainLayout->addWidget(rain);
+
+    this->setLayout(mainLayout);
+}
+
+void HumidityUvRainWidget::updateData(const int humidityValue, const int uvIndexValue, const int rainValue)
+{
+    humidity->updateData(humidityValue, "%");
+    uvIndex->updateData(uvIndexValue, " (" + uvIndextoDescription(uvIndexValue) + ")");
+    rain->updateData(rainValue, " " + Settings::instance().precipitationUnitString());
+}
+
+VisibilityPressureSnowWidget::VisibilityPressureSnowWidget(QWidget *parent)
+    : QWidget{parent}
+    , mainLayout(new QHBoxLayout(this))
+    , visibility(new singleWidgetItem("../Resources/visibility/visibility.png", "Visibility", this))
+    , pressure(new singleWidgetItem("../Resources/pressure/pressure1.png", "Pressure", this))
+    , snow(new singleWidgetItem("../Resources/snow/snowflake.png", "Snow", this))
+{
+    mainLayout->addWidget(visibility);
+    mainLayout->addWidget(WidgetUtils::createLineFrame(QFrame::VLine));
+    mainLayout->addWidget(pressure);
+    mainLayout->addWidget(WidgetUtils::createLineFrame(QFrame::VLine));
+    mainLayout->addWidget(snow);
+
+    this->setLayout(mainLayout);
+}
+
+void VisibilityPressureSnowWidget::updateData(const int visibilityValue, const int pressureValue, const int snowValue)
+{
+    visibility->updateData(visibilityValue, " " + Settings::instance().visibilityUnitString());
+    pressure->updateData(pressureValue, "hPa");
+    snow->updateData(snowValue, " " + Settings::instance().precipitationUnitString());
+}
+
+WindInfoWidget::WindInfoWidget(QWidget *parent)
+    : QWidget(parent)
+    , mainLayout(new QHBoxLayout(this))
+    , leftLayout(new QVBoxLayout())
+    , rightLayout(new QVBoxLayout())
+    , windGustsLabel(new QLabel("Wind Gusts"))
+    , windGusts(new QLabel())
+    , windSpeedLabel(new QLabel("Wind Speed"))
+    , windSpeed(new QLabel())
+    , compassLabel(new QLabel(this))
+    , initialCompassIcon(QPixmap("../Resources/wind/whiteCompass.png"))
+    , arrowIcon(QPixmap("../Resources/wind/whiteArrow.png"))
+{
+    windSpeedLabel->setAlignment(Qt::AlignLeft);
+    windSpeed->setAlignment(Qt::AlignLeft);
+    leftLayout->addWidget(windSpeedLabel);
+    leftLayout->addWidget(windSpeed);
+
+    windGustsLabel->setAlignment(Qt::AlignRight);
+    windGusts->setAlignment(Qt::AlignRight);
+    rightLayout->addWidget(windGustsLabel);
+    rightLayout->addWidget(windGusts);
+
+    mainLayout->addLayout(leftLayout);
+    compassLabel->setAlignment(Qt::AlignCenter);
+    mainLayout->addWidget(compassLabel);
+    mainLayout->addLayout(rightLayout);
+    this->setLayout(mainLayout);
+}
+
+void WindInfoWidget::updateData(const int windSpeedValue, const int windGustsValue, const int windDirectionValue)
+{
+
+    windSpeed->setText(QString::number(windSpeedValue) + Settings::instance().windSpeedUnitString());
+    windGusts->setText(QString::number(windGustsValue) + Settings::instance().windSpeedUnitString());
+
+    QPixmap compassIcon = initialCompassIcon.copy();
+    QPainter painter(&compassIcon);
+
+    painter.setRenderHint(QPainter::Antialiasing);
+    painter.setRenderHint(QPainter::SmoothPixmapTransform);
+
+    QPoint center(compassIcon.width() / 2, compassIcon.height() / 2);
+
+    painter.translate(center);
+    painter.rotate(windDirectionValue - 180);
+    painter.translate(-center);
+
+    painter.drawPixmap(center.x() - arrowIcon.width() / 2,
+                       center.y() - arrowIcon.height() / 2,
+                       arrowIcon);
+    painter.end();
+
+    compassLabel->setPixmap(compassIcon.scaled(100, 100, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+}
+
+singleWidgetItem::singleWidgetItem(const QString iconPath, const QString infoName, QWidget *parent)
+    : QWidget(parent)
+    , mainLayout(new QVBoxLayout(this))
+    , lowerLayout(new QHBoxLayout())
+    , infoIcon(new QPixmap(iconPath))
+    , infoIconLabel(new QLabel(this))
+    , infoLabel(new QLabel(infoName))
+    , info(new QLabel(this))
+{
+    mainLayout->addWidget(infoLabel);
+    infoIconLabel->setPixmap(infoIcon->scaled(iconWidth, iconHeight,
+                                              Qt::KeepAspectRatio, Qt::SmoothTransformation));
+    lowerLayout->addWidget(infoIconLabel);
+    lowerLayout->addWidget(info);
+    mainLayout->addLayout(lowerLayout);
+
+    this->setLayout(mainLayout);
+}
+
+void singleWidgetItem::updateData(const int value, const QString unit)
+{
+    info->setText(QString::number(value) + unit);
 }
 
 HourlyWeatherWidget::HourlyWeatherWidget(QWidget *parent)
@@ -125,11 +263,7 @@ DailyWeatherWidget::DailyWeatherWidget(QWidget *parent)
         mainLayout->addWidget(widget, 2*i, 0);
 
         if (i < 6) {
-            auto *line = new QFrame();
-            line->setFrameShape(QFrame::HLine);
-            line->setLineWidth(1);
-            line->setStyleSheet("color: black;");
-            mainLayout->addWidget(line, 2*i + 1, 0, 1, -1);
+            mainLayout->addWidget(WidgetUtils::createLineFrame(QFrame::HLine), 2*i + 1, 0, 1, -1);
         }
     }
 }
@@ -137,7 +271,6 @@ DailyWeatherWidget::DailyWeatherWidget(QWidget *parent)
 void DailyWeatherWidget::updateData(const QVector<QString> &dayNames, const QVector<int> &weatherCodes,
                                     const QVector<int> &minTemps, const QVector<int> &maxTemps)
 {
-    //todo magic number
     for (int i = 0; i < daysPerWeek; ++i) {
         QLayoutItem* item = mainLayout->itemAt(2*i);
         auto* widget = static_cast<DailyWidgetItem*>(item->widget());
@@ -183,6 +316,29 @@ void DailyWeatherWidget::DailyWidgetItem::updateData(const QString &dayName, con
                                                           Qt::KeepAspectRatio, Qt::SmoothTransformation));
     dailyminTempLabel->setText(QString::number(minTemp) + "°");
     dailymaxTempLabel->setText(QString::number(maxTemp) + "°");
+}
+
+QString HumidityUvRainWidget::uvIndextoDescription(const int uvIndex)
+{
+    switch(uvIndex){
+    case 0:
+    case 1:
+    case 2:
+        return "Safe";
+    case 3:
+    case 4:
+    case 5:
+        return "Low risk";
+    case 6:
+    case 7:
+        return "Moderate risk";
+    case 8:
+    case 9:
+    case 10:
+        return "High risk";
+    default:
+        return "Dangerous";
+    }
 }
 
 QString BasicInfoWidget::getDaySuffix(const int day) {

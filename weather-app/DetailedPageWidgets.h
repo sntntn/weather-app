@@ -33,6 +33,68 @@ public:
     QString weatherCodeToDescription(const int weatherCode);
 };
 
+class singleWidgetItem : public QWidget{
+    QVBoxLayout *mainLayout;
+    QHBoxLayout *lowerLayout;
+    QPixmap *infoIcon;
+    QLabel *infoIconLabel;
+    QLabel *infoLabel;
+    QLabel *info;
+
+    static const int iconWidth = 25;
+    static const int iconHeight = 25;
+public:
+    singleWidgetItem(const QString iconPath, const QString infoName, QWidget *parent = nullptr);
+    void updateData(const int value, const QString unit);
+    QFrame* createLineFrame();
+};
+
+class HumidityUvRainWidget : public QWidget
+{
+    QHBoxLayout *mainLayout;
+    singleWidgetItem *humidity;
+    singleWidgetItem *uvIndex;
+    singleWidgetItem *rain;
+
+public:
+    HumidityUvRainWidget(QWidget *parent = nullptr);
+    void updateData(const int humidity, const int uvIndex, const int rain);
+    QString uvIndextoDescription(const int uvIndex);
+};
+
+class VisibilityPressureSnowWidget : public QWidget
+{
+    QHBoxLayout *mainLayout;
+    singleWidgetItem *visibility;
+    singleWidgetItem *pressure;
+    singleWidgetItem *snow;
+
+public:
+    VisibilityPressureSnowWidget(QWidget *parent = nullptr);
+    void updateData(const int visibilityValue, const int pressureValue, const int snowValue);
+};
+
+class WindInfoWidget : public QWidget
+{
+    QHBoxLayout *mainLayout;
+    QVBoxLayout *leftLayout;
+    QVBoxLayout *rightLayout;
+    QLabel *windGustsLabel;
+    QLabel *windGusts;
+    QLabel *windSpeedLabel;
+    QLabel *windSpeed;
+    QLabel *compassLabel;
+    QPixmap initialCompassIcon;
+    QPixmap arrowIcon;
+
+    static const int iconWidth = 100;
+    static const int iconHeight = 100;
+
+public:
+    WindInfoWidget(QWidget *parent = nullptr);
+    void updateData(const int windSpeed, const int windGusts, const int windDirection);
+};
+
 class HourlyWeatherWidget : public QWidget
 {
     QVBoxLayout *mainLayout;
@@ -96,9 +158,4 @@ public:
                     const QVector<int> &minTemps, const QVector<int> &maxTemps);
 
 };
-
-
-
-
-
 #endif // DETAILEDPAGEWIDGETS_H

@@ -2,7 +2,6 @@
 #define DETAILEDWEATHERAPI_H
 
 #include <QGeoCoordinate>
-//#include <QThread>
 #include <QString>
 #include <QNetworkAccessManager>
 #include <QObject>
@@ -22,9 +21,6 @@ public:
 
 private slots:
     void replyFinished(QNetworkReply *reply);
-
-//protected:
-//    void run() override;
 
 signals:
     void dataFetched(const QSharedPointer<Data> &data);

@@ -24,12 +24,6 @@ DetailedWeatherAPI::DetailedWeatherAPI(const GeoLocationData &location, QObject 
     connect(networkManager, &QNetworkAccessManager::finished, this, &DetailedWeatherAPI::replyFinished);
 }
 
-//void DetailedWeatherAPI::run()
-//{
-//    fetchData(location.getCoordinates());
-//    exec();
-//}
-
 void DetailedWeatherAPI::fetchData(const QGeoCoordinate &coordinates)
 {
     QString latitude  = QString::number(coordinates.latitude());
@@ -39,19 +33,15 @@ void DetailedWeatherAPI::fetchData(const QGeoCoordinate &coordinates)
     QUrlQuery query;
     query.addQueryItem("latitude", latitude);
     query.addQueryItem("longitude", longitude);
-    query.addQueryItem("current", "temperature_2m,weather_code,is_day,wind_speed_10m,apparent_temperature,precipitation,relative_humidity_2m,visibility,pressure_msl,uv_index,precipitation_probability,wind_direction_10m,wind_gusts_10m");
+    query.addQueryItem("current", "temperature_2m,weather_code,is_day,wind_speed_10m,apparent_temperature,rain,snowfall,relative_humidity_2m,visibility,pressure_msl,uv_index,wind_direction_10m,wind_gusts_10m");
     query.addQueryItem("daily", "temperature_2m_max,temperature_2m_min,weather_code,sunrise,sunset");
     query.addQueryItem("timezone", "auto");
 
     query.addQueryItem("hourly", "temperature_2m,weather_code,is_day");
 
-    QDateTime now = QDateTime::currentDateTime();
-    QDateTime next24Hours = now.addSecs(24 * 60 * 60); // Add 24 hours
-    query.addQueryItem("start", now.toString(Qt::ISODate));
-    query.addQueryItem("end", next24Hours.toString(Qt::ISODate));
-
     query.addQueryItem("temperature_unit", Settings::instance().temperatureUnitApiParameter());
-
+    query.addQueryItem("wind_speed_unit", Settings::instance().windSpeedUnitApiParameter());
+    query.addQueryItem("precipitation_unit", Settings::instance().precipitationUnitApiParameter());
 
     url.setQuery(query);
     QNetworkRequest request(url);
@@ -68,8 +58,6 @@ void DetailedWeatherAPI::replyFinished(QNetworkReply *reply){
     auto data = parseDetailedWeatherData(jsonData, location);
 
     emit dataFetched(data);
-    //this->quit();
-
     reply->deleteLater();
 }
 
@@ -81,6 +69,7 @@ QSharedPointer<DetailedWeatherData> DetailedWeatherAPI::parseDetailedWeatherData
     QJsonObject current = obj.value("current").toObject();
     QJsonObject daily = obj.value("daily").toObject();
     QJsonObject hourly = obj.value("hourly").toObject();
+    qDebug() << current;
 
     QTimeZone timeZone = QTimeZone(timezoneId.toLatin1());
     int temperature = static_cast<int>(qRound(current.value("temperature_2m").toDouble()));
@@ -88,12 +77,12 @@ QSharedPointer<DetailedWeatherData> DetailedWeatherAPI::parseDetailedWeatherData
     bool isDay = static_cast<bool>(current.value("is_day").toInt());
     int windSpeed = static_cast<int>(qRound(current.value("wind_speed_10m").toDouble()));
     int apparentTemperature = static_cast<int>(qRound(current.value("apparent_temperature").toDouble()));
-    int precipitation = static_cast<int>(qRound(current.value("precipitation").toDouble()));
+    int rain = static_cast<int>(qRound(current.value("rain").toDouble()));
+    int snow = static_cast<int>(qRound(current.value("snowfall").toDouble()));
     int humidity = static_cast<int>(qRound(current.value("relative_humidity_2m").toDouble()));
     int visibility = static_cast<int>(qRound(current.value("visibility").toDouble()));
     int pressure =  static_cast<int>(qRound(current.value("pressure_msl").toDouble()));
     int uvIndex = static_cast<int>(qRound(current.value("uv_index").toDouble()));
-    int precipitationProbability = static_cast<int>(qRound(current.value("precipitation_probability").toDouble()));
     int windDirection = static_cast<int>(qRound(current.value("wind_direction_10m").toDouble()));
     int windGusts = static_cast<int>(qRound(current.value("wind_gusts_10m").toDouble()));
 
@@ -102,12 +91,12 @@ QSharedPointer<DetailedWeatherData> DetailedWeatherAPI::parseDetailedWeatherData
     qDebug() << "isDay:" << isDay;
     qDebug() << "wind speed:" << windSpeed;
     qDebug() << "real feel:" << apparentTemperature;
-    qDebug() << "precipitation:" << precipitation;
+    qDebug() << "rain:" << rain;
+    qDebug() << "snowfall:" << snow;
     qDebug() << "humidity:" << humidity;
     qDebug() << "visibility:" << visibility;
     qDebug() << "pressure:" << pressure;
     qDebug() << "uv:" << uvIndex;
-    qDebug() << "precipitation probability:" << precipitationProbability;
     qDebug() << "wind direction:" << windDirection;
     qDebug() << "wind gusts:" << windGusts;
 
@@ -206,7 +195,8 @@ QSharedPointer<DetailedWeatherData> DetailedWeatherAPI::parseDetailedWeatherData
                                                                      windGusts,
                                                                      windDirection,
                                                                      apparentTemperature,
-                                                                     precipitation,
+                                                                     rain,
+                                                                     snow,
                                                                      uvIndex,
                                                                      humidity,
                                                                      visibility,
@@ -221,8 +211,5 @@ QSharedPointer<DetailedWeatherData> DetailedWeatherAPI::parseDetailedWeatherData
                                                                      weeklySunrise,
                                                                      weeklySunset,
                                                                      weeklyDayName));
-
-
-
     return data;
 }

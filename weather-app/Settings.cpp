@@ -77,6 +77,19 @@ QString Settings::precipitationUnitToString(const PrecipitationUnit precUnit) co
     }
 }
 
+// Depends on precipitation unit in the API
+QString Settings::visibilityUnitToString(const PrecipitationUnit unit) const
+{
+    switch (unit) {
+    case Settings::PrecipitationUnit::MILLIMETRES:
+        return "m";
+    case Settings::PrecipitationUnit::INCHES:
+        return "ft";
+    default:
+        return "";
+    }
+}
+
 QString Settings::temperatureUnitsNames(const TemperatureUnit tempUnit) const{
     switch (tempUnit) {
     case Settings::TemperatureUnit::CELSIUS:
@@ -185,6 +198,12 @@ QString Settings::windSpeedUnitString() const
 QString Settings::precipitationUnitString() const
 {
     return precipitationUnitToString(m_precipitationUnit);
+}
+
+QString Settings::visibilityUnitString() const
+{
+    // Depends on precipitation unit in the API
+    return visibilityUnitToString(m_precipitationUnit);
 }
 
 QString Settings::temperatureUnitName() const

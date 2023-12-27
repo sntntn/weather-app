@@ -17,7 +17,8 @@ public:
                                  const int windGusts,
                                  const int windDirection,
                                  const int apparentTemperature,
-                                 const int precipitation,
+                                 const int rain,
+                                 const int snow,
                                  const int uvIndex,
                                  const int humidity,
                                  const int visibility,
@@ -70,9 +71,13 @@ public:
     {
         return m_apparentTemperature;
     }
-    inline int precipitation() const
+    inline int rain() const
     {
-        return m_precipitation;
+        return m_rain;
+    }
+    inline int snow() const
+    {
+        return m_snow;
     }
     inline int uvIndex() const
     {
@@ -134,8 +139,6 @@ public:
 private:
     GeoLocationData m_location;
     int m_temperature;
-    int m_highestTemperature;
-    int m_lowestTemperature;
     int m_weatherCode;
     bool m_isDay;
     QTimeZone m_timezone;
@@ -143,7 +146,8 @@ private:
     int m_windGusts;
     int m_windDirection;
     int m_apparentTemperature;
-    int m_precipitation;
+    int m_rain;
+    int m_snow;
     int m_uvIndex;
     int m_humidity;
     int m_visibility;

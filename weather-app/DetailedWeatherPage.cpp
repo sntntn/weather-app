@@ -11,7 +11,6 @@
 #include <iostream>
 #include <QStackedWidget>
 #include <QTimer>
-#include <QPainter>
 #include <QTransform>
 #include <QFrame>
 
@@ -32,9 +31,9 @@ DetailedWeatherPage::DetailedWeatherPage(QWidget *parent)
     , locationLabel(new QLabel(this))
     , basicInfo(new BasicInfoWidget(this))
     , minmaxTemperature(new QLabel(this))
-    , compassLabel(new QLabel(this))
-    , initialCompassIcon(QPixmap("../Resources/wind/whiteCompass.png"))
-    , arrowIcon(QPixmap("../Resources/wind/whiteArrow.png"))
+    , humidityUvRain(new HumidityUvRainWidget(this))
+    , visibilityPressureSnow(new VisibilityPressureSnowWidget(this))
+    , windInfo(new WindInfoWidget(this))
     , hourlyLabel(new QLabel("Hourly"))
     , hourlyWidget(new HourlyWeatherWidget(this))
     , dailyLabel(new QLabel("7-DAY FORECAST"))
@@ -63,6 +62,10 @@ DetailedWeatherPage::DetailedWeatherPage(QWidget *parent)
     minmaxTemperature->setStyleSheet("font-size: 16px;");
     weatherLayout->addWidget(minmaxTemperature, 0, Qt::AlignHCenter);
 
+    weatherLayout->addWidget(humidityUvRain);
+    weatherLayout->addWidget(visibilityPressureSnow);
+    weatherLayout->addWidget(windInfo);
+
     hourlyLabel->setStyleSheet("font: bold 15px;");
     weatherLayout->addWidget(hourlyLabel);
     weatherLayout->addWidget(hourlyWidget);
@@ -71,8 +74,6 @@ DetailedWeatherPage::DetailedWeatherPage(QWidget *parent)
     dailyLabel->setAlignment(Qt::AlignHCenter);
     weatherLayout->addWidget(dailyLabel);
     weatherLayout->addWidget(dailyWidget);
-
-    weatherLayout->addWidget(compassLabel);
 
     weatherScrollAreaContents->setLayout(weatherLayout);
     weatherScrollArea->setWidget(weatherScrollAreaContents);
@@ -116,8 +117,6 @@ void DetailedWeatherPage::addNewWidget(const QSharedPointer<Data> &data)
 
 void DetailedWeatherPage::setData(const GeoLocationData &data)
 {
-    widgetsScrollArea->verticalScrollBar()->setValue(0);
-
     bool showAddbutton = data.getRenamedPlace() != "My location" &&
                          Settings::instance().savedLocations().indexOf(data) == -1;
 
@@ -138,7 +137,6 @@ void DetailedWeatherPage::showData(const QSharedPointer<Data> &data){
     highlightWidget();
 
     locationLabel->setText(detailedData->location().getRenamedPlace());
-    //todo (need country from api)countryLabel->setText(detailedData->location.get)
 
     basicInfo->updateData(this->data->weatherCode(), this->data->isDay(), this->data->timezone(),
                           this->data->temperature(), this->data->apparentTemperature());
@@ -152,24 +150,9 @@ void DetailedWeatherPage::showData(const QSharedPointer<Data> &data){
     dailyWidget->updateData(this->data->weeklyDayName(), this->data->weeklyCode(),
                             this->data->weeklyMinTemp(), this->data->weeklyMaxTemp());
 
-    QPixmap compassIcon = initialCompassIcon.copy();
-    QPainter painter(&compassIcon);
-
-    painter.setRenderHint(QPainter::Antialiasing);
-    painter.setRenderHint(QPainter::SmoothPixmapTransform);
-
-    QPoint center(compassIcon.width() / 2, compassIcon.height() / 2);
-
-    painter.translate(center);
-    painter.rotate(detailedData->windDirection() - 180);
-    painter.translate(-center);
-
-    painter.drawPixmap(center.x() - arrowIcon.width() / 2,
-                       center.y() - arrowIcon.height() / 2,
-                       arrowIcon);
-    painter.end();
-
-    compassLabel->setPixmap(compassIcon.scaled(100, 100, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+    humidityUvRain->updateData(this->data->humidity(), this->data->uvIndex(), this->data->rain());
+    visibilityPressureSnow->updateData(this->data->visibility(), this->data->pressure(), this->data->snow());
+    windInfo->updateData(this->data->windSpeed(), this->data->windGusts(), this->data->windDirection());
 }
 
 void DetailedWeatherPage::resizeEvent(QResizeEvent* event) {

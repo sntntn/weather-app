@@ -10,7 +10,8 @@ DetailedWeatherData::DetailedWeatherData(const GeoLocationData &location,
                                          const int windGusts,
                                          const int windDirection,
                                          const int apparentTemperature,
-                                         const int precipitation,
+                                         const int rain,
+                                         const int snow,
                                          const int uvIndex,
                                          const int humidity,
                                          const int visibility,
@@ -35,7 +36,8 @@ DetailedWeatherData::DetailedWeatherData(const GeoLocationData &location,
     , m_windGusts(windGusts)
     , m_windDirection(windDirection)
     , m_apparentTemperature(apparentTemperature)
-    , m_precipitation(precipitation)
+    , m_rain(rain)
+    , m_snow(snow)
     , m_uvIndex(uvIndex)
     , m_humidity(humidity)
     , m_visibility(visibility)

@@ -155,27 +155,27 @@ void DetailedWeatherPage::showData(const QSharedPointer<Data> &data){
     this->data = detailedData;
     highlightWidget();
 
-    locationLabel->setText(detailedData->location.getRenamedPlace());
+    locationLabel->setText(detailedData->location().getRenamedPlace());
     //todo (need country from api)countryLabel->setText(detailedData->location.get)
 
-    basicInfo->updateData(this->data->weatherCode, this->data->isDay, this->data->timezone,
-                          this->data->temperature, this->data->apparentTemperature);
+    basicInfo->updateData(this->data->weatherCode(), this->data->isDay(), this->data->timezone(),
+                          this->data->temperature(), this->data->apparentTemperature());
 
-    minmaxTemperature->setText("H:" + QString::number(detailedData->weeklyMaxTemp[0]) + "°  L:"
-                               + QString::number(detailedData->weeklyMinTemp[0]) + "°");
+    minmaxTemperature->setText("H:" + QString::number(detailedData->weeklyMaxTemp()[0]) + "°  L:"
+                               + QString::number(detailedData->weeklyMinTemp()[0]) + "°");
     //todo magic number
     for (int i = 0; i < 24; ++i) {
         QLayoutItem* item = hourlyLayout->itemAt(i);
         HourlyWeatherWidget* widget = dynamic_cast<HourlyWeatherWidget*>(item->widget());
-        widget->updateData(this->data->hourlyTemperature[i], this->data->hourlyCode[i],
-                           this->data->hourlyIsDay[i], this->data->hourlyTimeStamp[i]);
+        widget->updateData(this->data->hourlyTemperature()[i], this->data->hourlyCode()[i],
+                           this->data->hourlyIsDay()[i], this->data->hourlyTimeStamp()[i]);
     }
     //todo magic number
     for (int i = 0; i < 7; ++i) {
         QLayoutItem* item = dailyLayout->itemAt(2*i);
         DailyWeatherWidget* widget = dynamic_cast<DailyWeatherWidget*>(item->widget());
-        widget->updateData(this->data->weeklyDayName[i], this->data->weeklyCode[i],
-                           this->data->weeklyMinTemp[i], this->data->weeklyMaxTemp[i]);
+        widget->updateData(this->data->weeklyDayName()[i], this->data->weeklyCode()[i],
+                           this->data->weeklyMinTemp()[i], this->data->weeklyMaxTemp()[i]);
     }
 
     QPixmap compassIcon = initialCompassIcon->copy();
@@ -187,7 +187,7 @@ void DetailedWeatherPage::showData(const QSharedPointer<Data> &data){
     QPoint center(compassIcon.width() / 2, compassIcon.height() / 2);
 
     painter.translate(center);
-    painter.rotate(detailedData->windDirection - 180);
+    painter.rotate(detailedData->windDirection() - 180);
     painter.translate(-center);
 
     painter.drawPixmap(center.x() - arrowIcon->width() / 2,
@@ -209,7 +209,7 @@ void DetailedWeatherPage::addButtonClicked()
 {
     emit locationSaved(this->data);
     this->addToSavedLocations->setVisible(false);
-    Settings::instance().savedLocations().push_back(this->data->location);
+    Settings::instance().savedLocations().push_back(this->data->location());
 }
 
 void DetailedWeatherPage::homeButtonClicked()
@@ -228,7 +228,7 @@ void DetailedWeatherPage::highlightWidget()
     }
 
     auto newSelectedWidget = std::find_if(m_widgets.begin(), m_widgets.end(), [this](const auto* widget) {
-        return widget->data->location() == this->data->location;
+        return widget->data->location() == this->data->location();
     });
 
     if (newSelectedWidget != m_widgets.end()) {

@@ -128,10 +128,10 @@ QSharedPointer<DetailedWeatherData> DetailedWeatherAPI::parseDetailedWeatherData
         }
     }
 
-    std::vector<int> ht;
-    std::vector<int> hc;
-    std::vector<bool> hd;
-    std::vector<QString> hts;
+    QVector<int> ht;
+    QVector<int> hc;
+    QVector<bool> hd;
+    QVector<QString> hts;
 
     for (int i = matchingIndex, end = matchingIndex + 24; i < end; i++){
         int temperature = static_cast<int>(qRound(hourlyTempJ[i].toDouble()));
@@ -155,10 +155,10 @@ QSharedPointer<DetailedWeatherData> DetailedWeatherAPI::parseDetailedWeatherData
     QJsonArray weeklySunsetJ = daily.value("sunset").toArray();
     QJsonArray weeklyDayJ = daily.value("time").toArray();
 
-    std::vector<int> weeklyCode;
-    std::vector<QString> weeklySunrise;
-    std::vector<QString> weeklySunset;
-    std::vector<QString> weeklyDayName;
+    QVector<int> weeklyCode;
+    QVector<QString> weeklySunrise;
+    QVector<QString> weeklySunset;
+    QVector<QString> weeklyDayName;
     for (int i = 0; i < 7; i++){
         int wc = static_cast<int>(qRound(weeklyCodeJ[i].toDouble()));
         weeklyCode.push_back(wc);
@@ -180,13 +180,13 @@ QSharedPointer<DetailedWeatherData> DetailedWeatherAPI::parseDetailedWeatherData
     qDebug() << "weekly day:" << weeklyDayName;
 
     QJsonArray weeklyMaxTempJ = daily.value("temperature_2m_max").toArray();
-    std::vector<int> weeklyMaxTemp;
+    QVector<int> weeklyMaxTemp;
     for (int i = 0; i < 7; i++){
         int temperature = static_cast<int>(qRound(weeklyMaxTempJ[i].toDouble()));
         weeklyMaxTemp.push_back(temperature);
     }
     QJsonArray weeklyMinTempJ = daily.value("temperature_2m_min").toArray();
-    std::vector<int> weeklyMinTemp;
+    QVector<int> weeklyMinTemp;
     for (int i = 0; i < 7; i++){
         int temperature = static_cast<int>(qRound(weeklyMinTempJ[i].toDouble()));
         weeklyMinTemp.push_back(temperature);

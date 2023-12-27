@@ -15,40 +15,40 @@ DetailedWeatherData::DetailedWeatherData(const GeoLocationData &location,
                                          const int humidity,
                                          const int visibility,
                                          const int pressure,
-                                         const std::vector<int> hourlyTemperature,
-                                         const std::vector<int> hourlyCode,
-                                         const std::vector<bool> hourlyIsDay,
-                                         const std::vector<QString> hourlyTimeStamp,
-                                         const std::vector<int> weeklyMaxTemp,
-                                         const std::vector<int> weeklyMinTemp,
-                                         const std::vector<int> weeklyCode,
-                                         const std::vector<QString> weeklySunrise,
-                                         const std::vector<QString> weeklySunset,
-                                         const std::vector<QString> weeklyDayName)
+                                         const QVector<int> hourlyTemperature,
+                                         const QVector<int> hourlyCode,
+                                         const QVector<bool> hourlyIsDay,
+                                         const QVector<QString> hourlyTimeStamp,
+                                         const QVector<int> weeklyMaxTemp,
+                                         const QVector<int> weeklyMinTemp,
+                                         const QVector<int> weeklyCode,
+                                         const QVector<QString> weeklySunrise,
+                                         const QVector<QString> weeklySunset,
+                                         const QVector<QString> weeklyDayName)
     : WeatherData(location, temperature, weeklyMaxTemp[0], weeklyMinTemp[0], weatherCode, isDay, timezone)
-    , location(location)
-    , temperature(temperature)
-    , weatherCode(weatherCode)
-    , isDay(isDay)
-    , timezone(timezone)
-    , windSpeed(windSpeed)
-    , windGusts(windGusts)
-    , windDirection(windDirection)
-    , apparentTemperature(apparentTemperature)
-    , precipitation(precipitation)
-    , uvIndex(uvIndex)
-    , humidity(humidity)
-    , visibility(visibility)
-    , pressure(pressure)
-    , hourlyTemperature(hourlyTemperature)
-    , hourlyCode(hourlyCode)
-    , hourlyIsDay(hourlyIsDay)
-    , hourlyTimeStamp(hourlyTimeStamp)
-    , weeklyMaxTemp(weeklyMaxTemp)
-    , weeklyMinTemp(weeklyMinTemp)
-    , weeklyCode(weeklyCode)
-    , weeklySunrise(weeklySunrise)
-    , weeklySunset(weeklySunset)
-    , weeklyDayName(weeklyDayName)
+    , m_location(location)
+    , m_temperature(temperature)
+    , m_weatherCode(weatherCode)
+    , m_isDay(isDay)
+    , m_timezone(timezone)
+    , m_windSpeed(windSpeed)
+    , m_windGusts(windGusts)
+    , m_windDirection(windDirection)
+    , m_apparentTemperature(apparentTemperature)
+    , m_precipitation(precipitation)
+    , m_uvIndex(uvIndex)
+    , m_humidity(humidity)
+    , m_visibility(visibility)
+    , m_pressure(pressure)
+    , m_hourlyTemperature(hourlyTemperature)
+    , m_hourlyCode(hourlyCode)
+    , m_hourlyIsDay(hourlyIsDay)
+    , m_hourlyTimeStamp(hourlyTimeStamp)
+    , m_weeklyMaxTemp(weeklyMaxTemp)
+    , m_weeklyMinTemp(weeklyMinTemp)
+    , m_weeklyCode(weeklyCode)
+    , m_weeklySunrise(weeklySunrise)
+    , m_weeklySunset(weeklySunset)
+    , m_weeklyDayName(weeklyDayName)
 {}
 

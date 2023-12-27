@@ -16,6 +16,7 @@ public:
 
 public slots:
     virtual void addNewWidget(const QSharedPointer<Data> &data) = 0;
+    virtual void addErrorWidget(const QString &errMsg) = 0;
     void deleteWidgets();
 
 protected:

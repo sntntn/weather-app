@@ -2,6 +2,7 @@
 
 #include "MainWindow.h"
 #include "WeatherData.h"
+#include "ErrorWidget.h"
 #include "WeatherWidget.h"
 #include "GeoLocationData.h"
 #include "Settings.h"
@@ -73,6 +74,12 @@ void DetailedWeatherPage::addNewWidget(const QSharedPointer<Data> &data)
     if (stackedWidget->currentWidget() == this) {
         QTimer::singleShot(100, this, &DetailedWeatherPage::highlightWidget);
     }
+}
+
+void DetailedWeatherPage::addErrorWidget(const QString &errMsg)
+{
+    auto *widget = new ErrorWidget(errMsg);
+    widgetsLayout->addWidget(widget, 0, 0, 1, 1);
 }
 
 void DetailedWeatherPage::setData(const GeoLocationData &data) // todo sharedptr

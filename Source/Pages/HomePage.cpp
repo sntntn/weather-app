@@ -6,6 +6,7 @@
 
 #include "MainWindow.h"
 #include "WeatherData.h"
+#include "ErrorWidget.h"
 #include "WeatherWidget.h"
 #include "SettingsDialog.h"
 #include "Settings.h"
@@ -80,6 +81,13 @@ void HomePage::addNewWidget(const QSharedPointer<Data> &data)
 
     widget->setMaximumHeight(160);
     m_widgets.emplaceBack(widget);
+}
+
+void HomePage::addErrorWidget(const QString &errMsg)
+{
+    auto *widget = new ErrorWidget(errMsg);
+    widgetsLayout->addWidget(widget, 0, 0, 1, 1);
+    widget->setMaximumHeight(160);
 }
 
 void HomePage::openSettingsDialog()

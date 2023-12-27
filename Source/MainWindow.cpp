@@ -43,8 +43,8 @@ MainWindow::MainWindow(QWidget *parent)
     connect(this, &MainWindow::deletePageWidgets, homePage, &Page::deleteWidgets);
     connect(this, &MainWindow::deletePageWidgets, detailedWeather, &Page::deleteWidgets);
     connect(userLocation, &UserLocation::userLocationFetched, this, &MainWindow::getLocationData);
-    connect(weatherApi, &ApiHandler::dataFetched, homePage, &HomePage::addNewWidget);
-    connect(weatherApi, &ApiHandler::dataFetched, detailedWeather, &DetailedWeatherPage::addNewWidget);
+    connect(weatherApi, &WeatherAPI::dataFetched, homePage, &HomePage::addNewWidget);
+    connect(weatherApi, &WeatherAPI::dataFetched, detailedWeather, &DetailedWeatherPage::addNewWidget);
 }
 
 MainWindow::~MainWindow()

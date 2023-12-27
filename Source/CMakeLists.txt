@@ -4,7 +4,6 @@ project(weather-app VERSION 0.1 LANGUAGES CXX)
 
 configure_file(config.ini ${CMAKE_CURRENT_BINARY_DIR} COPYONLY)
 
-
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)

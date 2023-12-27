@@ -76,7 +76,6 @@ build*
 *.user
 
 #config.ini
-config.ini
 
 #Serialization files
 Serialization/*.json

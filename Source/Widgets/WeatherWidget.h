@@ -36,12 +36,14 @@ private:
     static const int minmaxTemperatureFontSize = 14;
     static const int iconWidth = 80;
     static const int iconHeight = 80;
+    static const int initialFontSize = locationFontSize;
 
     QHBoxLayout *mainLayout;
     QVBoxLayout *leftLayout;
     QVBoxLayout *rightLayout;
     QLabel* temperatureLabel;
     QLabel* locationLabel;
+    QLabel* countryLabel;
     QLabel* maxTemperatureLabel;
     QLabel* minTemperatureLabel;
     QLabel* timeLabel;
@@ -50,6 +52,7 @@ private:
 
     QString weatherCodeToIcon(const int weatherCode, const bool isDay);
     int adjustLabelFontSize(const QString &fontName);
+    int adjustCountryLabelFontSize(const QString &fontName);
 };
 
 #endif // WEATHERWIDGET_H

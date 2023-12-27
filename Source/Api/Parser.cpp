@@ -53,14 +53,21 @@ void Parser::parseGeocodingData(const QJsonArray &resultsArray, QList<GeoLocatio
         if (!geometryObject.contains("lat") || !geometryObject.contains("lng")) {
             continue;
         }
-
         double latitude = geometryObject["lat"].toDouble();
         double longitude = geometryObject["lng"].toDouble();
+
+        QString country = "";
+        if(resultObject.contains("components") && resultObject["components"].isObject()){
+            QJsonObject componentsObject = resultObject["components"].toObject();
+            if(componentsObject.contains("country") && componentsObject["country"].isString()){
+                country = componentsObject["country"].toString();
+            }
+        }
 
         QString renamedPlace;
         auto commaIndex=place.indexOf(',');
         commaIndex == -1 ? renamedPlace = place : renamedPlace = place.left(commaIndex).trimmed();
 
-        locations.emplace_back(place, renamedPlace, QGeoCoordinate(latitude,longitude));
+        locations.emplace_back(place, renamedPlace, QGeoCoordinate(latitude,longitude),country);
     }
 }

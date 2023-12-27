@@ -21,6 +21,7 @@ WeatherWidget::WeatherWidget(const QSharedPointer<WeatherData> &data, QWidget *p
     , rightLayout(new QVBoxLayout())
     , temperatureLabel(new QLabel(QString::number(data->temperature()) + "°", this))
     , locationLabel(new QLabel(data->location().getRenamedPlace().toUpper(), this))
+    , countryLabel(new QLabel(data->location().getCountry(), this))
     , maxTemperatureLabel(new QLabel("H:" + QString::number(data->highestTemperature()) + "°", this))
     , minTemperatureLabel(new QLabel("L:" + QString::number(data->lowestTemperature()) + "°", this))
     , timeLabel(new QLabel(QDateTime::currentDateTime().toTimeZone(data->timezone()).toString("HH:mm"), this))
@@ -44,11 +45,17 @@ WeatherWidget::WeatherWidget(const QSharedPointer<WeatherData> &data, QWidget *p
 
     QString labelStyle = "QLabel { color: white; }";
     locationLabel->setStyleSheet(labelStyle);
-    locationLabel->setWordWrap(true);
+    //locationLabel->setWordWrap(true);
     timeLabel->setStyleSheet(labelStyle);
     temperatureLabel->setStyleSheet(labelStyle);
 
+    countryLabel->setFont(QFont("Roboto", adjustCountryLabelFontSize("Roboto"), QFont::Normal));
+    countryLabel->setStyleSheet("QLabel { color: #cccccc; }");
+    countryLabel->setWordWrap(true);
+
     leftLayout->addWidget(locationLabel, 0, Qt::AlignCenter);
+    leftLayout->addSpacing(-10);
+    leftLayout->addWidget(countryLabel, 0, Qt::AlignCenter);
     leftLayout->addWidget(iconLabel, 0, Qt::AlignCenter);
     leftLayout->addWidget(timeLabel, 0, Qt::AlignCenter);
 
@@ -65,17 +72,48 @@ WeatherWidget::WeatherWidget(const QSharedPointer<WeatherData> &data, QWidget *p
     mainLayout->addWidget(separator);
     mainLayout->addLayout(rightLayout);
     setLayout(mainLayout);
+
 }
+
+
+//TO DO
+//test funkcija za prilagodjavanje fonta i velicine countryLabel    -> za slucaj da GUI kolege zele drugacije da ga pozicioniraju i preurede :)
+int WeatherWidget::adjustCountryLabelFontSize(const QString &fontName)
+{
+    QString countryText = data->location().getCountry();
+
+    int countryLabelFontSize = initialFontSize - 8;
+    QFont font(fontName, countryLabelFontSize);
+    QFontMetrics fm(font);
+
+    QRect textRect = fm.boundingRect(0, 0, countryLabel->width(), QWIDGETSIZE_MAX, Qt::TextWordWrap, countryText);
+    int textHeight = textRect.height();
+
+    int maxHeight = countryLabel->maximumHeight();
+    int minFontSize = 8;
+
+    while (textHeight > maxHeight && font.pointSize() > minFontSize) {
+        font.setPointSize(font.pointSize() - 1);
+        fm = QFontMetrics(font);
+        textRect = fm.boundingRect(0, 0, countryLabel->width(), QWIDGETSIZE_MAX, Qt::TextWordWrap, countryText);
+        textHeight = textRect.height();
+    }
+
+    countryLabel->setFont(font);
+
+    return font.pointSize();
+}
+
 
 int WeatherWidget::adjustLabelFontSize(const QString &fontName)
 {
-    QFont font(fontName, locationFontSize);
+    QFont font(fontName, initialFontSize);
     QFontMetrics fm(font);
 
-    QRect textRect = fm.boundingRect(0, 0, locationLabel->width(), locationFontSize, Qt::AlignCenter | Qt::TextWordWrap, locationLabel->text());
+    QRect textRect = fm.boundingRect(0, 0, countryLabel->width(), initialFontSize, Qt::AlignCenter | Qt::TextWordWrap, countryLabel->text());
     int textHeight = textRect.height();
 
-    while (textHeight > locationFontSize && fm.height() > 0) {
+    while (textHeight > initialFontSize && fm.height() > 0) {
         font.setPointSize(font.pointSize() - 1);
         fm = QFontMetrics(font);
         textHeight = fm.height();

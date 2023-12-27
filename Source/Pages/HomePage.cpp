@@ -98,7 +98,7 @@ void HomePage::updateCompleter(const QList<GeoLocationData>& locations)
     this->locations = locations;
     QStringList places;
     for (const auto& location : locations) {
-        places.append(location.getPlace());
+        places.append(location.getDetailedPlace());
     }
 
     if (completer->model()) {
@@ -111,7 +111,7 @@ void HomePage::updateCompleter(const QList<GeoLocationData>& locations)
 void HomePage::onCompletionActivated(const QString& text)
 {
     for (const auto& location : locations) {
-        if (location.getPlace() == text) {
+        if (location.getDetailedPlace() == text) {
             emit locationObjectSelected(location);
             break;
         }

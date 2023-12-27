@@ -30,6 +30,7 @@ public:
 
 public slots:
     void addNewWidget(const QSharedPointer<Data> &data) override;
+    void addErrorWidget(const QString &errMsg) override;
     void setData(const GeoLocationData &data); // todo shared ptr
 
 private slots:

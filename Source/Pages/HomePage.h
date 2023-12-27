@@ -35,6 +35,7 @@ signals:
 
 public slots:
     void addNewWidget(const QSharedPointer<Data> &data) override;
+    void addErrorWidget(const QString &errMsg) override;
     void onSearchBarTextChanged();
 
 private:

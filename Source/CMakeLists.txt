@@ -57,7 +57,9 @@ set(PROJECT_SOURCES
         Utils/Serializer.cpp Utils/Serializer.h
         Utils/UserLocation.cpp Utils/UserLocation.h
 
+        Widgets/BasicWidget.h Widgets/BasicWidget.cpp
         Widgets/WeatherWidget.cpp Widgets/WeatherWidget.h
+        Widgets/ErrorWidget.h Widgets/ErrorWidget.cpp
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)

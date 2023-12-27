@@ -2,6 +2,7 @@
 
 #include "MainWindow.h"
 #include "WeatherData.h"
+#include "ErrorWidget.h"
 #include "WeatherWidget.h"
 #include "GeoLocationData.h"
 #include "Settings.h"
@@ -75,6 +76,13 @@ void DetailedWeatherPage::addNewWidget(const QSharedPointer<Data> &data)
     }
 }
 
+void DetailedWeatherPage::addErrorWidget(const QString &errMsg)
+{
+    auto *widget = new ErrorWidget(errMsg);
+    widgetsLayout->addWidget(widget, 0, 0, 1, 1);
+    m_widgets.emplaceBack(widget);
+}
+
 void DetailedWeatherPage::setData(const GeoLocationData &data) // todo sharedptr
 {
     widgetsScrollArea->verticalScrollBar()->setValue(0);
@@ -120,12 +128,14 @@ void DetailedWeatherPage::highlightWidget()
         selectedWidget->resetHighlight();
     }
 
-    auto newSelectedWidget = std::find_if(m_widgets.begin(), m_widgets.end(), [this](const auto* widget) {
-        return widget->data->location() == this->data;
+    auto newSelectedWidget = std::find_if(m_widgets.begin(), m_widgets.end(), [this](const auto* element) {
+        const WeatherWidget* widget = dynamic_cast<const WeatherWidget*>(element); // Check if it's not an ErrorWidget
+        return (widget != nullptr ? widget->data->location() == this->data : false);
     });
 
     if (newSelectedWidget != m_widgets.end()) {
-        selectedWidget = *newSelectedWidget;
+        auto newSelectedWeatherWidget = dynamic_cast<WeatherWidget*>(*newSelectedWidget);
+        selectedWidget = newSelectedWeatherWidget;
         widgetsScrollArea->ensureWidgetVisible(selectedWidget);
         selectedWidget->setHighlight();
     }

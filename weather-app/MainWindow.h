@@ -29,13 +29,13 @@ public:
 
 public slots:
     void showHomePage();
-    void showDetailedWeatherPage(const GeoLocationData &data); // todo sharedptr
-    void saveNewLocation(const QSharedPointer<Data> &location); // todo sharedptr
+    void showDetailedWeatherPage(const GeoLocationData &data);
+    void saveNewLocation(const QSharedPointer<Data> &data);
     void getLocationData(const GeoLocationData &location);
     void refreshPages();
 
 signals:
-    void detailedWeatherPageShown(const GeoLocationData &data); // todo sharedptr
+    void detailedWeatherPageShown(const GeoLocationData &data);
     void deletePageWidgets();
 
 protected:

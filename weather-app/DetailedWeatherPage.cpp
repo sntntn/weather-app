@@ -33,8 +33,8 @@ DetailedWeatherPage::DetailedWeatherPage(QWidget *parent)
     , basicInfo(new BasicInfoWidget(this))
     , minmaxTemperature(new QLabel(this))
     , compassLabel(new QLabel(this))
-    , initialCompassIcon(new QPixmap("../Resources/wind/whiteCompass.png"))
-    , arrowIcon(new QPixmap("../Resources/wind/whiteArrow.png"))
+    , initialCompassIcon(QPixmap("../Resources/wind/whiteCompass.png"))
+    , arrowIcon(QPixmap("../Resources/wind/whiteArrow.png"))
     , hourlyLabel(new QLabel("Hourly"))
     , hourlyWidget(new HourlyWeatherWidget(this))
     , dailyLabel(new QLabel("7-DAY FORECAST"))
@@ -99,21 +99,22 @@ void DetailedWeatherPage::addNewWidget(const QSharedPointer<Data> &data)
 
     int position = static_cast<int>(Settings::instance().savedLocations().indexOf(widget->data->location()));
 
-    if(Settings::instance().shareLocation())
+    if(Settings::instance().shareLocation()){
         position++;
+    }
 
     position == -1 ? widgetsLayout->addWidget(widget, 0, 0, 1, 1) // User location widget
                    : widgetsLayout->addWidget(widget, position, 0, 1, 1);
 
     m_widgets.emplaceBack(widget);
 
-    QStackedWidget* stackedWidget = qobject_cast<QStackedWidget*>(this->parent());
+    auto* stackedWidget = qobject_cast<QStackedWidget*>(this->parent());
     if (stackedWidget->currentWidget() == this) {
         QTimer::singleShot(100, this, &DetailedWeatherPage::highlightWidget);
     }
 }
 
-void DetailedWeatherPage::setData(const GeoLocationData &data) // todo sharedptr
+void DetailedWeatherPage::setData(const GeoLocationData &data)
 {
     widgetsScrollArea->verticalScrollBar()->setValue(0);
 
@@ -151,7 +152,7 @@ void DetailedWeatherPage::showData(const QSharedPointer<Data> &data){
     dailyWidget->updateData(this->data->weeklyDayName(), this->data->weeklyCode(),
                             this->data->weeklyMinTemp(), this->data->weeklyMaxTemp());
 
-    QPixmap compassIcon = initialCompassIcon->copy();
+    QPixmap compassIcon = initialCompassIcon.copy();
     QPainter painter(&compassIcon);
 
     painter.setRenderHint(QPainter::Antialiasing);
@@ -163,9 +164,9 @@ void DetailedWeatherPage::showData(const QSharedPointer<Data> &data){
     painter.rotate(detailedData->windDirection() - 180);
     painter.translate(-center);
 
-    painter.drawPixmap(center.x() - arrowIcon->width() / 2,
-                       center.y() - arrowIcon->height() / 2,
-                       *arrowIcon);
+    painter.drawPixmap(center.x() - arrowIcon.width() / 2,
+                       center.y() - arrowIcon.height() / 2,
+                       arrowIcon);
     painter.end();
 
     compassLabel->setPixmap(compassIcon.scaled(100, 100, Qt::KeepAspectRatio, Qt::SmoothTransformation));
@@ -186,7 +187,7 @@ void DetailedWeatherPage::addButtonClicked()
 
 void DetailedWeatherPage::homeButtonClicked()
 {
-    if(selectedWidget){
+    if(selectedWidget != nullptr){
         selectedWidget->resetHighlight();
     }
 
@@ -195,7 +196,7 @@ void DetailedWeatherPage::homeButtonClicked()
 
 void DetailedWeatherPage::highlightWidget()
 {
-    if(selectedWidget){
+    if(selectedWidget != nullptr){
         selectedWidget->resetHighlight();
     }
 

@@ -15,16 +15,16 @@ DetailedWeatherData::DetailedWeatherData(const GeoLocationData &location,
                                          const int humidity,
                                          const int visibility,
                                          const int pressure,
-                                         const QVector<int> hourlyTemperature,
-                                         const QVector<int> hourlyCode,
-                                         const QVector<bool> hourlyIsDay,
-                                         const QVector<QString> hourlyTimeStamp,
-                                         const QVector<int> weeklyMaxTemp,
-                                         const QVector<int> weeklyMinTemp,
-                                         const QVector<int> weeklyCode,
-                                         const QVector<QString> weeklySunrise,
-                                         const QVector<QString> weeklySunset,
-                                         const QVector<QString> weeklyDayName)
+                                         const QVector<int> &hourlyTemperature,
+                                         const QVector<int> &hourlyCode,
+                                         const QVector<bool> &hourlyIsDay,
+                                         const QVector<QString> &hourlyTimeStamp,
+                                         const QVector<int> &weeklyMaxTemp,
+                                         const QVector<int> &weeklyMinTemp,
+                                         const QVector<int> &weeklyCode,
+                                         const QVector<QString> &weeklySunrise,
+                                         const QVector<QString> &weeklySunset,
+                                         const QVector<QString> &weeklyDayName)
     : WeatherData(location, temperature, weeklyMaxTemp[0], weeklyMinTemp[0], weatherCode, isDay, timezone)
     , m_location(location)
     , m_temperature(temperature)

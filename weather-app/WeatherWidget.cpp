@@ -74,7 +74,8 @@ int WeatherWidget::adjustLabelFontSize(const QString &fontName)
     QRect textRect = fm.boundingRect(0, 0, locationLabel->width(), locationFontSize, Qt::AlignCenter | Qt::TextWordWrap, locationLabel->text());
     int textHeight = textRect.height();
 
-    while (textHeight > locationFontSize && fm.height() > 0) {
+    const int fmHeight = fm.height();
+    while (textHeight > locationFontSize && fmHeight > 0) {
         font.setPointSize(font.pointSize() - 1);
         fm = QFontMetrics(font);
         textHeight = fm.height();

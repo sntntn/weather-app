@@ -120,7 +120,9 @@ QSharedPointer<DetailedWeatherData> DetailedWeatherAPI::parseDetailedWeatherData
     QString formattedCurrentTime = currentTime.toString(Qt::ISODate).left(16);
 
     int matchingIndex = -1;
-    for (int i = 0; i < hourlyTimeJ.size(); ++i) {
+    const int hourlyTimeJsize = hourlyTimeJ.size();
+
+    for (int i = 0; i < hourlyTimeJsize; ++i) {
         QString timeEntry = hourlyTimeJ[i].toString();
         if (formattedCurrentTime <= timeEntry) {
             matchingIndex = i - 1;
@@ -138,7 +140,7 @@ QSharedPointer<DetailedWeatherData> DetailedWeatherAPI::parseDetailedWeatherData
         ht.push_back(temperature);
         int code = hourlyCodeJ[i].toInt();
         hc.push_back(code);
-        int day = static_cast<bool>(hourlyIsDayJ[i].toInt());
+        bool day = static_cast<bool>(hourlyIsDayJ[i].toInt());
         hd.push_back(day);
         QString time = hourlyTimeJ[i].toString();
         hts.push_back(time.mid(11, 5));

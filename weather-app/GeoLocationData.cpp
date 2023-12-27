@@ -38,7 +38,6 @@ void GeoLocationData::fromVariant(const QVariant & variant){
     m_coordinates = QGeoCoordinate(latitude, longitude);
 }
 
-// todo sharedptr
 GeoLocationData GeoLocationData::fromVariantMap(const QVariantMap& geoLocation)
 {
     return GeoLocationData{geoLocation.value("place").toString(),

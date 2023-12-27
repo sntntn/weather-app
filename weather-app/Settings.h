@@ -80,7 +80,7 @@ private:
     QString precipitationUnitToString(const PrecipitationUnit precUnit) const;
 
     QString temperatureUnitsNames(const TemperatureUnit tempUnit) const;
-    QString windSpeedUnitsNames(const WindSpeedUnit precUnit) const;
+    QString windSpeedUnitsNames(const WindSpeedUnit windSpeedUnit) const;
     QString precipitationUnitsNames(const PrecipitationUnit precUnit) const;
 
     Settings::TemperatureUnit m_temperatureUnit = TemperatureUnit::CELSIUS;

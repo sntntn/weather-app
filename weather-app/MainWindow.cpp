@@ -51,8 +51,9 @@ MainWindow::~MainWindow()
 
 void MainWindow::requestUserLocationData()
 {
-    if(settings.shareLocation())
+    if(settings.shareLocation()){
         userLocation->getLocation();
+    }
 }
 
 void MainWindow::getSavedLocationsData()
@@ -62,13 +63,13 @@ void MainWindow::getSavedLocationsData()
     }
 }
 
-void MainWindow::saveNewLocation(const QSharedPointer<Data> &data) // todo sharedptr
+void MainWindow::saveNewLocation(const QSharedPointer<Data> &data)
 {
     QSharedPointer<WeatherData> weatherData = qSharedPointerCast<WeatherData>(data);
     getLocationData(weatherData->location());
 }
 
-void MainWindow::getLocationData(const GeoLocationData &location) // todo sharedptr
+void MainWindow::getLocationData(const GeoLocationData &location)
 {   //todo maybe? sta ce weatherapi njegova promenljiva GeoLocationData ako se njemu prosledjuju koordinate
     //ima veze sa parserom koji cemo izbrisati svakako
     auto* api = new WeatherAPI(location, this);
@@ -84,7 +85,7 @@ void MainWindow::showHomePage(){
     stackedWidget->setCurrentWidget(homePage);
 }
 
-void MainWindow::showDetailedWeatherPage(const GeoLocationData &data) // todo sharedptr
+void MainWindow::showDetailedWeatherPage(const GeoLocationData &data)
 {
     stackedWidget->setCurrentWidget(detailedWeather);
     emit detailedWeatherPageShown(data);

@@ -7,7 +7,7 @@ UserLocation::UserLocation(QObject *parent)
     : QObject{parent}
     , source(QGeoPositionInfoSource::createDefaultSource(this))
 {
-    if(source){
+    if(source != nullptr){
         connect(source, &QGeoPositionInfoSource::positionUpdated, this, &UserLocation::positionUpdated);
     }
 }

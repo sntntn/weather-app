@@ -14,7 +14,7 @@ class BasicInfoWidget : public QWidget
     QHBoxLayout *basicInfoLayout;
     QVBoxLayout *leftLayout;
     QVBoxLayout *rightLayout;
-    QPixmap *weatherIcon;
+    QPixmap weatherIcon;
     QLabel *iconLabel;
     QLabel *weatherDescriptionLabel;
     QLabel *dateLabel;
@@ -49,7 +49,7 @@ class HourlyWeatherWidget : public QWidget
     class HourlyWidgetItem : public QWidget{
         QVBoxLayout *hourLayout;
         QLabel *hourLabel;
-        QPixmap *hourWeatherIcon;
+        QPixmap hourWeatherIcon;
         QLabel *hourWeatherIconLabel;
         QLabel *hourTempLabel;
 
@@ -77,10 +77,10 @@ class DailyWeatherWidget : public QWidget
     {
         QHBoxLayout *dailyLayout;
         QLabel *dayNameLabel;
-        QPixmap *dayWeatherIcon;
+        QPixmap dayWeatherIcon;
         QLabel *dayWeatherIconLabel;
         QLabel *dailyminTempLabel;
-        QPixmap *temperatureIcon;
+        QPixmap temperatureIcon;
         QLabel *temperatureIconLabel;
         QLabel *dailymaxTempLabel;
 

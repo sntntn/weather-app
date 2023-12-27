@@ -7,7 +7,6 @@ BasicInfoWidget::BasicInfoWidget(QWidget *parent)
     , basicInfoLayout(new QHBoxLayout())
     , leftLayout(new QVBoxLayout())
     , rightLayout(new QVBoxLayout())
-    , weatherIcon(new QPixmap())
     , iconLabel(new QLabel(this))
     , weatherDescriptionLabel(new QLabel(this))
     , dateLabel(new QLabel(this))
@@ -41,8 +40,8 @@ void BasicInfoWidget::updateData(const int weatherCode, const bool isDay,
                                  const QTimeZone &timezone, const int temperature,
                                  const int apparentTemperature)
 {
-    weatherIcon->load(Settings::instance().weatherCodeToIcon(weatherCode, isDay));
-    iconLabel->setPixmap(weatherIcon->scaled(iconWidth, iconHeight, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+    weatherIcon.load(Settings::instance().weatherCodeToIcon(weatherCode, isDay));
+    iconLabel->setPixmap(weatherIcon.scaled(iconWidth, iconHeight, Qt::KeepAspectRatio, Qt::SmoothTransformation));
     iconLabel->setFixedHeight(iconHeight);
 
     weatherDescriptionLabel->setText(weatherCodeToDescription(weatherCode));
@@ -64,7 +63,7 @@ HourlyWeatherWidget::HourlyWeatherWidget(QWidget *parent)
     , itemsLayout(new QHBoxLayout())
 {
     for(int i = 0; i < hoursPerDay; i++){
-        HourlyWidgetItem *widget = new HourlyWidgetItem(this);
+        auto *widget = new HourlyWidgetItem(this);
         widget->setFixedSize(widgetItemWidth, widgetItemHeight);
         itemsLayout->addWidget(widget);
     }
@@ -83,8 +82,7 @@ void HourlyWeatherWidget::updateData(const QVector<int> &temperatures, const QVe
 {
     for (int i = 0; i < hoursPerDay; ++i) {
         QLayoutItem* item = itemsLayout->itemAt(i);
-        //todo dynamic u static
-        HourlyWidgetItem* widget = dynamic_cast<HourlyWidgetItem*>(item->widget());
+        auto* widget = static_cast<HourlyWidgetItem*>(item->widget());
         widget->updateData(temperatures[i], weatherCodes[i],
                            isDays[i], timeStamps[i]);
     }
@@ -94,7 +92,6 @@ HourlyWeatherWidget::HourlyWidgetItem::HourlyWidgetItem(QWidget *parent)
     : QWidget(parent)
     , hourLayout(new QVBoxLayout(this))
     , hourLabel(new QLabel())
-    , hourWeatherIcon(new QPixmap())
     , hourWeatherIconLabel(new QLabel(this))
     , hourTempLabel(new QLabel(this))
 {
@@ -113,8 +110,8 @@ void HourlyWeatherWidget::HourlyWidgetItem::updateData(const int tempText, const
                                                        const bool isDay, const QString &timeStamp)
 {
     hourLabel->setText(timeStamp);
-    hourWeatherIcon->load(Settings::instance().weatherCodeToIcon(weatherCode, isDay));
-    hourWeatherIconLabel->setPixmap(hourWeatherIcon->scaled(iconWidth, iconHeight,
+    hourWeatherIcon.load(Settings::instance().weatherCodeToIcon(weatherCode, isDay));
+    hourWeatherIconLabel->setPixmap(hourWeatherIcon.scaled(iconWidth, iconHeight,
                                                             Qt::KeepAspectRatio, Qt::SmoothTransformation));
     hourTempLabel->setText(QString::number(tempText) + "°");
 }
@@ -124,11 +121,11 @@ DailyWeatherWidget::DailyWeatherWidget(QWidget *parent)
     , mainLayout(new QGridLayout(this))
 {
     for(int i = 0; i < daysPerWeek; i++){
-        DailyWidgetItem *widget = new DailyWidgetItem(this);
+        auto *widget = new DailyWidgetItem(this);
         mainLayout->addWidget(widget, 2*i, 0);
 
         if (i < 6) {
-            QFrame *line = new QFrame();
+            auto *line = new QFrame();
             line->setFrameShape(QFrame::HLine);
             line->setLineWidth(1);
             line->setStyleSheet("color: black;");
@@ -143,7 +140,7 @@ void DailyWeatherWidget::updateData(const QVector<QString> &dayNames, const QVec
     //todo magic number
     for (int i = 0; i < daysPerWeek; ++i) {
         QLayoutItem* item = mainLayout->itemAt(2*i);
-        DailyWidgetItem* widget = dynamic_cast<DailyWidgetItem*>(item->widget());
+        auto* widget = static_cast<DailyWidgetItem*>(item->widget());
         widget->updateData(dayNames[i], weatherCodes[i], minTemps[i], maxTemps[i]);
     }
 }
@@ -152,10 +149,9 @@ DailyWeatherWidget::DailyWidgetItem::DailyWidgetItem(QWidget *parent)
     : QWidget(parent)
     , dailyLayout(new QHBoxLayout(this))
     , dayNameLabel(new QLabel())
-    , dayWeatherIcon(new QPixmap())
     , dayWeatherIconLabel(new QLabel(this))
     , dailyminTempLabel(new QLabel(this))
-    , temperatureIcon(new QPixmap("../Resources/temperature/temperature.png"))
+    , temperatureIcon(QPixmap("../Resources/temperature/temperature.png"))
     , temperatureIconLabel(new QLabel())
     , dailymaxTempLabel(new QLabel(this))
 {
@@ -170,7 +166,7 @@ DailyWeatherWidget::DailyWidgetItem::DailyWidgetItem(QWidget *parent)
     dailyminTempLabel->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Preferred);
     dailyLayout->addWidget(dailyminTempLabel);
 
-    temperatureIconLabel->setPixmap(temperatureIcon->scaled(iconWidth, iconHeight,
+    temperatureIconLabel->setPixmap(temperatureIcon.scaled(iconWidth, iconHeight,
                                                             Qt::KeepAspectRatio, Qt::SmoothTransformation));
     dailyLayout->addWidget(temperatureIconLabel);
 
@@ -182,8 +178,8 @@ void DailyWeatherWidget::DailyWidgetItem::updateData(const QString &dayName, con
                                                          const int minTemp, const int maxTemp)
 {
     dayNameLabel->setText(dayName);
-    dayWeatherIcon->load(Settings::instance().weatherCodeToIcon(weatherCode, true));
-    dayWeatherIconLabel->setPixmap(dayWeatherIcon->scaled(iconWidth, iconHeight,
+    dayWeatherIcon.load(Settings::instance().weatherCodeToIcon(weatherCode, true));
+    dayWeatherIconLabel->setPixmap(dayWeatherIcon.scaled(iconWidth, iconHeight,
                                                           Qt::KeepAspectRatio, Qt::SmoothTransformation));
     dailyminTempLabel->setText(QString::number(minTemp) + "°");
     dailymaxTempLabel->setText(QString::number(maxTemp) + "°");

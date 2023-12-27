@@ -66,8 +66,8 @@ private:
     BasicInfoWidget *basicInfo;
     QLabel *minmaxTemperature;
     QLabel *compassLabel;
-    QPixmap *initialCompassIcon;
-    QPixmap *arrowIcon;
+    QPixmap initialCompassIcon;
+    QPixmap arrowIcon;
     QLabel *hourlyLabel;
     HourlyWeatherWidget *hourlyWidget;
     QLabel *dailyLabel;

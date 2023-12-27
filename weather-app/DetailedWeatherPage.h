@@ -48,8 +48,6 @@ signals:
 
 private:
     static const int spacerWidth = 40;
-    static const int iconWidth = 100;
-    static const int iconHeight = 100;
 
     QSharedPointer<DetailedWeatherData> data;
     QHBoxLayout *mainLayout;
@@ -70,9 +68,9 @@ private:
     QLabel *compassLabel;
     QPixmap *initialCompassIcon;
     QPixmap *arrowIcon;
-    QLabel *hourly;
+    QLabel *hourlyLabel;
     HourlyWeatherWidget *hourlyWidget;
-    QLabel *daily;
+    QLabel *dailyLabel;
     DailyWeatherWidget *dailyWidget;
     WeatherWidget *selectedWidget;
 

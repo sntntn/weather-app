@@ -2,6 +2,7 @@
 
 #include "MainWindow.h"
 #include "WeatherData.h"
+#include "ErrorWidget.h"
 #include "WeatherWidget.h"
 #include "GeoLocationData.h"
 #include "Settings.h"
@@ -85,7 +86,7 @@ DetailedWeatherPage::DetailedWeatherPage(QWidget *parent)
     connect(returnToHomePage, &QPushButton::clicked, this->mainWindow, &MainWindow::showHomePage);
     connect(returnToHomePage, &QPushButton::clicked, this, &DetailedWeatherPage::homeButtonClicked);
     connect(addToSavedLocations, &QPushButton::clicked, this, &DetailedWeatherPage::addButtonClicked);
-    connect(this, &DetailedWeatherPage::locationSaved, this->mainWindow, &MainWindow::saveNewLocation);
+    connect(this, &DetailedWeatherPage::locationSaved, this->mainWindow, &MainWindow::getLocationData);
 }
 
 void DetailedWeatherPage::addNewWidget(const QSharedPointer<Data> &data)
@@ -93,7 +94,7 @@ void DetailedWeatherPage::addNewWidget(const QSharedPointer<Data> &data)
     QSharedPointer<WeatherData> weatherData = qSharedPointerCast<WeatherData>(data);
 
     auto *widget = new WeatherWidget(weatherData, widgetsScrollAreaContents);
-    connect(widget, &WeatherWidget::clicked, this, &DetailedWeatherPage::setData);
+    connect(widget, &WeatherWidget::clicked, this, &DetailedWeatherPage::getData);
 
     widget->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Preferred);
     widget->setMaximumWidth(widgetsScrollArea->viewport()->width());
@@ -115,7 +116,14 @@ void DetailedWeatherPage::addNewWidget(const QSharedPointer<Data> &data)
     }
 }
 
-void DetailedWeatherPage::setData(const GeoLocationData &data)
+void DetailedWeatherPage::addErrorWidget(const QString &errMsg)
+{
+    auto *widget = new ErrorWidget(errMsg);
+    widgetsLayout->addWidget(widget, 0, 0, 1, 1);
+    m_widgets.emplaceBack(widget);
+}
+
+void DetailedWeatherPage::getData(const GeoLocationData &data)
 {
     bool showAddbutton = data.getRenamedPlace() != "My location" &&
                          Settings::instance().savedLocations().indexOf(data) == -1;
@@ -123,14 +131,14 @@ void DetailedWeatherPage::setData(const GeoLocationData &data)
     showAddbutton ? this->addToSavedLocations->setVisible(true)
                   : this->addToSavedLocations->setVisible(false);
 
-    //isto ko za MainWindow, saljemo data da postavi a onda u fetchData saljemo koordinate
+    // isto kao za MainWindow, saljemo data da postavi a onda u fetchData saljemo koordinate
     auto* api = new DetailedWeatherAPI(data, this);
-    //todo ceo data umesto koordinata
+    // todo ceo data umesto koordinata
     api->fetchData(data.getCoordinates());
-    connect(api, &DetailedWeatherAPI::dataFetched, this, &DetailedWeatherPage::showData);
+    connect(api, &DetailedWeatherAPI::dataFetched, this, &DetailedWeatherPage::setData);
 }
 
-void DetailedWeatherPage::showData(const QSharedPointer<Data> &data){
+void DetailedWeatherPage::setData(const QSharedPointer<Data> &data){
     //todo izbrisi SharedPointer
     QSharedPointer<DetailedWeatherData> detailedData = qSharedPointerCast<DetailedWeatherData>(data);
     this->data = detailedData;
@@ -163,7 +171,7 @@ void DetailedWeatherPage::resizeEvent(QResizeEvent* event) {
 
 void DetailedWeatherPage::addButtonClicked()
 {
-    emit locationSaved(this->data);
+    emit locationSaved(this->data->location());
     this->addToSavedLocations->setVisible(false);
     Settings::instance().savedLocations().push_back(this->data->location());
 }
@@ -183,12 +191,14 @@ void DetailedWeatherPage::highlightWidget()
         selectedWidget->resetHighlight();
     }
 
-    auto newSelectedWidget = std::find_if(m_widgets.begin(), m_widgets.end(), [this](const auto* widget) {
-        return widget->data->location() == this->data->location();
+    auto newSelectedWidget = std::find_if(m_widgets.begin(), m_widgets.end(), [this](const auto* element) {
+        const WeatherWidget* widget = dynamic_cast<const WeatherWidget*>(element); // Check if it's not an ErrorWidget
+        return (widget != nullptr ? widget->data->location() == this->data->location() : false);
     });
 
     if (newSelectedWidget != m_widgets.end()) {
-        selectedWidget = *newSelectedWidget;
+        auto newSelectedWeatherWidget = dynamic_cast<WeatherWidget*>(*newSelectedWidget);
+        selectedWidget = newSelectedWeatherWidget;
         widgetsScrollArea->ensureWidgetVisible(selectedWidget);
         selectedWidget->setHighlight();
     }

@@ -12,15 +12,19 @@ public:
     GeoLocationData() = default;
     ~GeoLocationData() = default;
     GeoLocationData(const GeoLocationData &other) = default;
-    GeoLocationData(QString place, QString renamedPlace, QGeoCoordinate coordinates);
+    GeoLocationData(QString place, QString renamedPlace, QGeoCoordinate coordinates, QString country);
 
 
-    inline QString getPlace() const{
+    inline QString getDetailedPlace() const{
         return m_place;
     }
 
     inline QString getRenamedPlace() const{
         return m_renamedPlace;
+    }
+
+    inline QString getCountry() const{
+        return m_country;
     }
 
     inline QGeoCoordinate getCoordinates() const{
@@ -42,6 +46,7 @@ private:
     QString m_place;
     QString m_renamedPlace;
     QGeoCoordinate m_coordinates;
+    QString m_country;
 };
 Q_DECLARE_METATYPE(GeoLocationData)
 

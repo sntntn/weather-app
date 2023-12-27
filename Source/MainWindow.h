@@ -13,6 +13,7 @@ class HomePage;
 class DetailedWeatherPage;
 class UserLocation;
 class GeoLocationData;
+class WeatherAPI;
 class Data;
 
 QT_BEGIN_NAMESPACE
@@ -30,7 +31,6 @@ public:
 public slots:
     void showHomePage();
     void showDetailedWeatherPage(const GeoLocationData &data);
-    void saveNewLocation(const QSharedPointer<Data> &data);
     void getLocationData(const GeoLocationData &location);
     void refreshPages();
 
@@ -48,6 +48,7 @@ private:
     DetailedWeatherPage *detailedWeather;
     QStackedWidget *stackedWidget;
     UserLocation *userLocation;
+    WeatherAPI *weatherApi;
 
     void getSavedLocationsData();
     void requestUserLocationData();

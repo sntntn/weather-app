@@ -6,6 +6,7 @@
 
 #include "MainWindow.h"
 #include "WeatherData.h"
+#include "ErrorWidget.h"
 #include "WeatherWidget.h"
 #include "SettingsDialog.h"
 #include "Settings.h"
@@ -56,7 +57,7 @@ HomePage::HomePage(QWidget *parent)
     connect(searchBar, &QLineEdit::textChanged, this, [this]() { debounceTimer->start(); });
     connect(debounceTimer, &QTimer::timeout, this, &HomePage::onSearchBarTextChanged);
 //    connect(searchBar, &QLineEdit::textChanged, this, &HomePage::onSearchBarTextChanged);
-    connect(this, &HomePage::searchBarPressed, &geocodingApi, &GeocodingAPI::testCityFunction);
+    connect(this, &HomePage::searchBarPressed, &geocodingApi, &GeocodingAPI::geocodeCity);
     connect(this, &HomePage::locationObjectSelected, mainWindow, &MainWindow::showDetailedWeatherPage);
 }
 
@@ -79,6 +80,15 @@ void HomePage::addNewWidget(const QSharedPointer<Data> &data)
     position == -1 ? widgetsLayout->addWidget(widget, 0, 0, 1, 1) // User location widget
                    : widgetsLayout->addWidget(widget, position / 2, position % 2, 1, 1);
 
+//    widget->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
+    widget->setMaximumHeight(160);
+    m_widgets.emplaceBack(widget);
+}
+
+void HomePage::addErrorWidget(const QString &errMsg)
+{
+    auto *widget = new ErrorWidget(errMsg);
+    widgetsLayout->addWidget(widget, 0, 0, 1, 1);
     widget->setMaximumHeight(160);
     m_widgets.emplaceBack(widget);
 }
@@ -99,7 +109,7 @@ void HomePage::updateCompleter(const QList<GeoLocationData>& locations)
     this->locations = locations;
     QStringList places;
     for (const auto& location : locations) {
-        places.append(location.getPlace());
+        places.append(location.getDetailedPlace());
     }
 
     if (completer->model() != nullptr) {
@@ -112,7 +122,7 @@ void HomePage::updateCompleter(const QList<GeoLocationData>& locations)
 void HomePage::onCompletionActivated(const QString& text)
 {
     for (const auto& location : locations) {
-        if (location.getPlace() == text) {
+        if (location.getDetailedPlace() == text) {
             emit locationObjectSelected(location);
             break;
         }

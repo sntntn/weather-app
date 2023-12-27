@@ -24,6 +24,7 @@ class MainWindow;
 class HomePage : public Page
 {
     Q_OBJECT
+
 public:
     explicit HomePage(QWidget *parent = nullptr);
     ~HomePage();
@@ -34,6 +35,7 @@ signals:
 
 public slots:
     void addNewWidget(const QSharedPointer<Data> &data) override;
+    void addErrorWidget(const QString &errMsg) override;
     void onSearchBarTextChanged();
 
 private:
@@ -50,13 +52,8 @@ private:
     QLineEdit *searchBar;
     QPushButton *settingsButton;
     QScrollArea *scrollArea;
-//    QHBoxLayout *scrollLayout;
     QWidget *scrollAreaContents;
     QGridLayout *widgetsLayout;
-//    QWidget *leftWidget;
-//    QWidget *rightWidget;
-//    QVBoxLayout *leftVBox;
-//    QVBoxLayout *rightVBox;
     CustomCompleter *completer;
     QTimer *debounceTimer;
     QPixmap settingsPixmap;

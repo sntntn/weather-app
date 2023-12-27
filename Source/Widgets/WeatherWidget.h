@@ -1,7 +1,8 @@
 #ifndef WEATHERWIDGET_H
 #define WEATHERWIDGET_H
 
-#include <QWidget>
+#include "BasicWidget.h"
+
 #include <QLabel>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
@@ -10,7 +11,7 @@
 class WeatherData;
 class GeoLocationData;
 
-class WeatherWidget : public QWidget
+class WeatherWidget : public BasicWidget
 {
     Q_OBJECT
 
@@ -36,12 +37,13 @@ private:
     static const int minmaxTemperatureFontSize = 14;
     static const int iconWidth = 80;
     static const int iconHeight = 80;
+    static const int initialFontSize = locationFontSize;
 
-    QHBoxLayout *mainLayout;
     QVBoxLayout *leftLayout;
     QVBoxLayout *rightLayout;
     QLabel* temperatureLabel;
     QLabel* locationLabel;
+    QLabel* countryLabel;
     QLabel* maxTemperatureLabel;
     QLabel* minTemperatureLabel;
     QLabel* timeLabel;
@@ -49,6 +51,7 @@ private:
     QPixmap weatherIcon;
 
     int adjustLabelFontSize(const QString &fontName);
+    int adjustCountryLabelFontSize(const QString &fontName);
 };
 
 #endif // WEATHERWIDGET_H

@@ -1,4 +1,5 @@
 #include "GeocodingAPI.h"
+
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QJsonArray>
@@ -7,31 +8,29 @@
 #include <QCoreApplication>
 #include <QSettings>
 
+#include "Parser.h"
+
 GeocodingAPI::GeocodingAPI()
-    :m_networkManager(new QNetworkAccessManager(this))
 {
+    // todo lista inicijalizacije
     QString configFilePath = QCoreApplication::applicationDirPath() + "/config.ini";
     QSettings settings(configFilePath, QSettings::IniFormat);
     OPEN_CAGE_API_KEY = settings.value("API/Key").toString();
-    connect(m_networkManager, &QNetworkAccessManager::finished, this, &GeocodingAPI::handleGeocodingResponse);
-}
-GeocodingAPI::~GeocodingAPI()
-{
-    delete m_networkManager;
+    connect(networkManager, &QNetworkAccessManager::finished, this, &GeocodingAPI::replyFinished);
 }
 
-void GeocodingAPI::geocodeCity(const QString& cityName) {
+void GeocodingAPI::geocodeCity(const QString& location)
+{
     QString apiUrl = QString("https://api.opencagedata.com/geocode/v1/json?q=%1&key=%2")
-                         .arg(cityName)
-                         .arg(OPEN_CAGE_API_KEY);
+                    .arg(location, OPEN_CAGE_API_KEY);
 
     QNetworkRequest request{QUrl(apiUrl)};
-    m_networkManager->get(request);
+    networkManager->get(request);
 }
 
-void GeocodingAPI::handleGeocodingResponse(QNetworkReply* reply) {
+void GeocodingAPI::replyFinished(QNetworkReply* reply)
+{
     if (reply->error() != QNetworkReply::NoError) {
-//        qDebug() << "Error:" << reply->errorString();
         return;
     }
 
@@ -39,71 +38,26 @@ void GeocodingAPI::handleGeocodingResponse(QNetworkReply* reply) {
     QJsonDocument jsonResponse = QJsonDocument::fromJson(responseData);
 
     if (!jsonResponse.isObject()) {
-//        qDebug() << "Error: Invalid JSON response";
         return;
     }
 
     QJsonObject jsonObject = jsonResponse.object();
     if (!jsonObject.contains("results") || !jsonObject["results"].isArray()) {
-//        qDebug() << "Error: Missing or invalid 'results' array in JSON response";
         return;
     }
 
     QJsonArray resultsArray = jsonObject["results"].toArray();
     if (resultsArray.isEmpty()) {
-//        qDebug() << "Error: Empty 'results' array in JSON response";
         return;
     }
 
-    // json za https://api.opencagedata.com/geocode/v1/json?q=Be&key=0741d020f58441f6b58ae4dc4128740d       formatted
+    // json za https://api.opencagedata.com/geocode/v1/json?q=Be&key=0741d020f58441f6b58ae4dc4128740d formatted
 
     QList<GeoLocationData> locations;
     locations.reserve(resultsArray.size());
 
-    processResultsArray(resultsArray, locations);
+    Parser::parseGeocodingData(resultsArray, locations);
 
     emit geocodingDataUpdated(locations);
     reply->deleteLater();
-}
-
-void GeocodingAPI::processResultsArray(const QJsonArray &resultsArray, QList<GeoLocationData> &locations)
-{
-    for (auto resultValue : resultsArray) {
-        QJsonObject resultObject = resultValue.toObject();
-
-        if (!resultObject.contains("formatted") || !resultObject["formatted"].isString()) {
-//            qDebug() << "Error: Missing or invalid 'formatted' string in JSON response";
-            continue;  // Preskoči ovaj rezultat i idi na sledeći
-        }
-
-        QString place = resultObject["formatted"].toString();
-        if(!place.isEmpty() && place.at(0).isDigit()){
-            continue;       //preskacemo postanske brojeve  -> prikazuje opstine
-        }
-
-        if (!resultObject.contains("geometry") || !resultObject["geometry"].isObject()) {
-//            qDebug() << "Error: Missing or invalid 'geometry' object in JSON response";
-            continue;
-        }
-
-        QJsonObject geometryObject = resultObject["geometry"].toObject();
-        if (!geometryObject.contains("lat") || !geometryObject.contains("lng")) {
-//            qDebug() << "Error: Missing 'lat' or 'lng' in 'geometry' object";
-            continue;
-        }
-
-        double latitude = geometryObject["lat"].toDouble();
-        double longitude = geometryObject["lng"].toDouble();
-
-        QString renamedPlace;
-        auto commaIndex=place.indexOf(',');
-        commaIndex == -1 ? renamedPlace = place : renamedPlace = place.left(commaIndex).trimmed();
-
-        //GeoLocationData gld{place, renamedPlace, QGeoCoordinate(latitude,longitude)};
-        locations.emplace_back(place, renamedPlace, QGeoCoordinate(latitude,longitude));
-    }
-}
-
-void GeocodingAPI::testCityFunction(const QString &location) {
-    geocodeCity(location);
 }

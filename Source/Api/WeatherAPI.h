@@ -2,7 +2,6 @@
 #define WEATHERAPI_H
 
 #include <QGeoCoordinate>
-#include <QThread>
 #include <QString>
 
 #include "ApiHandler.h"
@@ -14,21 +13,18 @@ class GeoLocationData;
 class WeatherAPI : public ApiHandler
 {
     Q_OBJECT
+
 public:
-    explicit WeatherAPI(const GeoLocationData& location, QObject *parent = nullptr);
+    explicit WeatherAPI(QObject *parent = nullptr);
     ~WeatherAPI() = default;
+    void fetchData(const GeoLocationData &location);
+
+signals:
+    void dataFetched(const QSharedPointer<Data> &data);
 
 public slots:
     void replyFinished(QNetworkReply* reply) override;
 
-protected:
-    GeoLocationData location;
-
-    void run() override;
-    void fetchData(const QGeoCoordinate &coordinates);
-
-private:
-    QSharedPointer<WeatherData> parseWeatherData(const QString& jsonData, const GeoLocationData &geoLocation);
 };
 
 #endif // WEATHERAPI_H

@@ -166,5 +166,3 @@ private:
 };
 
 #endif // DETAILEDWEATHERDATA_H
-
-

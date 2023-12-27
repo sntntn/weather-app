@@ -1,17 +1,18 @@
 #ifndef DETAILEDWEATHERAPI_H
 #define DETAILEDWEATHERAPI_H
 
+#include "ApiHandler.h"
+
 #include <QGeoCoordinate>
 #include <QString>
 #include <QNetworkAccessManager>
 #include <QObject>
 
 #include "GeoLocationData.h"
-//#include "WeatherAPI.h"
 
 class DetailedWeatherData;
 
-class DetailedWeatherAPI : public QObject
+class DetailedWeatherAPI : public ApiHandler
 {
     Q_OBJECT
 public:
@@ -20,16 +21,13 @@ public:
     void fetchData(const QGeoCoordinate &coordinates);
 
 private slots:
-    void replyFinished(QNetworkReply *reply);
+    void replyFinished(QNetworkReply *reply) override;
 
 signals:
     void dataFetched(const QSharedPointer<Data> &data);
 
 private:
     GeoLocationData location;
-    QNetworkAccessManager* networkManager;
-
-    QSharedPointer<DetailedWeatherData> parseDetailedWeatherData(const QString& jsonData, const GeoLocationData &geoLocation);
 };
 
 #endif // DETAILEDWEATHERAPI_H

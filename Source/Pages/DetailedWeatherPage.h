@@ -36,15 +36,16 @@ public:
 
 public slots:
     void addNewWidget(const QSharedPointer<Data> &data) override;
-    void setData(const GeoLocationData &data); // todo shared ptr
-    void showData(const QSharedPointer<Data> &data);
+    void addErrorWidget(const QString &errMsg) override;
+    void getData(const GeoLocationData &data); // todo shared ptr
+    void setData(const QSharedPointer<Data> &data);
 
 private slots:
     void addButtonClicked();
     void homeButtonClicked();
 
 signals:
-    void locationSaved(const QSharedPointer<Data> &data);
+    void locationSaved(const GeoLocationData &data);
 
 private:
     static const int spacerWidth = 40;

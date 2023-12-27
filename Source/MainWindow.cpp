@@ -26,6 +26,7 @@ MainWindow::MainWindow(QWidget *parent)
     , detailedWeather(new DetailedWeatherPage(this))
     , stackedWidget(new QStackedWidget(this))
     , userLocation(new UserLocation(this))
+    , weatherApi(new WeatherAPI(this))
 {
     ui->setupUi(this);
     resize(900,600);
@@ -38,10 +39,14 @@ MainWindow::MainWindow(QWidget *parent)
     requestUserLocationData();
     getSavedLocationsData();
 
-    connect(this, &MainWindow::detailedWeatherPageShown, detailedWeather, &DetailedWeatherPage::setData);
+    connect(this, &MainWindow::detailedWeatherPageShown, detailedWeather, &DetailedWeatherPage::getData);
     connect(this, &MainWindow::deletePageWidgets, homePage, &Page::deleteWidgets);
     connect(this, &MainWindow::deletePageWidgets, detailedWeather, &Page::deleteWidgets);
     connect(userLocation, &UserLocation::userLocationFetched, this, &MainWindow::getLocationData);
+    connect(userLocation, &UserLocation::userLocationError, homePage, &HomePage::addErrorWidget);
+//    connect(userLocation, &UserLocation::userLocationError, detailedWeather, &DetailedWeatherPage::addErrorWidget);
+    connect(weatherApi, &WeatherAPI::dataFetched, homePage, &HomePage::addNewWidget);
+    connect(weatherApi, &WeatherAPI::dataFetched, detailedWeather, &DetailedWeatherPage::addNewWidget);
 }
 
 MainWindow::~MainWindow()
@@ -63,25 +68,13 @@ void MainWindow::getSavedLocationsData()
     }
 }
 
-void MainWindow::saveNewLocation(const QSharedPointer<Data> &data)
-{
-    QSharedPointer<WeatherData> weatherData = qSharedPointerCast<WeatherData>(data);
-    getLocationData(weatherData->location());
-}
-
 void MainWindow::getLocationData(const GeoLocationData &location)
-{   //todo maybe? sta ce weatherapi njegova promenljiva GeoLocationData ako se njemu prosledjuju koordinate
-    //ima veze sa parserom koji cemo izbrisati svakako
-    auto* api = new WeatherAPI(location, this);
-
-    connect(api, &ApiHandler::finished, api, &WeatherAPI::deleteLater);
-    connect(api, &ApiHandler::dataFetched, homePage, &HomePage::addNewWidget);
-    connect(api, &ApiHandler::dataFetched, detailedWeather, &DetailedWeatherPage::addNewWidget);
-
-    api->start();
+{
+    weatherApi->fetchData(location);
 }
 
-void MainWindow::showHomePage(){
+void MainWindow::showHomePage()
+{
     stackedWidget->setCurrentWidget(homePage);
 }
 
@@ -94,15 +87,25 @@ void MainWindow::showDetailedWeatherPage(const GeoLocationData &data)
 void MainWindow::refreshPages()
 {
     emit deletePageWidgets();
+
+    // QGeoPositionInfoSource doesn't emit signals (?) after the first error so we reinitialize it
+    delete userLocation;
+    userLocation = new UserLocation(this);
+    connect(userLocation, &UserLocation::userLocationError, homePage, &HomePage::addErrorWidget);
+//    connect(userLocation, &UserLocation::userLocationError, detailedWeather, &DetailedWeatherPage::addErrorWidget);
+    connect(userLocation, &UserLocation::userLocationFetched, this, &MainWindow::getLocationData);
+
     requestUserLocationData();
     getSavedLocationsData();
 }
 
-void MainWindow::closeEvent(QCloseEvent *event){
+void MainWindow::closeEvent(QCloseEvent *event)
+{
     serializeData();
     QMainWindow::closeEvent(event);
 }
 
-void MainWindow::serializeData(){
+void MainWindow::serializeData()
+{
     Serializer::save(settings, "../Serialization/settings.json");
 }

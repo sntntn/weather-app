@@ -1,4 +1,5 @@
 #include "Page.h"
+
 #include "MainWindow.h"
 #include "WeatherWidget.h"
 

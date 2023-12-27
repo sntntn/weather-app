@@ -9,6 +9,7 @@ UserLocation::UserLocation(QObject *parent)
 {
     if(source != nullptr){
         connect(source, &QGeoPositionInfoSource::positionUpdated, this, &UserLocation::positionUpdated);
+        connect(source, &QGeoPositionInfoSource::errorOccurred, this, &UserLocation::handleError);
     }
 }
 
@@ -20,6 +21,12 @@ void UserLocation::getLocation()
 void UserLocation::positionUpdated(const QGeoPositionInfo &info)
 {
     // todo konstruktor geolocation
-    GeoLocationData data = GeoLocationData("My location", "My location", info.coordinate());
+    GeoLocationData data = GeoLocationData("My location", "My location", info.coordinate(), "My location");
     emit userLocationFetched(data);
+}
+
+void UserLocation::handleError(const QGeoPositionInfoSource::Error positioningError)
+{
+    qDebug() << positioningError;
+    emit userLocationError(errMsg);
 }

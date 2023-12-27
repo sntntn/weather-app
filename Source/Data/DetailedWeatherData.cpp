@@ -1,4 +1,5 @@
 #include "DetailedWeatherData.h"
+
 #include <iostream>
 
 DetailedWeatherData::DetailedWeatherData(const GeoLocationData &location,
@@ -53,4 +54,3 @@ DetailedWeatherData::DetailedWeatherData(const GeoLocationData &location,
     , m_weeklySunset(weeklySunset)
     , m_weeklyDayName(weeklyDayName)
 {}
-

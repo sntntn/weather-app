@@ -4,12 +4,11 @@ project(weather-app VERSION 0.1 LANGUAGES CXX)
 
 configure_file(config.ini ${CMAKE_CURRENT_BINARY_DIR} COPYONLY)
 
-
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -Wall -Wextra")
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
@@ -59,6 +58,9 @@ set(PROJECT_SOURCES
         Utils/Serializer.cpp Utils/Serializer.h
         Utils/UserLocation.cpp Utils/UserLocation.h
 
+        Widgets/BasicWidget.h Widgets/BasicWidget.cpp
+        Widgets/WeatherWidget.cpp Widgets/WeatherWidget.h
+        Widgets/ErrorWidget.h Widgets/ErrorWidget.cpp
         Widgets/WeatherWidget.cpp Widgets/WeatherWidget.h
         Widgets/DetailedPageWidgets.cpp Widgets/DetailedPageWidgets.h
 )

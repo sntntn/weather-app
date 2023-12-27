@@ -168,8 +168,6 @@ void Settings::fromVariant(const QVariant &variant)
     }
 }
 
-
-
 QString Settings::temperatureUnitApiParameter() const
 {
     return temperatureUnitToApiParameter(m_temperatureUnit);

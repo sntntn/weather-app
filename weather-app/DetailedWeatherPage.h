@@ -68,6 +68,8 @@ class DetailedWeatherPage : public Page
         QPixmap *dayWeatherIcon;
         QLabel *dayWeatherIconLabel;
         QLabel *dailyminTempLabel;
+        QPixmap *temperatureIcon;
+        QLabel *temperatureIconLabel;
         QLabel *dailymaxTempLabel;
 
     public:
@@ -117,9 +119,11 @@ private:
     QLabel *compassLabel;
     QPixmap *initialCompassIcon;
     QPixmap *arrowIcon;
+    QLabel *hourly;
     QScrollArea *hourlyWeatherArea;
     QWidget *hourlyWeatherContents;
     QHBoxLayout *hourlyLayout;
+    QLabel *daily;
     QGridLayout *dailyLayout;
     WeatherWidget *selectedWidget;
 

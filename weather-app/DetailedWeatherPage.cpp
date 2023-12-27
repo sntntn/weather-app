@@ -33,11 +33,13 @@ DetailedWeatherPage::DetailedWeatherPage(QWidget *parent)
     , basicInfo(new BasicInfoWidget(this))
     , minmaxTemperature(new QLabel(this))
     , compassLabel(new QLabel(this))
-    , initialCompassIcon(new QPixmap("../Resources/compass/whiteCompass.png"))
-    , arrowIcon(new QPixmap("../Resources/compass/whiteArrow.png"))
+    , initialCompassIcon(new QPixmap("../Resources/wind/whiteCompass.png"))
+    , arrowIcon(new QPixmap("../Resources/wind/whiteArrow.png"))
+    , hourly(new QLabel("Hourly"))
     , hourlyWeatherArea(new QScrollArea())
     , hourlyWeatherContents(new QWidget())
     , hourlyLayout(new QHBoxLayout())
+    , daily(new QLabel("7-DAY FORECAST"))
     , dailyLayout(new QGridLayout())
     , selectedWidget(nullptr)
 {
@@ -77,7 +79,6 @@ DetailedWeatherPage::DetailedWeatherPage(QWidget *parent)
             line->setFrameShape(QFrame::HLine);
             line->setLineWidth(1);
             line->setStyleSheet("color: black;");
-            //line->setStyleSheet("border: 1px solid black;");
             dailyLayout->addWidget(line, 2*i + 1, 0, 1, -1);
         }
     }
@@ -89,7 +90,13 @@ DetailedWeatherPage::DetailedWeatherPage(QWidget *parent)
     minmaxTemperature->setStyleSheet("font-size: 16px;");
     weatherLayout->addWidget(minmaxTemperature, 0, Qt::AlignHCenter);
 
+    hourly->setStyleSheet("font: bold 15px;");
+    weatherLayout->addWidget(hourly);
     weatherLayout->addWidget(hourlyWeatherArea);
+
+    daily->setStyleSheet("font: bold 15px; margin: 10px;");
+    daily->setAlignment(Qt::AlignHCenter);
+    weatherLayout->addWidget(daily);
     weatherLayout->addLayout(dailyLayout);
     weatherLayout->addWidget(compassLabel);
 
@@ -193,7 +200,6 @@ void DetailedWeatherPage::showData(const QSharedPointer<Data> &data){
     painter.drawPixmap(center.x() - arrowIcon->width() / 2,
                        center.y() - arrowIcon->height() / 2,
                        *arrowIcon);
-
     painter.end();
 
     compassLabel->setPixmap(compassIcon.scaled(100, 100, Qt::KeepAspectRatio, Qt::SmoothTransformation));
@@ -251,13 +257,23 @@ DetailedWeatherPage::BasicInfoWidget::BasicInfoWidget(QWidget *parent)
     , temperatureLabel(new QLabel(this))
     , feelsLikeLabel(new QLabel(this))
 {
-    temperatureLabel->setStyleSheet("font-size: 100px; font-weight: bold;");
+    temperatureLabel->setStyleSheet("font-size: 110px; font-weight: bold;");
     leftLayout->addWidget(iconLabel, 0, Qt::AlignLeft);
     leftLayout->addWidget(weatherDescriptionLabel, 0, Qt::AlignLeft);
-    leftLayout->addWidget(dateLabel, 0, Qt::AlignLeft | Qt::AlignBottom);
+    leftLayout->addWidget(dateLabel, 0, Qt::AlignLeft | Qt::AlignTop);
     leftLayout->addWidget(timeLabel, 0, Qt::AlignLeft | Qt::AlignTop);
     rightLayout->addWidget(temperatureLabel, 0, Qt::AlignHCenter);
-    rightLayout->addWidget(feelsLikeLabel, 0, Qt::AlignRight | Qt::AlignTop);
+    rightLayout->addWidget(feelsLikeLabel, 0, Qt::AlignRight | Qt::AlignBottom);
+    feelsLikeLabel->setStyleSheet(R"(
+    QLabel {
+        color: white;
+        background-color: #0066CC;
+        padding: 3px 5px;
+        border-radius: 5px;
+        font-size: 14px;
+        font-weight: bold;
+    }
+    )");
     basicInfoLayout->addLayout(leftLayout);
     basicInfoLayout->addLayout(rightLayout);
     this->setLayout(basicInfoLayout);
@@ -269,7 +285,7 @@ void DetailedWeatherPage::BasicInfoWidget::updateData(const int weatherCode, con
 {
     weatherIcon->load(Settings::instance().weatherCodeToIcon(weatherCode, isDay));
     iconLabel->setPixmap(weatherIcon->scaled(iconWidth, iconHeight, Qt::KeepAspectRatio, Qt::SmoothTransformation));
-    iconLabel->setFixedWidth(iconWidth);
+    iconLabel->setFixedHeight(iconHeight);
 
     weatherDescriptionLabel->setText(weatherCodeToDescription(weatherCode));
 
@@ -294,10 +310,7 @@ DetailedWeatherPage::HourlyWeatherWidget::HourlyWeatherWidget(QWidget *parent)
     hourTempLabel->setAlignment(Qt::AlignCenter);
     hourWeatherIconLabel->setAlignment(Qt::AlignCenter);
 
-    QFont font = hourTempLabel->font();
-    font.setPointSize(18);
-    font.setWeight(QFont::Bold);
-    hourTempLabel->setFont(font);
+    hourTempLabel->setStyleSheet("font: bold 18px;");
 
     hourLayout->addWidget(hourWeatherIconLabel);
     hourLayout->addWidget(hourTempLabel);
@@ -321,18 +334,24 @@ DetailedWeatherPage::DailyWeatherWidget::DailyWeatherWidget(QWidget *parent)
     , dayWeatherIcon(new QPixmap())
     , dayWeatherIconLabel(new QLabel(this))
     , dailyminTempLabel(new QLabel(this))
+    , temperatureIcon(new QPixmap("../Resources/temperature/temperature.png"))
+    , temperatureIconLabel(new QLabel())
     , dailymaxTempLabel(new QLabel(this))
 {
     dayNameLabel->setFixedWidth(80);
     dailyLayout->addWidget(dayNameLabel);
     dailyLayout->addStretch(1);
 
-    dayWeatherIconLabel->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
+    dayWeatherIconLabel->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Preferred);
     dailyLayout->addWidget(dayWeatherIconLabel);
     dailyLayout->addStretch(1);
 
     dailyminTempLabel->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Preferred);
     dailyLayout->addWidget(dailyminTempLabel);
+
+    temperatureIconLabel->setPixmap(temperatureIcon->scaled(25, 25,
+                                                           Qt::KeepAspectRatio, Qt::SmoothTransformation));
+    dailyLayout->addWidget(temperatureIconLabel);
 
     dailymaxTempLabel->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Preferred);
     dailyLayout->addWidget(dailymaxTempLabel);

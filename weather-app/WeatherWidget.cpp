@@ -42,11 +42,10 @@ WeatherWidget::WeatherWidget(const QSharedPointer<WeatherData> &data, QWidget *p
     iconLabel->setPixmap(weatherIcon.scaled(iconWidth, iconHeight, Qt::KeepAspectRatio, Qt::SmoothTransformation));
     iconLabel->setFixedWidth(iconWidth);
 
-    QString labelStyle = "QLabel { color: white; }";
-    locationLabel->setStyleSheet(labelStyle);
+    locationLabel->setStyleSheet("{ color: white; }");
     locationLabel->setWordWrap(true);
-    timeLabel->setStyleSheet(labelStyle);
-    temperatureLabel->setStyleSheet(labelStyle);
+    timeLabel->setStyleSheet("{ color: white; }");
+    temperatureLabel->setStyleSheet("{ color: white; }");
 
     leftLayout->addWidget(locationLabel, 0, Qt::AlignCenter);
     leftLayout->addWidget(iconLabel, 0, Qt::AlignCenter);

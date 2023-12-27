@@ -41,8 +41,7 @@ void GeoLocationData::fromVariant(const QVariant &variant){
     m_country = map.value("country").toString();
 }
 
-// todo sharedptr
-GeoLocationData GeoLocationData::fromVariantMap(const QVariantMap &geoLocation)
+GeoLocationData GeoLocationData::fromVariantMap(const QVariantMap& geoLocation)
 {
     return GeoLocationData{geoLocation.value("place").toString(),
                            geoLocation.value("renamedPlace").toString(),

@@ -14,6 +14,7 @@ class DetailedWeatherPage;
 class UserLocation;
 class GeoLocationData;
 class WeatherAPI;
+class Data;
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }

@@ -6,6 +6,7 @@
 class WidgetsManager : public QListWidget
 {
     Q_OBJECT
+
 public:
     using QListWidget::QListWidget;
 

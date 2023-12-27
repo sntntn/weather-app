@@ -77,6 +77,19 @@ QString Settings::precipitationUnitToString(const PrecipitationUnit precUnit) co
     }
 }
 
+// Depends on precipitation unit in the API
+QString Settings::visibilityUnitToString(const PrecipitationUnit unit) const
+{
+    switch (unit) {
+    case Settings::PrecipitationUnit::MILLIMETRES:
+        return "m";
+    case Settings::PrecipitationUnit::INCHES:
+        return "ft";
+    default:
+        return "";
+    }
+}
+
 QString Settings::temperatureUnitsNames(const TemperatureUnit tempUnit) const{
     switch (tempUnit) {
     case Settings::TemperatureUnit::CELSIUS:
@@ -185,6 +198,12 @@ QString Settings::precipitationUnitString() const
     return precipitationUnitToString(m_precipitationUnit);
 }
 
+QString Settings::visibilityUnitString() const
+{
+    // Depends on precipitation unit in the API
+    return visibilityUnitToString(m_precipitationUnit);
+}
+
 QString Settings::temperatureUnitName() const
 {
     return temperatureUnitsNames(m_temperatureUnit);
@@ -198,4 +217,64 @@ QString Settings::windSpeedUnitName() const
 QString Settings::precipitationUnitName() const
 {
     return precipitationUnitsNames(m_precipitationUnit);
+}
+
+QString Settings::weatherCodeToIcon(const int weatherCode, const bool isDay) {
+    const QString iconBasePath = "../Resources/weatherIcons/";
+
+    switch (weatherCode) {
+    case 0:
+        return isDay ? iconBasePath + "Sunny.png" : iconBasePath + "Clear.png";
+    case 1:
+        return isDay ? iconBasePath + "PartlyCloudyDay.png" : iconBasePath + "PartlyCloudyNight.png";
+    case 2:
+        return iconBasePath + "Cloudy.png";
+    case 3:
+        return iconBasePath + "Overcast.png";
+    case 45:
+        return iconBasePath + "Fog.png";
+    case 48:
+        return iconBasePath + "FreezingFog.png";
+    case 51:
+    case 53:
+    case 55:
+        return iconBasePath + "ModRain.png";
+    case 56:
+    case 57:
+        return iconBasePath + "FreezingDrizzle.png";
+    case 61:
+        return iconBasePath + "ModRain.png";
+    case 63:
+        return iconBasePath + "HeavyRain.png";
+    case 65:
+        return isDay ? iconBasePath + "HeavyRainSwrsDay.png" : iconBasePath + "HeavyRainSwrsNight.png";
+    case 66:
+    case 67:
+        return iconBasePath + "FreezingRain.png";
+    case 71:
+        return iconBasePath + "ModSnow.png";
+    case 73:
+        return iconBasePath + "HeavySnow.png";
+    case 75:
+        return isDay ? iconBasePath + "HeavySnowSwrsDay.png" : iconBasePath + "HeavySnowSwrsNight.png";
+    case 77:
+        return isDay ? iconBasePath + "IsoSnowSwrsDay.png" : iconBasePath + "IsoSnowSwrsNight.png";
+    case 80:
+        return isDay ? iconBasePath + "IsoRainSwrsDay.png" : iconBasePath + "IsoRainSwrsNight.png";
+    case 81:
+        return isDay ? iconBasePath + "ModRainSwrsDay.png" : iconBasePath + "ModRainSwrsNight.png";
+    case 82:
+        return isDay ? iconBasePath + "HeavyRainSwrsDay.png" : iconBasePath + "HeavyRainSwrsNight.png";
+    case 85:
+        return isDay ? iconBasePath + "IsoSnowSwrsDay.png" : iconBasePath + "IsoSnowSwrsNight.png";
+    case 86:
+        return isDay ? iconBasePath + "HeavySnowSwrsDay.png" : iconBasePath + "HeavySnowSwrsNight.png";
+    case 95:
+        return isDay ? iconBasePath + "PartCloudRainThunderDay.png" : iconBasePath + "PartCloudRainThunderNight.png";
+    case 96:
+    case 99:
+        return isDay ? iconBasePath + "PartCloudSleetSnowThunderDay.png" : iconBasePath + "PartCloudSleetSnowThunderNight.png";
+    default:
+        return iconBasePath + "Cloudy.png";
+    }
 }

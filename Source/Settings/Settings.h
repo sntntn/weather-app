@@ -24,6 +24,7 @@ public:
     QString temperatureUnitString() const;
     QString windSpeedUnitString() const;
     QString precipitationUnitString() const;
+    QString visibilityUnitString() const;
 
     QString temperatureUnitName() const;
     QString windSpeedUnitName() const;
@@ -31,6 +32,7 @@ public:
 
     QVariant toVariant() const override;
     void fromVariant(const QVariant & variant) override;
+    QString weatherCodeToIcon(const int weatherCode, const bool isDay);
 
     enum TemperatureUnit
     {
@@ -77,9 +79,11 @@ private:
     QString temperatureUnitToString(const TemperatureUnit tempUnit) const;
     QString windSpeedUnitToString(const WindSpeedUnit windSpeedUnit) const;
     QString precipitationUnitToString(const PrecipitationUnit precUnit) const;
+    QString visibilityUnitToString(const PrecipitationUnit unit) const; // Depends on precipitation unit in the API
+
 
     QString temperatureUnitsNames(const TemperatureUnit tempUnit) const;
-    QString windSpeedUnitsNames(const WindSpeedUnit precUnit) const;
+    QString windSpeedUnitsNames(const WindSpeedUnit windSpeedUnit) const;
     QString precipitationUnitsNames(const PrecipitationUnit precUnit) const;
 
     Settings::TemperatureUnit m_temperatureUnit = TemperatureUnit::CELSIUS;

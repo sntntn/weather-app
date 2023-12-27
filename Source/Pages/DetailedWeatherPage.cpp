@@ -6,10 +6,14 @@
 #include "WeatherWidget.h"
 #include "GeoLocationData.h"
 #include "Settings.h"
+#include "DetailedWeatherAPI.h"
+#include "DetailedWeatherData.h"
 
 #include <iostream>
 #include <QStackedWidget>
 #include <QTimer>
+#include <QTransform>
+#include <QFrame>
 
 DetailedWeatherPage::DetailedWeatherPage(QWidget *parent)
     : Page{parent}
@@ -19,10 +23,22 @@ DetailedWeatherPage::DetailedWeatherPage(QWidget *parent)
     , widgetsScrollAreaContents(new QWidget())
     , weatherScrollAreaContents(new QWidget())
     , widgetsLayout(new QGridLayout())
-    , weatherLayout(new QGridLayout())
+    , weatherLayout(new QVBoxLayout())
+    , buttonsLayout(new QHBoxLayout())
     , returnToHomePage(new QPushButton("< Home"))
     , horizontalSpacer(new QSpacerItem(spacerWidth, 0, QSizePolicy::Expanding, QSizePolicy::Minimum))
     , addToSavedLocations(new QPushButton("Add"))
+    , scrollTimer(new QTimer(this))
+    , locationLabel(new QLabel(this))
+    , basicInfo(new BasicInfoWidget(this))
+    , minmaxTemperature(new QLabel(this))
+    , humidityUvRain(new HumidityUvRainWidget(this))
+    , visibilityPressureSnow(new VisibilityPressureSnowWidget(this))
+    , windInfo(new WindInfoWidget(this))
+    , hourlyLabel(new QLabel("Hourly"))
+    , hourlyWidget(new HourlyWeatherWidget(this))
+    , dailyLabel(new QLabel("7-DAY FORECAST"))
+    , dailyWidget(new DailyWeatherWidget(this))
     , selectedWidget(nullptr)
 {
     widgetsScrollAreaContents->setLayout(widgetsLayout);
@@ -32,10 +48,33 @@ DetailedWeatherPage::DetailedWeatherPage(QWidget *parent)
     widgetsScrollArea->setWidgetResizable(true);
     widgetsScrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
-    weatherLayout->addWidget(returnToHomePage, 0, 0);
-    weatherLayout->addItem(horizontalSpacer, 0, 1);
-    weatherLayout->addWidget(addToSavedLocations, 0, 2);
+    buttonsLayout->addWidget(returnToHomePage);
+    buttonsLayout->addItem(horizontalSpacer);
+    buttonsLayout->addWidget(addToSavedLocations);
+
     weatherLayout->setAlignment(Qt::AlignTop);
+    weatherLayout->addLayout(buttonsLayout);
+
+    locationLabel->setStyleSheet("font-size: 24px; font-weight: bold;");
+    weatherLayout->addWidget(locationLabel, 0, Qt::AlignHCenter);
+    weatherLayout->addWidget(basicInfo);
+    basicInfo->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
+
+    minmaxTemperature->setStyleSheet("font-size: 16px;");
+    weatherLayout->addWidget(minmaxTemperature, 0, Qt::AlignHCenter);
+
+    weatherLayout->addWidget(humidityUvRain);
+    weatherLayout->addWidget(visibilityPressureSnow);
+    weatherLayout->addWidget(windInfo);
+
+    hourlyLabel->setStyleSheet("font: bold 15px;");
+    weatherLayout->addWidget(hourlyLabel);
+    weatherLayout->addWidget(hourlyWidget);
+
+    dailyLabel->setStyleSheet("font: bold 15px; margin: 10px;");
+    dailyLabel->setAlignment(Qt::AlignHCenter);
+    weatherLayout->addWidget(dailyLabel);
+    weatherLayout->addWidget(dailyWidget);
 
     weatherScrollAreaContents->setLayout(weatherLayout);
     weatherScrollArea->setWidget(weatherScrollAreaContents);
@@ -55,22 +94,23 @@ void DetailedWeatherPage::addNewWidget(const QSharedPointer<Data> &data)
     QSharedPointer<WeatherData> weatherData = qSharedPointerCast<WeatherData>(data);
 
     auto *widget = new WeatherWidget(weatherData, widgetsScrollAreaContents);
-    connect(widget, &WeatherWidget::clicked, this, &DetailedWeatherPage::setData);
+    connect(widget, &WeatherWidget::clicked, this, &DetailedWeatherPage::getData);
 
     widget->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Preferred);
     widget->setMaximumWidth(widgetsScrollArea->viewport()->width());
 
     int position = static_cast<int>(Settings::instance().savedLocations().indexOf(widget->data->location()));
 
-    if(Settings::instance().shareLocation())
+    if(Settings::instance().shareLocation()){
         position++;
+    }
 
     position == -1 ? widgetsLayout->addWidget(widget, 0, 0, 1, 1) // User location widget
                    : widgetsLayout->addWidget(widget, position, 0, 1, 1);
 
     m_widgets.emplaceBack(widget);
 
-    QStackedWidget* stackedWidget = qobject_cast<QStackedWidget*>(this->parent());
+    auto* stackedWidget = qobject_cast<QStackedWidget*>(this->parent());
     if (stackedWidget->currentWidget() == this) {
         QTimer::singleShot(100, this, &DetailedWeatherPage::highlightWidget);
     }
@@ -83,21 +123,44 @@ void DetailedWeatherPage::addErrorWidget(const QString &errMsg)
     m_widgets.emplaceBack(widget);
 }
 
-void DetailedWeatherPage::setData(const GeoLocationData &data) // todo sharedptr
+void DetailedWeatherPage::getData(const GeoLocationData &data)
 {
-    widgetsScrollArea->verticalScrollBar()->setValue(0);
-    this->data = data;
-    // test
-    std::cout << data.getRenamedPlace().toStdString() << " "
-              << data.getCoordinates().toString().toStdString() << std::endl;
-
     bool showAddbutton = data.getRenamedPlace() != "My location" &&
                          Settings::instance().savedLocations().indexOf(data) == -1;
 
     showAddbutton ? this->addToSavedLocations->setVisible(true)
                   : this->addToSavedLocations->setVisible(false);
 
+    // isto kao za MainWindow, saljemo data da postavi a onda u fetchData saljemo koordinate
+    auto* api = new DetailedWeatherAPI(data, this);
+    // todo ceo data umesto koordinata
+    api->fetchData(data.getCoordinates());
+    connect(api, &DetailedWeatherAPI::dataFetched, this, &DetailedWeatherPage::setData);
+}
+
+void DetailedWeatherPage::setData(const QSharedPointer<Data> &data){
+    //todo izbrisi SharedPointer
+    QSharedPointer<DetailedWeatherData> detailedData = qSharedPointerCast<DetailedWeatherData>(data);
+    this->data = detailedData;
     highlightWidget();
+
+    locationLabel->setText(detailedData->location().getRenamedPlace());
+
+    basicInfo->updateData(this->data->weatherCode(), this->data->isDay(), this->data->timezone(),
+                          this->data->temperature(), this->data->apparentTemperature());
+
+    minmaxTemperature->setText("H:" + QString::number(detailedData->weeklyMaxTemp()[0]) + "°  L:"
+                               + QString::number(detailedData->weeklyMinTemp()[0]) + "°");
+
+    hourlyWidget->updateData(this->data->hourlyTemperature(), this->data->hourlyCode(),
+                             this->data->hourlyIsDay(), this->data->hourlyTimeStamp());
+
+    dailyWidget->updateData(this->data->weeklyDayName(), this->data->weeklyCode(),
+                            this->data->weeklyMinTemp(), this->data->weeklyMaxTemp());
+
+    humidityUvRain->updateData(this->data->humidity(), this->data->uvIndex(), this->data->rain());
+    visibilityPressureSnow->updateData(this->data->visibility(), this->data->pressure(), this->data->snow());
+    windInfo->updateData(this->data->windSpeed(), this->data->windGusts(), this->data->windDirection());
 }
 
 void DetailedWeatherPage::resizeEvent(QResizeEvent* event) {
@@ -108,14 +171,14 @@ void DetailedWeatherPage::resizeEvent(QResizeEvent* event) {
 
 void DetailedWeatherPage::addButtonClicked()
 {
-    emit locationSaved(this->data);
+    emit locationSaved(this->data->location());
     this->addToSavedLocations->setVisible(false);
-    Settings::instance().savedLocations().push_back(this->data);
+    Settings::instance().savedLocations().push_back(this->data->location());
 }
 
 void DetailedWeatherPage::homeButtonClicked()
 {
-    if(selectedWidget){
+    if(selectedWidget != nullptr){
         selectedWidget->resetHighlight();
     }
 
@@ -124,13 +187,13 @@ void DetailedWeatherPage::homeButtonClicked()
 
 void DetailedWeatherPage::highlightWidget()
 {
-    if(selectedWidget){
+    if(selectedWidget != nullptr){
         selectedWidget->resetHighlight();
     }
 
     auto newSelectedWidget = std::find_if(m_widgets.begin(), m_widgets.end(), [this](const auto* element) {
         const WeatherWidget* widget = dynamic_cast<const WeatherWidget*>(element); // Check if it's not an ErrorWidget
-        return (widget != nullptr ? widget->data->location() == this->data : false);
+        return (widget != nullptr ? widget->data->location() == this->data->location() : false);
     });
 
     if (newSelectedWidget != m_widgets.end()) {

@@ -1,4 +1,5 @@
 #include "GeocodingAPI.h"
+
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QJsonArray>
@@ -18,7 +19,8 @@ GeocodingAPI::GeocodingAPI()
     connect(networkManager, &QNetworkAccessManager::finished, this, &GeocodingAPI::replyFinished);
 }
 
-void GeocodingAPI::geocodeCity(const QString& location) {
+void GeocodingAPI::geocodeCity(const QString& location)
+{
     QString apiUrl = QString("https://api.opencagedata.com/geocode/v1/json?q=%1&key=%2")
                     .arg(location, OPEN_CAGE_API_KEY);
 
@@ -26,7 +28,8 @@ void GeocodingAPI::geocodeCity(const QString& location) {
     networkManager->get(request);
 }
 
-void GeocodingAPI::replyFinished(QNetworkReply* reply) {
+void GeocodingAPI::replyFinished(QNetworkReply* reply)
+{
     if (reply->error() != QNetworkReply::NoError) {
         return;
     }

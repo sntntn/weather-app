@@ -32,27 +32,33 @@ SettingsDialog::SettingsDialog(QWidget *parent)
     const QMetaObject &meta = Settings::staticMetaObject;
 
     QMetaEnum temperatureMetaEnum = meta.enumerator(meta.indexOfEnumerator("TemperatureUnit"));
-    for (int i = 0; i < temperatureMetaEnum.keyCount(); ++i) {
+    const int tempKeyCount = temperatureMetaEnum.keyCount();
+
+    for (int i = 0; i < tempKeyCount; ++i) {
         int enumValue = temperatureMetaEnum.keyToValue(temperatureMetaEnum.key(i));
-        Settings::TemperatureUnit tempUnit = static_cast<Settings::TemperatureUnit>(enumValue);
+        auto tempUnit = static_cast<Settings::TemperatureUnit>(enumValue);
 
         temperatureUnit->addItem(settings.temperatureUnitsNames(tempUnit), QVariant::fromValue(tempUnit));
     }
     temperatureUnit->setCurrentText(settings.temperatureUnitName());
 
     QMetaEnum windSpeedMetaEnum = meta.enumerator(meta.indexOfEnumerator("WindSpeedUnit"));
-    for (int i = 0; i < windSpeedMetaEnum.keyCount(); ++i) {
+    const int windKeyCount = windSpeedMetaEnum.keyCount();
+
+    for (int i = 0; i < windKeyCount; ++i) {
         int enumValue = windSpeedMetaEnum.keyToValue(windSpeedMetaEnum.key(i));
-        Settings::WindSpeedUnit windUnit = static_cast<Settings::WindSpeedUnit>(enumValue);
+        auto windUnit = static_cast<Settings::WindSpeedUnit>(enumValue);
 
         windSpeedUnit->addItem(settings.windSpeedUnitsNames(windUnit), QVariant::fromValue(windUnit));
     }
     windSpeedUnit->setCurrentText(settings.windSpeedUnitName());
 
     QMetaEnum precipitationMetaEnum = meta.enumerator(meta.indexOfEnumerator("PrecipitationUnit"));
-    for (int i = 0; i < precipitationMetaEnum.keyCount(); ++i) {
+    const int precKeyCount = precipitationMetaEnum.keyCount();
+
+    for (int i = 0; i < precKeyCount; ++i) {
         int enumValue = precipitationMetaEnum.keyToValue(precipitationMetaEnum.key(i));
-        Settings::PrecipitationUnit precipUnit = static_cast<Settings::PrecipitationUnit>(enumValue);
+        auto precipUnit = static_cast<Settings::PrecipitationUnit>(enumValue);
 
         precipitationUnit->addItem(settings.precipitationUnitsNames(precipUnit),
                                    QVariant::fromValue(precipUnit));

@@ -37,6 +37,7 @@ set(PROJECT_SOURCES
         Api/ApiHandler.cpp Api/ApiHandler.h
         Api/GeocodingAPI.cpp Api/GeocodingAPI.h
         Api/WeatherAPI.cpp Api/WeatherAPI.h
+        Api/DetailedWeatherAPI.cpp Api/DetailedWeatherAPI.h
         Api/Parser.cpp Api/Parser.h
 
         Data/Data.h
@@ -60,6 +61,8 @@ set(PROJECT_SOURCES
         Widgets/BasicWidget.h Widgets/BasicWidget.cpp
         Widgets/WeatherWidget.cpp Widgets/WeatherWidget.h
         Widgets/ErrorWidget.h Widgets/ErrorWidget.cpp
+        Widgets/WeatherWidget.cpp Widgets/WeatherWidget.h
+        Widgets/DetailedPageWidgets.cpp Widgets/DetailedPageWidgets.h
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)

@@ -73,12 +73,14 @@ void HomePage::addNewWidget(const QSharedPointer<Data> &data)
 
     int position = static_cast<int>(Settings::instance().savedLocations().indexOf(widget->data->location()));
 
-    if(Settings::instance().shareLocation())
+    if(Settings::instance().shareLocation()){
         position++;
+    }
 
     position == -1 ? widgetsLayout->addWidget(widget, 0, 0, 1, 1) // User location widget
                    : widgetsLayout->addWidget(widget, position / 2, position % 2, 1, 1);
 
+//    widget->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
     widget->setMaximumHeight(160);
     m_widgets.emplaceBack(widget);
 }
@@ -110,7 +112,7 @@ void HomePage::updateCompleter(const QList<GeoLocationData>& locations)
         places.append(location.getDetailedPlace());
     }
 
-    if (completer->model()) {
+    if (completer->model() != nullptr) {
         delete completer->model();
     }
     completer->setModel(new QStringListModel(places, completer));

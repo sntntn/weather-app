@@ -39,7 +39,7 @@ MainWindow::MainWindow(QWidget *parent)
     requestUserLocationData();
     getSavedLocationsData();
 
-    connect(this, &MainWindow::detailedWeatherPageShown, detailedWeather, &DetailedWeatherPage::setData);
+    connect(this, &MainWindow::detailedWeatherPageShown, detailedWeather, &DetailedWeatherPage::getData);
     connect(this, &MainWindow::deletePageWidgets, homePage, &Page::deleteWidgets);
     connect(this, &MainWindow::deletePageWidgets, detailedWeather, &Page::deleteWidgets);
     connect(userLocation, &UserLocation::userLocationFetched, this, &MainWindow::getLocationData);
@@ -88,8 +88,7 @@ void MainWindow::refreshPages()
 {
     emit deletePageWidgets();
 
-    // QGeoPositionInfoSource doesn't emit signals (?)
-    // after the first error so we reinitialize it
+    // QGeoPositionInfoSource doesn't emit signals (?) after the first error so we reinitialize it
     delete userLocation;
     userLocation = new UserLocation(this);
     connect(userLocation, &UserLocation::userLocationError, homePage, &HomePage::addErrorWidget);

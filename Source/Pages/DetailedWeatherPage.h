@@ -11,12 +11,18 @@
 #include <QPushButton>
 #include <QSharedPointer>
 #include <QScrollBar>
+#include <QTimer>
+#include <QLabel>
+#include <QTimeZone>
 
 #include "GeoLocationData.h"
+#include "DetailedPageWidgets.h"
 
 class WeatherData;
 class MainWindow;
 class WeatherWidget;
+class GeoLocationData;
+class DetailedWeatherData;
 
 class DetailedWeatherPage : public Page
 {
@@ -31,7 +37,8 @@ public:
 public slots:
     void addNewWidget(const QSharedPointer<Data> &data) override;
     void addErrorWidget(const QString &errMsg) override;
-    void setData(const GeoLocationData &data); // todo shared ptr
+    void getData(const GeoLocationData &data); // todo shared ptr
+    void setData(const QSharedPointer<Data> &data);
 
 private slots:
     void addButtonClicked();
@@ -43,17 +50,29 @@ signals:
 private:
     static const int spacerWidth = 40;
 
-    GeoLocationData data; // todo sharedptr
+    QSharedPointer<DetailedWeatherData> data;
     QHBoxLayout *mainLayout;
     QScrollArea *widgetsScrollArea;
     QScrollArea *weatherScrollArea;
     QWidget *widgetsScrollAreaContents;
     QWidget *weatherScrollAreaContents;
     QGridLayout *widgetsLayout;
-    QGridLayout *weatherLayout;
+    QVBoxLayout *weatherLayout;
+    QHBoxLayout *buttonsLayout;
     QPushButton *returnToHomePage;
     QSpacerItem *horizontalSpacer;
     QPushButton *addToSavedLocations;
+    QTimer *scrollTimer;
+    QLabel *locationLabel;
+    BasicInfoWidget *basicInfo;
+    QLabel *minmaxTemperature;
+    HumidityUvRainWidget *humidityUvRain;
+    VisibilityPressureSnowWidget *visibilityPressureSnow;
+    WindInfoWidget *windInfo;
+    QLabel *hourlyLabel;
+    HourlyWeatherWidget *hourlyWidget;
+    QLabel *dailyLabel;
+    DailyWeatherWidget *dailyWidget;
     WeatherWidget *selectedWidget;
 
     void highlightWidget();

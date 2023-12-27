@@ -24,7 +24,6 @@ signals:
 
 public slots:
     void replyFinished(QNetworkReply* reply) override;
-
 };
 
 #endif // WEATHERAPI_H

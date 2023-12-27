@@ -80,8 +80,8 @@ void HomePage::addNewWidget(const QSharedPointer<Data> &data)
     position == -1 ? widgetsLayout->addWidget(widget, 0, 0, 1, 1) // User location widget
                    : widgetsLayout->addWidget(widget, position / 2, position % 2, 1, 1);
 
-//    widget->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
-    widget->setMaximumHeight(160);
+//    widget->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Preferred);
+    widget->setFixedHeight(180);
     m_widgets.emplaceBack(widget);
 }
 

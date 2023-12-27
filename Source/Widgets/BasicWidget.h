@@ -3,13 +3,19 @@
 
 #include <QWidget>
 
+#include <QHBoxLayout>
+
 class BasicWidget : public QWidget
 {
     Q_OBJECT
+
 public:
     explicit BasicWidget(QWidget *parent = nullptr);
 
-signals:
+protected:
+    QHBoxLayout *mainLayout;
+
+    const QString fontName = "Roboto";
 
 };
 

@@ -14,9 +14,8 @@
 #include "Settings.h"
 
 WeatherWidget::WeatherWidget(const QSharedPointer<WeatherData> &data, QWidget *parent)
-    : QWidget{parent}
+    : BasicWidget{parent}
     , data(data)
-    , mainLayout(new QHBoxLayout(this))
     , leftLayout(new QVBoxLayout())
     , rightLayout(new QVBoxLayout())
     , temperatureLabel(new QLabel(QString::number(data->temperature()) + "°", this))
@@ -27,13 +26,9 @@ WeatherWidget::WeatherWidget(const QSharedPointer<WeatherData> &data, QWidget *p
     , iconLabel(new QLabel(this))
     , weatherIcon(weatherCodeToIcon(data->weatherCode(), data->isDay()))
 {
-    setAttribute(Qt::WA_StyledBackground, true);
-    setStyleSheet("WeatherWidget { border-radius: 20px; background-color: #598be0; }");
-
     mainLayout->setSpacing(hBoxSpacing);
     mainLayout->setContentsMargins(hBoxMarginSize, hBoxMarginSize, hBoxMarginSize, hBoxMarginSize);
 
-    const QString fontName = "Roboto";
     locationLabel->setFont(QFont(fontName, adjustLabelFontSize(fontName), QFont::Bold));
     timeLabel->setFont(QFont(fontName, timeFontSize, QFont::Normal));
     temperatureLabel->setFont(QFont(fontName, temperatureFontSize, QFont::Bold));

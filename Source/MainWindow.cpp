@@ -44,7 +44,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(this, &MainWindow::deletePageWidgets, detailedWeather, &Page::deleteWidgets);
     connect(userLocation, &UserLocation::userLocationFetched, this, &MainWindow::getLocationData);
     connect(userLocation, &UserLocation::userLocationError, homePage, &HomePage::addErrorWidget);
-    connect(userLocation, &UserLocation::userLocationError, detailedWeather, &DetailedWeatherPage::addErrorWidget);
+//    connect(userLocation, &UserLocation::userLocationError, detailedWeather, &DetailedWeatherPage::addErrorWidget);
     connect(weatherApi, &WeatherAPI::dataFetched, homePage, &HomePage::addNewWidget);
     connect(weatherApi, &WeatherAPI::dataFetched, detailedWeather, &DetailedWeatherPage::addNewWidget);
 }
@@ -56,8 +56,9 @@ MainWindow::~MainWindow()
 
 void MainWindow::requestUserLocationData()
 {
-    if(settings.shareLocation())
+    if(settings.shareLocation()){
         userLocation->getLocation();
+    }
 }
 
 void MainWindow::getSavedLocationsData()
@@ -86,6 +87,15 @@ void MainWindow::showDetailedWeatherPage(const GeoLocationData &data)
 void MainWindow::refreshPages()
 {
     emit deletePageWidgets();
+
+    // QGeoPositionInfoSource doesn't emit signals (?)
+    // after the first error so we reinitialize it
+    delete userLocation;
+    userLocation = new UserLocation(this);
+    connect(userLocation, &UserLocation::userLocationError, homePage, &HomePage::addErrorWidget);
+//    connect(userLocation, &UserLocation::userLocationError, detailedWeather, &DetailedWeatherPage::addErrorWidget);
+    connect(userLocation, &UserLocation::userLocationFetched, this, &MainWindow::getLocationData);
+
     requestUserLocationData();
     getSavedLocationsData();
 }

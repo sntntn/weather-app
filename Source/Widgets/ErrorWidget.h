@@ -1,17 +1,16 @@
 #ifndef ERRORWIDGET_H
 #define ERRORWIDGET_H
 
-#include <QWidget>
-#include <QVBoxLayout>
+#include "BasicWidget.h"
+
 #include <QLabel>
 
-class ErrorWidget : public QWidget
+class ErrorWidget : public BasicWidget
 {
 public:
     explicit ErrorWidget(const QString &errorMessage, QWidget *parent = nullptr);
 
 private:
-    QVBoxLayout *mainLayout;
     QLabel *errorMessageLabel;
 
 };

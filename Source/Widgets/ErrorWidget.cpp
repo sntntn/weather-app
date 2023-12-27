@@ -1,8 +1,7 @@
 #include "ErrorWidget.h"
 
 ErrorWidget::ErrorWidget(const QString &errorMessage, QWidget *parent)
-    : QWidget{parent}
-    , mainLayout(new QVBoxLayout(this))
+    : BasicWidget{parent}
     , errorMessageLabel(new QLabel(errorMessage, this))
 {
     mainLayout->addWidget(errorMessageLabel);

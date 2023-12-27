@@ -4,7 +4,7 @@
 #include <QWidget>
 #include <QSharedPointer>
 
-class WeatherWidget;
+class BasicWidget;
 class Data;
 class MainWindow;
 
@@ -22,7 +22,7 @@ public slots:
 protected:
     explicit Page(QWidget *parent = nullptr);
 
-    QVector<WeatherWidget*> m_widgets;
+    QVector<BasicWidget*> m_widgets;
     MainWindow *mainWindow;
 };
 

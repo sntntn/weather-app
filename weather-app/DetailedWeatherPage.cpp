@@ -13,6 +13,7 @@
 #include <QTimer>
 #include <QPainter>
 #include <QTransform>
+#include <QFrame>
 
 DetailedWeatherPage::DetailedWeatherPage(QWidget *parent)
     : Page{parent}
@@ -74,7 +75,9 @@ DetailedWeatherPage::DetailedWeatherPage(QWidget *parent)
         if (i < 6) {
             QFrame *line = new QFrame();
             line->setFrameShape(QFrame::HLine);
-            line->setFrameShadow(QFrame::Sunken);
+            line->setLineWidth(1);
+            line->setStyleSheet("color: black;");
+            //line->setStyleSheet("border: 1px solid black;");
             dailyLayout->addWidget(line, 2*i + 1, 0, 1, -1);
         }
     }

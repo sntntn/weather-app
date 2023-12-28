@@ -11,9 +11,10 @@
 
 class BasicInfoWidget : public QWidget
 {
-    QVBoxLayout *basicInfoLayout;
-    QHBoxLayout *firstHLayout;
-    QHBoxLayout *secondHLayout;
+    QHBoxLayout *basicInfoLayout;
+    QVBoxLayout *leftLayout;
+    QVBoxLayout *rightLayout;
+    QVBoxLayout *dateTimeLayout;
     QPixmap weatherIcon;
     QLabel *iconLabel;
     QLabel *weatherDescriptionLabel;
@@ -22,15 +23,13 @@ class BasicInfoWidget : public QWidget
     QLabel *timeLabel;
     QLabel *temperatureLabel;
     QLabel *feelsLikeLabel;
-    QLabel *maxTempLabel;
-    QLabel *minTempLabel;
 
     static const int iconWidth = 80;
     static const int iconHeight = 80;
 
 public:
     BasicInfoWidget(QWidget *parent = nullptr);
-    void updateData(const int maxTemp, const int minTemp, const int weatherCode, const bool isDay, const QTimeZone &timezone, const int temperature,
+    void updateData(const int weatherCode, const bool isDay, const QTimeZone &timezone, const int temperature,
                     const int apparentTemperature);
     QString getDaySuffix(const int day);
     QString weatherCodeToDescription(const int weatherCode);
@@ -90,8 +89,8 @@ class WindInfoWidget : public QWidget
     QPixmap initialCompassIcon;
     QPixmap arrowIcon;
 
-    static const int iconWidth = 80;
-    static const int iconHeight = 80;
+    static const int iconWidth = 60;
+    static const int iconHeight = 60;
 
 public:
     WindInfoWidget(QWidget *parent = nullptr);

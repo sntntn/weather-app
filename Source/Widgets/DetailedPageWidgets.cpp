@@ -16,9 +16,10 @@ namespace WidgetUtils{
 
 BasicInfoWidget::BasicInfoWidget(QWidget *parent)
     : QWidget(parent)
-    , basicInfoLayout(new QVBoxLayout())
-    , firstHLayout(new QHBoxLayout())
-    , secondHLayout(new QHBoxLayout())
+    , basicInfoLayout(new QHBoxLayout())
+    , leftLayout(new QVBoxLayout())
+    , rightLayout(new QVBoxLayout())
+    , dateTimeLayout(new QVBoxLayout())
     , iconLabel(new QLabel(this))
     , weatherDescriptionLabel(new QLabel(this))
     , todayLabel(new QLabel("Today,"))
@@ -26,61 +27,34 @@ BasicInfoWidget::BasicInfoWidget(QWidget *parent)
     , timeLabel(new QLabel(this))
     , temperatureLabel(new QLabel(this))
     , feelsLikeLabel(new QLabel(this))
-    , maxTempLabel(new QLabel(this))
-    , minTempLabel(new QLabel(this))
 {
-//    temperatureLabel->setStyleSheet("font-size: 110px; font-weight: bold;");
-//    leftLayout->addWidget(iconLabel, 0, Qt::AlignLeft);
-//    leftLayout->addWidget(weatherDescriptionLabel, 0, Qt::AlignLeft);
-//    leftLayout->addWidget(dateLabel, 0, Qt::AlignLeft | Qt::AlignTop);
-//    leftLayout->addWidget(timeLabel, 0, Qt::AlignLeft | Qt::AlignTop);
-//    rightLayout->addWidget(temperatureLabel, 0, Qt::AlignHCenter);
-//    rightLayout->addWidget(feelsLikeLabel, 0, Qt::AlignRight | Qt::AlignBottom);
-//    feelsLikeLabel->setStyleSheet(R"(
-//    QLabel {
-//        color: white;
-//        background-color: #0066CC;
-//        padding: 3px 5px;
-//        border-radius: 5px;
-//        font-size: 14px;
-//        font-weight: bold;
-//    }
-//    )");
-//    basicInfoLayout->addLayout(leftLayout);
-//    basicInfoLayout->addLayout(rightLayout);
-//    this->setLayout(basicInfoLayout);
-    firstHLayout->addWidget(todayLabel);
-    firstHLayout->addWidget(timeLabel);
-    timeLabel->setAlignment(Qt::AlignRight);
+    temperatureLabel->setStyleSheet("font-size: 110px; font-weight: bold;");
+    leftLayout->addWidget(iconLabel, 0, Qt::AlignLeft);
+    leftLayout->addWidget(weatherDescriptionLabel, 0, Qt::AlignLeft | Qt::AlignTop);
 
-    basicInfoLayout->addLayout(firstHLayout);
-    basicInfoLayout->addWidget(dateLabel);
+    dateTimeLayout->addWidget(dateLabel);
+    dateTimeLayout->addWidget(timeLabel);
+    dateTimeLayout->setSpacing(0);
+    dateTimeLayout->setContentsMargins(0, 0, 0, 0);
+    leftLayout->addLayout(dateTimeLayout);
 
-    basicInfoLayout->addWidget(maxTempLabel);
-    maxTempLabel->setStyleSheet("font-size: 20px; ");
-
-    secondHLayout->addWidget(iconLabel);
-    iconLabel->setAlignment(Qt::AlignRight);
-
-    temperatureLabel->setStyleSheet("font-size: 120px; font-weight: bold;");
-    temperatureLabel->setAlignment(Qt::AlignCenter);
-    secondHLayout->addWidget(temperatureLabel);
-    maxTempLabel->setAlignment(Qt::AlignCenter);
-
-    secondHLayout->addWidget(weatherDescriptionLabel);
-    weatherDescriptionLabel->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
-    basicInfoLayout->addLayout(secondHLayout);
-    basicInfoLayout->addWidget(minTempLabel);
-    minTempLabel->setStyleSheet("font-size: 20px; ");
-    minTempLabel->setAlignment(Qt::AlignCenter);
-
-    feelsLikeLabel->setAlignment(Qt::AlignRight);
-    basicInfoLayout->addWidget(feelsLikeLabel);
+    rightLayout->addWidget(temperatureLabel, 0, Qt::AlignHCenter);
+    rightLayout->addWidget(feelsLikeLabel, 0, Qt::AlignRight | Qt::AlignBottom);
+    feelsLikeLabel->setStyleSheet(R"(
+    QLabel {
+        color: white;
+        background-color: black;
+        padding: 3px 8px;
+        border-radius: 5px;
+        font-size: 14px;
+    }
+    )");
+    basicInfoLayout->addLayout(leftLayout);
+    basicInfoLayout->addLayout(rightLayout);
     this->setLayout(basicInfoLayout);
-
 }
 
-void BasicInfoWidget::updateData(const int maxTemp, const int minTemp, const int weatherCode, const bool isDay,
+void BasicInfoWidget::updateData(const int weatherCode, const bool isDay,
                                  const QTimeZone &timezone, const int temperature,
                                  const int apparentTemperature)
 {
@@ -91,16 +65,11 @@ void BasicInfoWidget::updateData(const int maxTemp, const int minTemp, const int
     weatherDescriptionLabel->setText(weatherCodeToDescription(weatherCode));
 
     QDateTime currentTimeZone = QDateTime::currentDateTime().toTimeZone(timezone);
-    dateLabel->setText(currentTimeZone.toString("MMMM d") +
-                       getDaySuffix(currentTimeZone.date().day()));
+    dateLabel->setText("Today, " + currentTimeZone.toString("MMMM d") + getDaySuffix(currentTimeZone.date().day()));
     timeLabel->setText(currentTimeZone.toString("HH:mm"));
 
     temperatureLabel->setText(QString::number(temperature) + "°");
-        feelsLikeLabel->setText("Feels like: " + QString::number(apparentTemperature) + "°");
-
-        maxTempLabel->setText("H: " + QString::number(maxTemp) + "°");
-        minTempLabel->setText("L: " + QString::number(minTemp) + "°");
-
+    feelsLikeLabel->setText("Feels like: " + QString::number(apparentTemperature) + "°");
 }
 
 HumidityUvRainWidget::HumidityUvRainWidget(QWidget *parent)
@@ -113,7 +82,6 @@ HumidityUvRainWidget::HumidityUvRainWidget(QWidget *parent)
     this->setObjectName("HumidityUvRainContainer");
     this->setStyleSheet("#HumidityUvRainContainer { "
                         "background-color: black;"
-                        "border: 2px solid black;"
                         "border-radius: 15px; "
                         "margin: 5px; "
                         "}");
@@ -143,7 +111,6 @@ VisibilityPressureSnowWidget::VisibilityPressureSnowWidget(QWidget *parent)
     this->setObjectName("VisibilityPressureSnowContainer");
     this->setStyleSheet("#VisibilityPressureSnowContainer { "
                         "background-color: black;"
-                        "border: 2px solid black;"
                         "border-radius: 15px; "
                         "margin: 5px; "
                         "}");

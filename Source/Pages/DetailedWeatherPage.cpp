@@ -142,8 +142,7 @@ void DetailedWeatherPage::setData(const QSharedPointer<Data> &data){
 
     locationLabel->setText(detailedData->location().getRenamedPlace());
 
-    basicInfo->updateData(this->data->weeklyMaxTemp()[0], this->data->weeklyMinTemp()[0],
-                          this->data->weatherCode(), this->data->isDay(), this->data->timezone(),
+    basicInfo->updateData(this->data->weatherCode(), this->data->isDay(), this->data->timezone(),
                           this->data->temperature(), this->data->apparentTemperature());
 
     hourlyWidget->updateData(this->data->hourlyTemperature(), this->data->hourlyCode(),

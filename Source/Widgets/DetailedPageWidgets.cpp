@@ -158,8 +158,8 @@ MinMaxTempWidget::MinMaxTempWidget(QWidget *parent)
 
 void MinMaxTempWidget::updateData(const int maxTempValue, const int minTempValue)
 {
-    maxTemp->updateData(maxTempValue, "°C");//" " + Settings::instance().temperatureUnitToString);
-    minTemp->updateData(minTempValue, "°C");
+    maxTemp->updateData(maxTempValue, " " + Settings::instance().temperatureUnitString());//" " + Settings::instance().temperatureUnitToString);
+    minTemp->updateData(minTempValue, " " + Settings::instance().temperatureUnitString());
 }
 
 SunWidget::SunWidget(QWidget *parent)

@@ -11,23 +11,26 @@
 
 class BasicInfoWidget : public QWidget
 {
-    QHBoxLayout *basicInfoLayout;
-    QVBoxLayout *leftLayout;
-    QVBoxLayout *rightLayout;
+    QVBoxLayout *basicInfoLayout;
+    QHBoxLayout *firstHLayout;
+    QHBoxLayout *secondHLayout;
     QPixmap weatherIcon;
     QLabel *iconLabel;
     QLabel *weatherDescriptionLabel;
+    QLabel *todayLabel;
     QLabel *dateLabel;
     QLabel *timeLabel;
     QLabel *temperatureLabel;
     QLabel *feelsLikeLabel;
+    QLabel *maxTempLabel;
+    QLabel *minTempLabel;
 
-    static const int iconWidth = 100;
-    static const int iconHeight = 100;
+    static const int iconWidth = 80;
+    static const int iconHeight = 80;
 
 public:
     BasicInfoWidget(QWidget *parent = nullptr);
-    void updateData(const int weatherCode, const bool isDay, const QTimeZone &timezone, const int temperature,
+    void updateData(const int maxTemp, const int minTemp, const int weatherCode, const bool isDay, const QTimeZone &timezone, const int temperature,
                     const int apparentTemperature);
     QString getDaySuffix(const int day);
     QString weatherCodeToDescription(const int weatherCode);
@@ -41,8 +44,8 @@ class singleWidgetItem : public QWidget{
     QLabel *infoLabel;
     QLabel *info;
 
-    static const int iconWidth = 25;
-    static const int iconHeight = 25;
+    static const int iconWidth = 35;
+    static const int iconHeight = 35;
 public:
     singleWidgetItem(const QString iconPath, const QString infoName, QWidget *parent = nullptr);
     void updateData(const int value, const QString unit);
@@ -87,8 +90,8 @@ class WindInfoWidget : public QWidget
     QPixmap initialCompassIcon;
     QPixmap arrowIcon;
 
-    static const int iconWidth = 100;
-    static const int iconHeight = 100;
+    static const int iconWidth = 80;
+    static const int iconHeight = 80;
 
 public:
     WindInfoWidget(QWidget *parent = nullptr);
@@ -131,9 +134,10 @@ class DailyWeatherWidget : public QWidget
     QGridLayout *mainLayout;
 
     static const int daysPerWeek = 7;
-    static const int iconWidth = 30;
-    static const int iconHeight = 30;
-    static const int dayNameLabelWidth = 80;
+    static const int iconWidth = 35;
+    static const int iconHeight = 35;
+    static const int dayNameLabelWidth = 100;
+    static const int padding = 20;
 
     class DailyWidgetItem : public QWidget
     {

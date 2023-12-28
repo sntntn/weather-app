@@ -60,6 +60,7 @@ DetailedWeatherPage::DetailedWeatherPage(QWidget *parent)
     weatherLayout->addWidget(basicInfo);
     basicInfo->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
 
+    weatherLayout->addWidget(sunWidget);
     weatherLayout->addWidget(humidityUvRain);
     weatherLayout->addWidget(visibilityPressureSnow);
     weatherLayout->addWidget(windInfo);
@@ -72,7 +73,6 @@ DetailedWeatherPage::DetailedWeatherPage(QWidget *parent)
     dailyLabel->setAlignment(Qt::AlignHCenter);
     weatherLayout->addWidget(dailyLabel);
     weatherLayout->addWidget(dailyWidget);
-    weatherLayout->addWidget(sunWidget);
 
     weatherScrollAreaContents->setLayout(weatherLayout);
     weatherScrollArea->setWidget(weatherScrollAreaContents);

@@ -233,6 +233,9 @@ SunriseSunsetWidget::SunriseSunsetWidget(QWidget *parent)
     , sunriseTime(new QLabel())
     , sunsetTime(new QLabel())
 {
+    sunriseIconLabel->setPixmap(sunriseIcon);
+    sunsetIconLabel->setPixmap(sunsetIcon);
+
     sunriseLabel->setAlignment(Qt::AlignLeft);
     sunriseIconLabel->setAlignment(Qt::AlignLeft);
     sunriseTime->setAlignment(Qt::AlignLeft);

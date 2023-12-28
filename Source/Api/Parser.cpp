@@ -111,7 +111,9 @@ QSharedPointer<DetailedWeatherData> Parser::parseDetailedWeatherData(const QStri
     }
 
     QString sunrise = static_cast<QString>(weeklySunriseJ[0].toString());
+    sunrise = sunrise.mid(11,5);
     QString sunset = static_cast<QString>(weeklySunsetJ[0].toString());
+    sunset = sunset.mid(11, 5);
 
     QJsonArray weeklyMaxTempJ = daily.value("temperature_2m_max").toArray();
     QVector<int> weeklyMaxTemp;

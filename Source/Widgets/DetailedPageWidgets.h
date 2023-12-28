@@ -95,6 +95,25 @@ public:
     void updateData(const int windSpeed, const int windGusts, const int windDirection);
 };
 
+class SunriseSunsetWidget : public QWidget
+{
+    QHBoxLayout *mainLayout;
+    QVBoxLayout *leftLayout;
+    QVBoxLayout *rightLayout;
+    QLabel *sunriseLabel;
+    QLabel *sunsetLabel;
+    QLabel *sunriseIconLabel;
+    QLabel *sunsetIconLabel;
+    QPixmap sunriseIcon;
+    QPixmap sunsetIcon;
+    QLabel *sunriseTime;
+    QLabel *sunsetTime;
+
+public:
+    SunriseSunsetWidget(QWidget *parent = nullptr);
+    void updateData(const QString sunrise, const QString sunset);
+};
+
 class HourlyWeatherWidget : public QWidget
 {
     QVBoxLayout *mainLayout;

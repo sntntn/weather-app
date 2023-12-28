@@ -24,8 +24,8 @@ DetailedWeatherData::DetailedWeatherData(const GeoLocationData &location,
                                          const QVector<int> &weeklyMaxTemp,
                                          const QVector<int> &weeklyMinTemp,
                                          const QVector<int> &weeklyCode,
-                                         const QVector<QString> &weeklySunrise,
-                                         const QVector<QString> &weeklySunset,
+                                         const QString sunrise,
+                                         const QString sunset,
                                          const QVector<QString> &weeklyDayName)
     : WeatherData(location, temperature, weeklyMaxTemp[0], weeklyMinTemp[0], weatherCode, isDay, timezone)
     , m_location(location)
@@ -50,7 +50,7 @@ DetailedWeatherData::DetailedWeatherData(const GeoLocationData &location,
     , m_weeklyMaxTemp(weeklyMaxTemp)
     , m_weeklyMinTemp(weeklyMinTemp)
     , m_weeklyCode(weeklyCode)
-    , m_weeklySunrise(weeklySunrise)
-    , m_weeklySunset(weeklySunset)
+    , m_sunrise(sunrise)
+    , m_sunset(sunset)
     , m_weeklyDayName(weeklyDayName)
 {}

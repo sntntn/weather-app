@@ -30,8 +30,8 @@ public:
                                  const QVector<int> &weeklyMaxTemp,
                                  const QVector<int> &weeklyMinTemp,
                                  const QVector<int> &weeklyCode,
-                                 const QVector<QString> &weeklySunrise,
-                                 const QVector<QString> &weeklySunset,
+                                 const QString sunrise,
+                                 const QString sunset,
                                  const QVector<QString> &weeklyDayName
                                  );
 
@@ -123,13 +123,13 @@ public:
     {
         return m_weeklyCode;
     }
-    inline QVector<QString> weeklySunrise() const
+    inline QString sunrise() const
     {
-        return m_weeklySunrise;
+        return m_sunrise;
     }
-    inline QVector<QString> weeklySunset() const
+    inline QString sunset() const
     {
-        return m_weeklySunset;
+        return m_sunset;
     }
     inline QVector<QString> weeklyDayName() const
     {
@@ -159,8 +159,8 @@ private:
     QVector<int> m_weeklyMaxTemp;
     QVector<int> m_weeklyMinTemp;
     QVector<int> m_weeklyCode;
-    QVector<QString> m_weeklySunrise;
-    QVector<QString> m_weeklySunset;
+    QString m_sunrise;
+    QString m_sunset;
     QVector<QString> m_weeklyDayName;
 
 };

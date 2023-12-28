@@ -31,11 +31,11 @@ void DetailedWeatherAPI::fetchData(const QGeoCoordinate &coordinates)
     QUrlQuery query;
     query.addQueryItem("latitude", latitude);
     query.addQueryItem("longitude", longitude);
-    query.addQueryItem("current", "temperature_2m,weather_code,is_day,wind_speed_10m,apparent_temperature,rain,snowfall,relative_humidity_2m,visibility,pressure_msl,uv_index,wind_direction_10m,wind_gusts_10m");
-    query.addQueryItem("daily", "temperature_2m_max,temperature_2m_min,weather_code,sunrise,sunset");
+    query.addQueryItem("current", "temperature_2m,weather_code,is_day,wind_speed_10m,apparent_temperature,snow_depth,relative_humidity_2m,visibility,pressure_msl,uv_index,wind_direction_10m,wind_gusts_10m");
+    query.addQueryItem("daily", "temperature_2m_max,temperature_2m_min,weather_code,sunrise,sunset,precipitation_sum");
     query.addQueryItem("timezone", "auto");
 
-    query.addQueryItem("hourly", "temperature_2m,weather_code,is_day");
+    query.addQueryItem("hourly", "temperature_2m,weather_code,is_day,precipitation");
 
     query.addQueryItem("temperature_unit", Settings::instance().temperatureUnitApiParameter());
     query.addQueryItem("wind_speed_unit", Settings::instance().windSpeedUnitApiParameter());

@@ -17,8 +17,8 @@ public:
                                  const int windGusts,
                                  const int windDirection,
                                  const int apparentTemperature,
-                                 const int rain,
-                                 const int snow,
+                                 const int precipitation,
+                                 const int snowDepth,
                                  const int uvIndex,
                                  const int humidity,
                                  const int visibility,
@@ -30,8 +30,8 @@ public:
                                  const QVector<int> &weeklyMaxTemp,
                                  const QVector<int> &weeklyMinTemp,
                                  const QVector<int> &weeklyCode,
-                                 const QString sunrise,
-                                 const QString sunset,
+                                 const QVector<QString> &sunrise,
+                                 const QVector<QString> &sunset,
                                  const QVector<QString> &weeklyDayName
                                  );
 
@@ -71,13 +71,13 @@ public:
     {
         return m_apparentTemperature;
     }
-    inline int rain() const
+    inline int precipitation() const
     {
-        return m_rain;
+        return m_precipitation;
     }
-    inline int snow() const
+    inline int snowDepth() const
     {
-        return m_snow;
+        return m_snowDepth;
     }
     inline int uvIndex() const
     {
@@ -123,11 +123,11 @@ public:
     {
         return m_weeklyCode;
     }
-    inline QString sunrise() const
+    inline QVector<QString> sunrise() const
     {
         return m_sunrise;
     }
-    inline QString sunset() const
+    inline QVector<QString> sunset() const
     {
         return m_sunset;
     }
@@ -146,8 +146,8 @@ private:
     int m_windGusts;
     int m_windDirection;
     int m_apparentTemperature;
-    int m_rain;
-    int m_snow;
+    int m_precipitation;
+    int m_snowDepth;
     int m_uvIndex;
     int m_humidity;
     int m_visibility;
@@ -159,8 +159,8 @@ private:
     QVector<int> m_weeklyMaxTemp;
     QVector<int> m_weeklyMinTemp;
     QVector<int> m_weeklyCode;
-    QString m_sunrise;
-    QString m_sunset;
+    QVector<QString> m_sunrise;
+    QVector<QString> m_sunset;
     QVector<QString> m_weeklyDayName;
 
 };

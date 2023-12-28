@@ -11,8 +11,8 @@ DetailedWeatherData::DetailedWeatherData(const GeoLocationData &location,
                                          const int windGusts,
                                          const int windDirection,
                                          const int apparentTemperature,
-                                         const int rain,
-                                         const int snow,
+                                         const int precipitation,
+                                         const int snowDepth,
                                          const int uvIndex,
                                          const int humidity,
                                          const int visibility,
@@ -24,8 +24,8 @@ DetailedWeatherData::DetailedWeatherData(const GeoLocationData &location,
                                          const QVector<int> &weeklyMaxTemp,
                                          const QVector<int> &weeklyMinTemp,
                                          const QVector<int> &weeklyCode,
-                                         const QString sunrise,
-                                         const QString sunset,
+                                         const QVector<QString> &sunrise,
+                                         const QVector<QString> &sunset,
                                          const QVector<QString> &weeklyDayName)
     : WeatherData(location, temperature, weeklyMaxTemp[0], weeklyMinTemp[0], weatherCode, isDay, timezone)
     , m_location(location)
@@ -37,8 +37,8 @@ DetailedWeatherData::DetailedWeatherData(const GeoLocationData &location,
     , m_windGusts(windGusts)
     , m_windDirection(windDirection)
     , m_apparentTemperature(apparentTemperature)
-    , m_rain(rain)
-    , m_snow(snow)
+    , m_precipitation(precipitation)
+    , m_snowDepth(snowDepth)
     , m_uvIndex(uvIndex)
     , m_humidity(humidity)
     , m_visibility(visibility)

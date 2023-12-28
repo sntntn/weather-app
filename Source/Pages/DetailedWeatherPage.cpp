@@ -30,11 +30,12 @@ DetailedWeatherPage::DetailedWeatherPage(QWidget *parent)
     , addToSavedLocations(new QPushButton("Add"))
     , scrollTimer(new QTimer(this))
     , locationLabel(new QLabel(this))
+    , countryLabel(new QLabel(this))
     , basicInfo(new BasicInfoWidget(this))
     , humidityUvRain(new HumidityUvRainWidget(this))
     , visibilityPressureSnow(new VisibilityPressureSnowWidget(this))
     , windInfo(new WindInfoWidget(this))
-    , hourlyLabel(new QLabel("Hourly"))
+    , hourlyLabel(new QLabel("      Hourly"))
     , hourlyWidget(new HourlyWeatherWidget(this))
     , dailyLabel(new QLabel("7-DAY FORECAST"))
     , dailyWidget(new DailyWeatherWidget(this))
@@ -58,9 +59,11 @@ DetailedWeatherPage::DetailedWeatherPage(QWidget *parent)
 
     locationLabel->setStyleSheet("font-size: 24px; font-weight: bold;");
     weatherLayout->addWidget(locationLabel, 0, Qt::AlignHCenter);
+    countryLabel->setStyleSheet("font-size: 18px; color: gray;");
+    weatherLayout->addWidget(countryLabel, 0, Qt::AlignHCenter);
+
     weatherLayout->addWidget(basicInfo);
     basicInfo->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
-
     weatherLayout->addWidget(minmaxWidget);
     weatherLayout->addWidget(sunWidget);
     weatherLayout->addWidget(humidityUvRain);
@@ -144,14 +147,15 @@ void DetailedWeatherPage::setData(const QSharedPointer<Data> &data){
     this->data = detailedData;
     highlightWidget();
 
-    locationLabel->setText(detailedData->location().getRenamedPlace());
+    locationLabel->setText(this->data->location().getRenamedPlace());
+    countryLabel->setText(this->data->location().getCountry());
 
     basicInfo->updateData(this->data->weatherCode(), this->data->isDay(), this->data->timezone(),
                           this->data->temperature(), this->data->apparentTemperature());
 
     minmaxWidget->updateData(this->data->weeklyMaxTemp().first(), this->data->weeklyMinTemp().first());
 
-    sunWidget->updateData(this->data->sunrise(), this->data->sunset());
+    sunWidget->updateData(this->data->timezone(), this->data->sunrise(), this->data->sunset());
 
     hourlyWidget->updateData(this->data->hourlyTemperature(), this->data->hourlyCode(),
                              this->data->hourlyIsDay(), this->data->hourlyTimeStamp());
@@ -159,8 +163,8 @@ void DetailedWeatherPage::setData(const QSharedPointer<Data> &data){
     dailyWidget->updateData(this->data->weeklyDayName(), this->data->weeklyCode(),
                             this->data->weeklyMinTemp(), this->data->weeklyMaxTemp());
 
-    humidityUvRain->updateData(this->data->humidity(), this->data->uvIndex(), this->data->rain());
-    visibilityPressureSnow->updateData(this->data->visibility(), this->data->pressure(), this->data->snow());
+    humidityUvRain->updateData(this->data->humidity(), this->data->uvIndex(), this->data->precipitation());
+    visibilityPressureSnow->updateData(this->data->visibility(), this->data->pressure(), this->data->snowDepth());
     windInfo->updateData(this->data->windSpeed(), this->data->windGusts(), this->data->windDirection());
 }
 

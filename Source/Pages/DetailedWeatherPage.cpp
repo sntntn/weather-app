@@ -31,7 +31,6 @@ DetailedWeatherPage::DetailedWeatherPage(QWidget *parent)
     , scrollTimer(new QTimer(this))
     , locationLabel(new QLabel(this))
     , basicInfo(new BasicInfoWidget(this))
-    , minmaxTemperature(new QLabel(this))
     , humidityUvRain(new HumidityUvRainWidget(this))
     , visibilityPressureSnow(new VisibilityPressureSnowWidget(this))
     , windInfo(new WindInfoWidget(this))
@@ -60,9 +59,6 @@ DetailedWeatherPage::DetailedWeatherPage(QWidget *parent)
     weatherLayout->addWidget(locationLabel, 0, Qt::AlignHCenter);
     weatherLayout->addWidget(basicInfo);
     basicInfo->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
-
-    minmaxTemperature->setStyleSheet("font-size: 16px;");
-    weatherLayout->addWidget(minmaxTemperature, 0, Qt::AlignHCenter);
 
     weatherLayout->addWidget(humidityUvRain);
     weatherLayout->addWidget(visibilityPressureSnow);
@@ -147,7 +143,8 @@ void DetailedWeatherPage::setData(const QSharedPointer<Data> &data){
 
     locationLabel->setText(detailedData->location().getRenamedPlace());
 
-    basicInfo->updateData(this->data->weatherCode(), this->data->isDay(), this->data->timezone(),
+    basicInfo->updateData(this->data->weeklyMaxTemp()[0], this->data->weeklyMinTemp()[0],
+                          this->data->weatherCode(), this->data->isDay(), this->data->timezone(),
                           this->data->temperature(), this->data->apparentTemperature());
 
     sunWidget->updateData(this->data->sunrise(), this->data->sunset());

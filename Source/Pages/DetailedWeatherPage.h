@@ -74,7 +74,8 @@ private:
     QLabel *dailyLabel;
     DailyWeatherWidget *dailyWidget;
     WeatherWidget *selectedWidget;
-    SunriseSunsetWidget *sunWidget;
+    MinMaxTempWidget *minmaxWidget;
+    SunWidget *sunWidget;
 
     void highlightWidget();
 };

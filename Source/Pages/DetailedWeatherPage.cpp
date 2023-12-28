@@ -39,7 +39,8 @@ DetailedWeatherPage::DetailedWeatherPage(QWidget *parent)
     , dailyLabel(new QLabel("7-DAY FORECAST"))
     , dailyWidget(new DailyWeatherWidget(this))
     , selectedWidget(nullptr)
-    , sunWidget(new SunriseSunsetWidget(this))
+    , minmaxWidget(new MinMaxTempWidget(this))
+    , sunWidget(new SunWidget(this))
 {
     widgetsScrollAreaContents->setLayout(widgetsLayout);
     widgetsLayout->setAlignment(Qt::AlignTop);
@@ -60,6 +61,7 @@ DetailedWeatherPage::DetailedWeatherPage(QWidget *parent)
     weatherLayout->addWidget(basicInfo);
     basicInfo->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
 
+    weatherLayout->addWidget(minmaxWidget);
     weatherLayout->addWidget(sunWidget);
     weatherLayout->addWidget(humidityUvRain);
     weatherLayout->addWidget(visibilityPressureSnow);
@@ -146,6 +148,8 @@ void DetailedWeatherPage::setData(const QSharedPointer<Data> &data){
 
     basicInfo->updateData(this->data->weatherCode(), this->data->isDay(), this->data->timezone(),
                           this->data->temperature(), this->data->apparentTemperature());
+
+    minmaxWidget->updateData(this->data->weeklyMaxTemp().first(), this->data->weeklyMinTemp().first());
 
     sunWidget->updateData(this->data->sunrise(), this->data->sunset());
 

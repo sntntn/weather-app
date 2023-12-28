@@ -35,6 +35,38 @@ public:
     QString weatherCodeToDescription(const int weatherCode);
 };
 
+class MinMaxTempWidgetItem : public QWidget{
+    QHBoxLayout *mainLayout;
+    QHBoxLayout *lowerLayout;
+    QPixmap *infoIcon;
+    QLabel *infoIconLabel;
+    QLabel *infoLabel;
+    QLabel *info;
+
+    static const int iconWidth = 35;
+    static const int iconHeight = 35;
+public:
+    MinMaxTempWidgetItem(const QString iconPath, const QString infoName, QWidget *parent = nullptr);
+    void updateData(const int value, const QString unit);
+    QFrame* createLineFrame();
+};
+
+class SunWidgetItem : public QWidget{
+    QHBoxLayout *mainLayout;
+    QHBoxLayout *lowerLayout;
+    QPixmap *infoIcon;
+    QLabel *infoIconLabel;
+    QLabel *infoLabel;
+    QLabel *info;
+
+    static const int iconWidth = 35;
+    static const int iconHeight = 35;
+public:
+    SunWidgetItem(const QString iconPath, const QString infoName, QWidget *parent = nullptr);
+    void updateData(const QString value);
+    QFrame* createLineFrame();
+};
+
 class singleWidgetItem : public QWidget{
     QVBoxLayout *mainLayout;
     QHBoxLayout *lowerLayout;
@@ -76,6 +108,28 @@ public:
     void updateData(const int visibilityValue, const int pressureValue, const int snowValue);
 };
 
+class MinMaxTempWidget : public QWidget
+{
+    QHBoxLayout *mainLayout;
+    MinMaxTempWidgetItem *maxTemp;
+    MinMaxTempWidgetItem *minTemp;
+
+public:
+    MinMaxTempWidget(QWidget *parent = nullptr);
+    void updateData(const int minTempValue, const int maxTempValue);
+};
+
+class SunWidget : public QWidget
+{
+    QHBoxLayout *mainLayout;
+    SunWidgetItem *sunrise;
+    SunWidgetItem *sunset;
+
+public:
+    SunWidget(QWidget *parent = nullptr);
+    void updateData(const QString sunriseValue, const QString sunsetValue);
+};
+
 class WindInfoWidget : public QWidget
 {
     QHBoxLayout *mainLayout;
@@ -95,28 +149,6 @@ class WindInfoWidget : public QWidget
 public:
     WindInfoWidget(QWidget *parent = nullptr);
     void updateData(const int windSpeed, const int windGusts, const int windDirection);
-};
-
-class SunriseSunsetWidget : public QWidget
-{
-    QHBoxLayout *mainLayout;
-    QVBoxLayout *leftLayout;
-    QVBoxLayout *rightLayout;
-    QLabel *sunriseLabel;
-    QLabel *sunsetLabel;
-    QLabel *sunriseIconLabel;
-    QLabel *sunsetIconLabel;
-    QPixmap *sunriseIcon;
-    QPixmap *sunsetIcon;
-    QLabel *sunriseTime;
-    QLabel *sunsetTime;
-
-    static const int iconWidth = 20;
-    static const int iconHeight = 20;
-
-public:
-    SunriseSunsetWidget(QWidget *parent = nullptr);
-    void updateData(const QString sunrise, const QString sunset);
 };
 
 class HourlyWeatherWidget : public QWidget

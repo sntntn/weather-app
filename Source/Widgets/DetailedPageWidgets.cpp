@@ -186,6 +186,70 @@ void WindInfoWidget::updateData(const int windSpeedValue, const int windGustsVal
     compassLabel->setPixmap(compassIcon.scaled(100, 100, Qt::KeepAspectRatio, Qt::SmoothTransformation));
 }
 
+SunriseSunsetWidget::SunriseSunsetWidget(QWidget *parent)
+    : QWidget(parent)
+    , mainLayout(new QHBoxLayout(this))
+    , leftLayout(new QVBoxLayout())
+    , rightLayout(new QVBoxLayout())
+    , sunriseLabel(new QLabel("Sunrise"))
+    , sunsetLabel(new QLabel("Sunset"))
+    , sunriseIconLabel(new QLabel())
+    , sunsetIconLabel(new QLabel())
+    , sunriseIcon(QPixmap("../Resources/sunrise+sunset/sunrise.png"))
+    , sunsetIcon(QPixmap("../Resources/sunrise+sunset/sunset.png"))
+    , sunriseTime(new QLabel())
+    , sunsetTime(new QLabel())
+{
+    sunriseLabel->setAlignment(Qt::AlignLeft);
+    sunriseIconLabel->setAlignment(Qt::AlignLeft);
+    sunriseTime->setAlignment(Qt::AlignLeft);
+    leftLayout->addWidget(sunriseLabel);
+    leftLayout->addWidget(sunriseIconLabel);
+    leftLayout->addWidget(sunriseTime);
+
+    sunsetLabel->setAlignment(Qt::AlignRight);
+    sunsetIconLabel->setAlignment(Qt::AlignRight);
+    sunsetTime->setAlignment(Qt::AlignRight);
+    rightLayout->addWidget(sunsetLabel);
+    rightLayout->addWidget(sunsetIconLabel);
+    rightLayout->addWidget(sunsetTime);
+
+    mainLayout->addLayout(leftLayout);
+    mainLayout->addLayout(rightLayout);
+    this->setLayout(mainLayout);
+}
+
+void SunriseSunsetWidget::updateData(const QString sunrise, const QString sunset)
+{
+    sunriseTime->setText(sunrise);
+    sunsetTime->setText(sunset);
+
+    QPixmap sunrisePic = sunriseIcon.copy();
+    QPixmap sunsetPic = sunsetIcon.copy();
+
+    //hourWeatherIcon.load(Settings::instance().weatherCodeToIcon(weatherCode, isDay));
+    //hourWeatherIconLabel->setPixmap(hourWeatherIcon.scaled(iconWidth, iconHeight,
+    //                                                       Qt::KeepAspectRatio, Qt::SmoothTransformation));
+
+//    QPainter sunrisePainter(&sunrisePic);
+//    QPainter sunsetPainter(&sunsetPic);
+//
+//    sunrisePainter.setRenderHint(QPainter::Antialiasing);
+//    sunrisePainter.setRenderHint(QPainter::SmoothPixmapTransform);
+//
+//    sunsetPainter.setRenderHint(QPainter::Antialiasing);
+//    sunsetPainter.setRenderHint(QPainter::SmoothPixmapTransform);
+//
+//    QPoint center(sunrisePic.width() / 2, sunrisePic.height() / 2);
+//
+//    sunrisePainter.translate(center);
+//    sunrisePainter.end();
+
+    sunriseIconLabel->setPixmap(sunrisePic.scaled(100, 100, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+    sunsetIconLabel->setPixmap(sunsetPic.scaled(100, 100, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+
+};
+
 singleWidgetItem::singleWidgetItem(const QString iconPath, const QString infoName, QWidget *parent)
     : QWidget(parent)
     , mainLayout(new QVBoxLayout(this))

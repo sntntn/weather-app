@@ -257,30 +257,6 @@ void SunriseSunsetWidget::updateData(const QString sunrise, const QString sunset
     sunriseTime->setText(sunrise);
     sunsetTime->setText(sunset);
 
-    QPixmap sunrisePic = sunriseIcon.copy();
-    QPixmap sunsetPic = sunsetIcon.copy();
-
-    //hourWeatherIcon.load(Settings::instance().weatherCodeToIcon(weatherCode, isDay));
-    //hourWeatherIconLabel->setPixmap(hourWeatherIcon.scaled(iconWidth, iconHeight,
-    //                                                       Qt::KeepAspectRatio, Qt::SmoothTransformation));
-
-//    QPainter sunrisePainter(&sunrisePic);
-//    QPainter sunsetPainter(&sunsetPic);
-//
-//    sunrisePainter.setRenderHint(QPainter::Antialiasing);
-//    sunrisePainter.setRenderHint(QPainter::SmoothPixmapTransform);
-//
-//    sunsetPainter.setRenderHint(QPainter::Antialiasing);
-//    sunsetPainter.setRenderHint(QPainter::SmoothPixmapTransform);
-//
-//    QPoint center(sunrisePic.width() / 2, sunrisePic.height() / 2);
-//
-//    sunrisePainter.translate(center);
-//    sunrisePainter.end();
-
-    sunriseIconLabel->setPixmap(sunrisePic.scaled(100, 100, Qt::KeepAspectRatio, Qt::SmoothTransformation));
-    sunsetIconLabel->setPixmap(sunsetPic.scaled(100, 100, Qt::KeepAspectRatio, Qt::SmoothTransformation));
-
 };
 
 singleWidgetItem::singleWidgetItem(const QString iconPath, const QString infoName, QWidget *parent)

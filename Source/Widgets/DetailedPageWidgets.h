@@ -35,36 +35,53 @@ public:
     QString weatherCodeToDescription(const int weatherCode);
 };
 
-class MinMaxTempWidgetItem : public QWidget{
+class MinMaxTempWidget : public QWidget
+{
     QHBoxLayout *mainLayout;
-    QHBoxLayout *lowerLayout;
-    QPixmap *infoIcon;
-    QLabel *infoIconLabel;
-    QLabel *infoLabel;
-    QLabel *info;
 
-    static const int iconWidth = 35;
-    static const int iconHeight = 35;
+    class MinMaxTempWidgetItem : public QWidget{
+        QHBoxLayout *mainLayout;
+        QPixmap *infoIcon;
+        QLabel *infoIconLabel;
+        QLabel *infoLabel;
+        QLabel *info;
+
+        static const int iconWidth = 30;
+        static const int iconHeight = 30;
+    public:
+        MinMaxTempWidgetItem(const QString iconPath, const QString infoName, QWidget *parent = nullptr);
+        void updateData(const int value, const QString unit);
+    };
+
 public:
-    MinMaxTempWidgetItem(const QString iconPath, const QString infoName, QWidget *parent = nullptr);
-    void updateData(const int value, const QString unit);
-    QFrame* createLineFrame();
+    MinMaxTempWidget(QWidget *parent = nullptr);
+    void updateData(const int minTempValue, const int maxTempValue);
 };
 
-class SunWidgetItem : public QWidget{
+class SunWidget : public QWidget
+{
     QHBoxLayout *mainLayout;
-    QHBoxLayout *lowerLayout;
-    QPixmap *infoIcon;
-    QLabel *infoIconLabel;
-    QLabel *infoLabel;
-    QLabel *info;
 
-    static const int iconWidth = 35;
-    static const int iconHeight = 35;
+    class SunWidgetItem : public QWidget{
+        QHBoxLayout *mainLayout;
+        QHBoxLayout *lowerLayout;
+        QPixmap *infoIcon;
+        QLabel *infoIconLabel;
+        QLabel *infoLabel;
+        QLabel *info;
+
+        static const int iconWidth = 35;
+        static const int iconHeight = 35;
+
+    public:
+        SunWidgetItem(const QString iconPath, const QString infoName, QWidget *parent = nullptr);
+        void updateData(const QString value);
+        QFrame* createLineFrame();
+    };
+
 public:
-    SunWidgetItem(const QString iconPath, const QString infoName, QWidget *parent = nullptr);
-    void updateData(const QString value);
-    QFrame* createLineFrame();
+    SunWidget(QWidget *parent = nullptr);
+    void updateData(const QString sunriseValue, const QString sunsetValue);
 };
 
 class singleWidgetItem : public QWidget{
@@ -106,28 +123,6 @@ class VisibilityPressureSnowWidget : public QWidget
 public:
     VisibilityPressureSnowWidget(QWidget *parent = nullptr);
     void updateData(const int visibilityValue, const int pressureValue, const int snowValue);
-};
-
-class MinMaxTempWidget : public QWidget
-{
-    QHBoxLayout *mainLayout;
-    MinMaxTempWidgetItem *maxTemp;
-    MinMaxTempWidgetItem *minTemp;
-
-public:
-    MinMaxTempWidget(QWidget *parent = nullptr);
-    void updateData(const int minTempValue, const int maxTempValue);
-};
-
-class SunWidget : public QWidget
-{
-    QHBoxLayout *mainLayout;
-    SunWidgetItem *sunrise;
-    SunWidgetItem *sunset;
-
-public:
-    SunWidget(QWidget *parent = nullptr);
-    void updateData(const QString sunriseValue, const QString sunsetValue);
 };
 
 class WindInfoWidget : public QWidget

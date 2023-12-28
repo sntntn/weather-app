@@ -73,7 +73,6 @@ DetailedWeatherPage::DetailedWeatherPage(QWidget *parent)
     dailyLabel->setAlignment(Qt::AlignHCenter);
     weatherLayout->addWidget(dailyLabel);
     weatherLayout->addWidget(dailyWidget);
-    weatherLayout->addWidget(sunWidget);
 
     weatherScrollAreaContents->setLayout(weatherLayout);
     weatherScrollArea->setWidget(weatherScrollAreaContents);

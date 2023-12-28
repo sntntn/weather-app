@@ -200,22 +200,24 @@ SunriseSunsetWidget::SunriseSunsetWidget(QWidget *parent)
     , sunriseTime(new QLabel())
     , sunsetTime(new QLabel())
 {
-//    sunriseLabel->setAlignment(Qt::AlignLeft);
-//    sunriseIconLabel->setAlignment(Qt::AlignLeft);
-//    sunriseTime->setAlignment(Qt::AlignLeft);
-
     sunriseIconLabel->setPixmap(sunriseIcon->scaled(iconWidth, iconHeight,
                                               Qt::KeepAspectRatio, Qt::SmoothTransformation));
     sunsetIconLabel->setPixmap(sunsetIcon->scaled(iconWidth, iconHeight,
                                                     Qt::KeepAspectRatio, Qt::SmoothTransformation));
 
+    sunriseLabel->setAlignment(Qt::AlignLeft);
+    sunriseIconLabel->setAlignment(Qt::AlignLeft);
+    sunriseTime->setAlignment(Qt::AlignLeft);
+    sunriseLabel->setAlignment(Qt::AlignLeft);
+    sunriseIconLabel->setAlignment(Qt::AlignLeft);
+    sunriseTime->setAlignment(Qt::AlignLeft);
     leftLayout->addWidget(sunriseLabel);
     leftLayout->addWidget(sunriseIconLabel);
     leftLayout->addWidget(sunriseTime);
 
-//    sunsetLabel->setAlignment(Qt::AlignRight);
-//    sunsetIconLabel->setAlignment(Qt::AlignRight);
-//    sunsetTime->setAlignment(Qt::AlignRight);
+    sunsetLabel->setAlignment(Qt::AlignRight);
+    sunsetIconLabel->setAlignment(Qt::AlignRight);
+    sunsetTime->setAlignment(Qt::AlignRight);
     rightLayout->addWidget(sunsetLabel);
     rightLayout->addWidget(sunsetIconLabel);
     rightLayout->addWidget(sunsetTime);

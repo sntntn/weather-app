@@ -139,8 +139,8 @@ void VisibilityPressureSnowWidget::updateData(const int visibilityValue, const i
 MinMaxTempWidget::MinMaxTempWidget(QWidget *parent)
     : QWidget{parent}
     , mainLayout(new QHBoxLayout(this))
-    , maxTemp(new MinMaxTempWidgetItem("../Resources/temperature/downarrowBlack.png", "Highest temp:", this))
-    , minTemp(new MinMaxTempWidgetItem("../Resources/temperature/uparrowBlack.png", "Lowest temp:", this))
+    , maxTemp(new MinMaxTempWidgetItem("../Resources/temperature/uparrowBlack.png", "Highest temp:", this))
+    , minTemp(new MinMaxTempWidgetItem("../Resources/temperature/downarrowBlack.png", "Lowest temp:", this))
 {
     this->setObjectName("MinMaxTempContainer");
     this->setStyleSheet("#MinMaxTempContainer { "

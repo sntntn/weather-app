@@ -100,7 +100,6 @@ QSharedPointer<DetailedWeatherData> Parser::parseDetailedWeatherData(const QStri
     QVector<int> weeklyCode;
     QVector<QString> weeklyDayName;
 
-
     for (int i = 0; i < 7; i++){
         int wc = static_cast<int>(qRound(weeklyCodeJ[i].toDouble()));
         weeklyCode.push_back(wc);
@@ -110,8 +109,8 @@ QSharedPointer<DetailedWeatherData> Parser::parseDetailedWeatherData(const QStri
         weeklyDayName.push_back(dayName);
     }
 
-    QString sunrise = static_cast<QString>(weeklySunriseJ[0].toString());
-    QString sunset = static_cast<QString>(weeklySunsetJ[0].toString());
+    QString sunrise = static_cast<QString>(weeklySunriseJ[0].toString()).mid(11, 5);
+    QString sunset = static_cast<QString>(weeklySunsetJ[0].toString()).mid(11, 5);
 
     QJsonArray weeklyMaxTempJ = daily.value("temperature_2m_max").toArray();
     QVector<int> weeklyMaxTemp;

@@ -106,10 +106,13 @@ class SunriseSunsetWidget : public QWidget
     QLabel *sunsetLabel;
     QLabel *sunriseIconLabel;
     QLabel *sunsetIconLabel;
-    QPixmap sunriseIcon;
-    QPixmap sunsetIcon;
+    QPixmap *sunriseIcon;
+    QPixmap *sunsetIcon;
     QLabel *sunriseTime;
     QLabel *sunsetTime;
+
+    static const int iconWidth = 20;
+    static const int iconHeight = 20;
 
 public:
     SunriseSunsetWidget(QWidget *parent = nullptr);

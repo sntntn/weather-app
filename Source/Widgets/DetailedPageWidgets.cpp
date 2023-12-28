@@ -195,21 +195,27 @@ SunriseSunsetWidget::SunriseSunsetWidget(QWidget *parent)
     , sunsetLabel(new QLabel("Sunset"))
     , sunriseIconLabel(new QLabel())
     , sunsetIconLabel(new QLabel())
-    , sunriseIcon(QPixmap("../Resources/sunrise+sunset/sunrise.png"))
-    , sunsetIcon(QPixmap("../Resources/sunrise+sunset/sunset.png"))
+    , sunriseIcon(new QPixmap("../Resources/sunrise+sunset/sunrise.png"))
+    , sunsetIcon(new QPixmap("../Resources/sunrise+sunset/sunset.png"))
     , sunriseTime(new QLabel())
     , sunsetTime(new QLabel())
 {
-    sunriseLabel->setAlignment(Qt::AlignLeft);
-    sunriseIconLabel->setAlignment(Qt::AlignLeft);
-    sunriseTime->setAlignment(Qt::AlignLeft);
+//    sunriseLabel->setAlignment(Qt::AlignLeft);
+//    sunriseIconLabel->setAlignment(Qt::AlignLeft);
+//    sunriseTime->setAlignment(Qt::AlignLeft);
+
+    sunriseIconLabel->setPixmap(sunriseIcon->scaled(iconWidth, iconHeight,
+                                              Qt::KeepAspectRatio, Qt::SmoothTransformation));
+    sunsetIconLabel->setPixmap(sunsetIcon->scaled(iconWidth, iconHeight,
+                                                    Qt::KeepAspectRatio, Qt::SmoothTransformation));
+
     leftLayout->addWidget(sunriseLabel);
     leftLayout->addWidget(sunriseIconLabel);
     leftLayout->addWidget(sunriseTime);
 
-    sunsetLabel->setAlignment(Qt::AlignRight);
-    sunsetIconLabel->setAlignment(Qt::AlignRight);
-    sunsetTime->setAlignment(Qt::AlignRight);
+//    sunsetLabel->setAlignment(Qt::AlignRight);
+//    sunsetIconLabel->setAlignment(Qt::AlignRight);
+//    sunsetTime->setAlignment(Qt::AlignRight);
     rightLayout->addWidget(sunsetLabel);
     rightLayout->addWidget(sunsetIconLabel);
     rightLayout->addWidget(sunsetTime);
@@ -223,8 +229,7 @@ void SunriseSunsetWidget::updateData(const QString sunrise, const QString sunset
 {
     sunriseTime->setText(sunrise);
     sunsetTime->setText(sunset);
-
-};
+}
 
 singleWidgetItem::singleWidgetItem(const QString iconPath, const QString infoName, QWidget *parent)
     : QWidget(parent)

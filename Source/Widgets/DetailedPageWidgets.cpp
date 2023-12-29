@@ -428,14 +428,22 @@ DailyWeatherWidget::DailyWeatherWidget(QWidget *parent)
         mainLayout->addWidget(widget, i, 0);
     }
     this->setLayout(mainLayout);
+
+    connect(this, &DailyWeatherWidget::showTemperatureGraph,
+            this, &DailyWeatherWidget::onShowTemperatureGraph);
 }
 
 void DailyWeatherWidget::updateData(const QVector<QString> &dayNames, const QVector<int> &weatherCodes,
-                                    const QVector<int> &minTemps, const QVector<int> &maxTemps)
+                                    const QVector<int> &minTemps, const QVector<int> &maxTemps,
+                                    const QVector<int> &temperatures)
 {
     for (int i = 0; i < daysPerWeek; ++i) {
         auto* widget = static_cast<DailyWidgetItem*>(mainLayout->itemAt(i)->widget());
-        widget->updateData(dayNames[i], weatherCodes[i], minTemps[i], maxTemps[i]);
+        int startIndex = i * hoursPerDay;
+
+        QVector<int> dayTemperatures = temperatures.mid(startIndex, hoursPerDay);
+        //temperatures per day izdvojiti za dati dan
+        widget->updateData(dayNames[i], weatherCodes[i], minTemps[i], maxTemps[i], dayTemperatures);
     }
 }
 
@@ -482,14 +490,21 @@ DailyWeatherWidget::DailyWidgetItem::DailyWidgetItem(QWidget *parent)
 }
 
 void DailyWeatherWidget::DailyWidgetItem::updateData(const QString &dayName, const int weatherCode,
-                                                     const int minTemp, const int maxTemp)
+                                                     const int minTemp, const int maxTemp,
+                                                     const QVector<int> &temperatures)
 {
     dayNameLabel->setText(dayName);
     dayWeatherIcon.load(Settings::instance().weatherCodeToIcon(weatherCode, true));
     dayWeatherIconLabel->setPixmap(dayWeatherIcon.scaled(iconWidth, iconHeight,
                                                          Qt::KeepAspectRatio, Qt::SmoothTransformation));
     dailyminTempLabel->setText(QString::number(minTemp) + "°");
-        dailymaxTempLabel->setText(QString::number(maxTemp) + "°");
+    dailymaxTempLabel->setText(QString::number(maxTemp) + "°");
+    temperatureDataForTheDay = temperatures;
+}
+
+void DailyWeatherWidget::onShowTemperatureGraph(const QVector<int>& temperatures) {
+    GraphDialog dialog(temperatures, this);
+    dialog.exec();
 }
 
 void DailyWeatherWidget::DailyWidgetItem::paintEvent(QPaintEvent *event) {

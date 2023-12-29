@@ -57,6 +57,7 @@ set(PROJECT_SOURCES
         Utils/Serializable.h
         Utils/Serializer.cpp Utils/Serializer.h
         Utils/UserLocation.cpp Utils/UserLocation.h
+        Utils/GraphDialog.cpp Utils/GraphDialog.h
 
         Widgets/BasicWidget.h Widgets/BasicWidget.cpp
         Widgets/WeatherWidget.cpp Widgets/WeatherWidget.h

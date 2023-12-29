@@ -153,7 +153,8 @@ void DetailedWeatherPage::setData(const QSharedPointer<DetailedWeatherData> deta
                              this->data->hourlyIsDay(), this->data->hourlyTimeStamp());
 
     dailyWidget->updateData(this->data->weeklyDayName(), this->data->weeklyCode(),
-                            this->data->weeklyMinTemp(), this->data->weeklyMaxTemp());
+                            this->data->weeklyMinTemp(), this->data->weeklyMaxTemp(),
+                            this->data->fullHourlyTemperature());
 
     humidityUvRain->updateData(this->data->humidity(), this->data->uvIndex(), this->data->precipitation());
     visibilityPressureSnow->updateData(this->data->visibility(), this->data->pressure(), this->data->snowDepth());

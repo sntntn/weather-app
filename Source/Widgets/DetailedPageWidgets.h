@@ -9,6 +9,8 @@
 #include <QGridLayout>
 #include <QScrollArea>
 
+#include "GraphDialog.h"
+
 class BasicInfoWidget : public QWidget
 {
     static const int iconWidth = 80;
@@ -178,7 +180,10 @@ public:
 
 class DailyWeatherWidget : public QWidget
 {
+    Q_OBJECT
+
     static const int daysPerWeek = 7;
+    static const int hoursPerDay = 24;
     static const int iconWidth = 35;
     static const int iconHeight = 35;
     static const int dayNameLabelWidth = 100;
@@ -197,19 +202,34 @@ class DailyWeatherWidget : public QWidget
         QPixmap temperatureIcon;
         QLabel *temperatureIconLabel;
         QLabel *dailymaxTempLabel;
+        QVector<int> temperatureDataForTheDay;
 
     protected:
         void paintEvent(QPaintEvent *event) override;
+        void mousePressEvent(QMouseEvent *event) override {
+            auto *parentWidget = qobject_cast<DailyWeatherWidget*>(this->parent());
+            parentWidget->emitItemClicked(temperatureDataForTheDay);
+        }
 
     public:
         DailyWidgetItem(QWidget *parent = nullptr);
         void updateData(const QString &dayName, const int weatherCode,
-                        const int minTemp, const int maxTemp);
+                        const int minTemp, const int maxTemp, const QVector<int> &temperatures);
     };
 
 public:
     DailyWeatherWidget(QWidget *parent = nullptr);
     void updateData(const QVector<QString> &dayNames, const QVector<int> &weatherCodes,
-                    const QVector<int> &minTemps, const QVector<int> &maxTemps);
+                    const QVector<int> &minTemps, const QVector<int> &maxTemps,
+                    const QVector<int> &temperatures);
+    void emitItemClicked(const QVector<int>& temperatures) {
+        emit showTemperatureGraph(temperatures);
+    }
+
+public slots:
+    void onShowTemperatureGraph(const QVector<int>& temperatures);
+
+signals:
+    void showTemperatureGraph(const QVector<int>& temperatures);
 };
 #endif // DETAILEDPAGEWIDGETS_H

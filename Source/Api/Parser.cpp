@@ -1,5 +1,7 @@
 #include "Parser.h"
 
+#include <algorithm>
+#include <iterator>
 #include <stdexcept>
 
 #include "WeatherData.h"
@@ -93,6 +95,14 @@ QSharedPointer<DetailedWeatherData> Parser::parseDetailedWeatherData(const QStri
     QJsonArray hourlyCodeJ = hourly.value("weather_code").toArray();
     QJsonArray hourlyIsDayJ = hourly.value("is_day").toArray();
 
+    QVector<int> hourlyTemperatures;
+    hourlyTemperatures.reserve(hourlyTempJ.size());
+
+    std::transform(hourlyTempJ.begin(), hourlyTempJ.end(), std::back_inserter(hourlyTemperatures),
+                   [](const QJsonValue &value) {
+                       return static_cast<int>(qRound(value.toDouble()));
+                   });
+
     QVector<int> ht;
     QVector<int> hc;
     QVector<bool> hd;
@@ -162,6 +172,7 @@ QSharedPointer<DetailedWeatherData> Parser::parseDetailedWeatherData(const QStri
                                                                      visibility,
                                                                      pressure,
                                                                      ht,
+                                                                     hourlyTemperatures,
                                                                      hc,
                                                                      hd,
                                                                      hts,

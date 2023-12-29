@@ -24,6 +24,7 @@ public:
                                  const int visibility,
                                  const int pressure,
                                  const QVector<int> &hourlyTemperature,
+                                 const QVector<int> &fullHourlyTemperature,
                                  const QVector<int> &hourlyCode,
                                  const QVector<bool> &hourlyIsDay,
                                  const QVector<QString> &hourlyTimeStamp,
@@ -99,6 +100,10 @@ public:
     {
         return m_hourlyTemperature;
     }
+    inline QVector<int> fullHourlyTemperature() const
+    {
+        return m_fullHourlyTemperature;
+    }
     inline QVector<int> hourlyCode() const
     {
         return m_hourlyCode;
@@ -153,6 +158,7 @@ private:
     int m_visibility;
     int m_pressure;
     QVector<int> m_hourlyTemperature;
+    QVector<int> m_fullHourlyTemperature;
     QVector<int> m_hourlyCode;
     QVector<bool> m_hourlyIsDay;
     QVector<QString> m_hourlyTimeStamp;

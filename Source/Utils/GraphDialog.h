@@ -1,0 +1,26 @@
+#ifndef GRAPHDIALOG_H
+#define GRAPHDIALOG_H
+
+#include <QObject>
+#include <QDialog>
+
+class GraphDialog : public QDialog
+{
+    Q_OBJECT
+
+public:
+    GraphDialog(const QVector<int>& temperatures, QWidget *parent = nullptr);
+
+protected:
+    void paintEvent(QPaintEvent *event) override;
+
+private:
+    QVector<int> m_temperatures;
+    int m_minTemp;
+    int m_maxTemp;
+
+    double mapTemperatureToY(int temperature);
+    void calculateTemperatureRange();
+};
+
+#endif // GRAPHDIALOG_H

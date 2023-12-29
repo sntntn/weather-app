@@ -18,6 +18,7 @@ DetailedWeatherData::DetailedWeatherData(const GeoLocationData &location,
                                          const int visibility,
                                          const int pressure,
                                          const QVector<int> &hourlyTemperature,
+                                         const QVector<int> &fullHourlyTemperature,
                                          const QVector<int> &hourlyCode,
                                          const QVector<bool> &hourlyIsDay,
                                          const QVector<QString> &hourlyTimeStamp,
@@ -44,6 +45,7 @@ DetailedWeatherData::DetailedWeatherData(const GeoLocationData &location,
     , m_visibility(visibility)
     , m_pressure(pressure)
     , m_hourlyTemperature(hourlyTemperature)
+    , m_fullHourlyTemperature(fullHourlyTemperature)
     , m_hourlyCode(hourlyCode)
     , m_hourlyIsDay(hourlyIsDay)
     , m_hourlyTimeStamp(hourlyTimeStamp)

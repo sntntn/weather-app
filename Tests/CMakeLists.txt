@@ -71,6 +71,7 @@ set(CPP_SOURCES
     ../Source/Utils/Serializable.h
     ../Source/Utils/Serializer.cpp ../Source/Utils/Serializer.h
     ../Source/Utils/UserLocation.cpp ../Source/Utils/UserLocation.h
+    ../Source/Utils/GraphDialog.cpp ../Source/Utils/GraphDialog.h
 
     ../Source/Widgets/BasicWidget.h ../Source/Widgets/BasicWidget.cpp
     ../Source/Widgets/WeatherWidget.cpp ../Source/Widgets/WeatherWidget.h

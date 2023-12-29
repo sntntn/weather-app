@@ -133,10 +133,8 @@ void DetailedWeatherPage::getData(const GeoLocationData &data)
     showAddbutton ? this->addToSavedLocations->setVisible(true)
                   : this->addToSavedLocations->setVisible(false);
 
-    // isto kao za MainWindow, saljemo data da postavi a onda u fetchData saljemo koordinate
-    auto* api = new DetailedWeatherAPI(data, this);
-    // todo ceo data umesto koordinata
-    api->fetchData(data.getCoordinates());
+    auto* api = new DetailedWeatherAPI(this);
+    api->fetchData(data);
     connect(api, &DetailedWeatherAPI::dataFetched, this, &DetailedWeatherPage::setData);
 }
 

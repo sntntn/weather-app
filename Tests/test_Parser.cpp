@@ -9,7 +9,7 @@
 #include "Parser.h"
 #include "GeoLocationData.h"
 
-TEST_CASE("Test Parser class"){
+TEST_CASE("WeatherData parser"){
 
     SECTION("Test parseWeatherData with real JSON from open-meteo"){
         // Arrange

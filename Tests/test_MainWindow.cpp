@@ -23,15 +23,15 @@ TEST_CASE("MainWindow page manipulation functions"){
 
     SECTION("Current page is DetailedWeatherPage if showDetailedWeatherPage slot is triggered"){
         // Arrange
-        MainWindow mainWindow;
-        HomePage homePage;
+        auto mainWindow = new MainWindow();
+        HomePage homePage(mainWindow);
         GeoLocationData geolocation;
         QObject::connect(&homePage, &HomePage::locationObjectSelected,
-                         &mainWindow, &MainWindow::showDetailedWeatherPage);
+                         mainWindow, &MainWindow::showDetailedWeatherPage);
 
         // Act
         emit homePage.locationObjectSelected(geolocation);
-        auto currentPage = dynamic_cast<DetailedWeatherPage*>(mainWindow.currentPage());
+        auto currentPage = dynamic_cast<DetailedWeatherPage*>(mainWindow->currentPage());
 
         // Assert
         REQUIRE_FALSE(currentPage == nullptr);

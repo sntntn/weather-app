@@ -41,7 +41,7 @@ void WeatherAPI::fetchData(const GeoLocationData &location)
 
 void WeatherAPI::replyFinished(QNetworkReply *reply){
     if (reply->error() != QNetworkReply::NoError) {
-        qDebug() << reply->errorString().toStdString();
+//        qDebug() << reply->errorString().toStdString();
         emit errorOccurred(networkErrMsg);
         return;
     }

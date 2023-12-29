@@ -33,5 +33,23 @@ TEST_CASE("WeatherAPI testing"){
         // Assert
         REQUIRE(check);
     }
+
+    SECTION("WeatherAPI returns errorOccurred signal if the coordinates are incorrect"){
+        // Arrange
+        GeoLocationData location1("test", "test", QGeoCoordinate(200.0, 200.0), "test");
+        WeatherAPI api;
+        bool errorOccurred = false;
+
+        // Act
+        QObject::connect(&api, &WeatherAPI::errorOccurred, [&errorOccurred](){
+            errorOccurred = true;
+        });
+
+        api.fetchData(location1);
+        QTest::qWait(1500);
+
+        // Assert
+        REQUIRE(errorOccurred);
+    }
 }
 

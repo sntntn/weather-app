@@ -20,7 +20,7 @@ class BasicInfoWidget : public QWidget
     QPixmap weatherIcon;
     QLabel *iconLabel;
     QLabel *weatherDescriptionLabel;
-    QLabel *todayLabel;
+    QLabel todayLabel;
     QLabel *dateLabel;
     QLabel *timeLabel;
     QLabel *temperatureLabel;
@@ -43,7 +43,7 @@ class MinMaxTempWidget : public QWidget
         static const int iconWidth = 10;
         static const int iconHeight = 15;
         QHBoxLayout *mainLayout;
-        QPixmap *infoIcon;
+        QPixmap infoIcon;
         QLabel *infoIconLabel;
         QLabel *infoLabel;
         QLabel *info;
@@ -68,7 +68,7 @@ class SunWidget : public QWidget
         static const int iconHeight = 40;
         QHBoxLayout *mainLayout;
         QVBoxLayout *timeLayout;
-        QPixmap *infoIcon;
+        QPixmap infoIcon;
         QLabel *infoIconLabel;
         QLabel *infoLabel;
         QLabel *info;
@@ -90,7 +90,7 @@ class singleWidgetItem : public QWidget{
     static const int iconHeight = 35;
     QVBoxLayout *mainLayout;
     QHBoxLayout *lowerLayout;
-    QPixmap *infoIcon;
+    QPixmap infoIcon;
     QLabel *infoIconLabel;
     QLabel *infoLabel;
     QLabel *info;

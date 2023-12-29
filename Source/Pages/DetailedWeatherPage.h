@@ -40,10 +40,10 @@ public:
     DetailedWeatherAPI* api;
 
 public slots:
-    void addNewWidget(const QSharedPointer<WeatherData> &data) override;
+    void addNewWidget(const QSharedPointer<WeatherData> data) override;
     void addErrorWidget(const QString &errMsg) override;
     void getData(const GeoLocationData &data);
-    void setData(const QSharedPointer<DetailedWeatherData> &data);
+    void setData(const QSharedPointer<DetailedWeatherData> data);
 
 private slots:
     void addButtonClicked();

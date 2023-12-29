@@ -91,7 +91,7 @@ DetailedWeatherPage::DetailedWeatherPage(QWidget *parent)
     connect(this, &DetailedWeatherPage::locationSaved, this->mainWindow, &MainWindow::getLocationData);
 }
 
-void DetailedWeatherPage::addNewWidget(const QSharedPointer<WeatherData> &weatherData)
+void DetailedWeatherPage::addNewWidget(const QSharedPointer<WeatherData> weatherData)
 {
     auto *widget = new WeatherWidget(weatherData, widgetsScrollAreaContents);
     connect(widget, &WeatherWidget::clicked, this, &DetailedWeatherPage::getData);
@@ -135,7 +135,7 @@ void DetailedWeatherPage::getData(const GeoLocationData &data)
     connect(api, &DetailedWeatherAPI::dataFetched, this, &DetailedWeatherPage::setData);
 }
 
-void DetailedWeatherPage::setData(const QSharedPointer<DetailedWeatherData> &detailedData){
+void DetailedWeatherPage::setData(const QSharedPointer<DetailedWeatherData> detailedData){
     this->data = detailedData;
     highlightWidget();
 

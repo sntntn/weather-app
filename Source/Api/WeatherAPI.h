@@ -20,8 +20,8 @@ public:
     void fetchData(const GeoLocationData &location);
 
 signals:
-    void dataFetched(const QSharedPointer<WeatherData> &data);
-    void errorOccured(const QString &errMsg);
+    void dataFetched(const QSharedPointer<WeatherData> data);
+    void errorOccurred(const QString &errMsg);
 
 public slots:
     void replyFinished(QNetworkReply* reply) override;

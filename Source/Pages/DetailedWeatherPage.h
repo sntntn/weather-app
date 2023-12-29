@@ -17,6 +17,7 @@
 
 #include "GeoLocationData.h"
 #include "DetailedPageWidgets.h"
+#include "DetailedWeatherAPI.h"
 
 class WeatherData;
 class MainWindow;
@@ -33,6 +34,10 @@ public:
     ~DetailedWeatherPage() = default;
 
     void resizeEvent(QResizeEvent *event) override;
+    int widgetNumber();
+
+    QSharedPointer<DetailedWeatherData> data;
+    DetailedWeatherAPI* api;
 
 public slots:
     void addNewWidget(const QSharedPointer<WeatherData> &data) override;
@@ -50,7 +55,6 @@ signals:
 private:
     static const int spacerWidth = 40;
 
-    QSharedPointer<DetailedWeatherData> data;
     QHBoxLayout *mainLayout;
     QScrollArea *widgetsScrollArea;
     QScrollArea *weatherScrollArea;

@@ -40,6 +40,7 @@ set(TEST_SOURCES
     test_WeatherAPI.cpp
     test_Parser.cpp
     test_WeatherData.cpp
+    test_DetailedWeatherPage.cpp
 )
 
 set(CPP_SOURCES

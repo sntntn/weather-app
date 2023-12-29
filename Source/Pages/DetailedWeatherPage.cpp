@@ -6,7 +6,6 @@
 #include "WeatherWidget.h"
 #include "GeoLocationData.h"
 #include "Settings.h"
-#include "DetailedWeatherAPI.h"
 #include "DetailedWeatherData.h"
 
 #include <iostream>
@@ -17,6 +16,7 @@
 
 DetailedWeatherPage::DetailedWeatherPage(QWidget *parent)
     : Page{parent}
+    , api(new DetailedWeatherAPI(this))
     , mainLayout(new QHBoxLayout(this))
     , widgetsScrollArea(new QScrollArea())
     , weatherScrollArea(new QScrollArea())
@@ -131,7 +131,6 @@ void DetailedWeatherPage::getData(const GeoLocationData &data)
     showAddbutton ? this->addToSavedLocations->setVisible(true)
                   : this->addToSavedLocations->setVisible(false);
 
-    auto* api = new DetailedWeatherAPI(this);
     api->fetchData(data);
     connect(api, &DetailedWeatherAPI::dataFetched, this, &DetailedWeatherPage::setData);
 }
@@ -179,8 +178,12 @@ void DetailedWeatherPage::homeButtonClicked()
     if(selectedWidget != nullptr){
         selectedWidget->resetHighlight();
     }
-
     selectedWidget = nullptr;
+}
+
+int DetailedWeatherPage::widgetNumber()
+{
+    return m_widgets.size();
 }
 
 void DetailedWeatherPage::highlightWidget()

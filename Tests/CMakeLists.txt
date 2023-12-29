@@ -34,6 +34,7 @@ include_directories(
 set(TEST_SOURCES
     main.cpp
     test_MainWindow.cpp
+    test_Settings.cpp
 )
 
 set(CPP_SOURCES
@@ -72,7 +73,8 @@ set(CPP_SOURCES
     ../Source/Widgets/DetailedPageWidgets.cpp ../Source/Widgets/DetailedPageWidgets.h
 )
 
-add_executable(weather-app-tests ${TEST_SOURCES} ${CPP_SOURCES} catch.hpp)
+add_executable(weather-app-tests ${TEST_SOURCES} ${CPP_SOURCES} catch.hpp
+    test_Parser.cpp)
 
 target_link_libraries(weather-app-tests PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)
 target_link_libraries(weather-app-tests PRIVATE Qt6::Network)

@@ -1,34 +1,57 @@
 #include "Parser.h"
 
+#include <stdexcept>
+
 #include "WeatherData.h"
 #include "DetailedWeatherData.h"
 #include "GeoLocationData.h"
 
-WeatherData* Parser::parseWeatherData(const QString &jsonData, const GeoLocationData &geoLocation)
-{
-    QJsonDocument doc = QJsonDocument::fromJson(jsonData.toUtf8());
-    QJsonObject obj = doc.object();
-    QString timezoneId = obj.value("timezone").toString();
-    QJsonObject current = obj.value("current").toObject();
-    QJsonObject daily = obj.value("daily").toObject();
+WeatherData* Parser::parseWeatherData(const QString &jsonData, const GeoLocationData &geoLocation) {
+    try {
+        QJsonDocument doc = QJsonDocument::fromJson(jsonData.toUtf8());
+        if (doc.isNull()) {
+            throw std::runtime_error("Invalid JSON data");
+        }
 
-    QTimeZone timeZone = QTimeZone(timezoneId.toLatin1());
-    int temperature = static_cast<int>(qRound(current.value("temperature_2m").toDouble()));
-    int weatherCode = current.value("weather_code").toInt();
-    bool isDay = static_cast<bool>(current.value("is_day").toInt());
+        QJsonObject obj = doc.object();
+        if (!obj.contains("timezone") || !obj.contains("current") || !obj.contains("daily")) {
+            throw std::runtime_error("Missing required JSON fields");
+        }
 
-    QJsonArray dailyMaxTemperature = daily.value("temperature_2m_max").toArray();
-    int maxTemperature = static_cast<int>(qRound(dailyMaxTemperature[0].toDouble()));
-    QJsonArray dailyMinTemperature = daily.value("temperature_2m_min").toArray();
-    int minTemperature = static_cast<int>(qRound(dailyMinTemperature[0].toDouble()));
+        QString timezoneId = obj.value("timezone").toString();
+        QTimeZone timeZone = QTimeZone(timezoneId.toLatin1());
+        if (!timeZone.isValid()) {
+            throw std::runtime_error("Invalid timezone ID");
+        }
 
-    return new WeatherData(geoLocation,
-                           temperature,
-                           maxTemperature,
-                           minTemperature,
-                           weatherCode,
-                           isDay,
-                           timeZone);
+        QJsonObject current = obj.value("current").toObject();
+        int temperature = static_cast<int>(qRound(current.value("temperature_2m").toDouble()));
+        int weatherCode = current.value("weather_code").toInt();
+        bool isDay = static_cast<bool>(current.value("is_day").toInt());
+
+        QJsonObject daily = obj.value("daily").toObject();
+        QJsonArray dailyMaxTemperature = daily.value("temperature_2m_max").toArray();
+        QJsonArray dailyMinTemperature = daily.value("temperature_2m_min").toArray();
+
+        if (dailyMaxTemperature.isEmpty() || dailyMinTemperature.isEmpty()) {
+            throw std::runtime_error("Daily temperature arrays are empty");
+        }
+
+        int maxTemperature = static_cast<int>(qRound(dailyMaxTemperature[0].toDouble()));
+        int minTemperature = static_cast<int>(qRound(dailyMinTemperature[0].toDouble()));
+
+        return new WeatherData(geoLocation,
+                               temperature,
+                               maxTemperature,
+                               minTemperature,
+                               weatherCode,
+                               isDay,
+                               timeZone);
+    }
+    catch (const std::exception &e) {
+        qDebug() << "Exception caught in parseWeatherData:" << e.what();
+        return nullptr;
+    }
 }
 
 QSharedPointer<DetailedWeatherData> Parser::parseDetailedWeatherData(const QString& jsonData, const GeoLocationData &geoLocation)

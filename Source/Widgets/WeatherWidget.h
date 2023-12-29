@@ -41,6 +41,7 @@ private:
 
     QVBoxLayout *leftLayout;
     QVBoxLayout *rightLayout;
+    QVBoxLayout *cityCountryLayout;
     QLabel* temperatureLabel;
     QLabel* locationLabel;
     QLabel* countryLabel;

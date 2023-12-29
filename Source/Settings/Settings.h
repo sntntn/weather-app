@@ -81,7 +81,6 @@ private:
     QString precipitationUnitToString(const PrecipitationUnit precUnit) const;
     QString visibilityUnitToString(const PrecipitationUnit unit) const; // Depends on precipitation unit in the API
 
-
     QString temperatureUnitsNames(const TemperatureUnit tempUnit) const;
     QString windSpeedUnitsNames(const WindSpeedUnit windSpeedUnit) const;
     QString precipitationUnitsNames(const PrecipitationUnit precUnit) const;

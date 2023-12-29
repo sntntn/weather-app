@@ -125,7 +125,8 @@ SettingsDialog::SettingsDialog(QWidget *parent)
     connect(cancel, &QPushButton::clicked, this, &SettingsDialog::close);
 }
 
-void SettingsDialog::changeSettings(){
+void SettingsDialog::changeSettings()
+{
     Settings::TemperatureUnit selectedTempUnit = static_cast<Settings::TemperatureUnit>(temperatureUnit->itemData(temperatureUnit->currentIndex()).toInt());
     Settings::WindSpeedUnit selectedWindUnit= static_cast<Settings::WindSpeedUnit>(windSpeedUnit->itemData(windSpeedUnit->currentIndex()).toInt());
     Settings::PrecipitationUnit selectedPrecUnit = static_cast<Settings::PrecipitationUnit>(precipitationUnit->itemData(precipitationUnit->currentIndex()).toInt());
@@ -140,6 +141,7 @@ void SettingsDialog::changeSettings(){
     this->close();
 }
 
-void SettingsDialog::resetOrder(){
+void SettingsDialog::resetOrder()
+{
     widgetOrder = settings.savedLocations();
 }

@@ -19,7 +19,6 @@ class SettingsDialog : public QDialog
     Q_OBJECT
 
 public:
-    MainWindow* getMainWindow();
     SettingsDialog(QWidget *parent = nullptr);
     ~SettingsDialog() = default;
     void changeSettings();
@@ -46,7 +45,6 @@ private:
     QIcon trashIcon;
 
     void setupUi();
-
     const QString trashIconPath = "../Resources/trashCan/redTrash.png";
 };
 

@@ -6,7 +6,8 @@
 #include "GeoLocationData.h"
 #include "Serializer.h"
 
-QString Settings::temperatureUnitToApiParameter(const TemperatureUnit tempUnit) const{
+QString Settings::temperatureUnitToApiParameter(const TemperatureUnit tempUnit) const
+{
     switch (tempUnit) {
     case Settings::TemperatureUnit::CELSIUS:
         return "celsius";
@@ -16,7 +17,9 @@ QString Settings::temperatureUnitToApiParameter(const TemperatureUnit tempUnit) 
         return "";
     }
 }
-QString Settings::windSpeedUnitToApiParameter(const WindSpeedUnit windSpeedUnit) const{
+
+QString Settings::windSpeedUnitToApiParameter(const WindSpeedUnit windSpeedUnit) const
+{
     switch (windSpeedUnit) {
     case Settings::WindSpeedUnit::KMH:
         return "kmh";
@@ -30,7 +33,9 @@ QString Settings::windSpeedUnitToApiParameter(const WindSpeedUnit windSpeedUnit)
         return "";
     }
 }
-QString Settings::precipitationUnitToApiParameter(const PrecipitationUnit precUnit) const{
+
+QString Settings::precipitationUnitToApiParameter(const PrecipitationUnit precUnit) const
+{
     switch (precUnit) {
     case Settings::PrecipitationUnit::MILLIMETRES:
         return "mm";
@@ -41,7 +46,8 @@ QString Settings::precipitationUnitToApiParameter(const PrecipitationUnit precUn
     }
 }
 
-QString Settings::temperatureUnitToString(const TemperatureUnit tempUnit) const{
+QString Settings::temperatureUnitToString(const TemperatureUnit tempUnit) const
+{
     switch (tempUnit) {
     case Settings::TemperatureUnit::CELSIUS:
         return "°C";
@@ -52,7 +58,8 @@ QString Settings::temperatureUnitToString(const TemperatureUnit tempUnit) const{
     }
 }
 
-QString Settings::windSpeedUnitToString(const WindSpeedUnit windSpeedUnit) const{
+QString Settings::windSpeedUnitToString(const WindSpeedUnit windSpeedUnit) const
+{
     switch (windSpeedUnit) {
     case Settings::WindSpeedUnit::KMH:
         return "km/h";
@@ -66,7 +73,9 @@ QString Settings::windSpeedUnitToString(const WindSpeedUnit windSpeedUnit) const
         return "";
     }
 }
-QString Settings::precipitationUnitToString(const PrecipitationUnit precUnit) const{
+
+QString Settings::precipitationUnitToString(const PrecipitationUnit precUnit) const
+{
     switch (precUnit) {
     case Settings::PrecipitationUnit::MILLIMETRES:
         return "mm";
@@ -90,7 +99,8 @@ QString Settings::visibilityUnitToString(const PrecipitationUnit unit) const
     }
 }
 
-QString Settings::temperatureUnitsNames(const TemperatureUnit tempUnit) const{
+QString Settings::temperatureUnitsNames(const TemperatureUnit tempUnit) const
+{
     switch (tempUnit) {
     case Settings::TemperatureUnit::CELSIUS:
         return "Celsius";
@@ -100,7 +110,9 @@ QString Settings::temperatureUnitsNames(const TemperatureUnit tempUnit) const{
         return "";
     }
 }
-QString Settings::windSpeedUnitsNames(const WindSpeedUnit windSpeedUnit) const{
+
+QString Settings::windSpeedUnitsNames(const WindSpeedUnit windSpeedUnit) const
+{
     switch (windSpeedUnit) {
     case Settings::WindSpeedUnit::KMH:
         return "Kilometres per hour";
@@ -114,7 +126,9 @@ QString Settings::windSpeedUnitsNames(const WindSpeedUnit windSpeedUnit) const{
         return "";
     }
 }
-QString Settings::precipitationUnitsNames(const PrecipitationUnit precUnit) const{
+
+QString Settings::precipitationUnitsNames(const PrecipitationUnit precUnit) const
+{
     switch (precUnit) {
     case Settings::PrecipitationUnit::MILLIMETRES:
         return "Millimetres";
@@ -219,7 +233,8 @@ QString Settings::precipitationUnitName() const
     return precipitationUnitsNames(m_precipitationUnit);
 }
 
-QString Settings::weatherCodeToIcon(const int weatherCode, const bool isDay) {
+QString Settings::weatherCodeToIcon(const int weatherCode, const bool isDay)
+{
     const QString iconBasePath = "../Resources/weatherIcons/";
 
     switch (weatherCode) {

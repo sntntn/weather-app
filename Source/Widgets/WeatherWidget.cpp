@@ -18,6 +18,7 @@ WeatherWidget::WeatherWidget(const QSharedPointer<WeatherData> &data, QWidget *p
     , data(data)
     , leftLayout(new QVBoxLayout())
     , rightLayout(new QVBoxLayout())
+    , cityCountryLayout(new QVBoxLayout())
     , temperatureLabel(new QLabel(QString::number(data->temperature()) + "°", this))
     , locationLabel(new QLabel(data->location().getRenamedPlace().toUpper(), this))
     , countryLabel(new QLabel(data->location().getCountry(), this))
@@ -38,19 +39,20 @@ WeatherWidget::WeatherWidget(const QSharedPointer<WeatherData> &data, QWidget *p
     iconLabel->setPixmap(weatherIcon.scaled(iconWidth, iconHeight, Qt::KeepAspectRatio, Qt::SmoothTransformation));
     iconLabel->setFixedHeight(iconHeight);
 
-
     locationLabel->setStyleSheet("color: white;");
     locationLabel->setWordWrap(true);
     timeLabel->setStyleSheet("color: white;");
     temperatureLabel->setStyleSheet("color: white;");
 
     countryLabel->setFont(QFont(fontName, adjustCountryLabelFontSize(fontName), QFont::Normal));
-    countryLabel->setStyleSheet("QLabel { color: #cccccc; }");
+    countryLabel->setStyleSheet("color: white;");
     countryLabel->setWordWrap(true);
 
-    leftLayout->addWidget(locationLabel, 0, Qt::AlignCenter | Qt::AlignTop);
-    leftLayout->addSpacing(-12);
-    leftLayout->addWidget(countryLabel, 0, Qt::AlignCenter | Qt::AlignTop);
+    cityCountryLayout->addWidget(locationLabel, 0, Qt::AlignCenter);
+    cityCountryLayout->addWidget(countryLabel, 0, Qt::AlignCenter);
+    cityCountryLayout->setSpacing(0);
+    cityCountryLayout->setContentsMargins(0, 0, 0, 0);
+    leftLayout->addLayout(cityCountryLayout);
     leftLayout->addWidget(iconLabel, 0, Qt::AlignCenter);
     leftLayout->addWidget(timeLabel, 0, Qt::AlignCenter);
 
@@ -67,7 +69,6 @@ WeatherWidget::WeatherWidget(const QSharedPointer<WeatherData> &data, QWidget *p
     mainLayout->addWidget(separator);
     mainLayout->addLayout(rightLayout);
     setLayout(mainLayout);
-
 }
 
 int WeatherWidget::adjustCountryLabelFontSize(const QString &fontName)

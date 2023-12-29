@@ -19,6 +19,7 @@ find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
 find_package(Qt6 COMPONENTS Core Network REQUIRED)
 find_package(Qt6 REQUIRED COMPONENTS Positioning)
+find_package(Qt6 REQUIRED COMPONENTS Test)
 
 include_directories(
     .
@@ -34,7 +35,12 @@ include_directories(
 set(TEST_SOURCES
     main.cpp
     test_MainWindow.cpp
+<<<<<<< HEAD
     test_Settings.cpp
+=======
+    test_UserLocation.cpp
+    test_WeatherAPI.cpp
+>>>>>>> 5dd2fcb0d655036d05e3c24bd41f0e417b62a4f8
 )
 
 set(CPP_SOURCES
@@ -79,3 +85,4 @@ add_executable(weather-app-tests ${TEST_SOURCES} ${CPP_SOURCES} catch.hpp
 target_link_libraries(weather-app-tests PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)
 target_link_libraries(weather-app-tests PRIVATE Qt6::Network)
 target_link_libraries(weather-app-tests PRIVATE Qt6::Positioning)
+target_link_libraries(weather-app-tests PRIVATE Qt6::Test)

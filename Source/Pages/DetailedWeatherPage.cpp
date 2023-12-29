@@ -91,10 +91,8 @@ DetailedWeatherPage::DetailedWeatherPage(QWidget *parent)
     connect(this, &DetailedWeatherPage::locationSaved, this->mainWindow, &MainWindow::getLocationData);
 }
 
-void DetailedWeatherPage::addNewWidget(const QSharedPointer<Data> &data)
+void DetailedWeatherPage::addNewWidget(const QSharedPointer<WeatherData> &weatherData)
 {
-    QSharedPointer<WeatherData> weatherData = qSharedPointerCast<WeatherData>(data);
-
     auto *widget = new WeatherWidget(weatherData, widgetsScrollAreaContents);
     connect(widget, &WeatherWidget::clicked, this, &DetailedWeatherPage::getData);
 
@@ -133,16 +131,12 @@ void DetailedWeatherPage::getData(const GeoLocationData &data)
     showAddbutton ? this->addToSavedLocations->setVisible(true)
                   : this->addToSavedLocations->setVisible(false);
 
-    // isto kao za MainWindow, saljemo data da postavi a onda u fetchData saljemo koordinate
-    auto* api = new DetailedWeatherAPI(data, this);
-    // todo ceo data umesto koordinata
-    api->fetchData(data.getCoordinates());
+    auto* api = new DetailedWeatherAPI(this);
+    api->fetchData(data);
     connect(api, &DetailedWeatherAPI::dataFetched, this, &DetailedWeatherPage::setData);
 }
 
-void DetailedWeatherPage::setData(const QSharedPointer<Data> &data){
-    //todo izbrisi SharedPointer
-    QSharedPointer<DetailedWeatherData> detailedData = qSharedPointerCast<DetailedWeatherData>(data);
+void DetailedWeatherPage::setData(const QSharedPointer<DetailedWeatherData> &detailedData){
     this->data = detailedData;
     highlightWidget();
 

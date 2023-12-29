@@ -12,9 +12,8 @@
 
 GeocodingAPI::GeocodingAPI()
 {
-    // todo lista inicijalizacije
-    QString configFilePath = QCoreApplication::applicationDirPath() + "/config.ini";
-    QSettings settings(configFilePath, QSettings::IniFormat);
+    const QString configFilePath = QCoreApplication::applicationDirPath() + "/config.ini";
+    const QSettings settings(configFilePath, QSettings::IniFormat);
     OPEN_CAGE_API_KEY = settings.value("API/Key").toString();
     connect(networkManager, &QNetworkAccessManager::finished, this, &GeocodingAPI::replyFinished);
 }

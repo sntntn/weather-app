@@ -15,16 +15,17 @@ class DetailedWeatherData;
 class DetailedWeatherAPI : public ApiHandler
 {
     Q_OBJECT
+
 public:
-    explicit DetailedWeatherAPI(const GeoLocationData& location, QObject *parent = nullptr);
+    explicit DetailedWeatherAPI(QObject *parent = nullptr);
     ~DetailedWeatherAPI() = default;
-    void fetchData(const QGeoCoordinate &coordinates);
+    void fetchData(const GeoLocationData& location);
 
 private slots:
     void replyFinished(QNetworkReply *reply) override;
 
 signals:
-    void dataFetched(const QSharedPointer<Data> &data);
+    void dataFetched(const QSharedPointer<DetailedWeatherData> &data);
 
 private:
     GeoLocationData location;

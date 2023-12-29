@@ -15,17 +15,16 @@
 #include "Parser.h"
 #include "Settings.h"
 
-DetailedWeatherAPI::DetailedWeatherAPI(const GeoLocationData &location, QObject *parent)
+DetailedWeatherAPI::DetailedWeatherAPI(QObject *parent)
     : ApiHandler(parent)
-    , location(location)
 {
     connect(networkManager, &QNetworkAccessManager::finished, this, &DetailedWeatherAPI::replyFinished);
 }
 
-void DetailedWeatherAPI::fetchData(const QGeoCoordinate &coordinates)
+void DetailedWeatherAPI::fetchData(const GeoLocationData &location)
 {
-    QString latitude  = QString::number(coordinates.latitude());
-    QString longitude = QString::number(coordinates.longitude());
+    QString latitude  = QString::number(location.getCoordinates().latitude());
+    QString longitude = QString::number(location.getCoordinates().longitude());
 
     QUrl url("https://api.open-meteo.com/v1/forecast");
     QUrlQuery query;
@@ -43,7 +42,8 @@ void DetailedWeatherAPI::fetchData(const QGeoCoordinate &coordinates)
 
     url.setQuery(query);
     QNetworkRequest request(url);
-    networkManager->get(request);
+    auto *reply = networkManager->get(request);
+    reply->setProperty("location", location.toVariant());
 }
 
 void DetailedWeatherAPI::replyFinished(QNetworkReply *reply){
@@ -51,6 +51,9 @@ void DetailedWeatherAPI::replyFinished(QNetworkReply *reply){
         qDebug() << reply->errorString().toStdString();
         return;
     }
+
+    GeoLocationData location;
+    location.fromVariant(reply->property("location"));
 
     QString jsonData = reply->readAll();
     auto data = Parser::parseDetailedWeatherData(jsonData, location);

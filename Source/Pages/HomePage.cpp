@@ -66,9 +66,9 @@ HomePage::~HomePage()
     delete completer->model();
 }
 
-void HomePage::addNewWidget(const QSharedPointer<Data> &data)
+void HomePage::addNewWidget(const QSharedPointer<WeatherData> &data)
 {
-    auto *widget = new WeatherWidget(qSharedPointerCast<WeatherData>(data), scrollAreaContents);
+    auto *widget = new WeatherWidget(data, scrollAreaContents);
     connect(widget, &WeatherWidget::clicked, this->mainWindow, &MainWindow::showDetailedWeatherPage);
 
     int position = static_cast<int>(Settings::instance().savedLocations().indexOf(widget->data->location()));

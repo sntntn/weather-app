@@ -21,12 +21,12 @@ class SettingsDialog : public QDialog
 public:
     SettingsDialog(QWidget *parent = nullptr);
     ~SettingsDialog() = default;
-    void changeSettings();
 
 signals:
     void settingsChanged();
 
 public slots:
+    void changeSettings();
     void resetOrder();
 
 private:
@@ -45,6 +45,7 @@ private:
     QIcon trashIcon;
 
     void setupUi();
+
     const QString trashIconPath = "../Resources/trashCan/redTrash.png";
 };
 

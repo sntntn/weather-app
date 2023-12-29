@@ -5,17 +5,18 @@
 #include <QSharedPointer>
 
 class BasicWidget;
-class Data;
 class MainWindow;
+class WeatherData;
 
 class Page : public QWidget
 {
     Q_OBJECT
+
 public:
     virtual ~Page() = default;
 
 public slots:
-    virtual void addNewWidget(const QSharedPointer<Data> &data) = 0;
+    virtual void addNewWidget(const QSharedPointer<WeatherData> &data) = 0;
     virtual void addErrorWidget(const QString &errMsg) = 0;
     void deleteWidgets();
 

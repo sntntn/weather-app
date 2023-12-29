@@ -25,7 +25,7 @@ private slots:
     void replyFinished(QNetworkReply *reply) override;
 
 signals:
-    void dataFetched(const QSharedPointer<Data> &data);
+    void dataFetched(const QSharedPointer<DetailedWeatherData> &data);
 
 private:
     GeoLocationData location;

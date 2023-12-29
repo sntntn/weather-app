@@ -27,3 +27,29 @@ TEST_CASE("Test Parser class"){
     }
 }
 
+TEST_CASE("Parser Tests") {
+
+    SECTION("Test parseWeatherData with invalid JSON") {
+        GeoLocationData location("Belgrade", "Belgrade", QGeoCoordinate(44.8125, 20.4375), "Serbia");
+        QString invalidJson = "This is not a valid JSON string";
+        REQUIRE_THROWS_AS(Parser::parseWeatherData(invalidJson, location), std::runtime_error);
+    }
+
+    SECTION("Test parseWeatherData with missing fields") {
+        GeoLocationData location("Belgrade", "Belgrade", QGeoCoordinate(44.8125, 20.4375), "Serbia");
+        QString jsonWithoutFields = "{\"timezone\": \"Europe/Belgrade\"}";
+        REQUIRE_THROWS_AS(Parser::parseWeatherData(jsonWithoutFields, location), std::runtime_error);
+    }
+
+    SECTION("Test parseWeatherData with valid JSON") {
+        GeoLocationData location("Belgrade", "Belgrade", QGeoCoordinate(44.8125, 20.4375), "Serbia");
+        QString validJson = R"({
+            "timezone": "Europe/Belgrade",
+            "current": { "temperature_2m": 25, "weather_code": 800, "is_day": 1 },
+            "daily": { "temperature_2m_max": [28], "temperature_2m_min": [20] }
+        })";
+        REQUIRE_NOTHROW(Parser::parseWeatherData(validJson, location));
+    }
+
+
+}

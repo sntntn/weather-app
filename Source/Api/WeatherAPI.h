@@ -27,8 +27,10 @@ public slots:
     void replyFinished(QNetworkReply* reply) override;
 
 private:
-    const QString errMsg = "Error occured while fetching weather data. "
-                           "Please check your internet connection.";
+    const QString networkErrMsg = "Error occured while fetching weather data. "
+                                  "Please check your internet connection.";
+
+    const QString parseErrMsg = "Error occured while parsing API response,";
 };
 
 #endif // WEATHERAPI_H

@@ -63,6 +63,7 @@ DetailedWeatherPage::DetailedWeatherPage(QWidget *parent)
     weatherLayout->addWidget(countryLabel, 0, Qt::AlignHCenter);
     weatherLayout->addWidget(basicInfo);
     basicInfo->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
+
     weatherLayout->addWidget(minmaxWidget);
     weatherLayout->addWidget(sunWidget);
     weatherLayout->addWidget(humidityUvRain);
@@ -81,6 +82,7 @@ DetailedWeatherPage::DetailedWeatherPage(QWidget *parent)
     weatherScrollAreaContents->setLayout(weatherLayout);
     weatherScrollArea->setWidget(weatherScrollAreaContents);
     weatherScrollArea->setWidgetResizable(true);
+    weatherScrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
     mainLayout->addWidget(widgetsScrollArea);
     mainLayout->addWidget(weatherScrollArea);
@@ -179,6 +181,7 @@ void DetailedWeatherPage::addButtonClicked()
     emit locationSaved(this->data->location());
     this->addToSavedLocations->setVisible(false);
     Settings::instance().savedLocations().push_back(this->data->location());
+    weatherScrollArea->ensureWidgetVisible(locationLabel);
 }
 
 void DetailedWeatherPage::homeButtonClicked()

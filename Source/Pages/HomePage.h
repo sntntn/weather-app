@@ -44,6 +44,7 @@ private:
     static const int topMargin = 0;
     static const int bottomMargin = 0;
     static const int timerInterval = 200;
+    static const int widgetHeight = 180;
 
     const QString settingsIconPath = "../Resources/settingsIcon/settings.png";
 

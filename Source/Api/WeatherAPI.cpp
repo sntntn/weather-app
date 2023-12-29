@@ -1,6 +1,5 @@
 #include "WeatherAPI.h"
 
-#include <iostream>
 #include <QUrl>
 #include <QUrlQuery>
 #include <QString>
@@ -41,13 +40,14 @@ void WeatherAPI::fetchData(const GeoLocationData &location)
 }
 
 void WeatherAPI::replyFinished(QNetworkReply *reply){
-    if (reply->error() != QNetworkReply::NoError) {
-        std::cerr << "Error: " << reply->errorString().toStdString() << std::endl;
-        return; // TODO
-    }
-
     GeoLocationData location;
     location.fromVariant(reply->property("location"));
+
+    if (reply->error() != QNetworkReply::NoError) {
+        qDebug() << reply->errorString().toStdString();
+        emit errorOccured(errMsg);
+        return;
+    }
 
     QString jsonData = reply->readAll();
 

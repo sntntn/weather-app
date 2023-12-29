@@ -21,10 +21,14 @@ public:
 
 signals:
     void dataFetched(const QSharedPointer<Data> &data);
+    void errorOccured(const QString &errMsg);
 
 public slots:
     void replyFinished(QNetworkReply* reply) override;
 
+private:
+    const QString errMsg = "Error occured while fetching weather data. "
+                           "Please check your internet connection.";
 };
 
 #endif // WEATHERAPI_H

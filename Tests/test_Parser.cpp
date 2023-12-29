@@ -11,34 +11,31 @@
 
 TEST_CASE("Test Parser class"){
 
-    SECTION("Test function parseWeatherData"){
+    SECTION("Test parseWeatherData with real JSON from open-meteo"){
         // Arrange
-        GeoLocationData *location = new GeoLocationData("Belgrade", "Belgrade",
-                                                       QGeoCoordinate(44.8125, 20.4375), "Serbia");
+        GeoLocationData location("Belgrade", "Belgrade", QGeoCoordinate(44.8125, 20.4375), "Serbia");
 
         std::ifstream file("../Tests/Resources/weatherData.txt");
         std::stringstream buffer;
         buffer << file.rdbuf();
         std::string jsonData = buffer.str();
+
         // Act
 
         // Assert
-        REQUIRE_FALSE( nullptr == Parser::parseWeatherData(QString::fromStdString(jsonData), *location) );
+        REQUIRE_FALSE( nullptr == Parser::parseWeatherData(QString::fromStdString(jsonData), location) );
     }
-}
-
-TEST_CASE("Parser Tests") {
 
     SECTION("Test parseWeatherData with invalid JSON") {
         GeoLocationData location("Belgrade", "Belgrade", QGeoCoordinate(44.8125, 20.4375), "Serbia");
         QString invalidJson = "This is not a valid JSON string";
-        REQUIRE_THROWS_AS(Parser::parseWeatherData(invalidJson, location), std::runtime_error);
+        REQUIRE(nullptr == Parser::parseWeatherData(invalidJson, location));
     }
 
     SECTION("Test parseWeatherData with missing fields") {
         GeoLocationData location("Belgrade", "Belgrade", QGeoCoordinate(44.8125, 20.4375), "Serbia");
         QString jsonWithoutFields = "{\"timezone\": \"Europe/Belgrade\"}";
-        REQUIRE_THROWS_AS(Parser::parseWeatherData(jsonWithoutFields, location), std::runtime_error);
+        REQUIRE(nullptr == Parser::parseWeatherData(jsonWithoutFields, location));
     }
 
     SECTION("Test parseWeatherData with valid JSON") {
@@ -48,8 +45,7 @@ TEST_CASE("Parser Tests") {
             "current": { "temperature_2m": 25, "weather_code": 800, "is_day": 1 },
             "daily": { "temperature_2m_max": [28], "temperature_2m_min": [20] }
         })";
-        REQUIRE_NOTHROW(Parser::parseWeatherData(validJson, location));
+        REQUIRE_FALSE(nullptr == Parser::parseWeatherData(validJson, location));
     }
-
 
 }

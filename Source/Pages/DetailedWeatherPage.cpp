@@ -188,6 +188,10 @@ int DetailedWeatherPage::widgetNumber()
 
 void DetailedWeatherPage::highlightWidget()
 {
+    if(this->data == nullptr){
+        return;
+    }
+
     if(selectedWidget != nullptr){
         selectedWidget->resetHighlight();
     }

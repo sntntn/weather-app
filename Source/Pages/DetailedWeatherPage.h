@@ -47,6 +47,7 @@ public slots:
 private slots:
     void addButtonClicked();
     void homeButtonClicked();
+    void handleApiError(const QString &errMsg);
 
 signals:
     void locationSaved(const GeoLocationData &data);

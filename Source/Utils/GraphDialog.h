@@ -12,7 +12,7 @@ public:
     GraphDialog(const QVector<int>& temperatures, QWidget *parent = nullptr);
 
 protected:
-    void paintEvent(QPaintEvent *event) override;
+    void paintEvent(QPaintEvent*) override;
 
 private:
     QVector<int> m_temperatures;

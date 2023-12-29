@@ -27,6 +27,5 @@ void UserLocation::positionUpdated(const QGeoPositionInfo &info)
 
 void UserLocation::handleError(const QGeoPositionInfoSource::Error)
 {
-//    qDebug() << positioningError;
     emit userLocationError(errMsg);
 }

@@ -7,7 +7,7 @@
 #include "Settings.h"
 
 namespace WidgetUtils{
-QFrame* createLineFrame(QFrame::Shape shape, QString color = "white") {
+QFrame* createLineFrame(QFrame::Shape shape, const QString &color = "white") {
     auto *line = new QFrame();
     line->setFrameShape(shape);
     line->setLineWidth(1);
@@ -101,13 +101,13 @@ MinMaxTempWidget::MinMaxTempWidget(QWidget *parent)
 
 void MinMaxTempWidget::updateData(const int maxTempValue, const int minTempValue)
 {
-        auto* maxWidget = static_cast<MinMaxTempWidgetItem*>(mainLayout->itemAt(0)->widget());
+        auto* maxWidget = dynamic_cast<MinMaxTempWidgetItem*>(mainLayout->itemAt(0)->widget());
         maxWidget->updateData(maxTempValue, "°");
-        auto* minWidget = static_cast<MinMaxTempWidgetItem*>(mainLayout->itemAt(2)->widget());
+        auto* minWidget = dynamic_cast<MinMaxTempWidgetItem*>(mainLayout->itemAt(2)->widget());
         minWidget->updateData(minTempValue, "°");
 }
 
-MinMaxTempWidget::MinMaxTempWidgetItem::MinMaxTempWidgetItem(const QString iconPath, const QString infoName, QWidget *parent)
+MinMaxTempWidget::MinMaxTempWidgetItem::MinMaxTempWidgetItem(const QString &iconPath, const QString &infoName, QWidget *parent)
     : QWidget(parent)
     , mainLayout(new QHBoxLayout(this))
     , infoIcon(QPixmap(iconPath))
@@ -125,7 +125,7 @@ MinMaxTempWidget::MinMaxTempWidgetItem::MinMaxTempWidgetItem(const QString iconP
         this->setLayout(mainLayout);
 }
 
-void MinMaxTempWidget::MinMaxTempWidgetItem::updateData(const int value, const QString unit)
+void MinMaxTempWidget::MinMaxTempWidgetItem::updateData(const int value, const QString &unit)
 {
         info->setText(QString::number(value) + unit);
 }
@@ -155,15 +155,15 @@ SunWidget::SunWidget(QWidget *parent)
         this->setLayout(mainLayout);
 }
 
-void SunWidget::updateData(const QTimeZone &timezone, const QVector<QString> sunriseValues, const QVector<QString> sunsetValues)
+void SunWidget::updateData(const QTimeZone &timezone, const QVector<QString> &sunriseValues, const QVector<QString> &sunsetValues)
 {
-        auto* sunriseWidget = static_cast<SunWidgetItem*>(mainLayout->itemAt(0)->widget());
+        auto* sunriseWidget = dynamic_cast<SunWidgetItem*>(mainLayout->itemAt(0)->widget());
         sunriseWidget->updateData(timezone, sunriseValues);
-        auto* sunsetWidget = static_cast<SunWidgetItem*>(mainLayout->itemAt(2)->widget());
+        auto* sunsetWidget = dynamic_cast<SunWidgetItem*>(mainLayout->itemAt(2)->widget());
         sunsetWidget->updateData(timezone, sunsetValues);
 }
 
-SunWidget::SunWidgetItem::SunWidgetItem(const QString iconPath, const QString infoName, QWidget *parent)
+SunWidget::SunWidgetItem::SunWidgetItem(const QString &iconPath, const QString &infoName, QWidget *parent)
     : QWidget(parent)
     , mainLayout(new QHBoxLayout(this))
     , timeLayout(new QVBoxLayout())
@@ -189,7 +189,7 @@ SunWidget::SunWidgetItem::SunWidgetItem(const QString iconPath, const QString in
         this->setLayout(mainLayout);
 }
 
-void SunWidget::SunWidgetItem::updateData(const QTimeZone &timezone, const QVector<QString> values)
+void SunWidget::SunWidgetItem::updateData(const QTimeZone &timezone, const QVector<QString> &values)
 {
         info->setText(values[0].mid(11,5));
 
@@ -202,8 +202,8 @@ void SunWidget::SunWidgetItem::updateData(const QTimeZone &timezone, const QVect
             specifiedTime.setTimeZone(timezone);
         }
         auto differenceInSeconds = currentTime.secsTo(specifiedTime);
-        int hours = differenceInSeconds / 3600;
-        int minutes = (differenceInSeconds % 3600) / 60;
+        auto hours = differenceInSeconds / 3600;
+        auto minutes = (differenceInSeconds % 3600) / 60;
 
         additionalinfo->setText("+" + QString::number(hours) + "h " +
                                 QString::number(minutes) + "m");
@@ -333,7 +333,7 @@ void WindInfoWidget::updateData(const int windSpeedValue, const int windGustsVal
     compassLabel->setPixmap(compassIcon.scaled(100, 100, Qt::KeepAspectRatio, Qt::SmoothTransformation));
 }
 
-singleWidgetItem::singleWidgetItem(const QString iconPath, const QString infoName, QWidget *parent)
+singleWidgetItem::singleWidgetItem(const QString &iconPath, const QString &infoName, QWidget *parent)
     : QWidget(parent)
     , mainLayout(new QVBoxLayout(this))
     , lowerLayout(new QHBoxLayout())
@@ -352,7 +352,7 @@ singleWidgetItem::singleWidgetItem(const QString iconPath, const QString infoNam
     this->setLayout(mainLayout);
 }
 
-void singleWidgetItem::updateData(const int value, const QString unit)
+void singleWidgetItem::updateData(const int value, const QString &unit)
 {
     info->setText(QString::number(value) + unit);
 }
@@ -385,7 +385,7 @@ void HourlyWeatherWidget::updateData(const QVector<int> &temperatures, const QVe
                                      const QVector<bool> &isDays, const QVector<QString> &timeStamps)
 {
     for (int i = 0; i < hoursPerDay; ++i) {
-        auto* widget = static_cast<HourlyWidgetItem*>(itemsLayout->itemAt(i)->widget());
+        auto* widget = dynamic_cast<HourlyWidgetItem*>(itemsLayout->itemAt(i)->widget());
         widget->updateData(temperatures[i], weatherCodes[i],
                            isDays[i], timeStamps[i]);
     }
@@ -442,7 +442,6 @@ void DailyWeatherWidget::updateData(const QVector<QString> &dayNames, const QVec
         int startIndex = i * hoursPerDay;
 
         QVector<int> dayTemperatures = temperatures.mid(startIndex, hoursPerDay);
-        //temperatures per day izdvojiti za dati dan
         widget->updateData(dayNames[i], weatherCodes[i], minTemps[i], maxTemps[i], dayTemperatures);
     }
 }

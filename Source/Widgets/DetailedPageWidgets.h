@@ -51,13 +51,13 @@ class MinMaxTempWidget : public QWidget
         QLabel *info;
 
     public:
-        MinMaxTempWidgetItem(const QString iconPath, const QString infoName, QWidget *parent = nullptr);
-        void updateData(const int value, const QString unit);
+        MinMaxTempWidgetItem(const QString &iconPath, const QString &infoName, QWidget *parent = nullptr);
+        void updateData(const int value, const QString &unit);
     };
 
 public:
     MinMaxTempWidget(QWidget *parent = nullptr);
-    void updateData(const int minTempValue, const int maxTempValue);
+    void updateData(const int maxTempValue, const int minTempValue);
 };
 
 class SunWidget : public QWidget
@@ -77,13 +77,13 @@ class SunWidget : public QWidget
         QLabel *additionalinfo;
 
     public:
-        SunWidgetItem(const QString iconPath, const QString infoName, QWidget *parent = nullptr);
-        void updateData(const QTimeZone &timezone, const QVector<QString> value);
+        SunWidgetItem(const QString &iconPath, const QString &infoName, QWidget *parent = nullptr);
+        void updateData(const QTimeZone &timezone, const QVector<QString> &value);
     };
 
 public:
     SunWidget(QWidget *parent = nullptr);
-    void updateData(const QTimeZone &timezone, const QVector<QString> sunriseValue, const QVector<QString> sunsetValue);
+    void updateData(const QTimeZone &timezone, const QVector<QString> &sunriseValue, const QVector<QString> &sunsetValue);
 };
 
 class singleWidgetItem : public QWidget{
@@ -98,8 +98,8 @@ class singleWidgetItem : public QWidget{
     QLabel *info;
 
 public:
-    singleWidgetItem(const QString iconPath, const QString infoName, QWidget *parent = nullptr);
-    void updateData(const int value, const QString unit);
+    singleWidgetItem(const QString &iconPath, const QString &infoName, QWidget *parent = nullptr);
+    void updateData(const int value, const QString &unit);
 };
 
 class HumidityUvRainWidget : public QWidget
@@ -206,7 +206,7 @@ class DailyWeatherWidget : public QWidget
 
     protected:
         void paintEvent(QPaintEvent *event) override;
-        void mousePressEvent(QMouseEvent *event) override {
+        void mousePressEvent(QMouseEvent*) override {
             auto *parentWidget = qobject_cast<DailyWeatherWidget*>(this->parent());
             parentWidget->emitItemClicked(temperatureDataForTheDay);
         }

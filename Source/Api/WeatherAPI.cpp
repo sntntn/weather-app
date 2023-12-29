@@ -42,7 +42,7 @@ void WeatherAPI::fetchData(const GeoLocationData &location)
 void WeatherAPI::replyFinished(QNetworkReply *reply){
     if (reply->error() != QNetworkReply::NoError) {
         qDebug() << reply->errorString().toStdString();
-        emit errorOccurred(errMsg);
+        emit errorOccurred(networkErrMsg);
         return;
     }
 
@@ -52,7 +52,11 @@ void WeatherAPI::replyFinished(QNetworkReply *reply){
     QString jsonData = reply->readAll();
 
     QSharedPointer<WeatherData> data(Parser::parseWeatherData(jsonData, location));
-    emit dataFetched(data);
+
+    if(data.isNull())
+        emit errorOccurred(parseErrMsg);
+    else
+        emit dataFetched(data);
 
     reply->deleteLater();
 }

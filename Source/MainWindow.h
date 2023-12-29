@@ -28,6 +28,9 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
+    QWidget* currentPage();
+
+
 public slots:
     void showHomePage();
     void showDetailedWeatherPage(const GeoLocationData &data);

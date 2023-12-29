@@ -42,7 +42,7 @@ public:
     inline int temperature() const
     {
         return m_temperature;
-    };
+    }
     inline int weatherCode() const
     {
         return m_weatherCode;

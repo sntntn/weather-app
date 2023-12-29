@@ -24,7 +24,7 @@ BasicInfoWidget::BasicInfoWidget(QWidget *parent)
     , dateTimeLayout(new QVBoxLayout())
     , iconLabel(new QLabel(this))
     , weatherDescriptionLabel(new QLabel(this))
-    , todayLabel(new QLabel("Today,"))
+    , todayLabel(QLabel("Today,"))
     , dateLabel(new QLabel(this))
     , timeLabel(new QLabel(this))
     , temperatureLabel(new QLabel(this))
@@ -110,12 +110,12 @@ void MinMaxTempWidget::updateData(const int maxTempValue, const int minTempValue
 MinMaxTempWidget::MinMaxTempWidgetItem::MinMaxTempWidgetItem(const QString iconPath, const QString infoName, QWidget *parent)
     : QWidget(parent)
     , mainLayout(new QHBoxLayout(this))
-    , infoIcon(new QPixmap(iconPath))
+    , infoIcon(QPixmap(iconPath))
     , infoIconLabel(new QLabel(this))
     , infoLabel(new QLabel(infoName))
     , info(new QLabel(this))
 {
-        infoIconLabel->setPixmap(infoIcon->scaled(iconWidth, iconHeight,
+        infoIconLabel->setPixmap(infoIcon.scaled(iconWidth, iconHeight,
                                                   Qt::KeepAspectRatio, Qt::SmoothTransformation));
         mainLayout->addWidget(infoIconLabel);
         mainLayout->addWidget(infoLabel);
@@ -167,14 +167,14 @@ SunWidget::SunWidgetItem::SunWidgetItem(const QString iconPath, const QString in
     : QWidget(parent)
     , mainLayout(new QHBoxLayout(this))
     , timeLayout(new QVBoxLayout())
-    , infoIcon(new QPixmap(iconPath))
+    , infoIcon(QPixmap(iconPath))
     , infoIconLabel(new QLabel(this))
     , infoLabel(new QLabel(infoName))
     , info(new QLabel(this))
     , additionalinfo(new QLabel(this))
 {
         mainLayout->addWidget(infoLabel);
-        infoIconLabel->setPixmap(infoIcon->scaled(iconWidth, iconHeight,
+        infoIconLabel->setPixmap(infoIcon.scaled(iconWidth, iconHeight,
                                                   Qt::KeepAspectRatio, Qt::SmoothTransformation));
         mainLayout->addStretch(1);
         mainLayout->addWidget(infoIconLabel);
@@ -337,13 +337,13 @@ singleWidgetItem::singleWidgetItem(const QString iconPath, const QString infoNam
     : QWidget(parent)
     , mainLayout(new QVBoxLayout(this))
     , lowerLayout(new QHBoxLayout())
-    , infoIcon(new QPixmap(iconPath))
+    , infoIcon(QPixmap(iconPath))
     , infoIconLabel(new QLabel(this))
     , infoLabel(new QLabel(infoName))
     , info(new QLabel(this))
 {
     mainLayout->addWidget(infoLabel);
-    infoIconLabel->setPixmap(infoIcon->scaled(iconWidth, iconHeight,
+    infoIconLabel->setPixmap(infoIcon.scaled(iconWidth, iconHeight,
                                               Qt::KeepAspectRatio, Qt::SmoothTransformation));
     lowerLayout->addWidget(infoIconLabel);
     lowerLayout->addWidget(info);
@@ -497,8 +497,8 @@ void DailyWeatherWidget::DailyWidgetItem::paintEvent(QPaintEvent *event) {
 
         QPainter painter(this);
         QLinearGradient gradient(rect().topLeft(), rect().bottomLeft());
-        gradient.setColorAt(0, QColor("#a2a2a2"));
-        gradient.setColorAt(1, QColor("#ffffff"));
+        gradient.setColorAt(0, QColor(0xa2, 0xa2, 0xa2));
+        gradient.setColorAt(1, QColor(0xff, 0xff, 0xff));
 
         QBrush brush(gradient);
         painter.setBrush(brush);

@@ -34,7 +34,7 @@ signals:
     void locationObjectSelected(const GeoLocationData& locationData);
 
 public slots:
-    void addNewWidget(const QSharedPointer<WeatherData> &data) override;
+    void addNewWidget(const QSharedPointer<WeatherData> data) override;
     void addErrorWidget(const QString &errMsg) override;
     void onSearchBarTextChanged();
 

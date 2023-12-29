@@ -8,7 +8,6 @@
 
 #include "Parser.h"
 #include "GeoLocationData.h"
-#include "WeatherData.h"
 
 TEST_CASE("Test Parser class"){
 
@@ -21,7 +20,6 @@ TEST_CASE("Test Parser class"){
         std::stringstream buffer;
         buffer << file.rdbuf();
         std::string jsonData = buffer.str();
-        //qDebug() << jsonData;
         // Act
 
         // Assert

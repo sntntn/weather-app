@@ -13,6 +13,7 @@ public:
 
 protected:
     void paintEvent(QPaintEvent*) override;
+    void resizeEvent(QResizeEvent *event) override;
 
 private:
     QVector<int> m_temperatures;

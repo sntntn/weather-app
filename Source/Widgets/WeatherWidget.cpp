@@ -13,7 +13,7 @@
 #include "WeatherData.h"
 #include "Settings.h"
 
-WeatherWidget::WeatherWidget(const QSharedPointer<WeatherData> &data, QWidget *parent)
+WeatherWidget::WeatherWidget(const QSharedPointer<WeatherData> data, QWidget *parent)
     : BasicWidget{parent}
     , data(data)
     , leftLayout(new QVBoxLayout())

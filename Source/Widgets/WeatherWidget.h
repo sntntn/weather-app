@@ -16,7 +16,7 @@ class WeatherWidget : public BasicWidget
     Q_OBJECT
 
 public:
-    explicit WeatherWidget(const QSharedPointer<WeatherData> &data, QWidget *parent = nullptr);
+    explicit WeatherWidget(const QSharedPointer<WeatherData> data, QWidget *parent = nullptr);
     ~WeatherWidget() = default;
     void mousePressEvent(QMouseEvent *event) override;
 

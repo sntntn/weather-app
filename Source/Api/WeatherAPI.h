@@ -20,7 +20,7 @@ public:
     void fetchData(const GeoLocationData &location);
 
 signals:
-    void dataFetched(const QSharedPointer<WeatherData> &data);
+    void dataFetched(const QSharedPointer<WeatherData> data);
     void errorOccurred(const QString &errMsg);
 
 public slots:

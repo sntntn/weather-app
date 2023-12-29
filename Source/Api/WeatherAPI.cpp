@@ -40,14 +40,14 @@ void WeatherAPI::fetchData(const GeoLocationData &location)
 }
 
 void WeatherAPI::replyFinished(QNetworkReply *reply){
-    GeoLocationData location;
-    location.fromVariant(reply->property("location"));
-
     if (reply->error() != QNetworkReply::NoError) {
         qDebug() << reply->errorString().toStdString();
         emit errorOccured(errMsg);
         return;
     }
+
+    GeoLocationData location;
+    location.fromVariant(reply->property("location"));
 
     QString jsonData = reply->readAll();
 

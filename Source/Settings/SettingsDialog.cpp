@@ -23,7 +23,7 @@ SettingsDialog::SettingsDialog(QWidget *parent)
     , save(new QPushButton("Save"))
     , cancel(new QPushButton("Cancel"))
     , widgetOrder(settings.savedLocations())
-    , trashCan("../Resources/trashCan/redTrash.png") //todo
+    , trashCan("../Resources/trashCan/redTrash.png")
     , trashIcon(trashCan)
 {
     locationSwitch->setChecked(settings.m_shareLocation);

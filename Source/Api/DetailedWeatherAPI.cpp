@@ -48,8 +48,8 @@ void DetailedWeatherAPI::fetchData(const QGeoCoordinate &coordinates)
 
 void DetailedWeatherAPI::replyFinished(QNetworkReply *reply){
     if (reply->error() != QNetworkReply::NoError) {
-        std::cerr << "Error: " << reply->errorString().toStdString() << std::endl;
-        return; // TODO
+        qDebug() << reply->errorString().toStdString();
+        return;
     }
 
     QString jsonData = reply->readAll();

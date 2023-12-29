@@ -47,7 +47,7 @@ private:
 
     void setupUi();
 
-    const QString trashIconPath = "../Resources/trashCan/redTrash.png"; // todo
+    const QString trashIconPath = "../Resources/trashCan/redTrash.png";
 };
 
 #endif // SETTINGSDIALOG_H

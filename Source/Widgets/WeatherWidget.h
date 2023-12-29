@@ -35,8 +35,8 @@ private:
     static const int timeFontSize = 14;
     static const int temperatureFontSize = 45;
     static const int minmaxTemperatureFontSize = 14;
-    static const int iconWidth = 80;
-    static const int iconHeight = 80;
+    static const int iconWidth = 70;
+    static const int iconHeight = 70;
     static const int initialFontSize = locationFontSize;
 
     QVBoxLayout *leftLayout;

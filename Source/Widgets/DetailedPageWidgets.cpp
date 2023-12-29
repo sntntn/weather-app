@@ -1,17 +1,19 @@
 #include "DetailedPageWidgets.h"
 
 #include <QPainter>
+#include <QStyleOption>
+#include <QPainterPath>
 
 #include "Settings.h"
 
 namespace WidgetUtils{
-    QFrame* createLineFrame(QFrame::Shape shape) {
-        auto *line = new QFrame();
-        line->setFrameShape(shape);
-        line->setLineWidth(1);
-        line->setStyleSheet("color: black;");
-        return line;
-    }
+QFrame* createLineFrame(QFrame::Shape shape, QString color = "white") {
+    auto *line = new QFrame();
+    line->setFrameShape(shape);
+    line->setLineWidth(1);
+    line->setStyleSheet("color: " + color + ";");
+    return line;
+}
 }
 
 BasicInfoWidget::BasicInfoWidget(QWidget *parent)
@@ -19,8 +21,10 @@ BasicInfoWidget::BasicInfoWidget(QWidget *parent)
     , basicInfoLayout(new QHBoxLayout())
     , leftLayout(new QVBoxLayout())
     , rightLayout(new QVBoxLayout())
+    , dateTimeLayout(new QVBoxLayout())
     , iconLabel(new QLabel(this))
     , weatherDescriptionLabel(new QLabel(this))
+    , todayLabel(new QLabel("Today,"))
     , dateLabel(new QLabel(this))
     , timeLabel(new QLabel(this))
     , temperatureLabel(new QLabel(this))
@@ -28,19 +32,23 @@ BasicInfoWidget::BasicInfoWidget(QWidget *parent)
 {
     temperatureLabel->setStyleSheet("font-size: 110px; font-weight: bold;");
     leftLayout->addWidget(iconLabel, 0, Qt::AlignLeft);
-    leftLayout->addWidget(weatherDescriptionLabel, 0, Qt::AlignLeft);
-    leftLayout->addWidget(dateLabel, 0, Qt::AlignLeft | Qt::AlignTop);
-    leftLayout->addWidget(timeLabel, 0, Qt::AlignLeft | Qt::AlignTop);
+    leftLayout->addWidget(weatherDescriptionLabel, 0, Qt::AlignLeft | Qt::AlignTop);
+
+    dateTimeLayout->addWidget(dateLabel);
+    dateTimeLayout->addWidget(timeLabel);
+    dateTimeLayout->setSpacing(0);
+    dateTimeLayout->setContentsMargins(0, 0, 0, 0);
+    leftLayout->addLayout(dateTimeLayout);
+
     rightLayout->addWidget(temperatureLabel, 0, Qt::AlignHCenter);
     rightLayout->addWidget(feelsLikeLabel, 0, Qt::AlignRight | Qt::AlignBottom);
     feelsLikeLabel->setStyleSheet(R"(
     QLabel {
         color: white;
-        background-color: #0066CC;
-        padding: 3px 5px;
+        background-color: black;
+        padding: 3px 8px;
         border-radius: 5px;
         font-size: 14px;
-        font-weight: bold;
     }
     )");
     basicInfoLayout->addLayout(leftLayout);
@@ -58,13 +66,147 @@ void BasicInfoWidget::updateData(const int weatherCode, const bool isDay,
 
     weatherDescriptionLabel->setText(weatherCodeToDescription(weatherCode));
 
-    QDateTime currentTimeZone = QDateTime::currentDateTime().toTimeZone(timezone);
-    dateLabel->setText(currentTimeZone.toString("'Today,' MMMM d") +
-                       getDaySuffix(currentTimeZone.date().day()));
-    timeLabel->setText(currentTimeZone.toString("HH:mm"));
+    QDateTime currentTime = QDateTime::currentDateTime().toTimeZone(timezone);
+    dateLabel->setText("Today, " + currentTime.toString("MMMM d") + getDaySuffix(currentTime.date().day()));
+    timeLabel->setText(currentTime.toString("HH:mm"));
 
     temperatureLabel->setText(QString::number(temperature) + "°");
         feelsLikeLabel->setText("Feels like: " + QString::number(apparentTemperature) + "°");
+}
+
+MinMaxTempWidget::MinMaxTempWidget(QWidget *parent)
+    : QWidget{parent}
+    , mainLayout(new QHBoxLayout(this))
+{
+        this->setObjectName("TempContainer");
+        this->setStyleSheet("#TempContainer { "
+                            "background-color: white;"
+                            "border: 2px solid black;"
+                            "border-radius: 15px; "
+                            "margin: 5px; "
+                            "}"
+                            "#TempContainer QLabel { "
+                            "color: black;"
+                            "}"
+                            );
+
+        auto *maxTemp = new MinMaxTempWidgetItem("../Resources/temperature/uparrowBlack.png", "Highest temp:", this);
+        auto *minTemp = new MinMaxTempWidgetItem("../Resources/temperature/downarrowBlack.png", "Lowest temp:", this);
+        mainLayout->addWidget(maxTemp);
+        mainLayout->addWidget(WidgetUtils::createLineFrame(QFrame::VLine, "black"));
+        mainLayout->addWidget(minTemp);
+
+        this->setLayout(mainLayout);
+}
+
+void MinMaxTempWidget::updateData(const int maxTempValue, const int minTempValue)
+{
+        auto* maxWidget = static_cast<MinMaxTempWidgetItem*>(mainLayout->itemAt(0)->widget());
+        maxWidget->updateData(maxTempValue, "°");
+        auto* minWidget = static_cast<MinMaxTempWidgetItem*>(mainLayout->itemAt(2)->widget());
+        minWidget->updateData(minTempValue, "°");
+}
+
+MinMaxTempWidget::MinMaxTempWidgetItem::MinMaxTempWidgetItem(const QString iconPath, const QString infoName, QWidget *parent)
+    : QWidget(parent)
+    , mainLayout(new QHBoxLayout(this))
+    , infoIcon(new QPixmap(iconPath))
+    , infoIconLabel(new QLabel(this))
+    , infoLabel(new QLabel(infoName))
+    , info(new QLabel(this))
+{
+        infoIconLabel->setPixmap(infoIcon->scaled(iconWidth, iconHeight,
+                                                  Qt::KeepAspectRatio, Qt::SmoothTransformation));
+        mainLayout->addWidget(infoIconLabel);
+        mainLayout->addWidget(infoLabel);
+        mainLayout->addWidget(info);
+        mainLayout->addStretch(1);
+
+        this->setLayout(mainLayout);
+}
+
+void MinMaxTempWidget::MinMaxTempWidgetItem::updateData(const int value, const QString unit)
+{
+        info->setText(QString::number(value) + unit);
+}
+
+
+SunWidget::SunWidget(QWidget *parent)
+    : QWidget(parent)
+    , mainLayout(new QHBoxLayout(this))
+{
+        this->setObjectName("SunContainer");
+        this->setStyleSheet("#SunContainer { "
+                            "background-color: black;"
+                            "border-radius: 15px; "
+                            "margin: 5px; "
+                            "}"
+                            "#SunContainer QLabel { "
+                            "color: white;"
+                            "}"
+                            );
+
+        auto *sunrise = new SunWidgetItem("../Resources/sunrise+sunset/sunrise.png", "Sunrise", this);
+        auto *sunset = new SunWidgetItem("../Resources/sunrise+sunset/sunset.png", "Sunset", this);
+        mainLayout->addWidget(sunrise);
+        mainLayout->addWidget(WidgetUtils::createLineFrame(QFrame::VLine));
+        mainLayout->addWidget(sunset);
+
+        this->setLayout(mainLayout);
+}
+
+void SunWidget::updateData(const QTimeZone &timezone, const QVector<QString> sunriseValues, const QVector<QString> sunsetValues)
+{
+        auto* sunriseWidget = static_cast<SunWidgetItem*>(mainLayout->itemAt(0)->widget());
+        sunriseWidget->updateData(timezone, sunriseValues);
+        auto* sunsetWidget = static_cast<SunWidgetItem*>(mainLayout->itemAt(2)->widget());
+        sunsetWidget->updateData(timezone, sunsetValues);
+}
+
+SunWidget::SunWidgetItem::SunWidgetItem(const QString iconPath, const QString infoName, QWidget *parent)
+    : QWidget(parent)
+    , mainLayout(new QHBoxLayout(this))
+    , timeLayout(new QVBoxLayout())
+    , infoIcon(new QPixmap(iconPath))
+    , infoIconLabel(new QLabel(this))
+    , infoLabel(new QLabel(infoName))
+    , info(new QLabel(this))
+    , additionalinfo(new QLabel(this))
+{
+        mainLayout->addWidget(infoLabel);
+        infoIconLabel->setPixmap(infoIcon->scaled(iconWidth, iconHeight,
+                                                  Qt::KeepAspectRatio, Qt::SmoothTransformation));
+        mainLayout->addStretch(1);
+        mainLayout->addWidget(infoIconLabel);
+        mainLayout->addStretch(1);
+
+        additionalinfo->setStyleSheet("font-size: 18px;");
+        additionalinfo->setStyleSheet("font-size: 12px; color: gray;");
+        timeLayout->addWidget(info);
+        timeLayout->addWidget(additionalinfo);
+        mainLayout->addLayout(timeLayout);
+
+        this->setLayout(mainLayout);
+}
+
+void SunWidget::SunWidgetItem::updateData(const QTimeZone &timezone, const QVector<QString> values)
+{
+        info->setText(values[0].mid(11,5));
+
+        QDateTime specifiedTime = QDateTime::fromString(values[0], Qt::ISODate);
+        specifiedTime.setTimeZone(timezone);
+        QDateTime currentTime = QDateTime::currentDateTime().toTimeZone(timezone);
+
+        if(specifiedTime < currentTime){
+            specifiedTime = QDateTime::fromString(values[1], Qt::ISODate);
+            specifiedTime.setTimeZone(timezone);
+        }
+        auto differenceInSeconds = currentTime.secsTo(specifiedTime);
+        int hours = differenceInSeconds / 3600;
+        int minutes = (differenceInSeconds % 3600) / 60;
+
+        additionalinfo->setText("+" + QString::number(hours) + "h " +
+                                QString::number(minutes) + "m");
 }
 
 HumidityUvRainWidget::HumidityUvRainWidget(QWidget *parent)
@@ -72,8 +214,17 @@ HumidityUvRainWidget::HumidityUvRainWidget(QWidget *parent)
     , mainLayout(new QHBoxLayout(this))
     , humidity(new singleWidgetItem("../Resources/humidity/humidity.png", "Humidity", this))
     , uvIndex(new singleWidgetItem("../Resources/uv/uv.png", "UV Index", this))
-    , rain(new singleWidgetItem("../Resources/precipitation/raindrop.png", "Rain", this))
+    , rain(new singleWidgetItem("../Resources/precipitation/raindrop.png", "Precipitation", this))
 {
+    this->setObjectName("HumidityUvRainContainer");
+    this->setStyleSheet("#HumidityUvRainContainer { "
+                        "background-color: black;"
+                        "border-radius: 15px; "
+                        "margin: 5px; "
+                        "}"
+                        "#HumidityUvRainContainer QLabel { "
+                        "color: white;"
+                        "}");
     mainLayout->addWidget(humidity);
     mainLayout->addWidget(WidgetUtils::createLineFrame(QFrame::VLine));
     mainLayout->addWidget(uvIndex);
@@ -95,8 +246,17 @@ VisibilityPressureSnowWidget::VisibilityPressureSnowWidget(QWidget *parent)
     , mainLayout(new QHBoxLayout(this))
     , visibility(new singleWidgetItem("../Resources/visibility/visibility.png", "Visibility", this))
     , pressure(new singleWidgetItem("../Resources/pressure/pressure1.png", "Pressure", this))
-    , snow(new singleWidgetItem("../Resources/snow/snowflake.png", "Snow", this))
+    , snow(new singleWidgetItem("../Resources/snow/snowflake.png", "Snow depth", this))
 {
+    this->setObjectName("VisibilityPressureSnowContainer");
+    this->setStyleSheet("#VisibilityPressureSnowContainer { "
+                        "background-color: black;"
+                        "border-radius: 15px; "
+                        "margin: 5px; "
+                        "}"
+                        "#VisibilityPressureSnowContainer QLabel { "
+                        "color: white;"
+                        "}");
     mainLayout->addWidget(visibility);
     mainLayout->addWidget(WidgetUtils::createLineFrame(QFrame::VLine));
     mainLayout->addWidget(pressure);
@@ -106,11 +266,16 @@ VisibilityPressureSnowWidget::VisibilityPressureSnowWidget(QWidget *parent)
     this->setLayout(mainLayout);
 }
 
-void VisibilityPressureSnowWidget::updateData(const int visibilityValue, const int pressureValue, const int snowValue)
+void VisibilityPressureSnowWidget::updateData(const int visibilityValue, const int pressureValue, double snowValue)
 {
     visibility->updateData(visibilityValue, " " + Settings::instance().visibilityUnitString());
-    pressure->updateData(pressureValue, "hPa");
-    snow->updateData(snowValue, " " + Settings::instance().precipitationUnitString());
+    pressure->updateData(pressureValue, " hPa");
+
+    if(Settings::instance().precipitationUnitApiParameter() == "mm"){
+        snow->updateData(static_cast<int>(qRound(snowValue * 100)), " m");
+    }
+    else
+        snow->updateData(static_cast<int>(qRound(snowValue * 12)), " in");
 }
 
 WindInfoWidget::WindInfoWidget(QWidget *parent)
@@ -126,12 +291,12 @@ WindInfoWidget::WindInfoWidget(QWidget *parent)
     , initialCompassIcon(QPixmap("../Resources/wind/whiteCompass.png"))
     , arrowIcon(QPixmap("../Resources/wind/whiteArrow.png"))
 {
-    windSpeedLabel->setAlignment(Qt::AlignLeft);
+    windSpeedLabel->setAlignment(Qt::AlignLeft | Qt::AlignBottom);
     windSpeed->setAlignment(Qt::AlignLeft);
     leftLayout->addWidget(windSpeedLabel);
     leftLayout->addWidget(windSpeed);
 
-    windGustsLabel->setAlignment(Qt::AlignRight);
+    windGustsLabel->setAlignment(Qt::AlignRight | Qt::AlignBottom);
     windGusts->setAlignment(Qt::AlignRight);
     rightLayout->addWidget(windGustsLabel);
     rightLayout->addWidget(windGusts);
@@ -165,7 +330,6 @@ void WindInfoWidget::updateData(const int windSpeedValue, const int windGustsVal
                        center.y() - arrowIcon.height() / 2,
                        arrowIcon);
     painter.end();
-
     compassLabel->setPixmap(compassIcon.scaled(100, 100, Qt::KeepAspectRatio, Qt::SmoothTransformation));
 }
 
@@ -193,6 +357,8 @@ void singleWidgetItem::updateData(const int value, const QString unit)
     info->setText(QString::number(value) + unit);
 }
 
+
+
 HourlyWeatherWidget::HourlyWeatherWidget(QWidget *parent)
     : QWidget(parent)
     , mainLayout(new QVBoxLayout(this))
@@ -219,8 +385,7 @@ void HourlyWeatherWidget::updateData(const QVector<int> &temperatures, const QVe
                                      const QVector<bool> &isDays, const QVector<QString> &timeStamps)
 {
     for (int i = 0; i < hoursPerDay; ++i) {
-        QLayoutItem* item = itemsLayout->itemAt(i);
-        auto* widget = static_cast<HourlyWidgetItem*>(item->widget());
+        auto* widget = static_cast<HourlyWidgetItem*>(itemsLayout->itemAt(i)->widget());
         widget->updateData(temperatures[i], weatherCodes[i],
                            isDays[i], timeStamps[i]);
     }
@@ -250,7 +415,7 @@ void HourlyWeatherWidget::HourlyWidgetItem::updateData(const int tempText, const
     hourLabel->setText(timeStamp);
     hourWeatherIcon.load(Settings::instance().weatherCodeToIcon(weatherCode, isDay));
     hourWeatherIconLabel->setPixmap(hourWeatherIcon.scaled(iconWidth, iconHeight,
-                                                            Qt::KeepAspectRatio, Qt::SmoothTransformation));
+                                                           Qt::KeepAspectRatio, Qt::SmoothTransformation));
     hourTempLabel->setText(QString::number(tempText) + "°");
 }
 
@@ -260,20 +425,16 @@ DailyWeatherWidget::DailyWeatherWidget(QWidget *parent)
 {
     for(int i = 0; i < daysPerWeek; i++){
         auto *widget = new DailyWidgetItem(this);
-        mainLayout->addWidget(widget, 2*i, 0);
-
-        if (i < 6) {
-            mainLayout->addWidget(WidgetUtils::createLineFrame(QFrame::HLine), 2*i + 1, 0, 1, -1);
-        }
+        mainLayout->addWidget(widget, i, 0);
     }
+    this->setLayout(mainLayout);
 }
 
 void DailyWeatherWidget::updateData(const QVector<QString> &dayNames, const QVector<int> &weatherCodes,
                                     const QVector<int> &minTemps, const QVector<int> &maxTemps)
 {
     for (int i = 0; i < daysPerWeek; ++i) {
-        QLayoutItem* item = mainLayout->itemAt(2*i);
-        auto* widget = static_cast<DailyWidgetItem*>(item->widget());
+        auto* widget = static_cast<DailyWidgetItem*>(mainLayout->itemAt(i)->widget());
         widget->updateData(dayNames[i], weatherCodes[i], minTemps[i], maxTemps[i]);
     }
 }
@@ -284,11 +445,21 @@ DailyWeatherWidget::DailyWidgetItem::DailyWidgetItem(QWidget *parent)
     , dayNameLabel(new QLabel())
     , dayWeatherIconLabel(new QLabel(this))
     , dailyminTempLabel(new QLabel(this))
-    , temperatureIcon(QPixmap("../Resources/temperature/temperature.png"))
+    , temperatureIcon(QPixmap("../Resources/temperature/temperatureBlack.png"))
     , temperatureIconLabel(new QLabel())
     , dailymaxTempLabel(new QLabel(this))
 {
+    this->setObjectName("DailyWeatherItemContainer");
+    this->setStyleSheet("#DailyWeatherItemContainer { "
+                        "border-radius: " + QString::number(border) + "px; "
+                        "margin: 5px; "
+                        "}"
+                        "#DailyWeatherItemContainer QLabel { "
+                        "color: black;"
+                        "}");
+
     dayNameLabel->setFixedWidth(dayNameLabelWidth);
+    dayNameLabel->setContentsMargins(padding, 0, 0, 0);
     dailyLayout->addWidget(dayNameLabel);
     dailyLayout->addStretch(1);
 
@@ -300,22 +471,46 @@ DailyWeatherWidget::DailyWidgetItem::DailyWidgetItem(QWidget *parent)
     dailyLayout->addWidget(dailyminTempLabel);
 
     temperatureIconLabel->setPixmap(temperatureIcon.scaled(iconWidth, iconHeight,
-                                                            Qt::KeepAspectRatio, Qt::SmoothTransformation));
+                                                           Qt::KeepAspectRatio, Qt::SmoothTransformation));
     dailyLayout->addWidget(temperatureIconLabel);
 
+    dailymaxTempLabel->setFixedWidth(dailyMaxLabelWidth);
     dailymaxTempLabel->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Preferred);
     dailyLayout->addWidget(dailymaxTempLabel);
+
+    setAutoFillBackground(true);
 }
 
 void DailyWeatherWidget::DailyWidgetItem::updateData(const QString &dayName, const int weatherCode,
-                                                         const int minTemp, const int maxTemp)
+                                                     const int minTemp, const int maxTemp)
 {
     dayNameLabel->setText(dayName);
     dayWeatherIcon.load(Settings::instance().weatherCodeToIcon(weatherCode, true));
     dayWeatherIconLabel->setPixmap(dayWeatherIcon.scaled(iconWidth, iconHeight,
-                                                          Qt::KeepAspectRatio, Qt::SmoothTransformation));
+                                                         Qt::KeepAspectRatio, Qt::SmoothTransformation));
     dailyminTempLabel->setText(QString::number(minTemp) + "°");
-    dailymaxTempLabel->setText(QString::number(maxTemp) + "°");
+        dailymaxTempLabel->setText(QString::number(maxTemp) + "°");
+}
+
+void DailyWeatherWidget::DailyWidgetItem::paintEvent(QPaintEvent *event) {
+        QWidget::paintEvent(event);
+
+        QPainter painter(this);
+        QLinearGradient gradient(rect().topLeft(), rect().bottomLeft());
+        gradient.setColorAt(0, QColor("#a2a2a2"));
+        gradient.setColorAt(1, QColor("#ffffff"));
+
+        QBrush brush(gradient);
+        painter.setBrush(brush);
+        painter.setPen(Qt::NoPen);
+
+        QStyleOption opt;
+        opt.initFrom(this);
+
+        QPainterPath path;
+        path.addRoundedRect(rect(), border, border);
+        painter.setClipPath(path);
+        painter.fillPath(path, brush);
 }
 
 QString HumidityUvRainWidget::uvIndextoDescription(const int uvIndex)

@@ -36,7 +36,7 @@ WeatherWidget::WeatherWidget(const QSharedPointer<WeatherData> &data, QWidget *p
     maxTemperatureLabel->setFont(QFont(fontName, minmaxTemperatureFontSize, QFont::Normal));
     minTemperatureLabel->setFont(QFont(fontName, minmaxTemperatureFontSize, QFont::Normal));
     iconLabel->setPixmap(weatherIcon.scaled(iconWidth, iconHeight, Qt::KeepAspectRatio, Qt::SmoothTransformation));
-    iconLabel->setFixedWidth(iconWidth);
+    iconLabel->setFixedHeight(iconHeight);
 
 
     locationLabel->setStyleSheet("color: white;");
@@ -48,9 +48,9 @@ WeatherWidget::WeatherWidget(const QSharedPointer<WeatherData> &data, QWidget *p
     countryLabel->setStyleSheet("QLabel { color: #cccccc; }");
     countryLabel->setWordWrap(true);
 
-    leftLayout->addWidget(locationLabel, 0, Qt::AlignCenter);
-    leftLayout->addSpacing(-10);
-    leftLayout->addWidget(countryLabel, 0, Qt::AlignCenter);
+    leftLayout->addWidget(locationLabel, 0, Qt::AlignCenter | Qt::AlignTop);
+    leftLayout->addSpacing(-12);
+    leftLayout->addWidget(countryLabel, 0, Qt::AlignCenter | Qt::AlignTop);
     leftLayout->addWidget(iconLabel, 0, Qt::AlignCenter);
     leftLayout->addWidget(timeLabel, 0, Qt::AlignCenter);
 
@@ -70,9 +70,6 @@ WeatherWidget::WeatherWidget(const QSharedPointer<WeatherData> &data, QWidget *p
 
 }
 
-
-//TO DO
-//test funkcija za prilagodjavanje fonta i velicine countryLabel    -> za slucaj da GUI kolege zele drugacije da ga pozicioniraju i preurede :)
 int WeatherWidget::adjustCountryLabelFontSize(const QString &fontName)
 {
     QString countryText = data->location().getCountry();

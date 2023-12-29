@@ -64,7 +64,7 @@ private:
     QPushButton *addToSavedLocations;
     QTimer *scrollTimer;
     QLabel *locationLabel;
-    QLabel *detailedLocationLabel;
+    QLabel *countryLabel;
     BasicInfoWidget *basicInfo;
     QLabel *minmaxTemperature;
     HumidityUvRainWidget *humidityUvRain;
@@ -75,6 +75,8 @@ private:
     QLabel *dailyLabel;
     DailyWeatherWidget *dailyWidget;
     WeatherWidget *selectedWidget;
+    MinMaxTempWidget *minmaxWidget;
+    SunWidget *sunWidget;
 
     void highlightWidget();
 };

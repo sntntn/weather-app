@@ -1,0 +1,37 @@
+#include "catch.hpp"
+
+#include <QObject>
+#include <QTimer>
+#include <QTest>
+#include <QGeoCoordinate>
+
+#include "GeoLocationData.h"
+#include "WeatherAPI.h"
+#include "WeatherData.h"
+
+TEST_CASE("WeatherAPI testing"){
+    SECTION("WeatherData sent with dataFetched signal contains "
+            "GeoLocationData which was sent to WeatherAPI"){
+        // Arrange
+        GeoLocationData location1("test", "test", QGeoCoordinate(4.99811, -73.85789), "test");
+        GeoLocationData location2;
+        WeatherAPI api;
+
+        // Act
+        QObject::connect(&api, &WeatherAPI::dataFetched, [&location2](const QSharedPointer<WeatherData> &data){
+            location2 = data.data()->location();
+        } );
+
+        api.fetchData(location1);
+        QTest::qWait(1500);
+
+        bool check = location1.getRenamedPlace() == location2.getRenamedPlace() &&
+                     location1.getDetailedPlace() == location2.getDetailedPlace() &&
+                     location1.getCountry() == location2.getCountry() &&
+                     location1.getCoordinates() == location2.getCoordinates();
+
+        // Assert
+        REQUIRE(check);
+    }
+}
+

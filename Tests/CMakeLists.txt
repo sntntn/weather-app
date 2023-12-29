@@ -36,6 +36,7 @@ set(TEST_SOURCES
     main.cpp
     test_MainWindow.cpp
     test_UserLocation.cpp
+    test_WeatherAPI.cpp
 )
 
 set(CPP_SOURCES

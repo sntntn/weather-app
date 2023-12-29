@@ -34,7 +34,6 @@ public:
     ~DetailedWeatherPage() = default;
 
     void resizeEvent(QResizeEvent *event) override;
-    int widgetNumber();
 
     QSharedPointer<DetailedWeatherData> data;
     DetailedWeatherAPI* api;

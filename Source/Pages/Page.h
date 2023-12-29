@@ -15,6 +15,11 @@ class Page : public QWidget
 public:
     virtual ~Page() = default;
 
+    inline int numWidgets() const
+    {
+        return m_widgets.size();
+    }
+
 public slots:
     virtual void addNewWidget(const QSharedPointer<WeatherData> data) = 0;
     virtual void addErrorWidget(const QString &errMsg) = 0;

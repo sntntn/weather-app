@@ -32,7 +32,7 @@ TEST_CASE("DetailedWeatherPage Tests"){
         DetailedWeatherPage *page = new DetailedWeatherPage(mainwindow);
         stackedWidget->addWidget(page);
         stackedWidget->setCurrentWidget(page);
-        int numofWidgets = page->widgetNumber();
+        int numofWidgets = page->numWidgets();
 
         GeoLocationData location("Belgrade", "Belgrade", QGeoCoordinate(44.8125, 20.4375), "Serbia");
         QTimeZone timezone("Europe/Belgrade");
@@ -44,7 +44,7 @@ TEST_CASE("DetailedWeatherPage Tests"){
         page->addNewWidget(sharedWeatherData);
 
         // Assert
-        REQUIRE(numofWidgets + 1 == page->widgetNumber());
+        REQUIRE(numofWidgets + 1 == page->numWidgets());
     }
 
     SECTION("Test if getData function calls function setData"){

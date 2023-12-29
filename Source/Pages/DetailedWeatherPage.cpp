@@ -181,11 +181,6 @@ void DetailedWeatherPage::homeButtonClicked()
     selectedWidget = nullptr;
 }
 
-int DetailedWeatherPage::widgetNumber()
-{
-    return m_widgets.size();
-}
-
 void DetailedWeatherPage::highlightWidget()
 {
     if(this->data == nullptr){

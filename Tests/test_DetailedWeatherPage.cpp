@@ -47,8 +47,33 @@ TEST_CASE("DetailedWeatherPage Tests"){
         REQUIRE(numofWidgets + 1 == page->numWidgets());
     }
 
+    SECTION("deleteWidgets function"){
+        // Arrange
+        qRegisterMetaType<QSharedPointer<WeatherData>>("QSharedPointer<WeatherData>");
+
+        MainWindow* mainwindow = new MainWindow();
+        auto stackedWidget = new QStackedWidget();
+        DetailedWeatherPage *page = new DetailedWeatherPage(mainwindow);
+        stackedWidget->addWidget(page);
+        stackedWidget->setCurrentWidget(page);
+
+        GeoLocationData location("Belgrade", "Belgrade", QGeoCoordinate(44.8125, 20.4375), "Serbia");
+        QTimeZone timezone("Europe/Belgrade");
+
+        QSharedPointer<WeatherData> sharedWeatherData = QSharedPointer<WeatherData>::create(
+            location, 25, 30, 20, 65, true, timezone);
+
+        page->addNewWidget(sharedWeatherData);
+
+        // Act
+        page->deleteWidgets();
+
+        // Assert
+        REQUIRE(page->numWidgets() == 0);
+    }
+
     SECTION("Test if getData function calls function setData"){
-        //Arrange
+        // Arrange
         qRegisterMetaType<QSharedPointer<DetailedWeatherData>>("QSharedPointer<DetailedWeatherData>");
         MainWindow* mainwindow = new MainWindow();
         auto stackedWidget = new QStackedWidget();
@@ -57,13 +82,13 @@ TEST_CASE("DetailedWeatherPage Tests"){
         stackedWidget->setCurrentWidget(page);
         GeoLocationData location("Izmisljeni", "Grad", QGeoCoordinate(44.8125, 20.4375), "Serbia");
 
-        //Act
+        // Act
         QSignalSpy spy(page->api, &DetailedWeatherAPI::dataFetched);
         page->getData(location);
 
         QTest::qWait(1500);
 
-        //Assert
+        // Assert
         REQUIRE(spy.count() == 1);
     }
 }

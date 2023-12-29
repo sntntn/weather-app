@@ -50,6 +50,7 @@ WeatherData* Parser::parseWeatherData(const QString &jsonData, const GeoLocation
     }
     catch (const std::exception &e) {
         qDebug() << "Exception caught in parseWeatherData:" << e.what();
+        throw;
         return nullptr;
     }
 }

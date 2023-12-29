@@ -197,7 +197,7 @@ void DetailedWeatherPage::highlightWidget()
     });
 
     if (newSelectedWidget != m_widgets.end()) {
-        auto newSelectedWeatherWidget = dynamic_cast<WeatherWidget*>(*newSelectedWidget);
+        auto *newSelectedWeatherWidget = dynamic_cast<WeatherWidget*>(*newSelectedWidget);
         selectedWidget = newSelectedWeatherWidget;
         widgetsScrollArea->ensureWidgetVisible(selectedWidget);
         selectedWidget->setHighlight();

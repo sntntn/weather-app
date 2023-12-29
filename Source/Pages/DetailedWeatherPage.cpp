@@ -89,6 +89,7 @@ DetailedWeatherPage::DetailedWeatherPage(QWidget *parent)
     connect(returnToHomePage, &QPushButton::clicked, this, &DetailedWeatherPage::homeButtonClicked);
     connect(addToSavedLocations, &QPushButton::clicked, this, &DetailedWeatherPage::addButtonClicked);
     connect(this, &DetailedWeatherPage::locationSaved, this->mainWindow, &MainWindow::getLocationData);
+    connect(api, &DetailedWeatherAPI::errorOccurred, this, &DetailedWeatherPage::handleApiError);
 }
 
 void DetailedWeatherPage::addNewWidget(const QSharedPointer<WeatherData> weatherData)
@@ -158,6 +159,12 @@ void DetailedWeatherPage::setData(const QSharedPointer<DetailedWeatherData> deta
     humidityUvRain->updateData(this->data->humidity(), this->data->uvIndex(), this->data->precipitation());
     visibilityPressureSnow->updateData(this->data->visibility(), this->data->pressure(), this->data->snowDepth());
     windInfo->updateData(this->data->windSpeed(), this->data->windGusts(), this->data->windDirection());
+}
+
+void DetailedWeatherPage::handleApiError(const QString &errMsg)
+{
+    // todo
+    qDebug() << errMsg;
 }
 
 void DetailedWeatherPage::resizeEvent(QResizeEvent* event) {

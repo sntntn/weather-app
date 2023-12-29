@@ -23,7 +23,7 @@ TEST_CASE("Test Parser class"){
         // Act
 
         // Assert
-        REQUIRE_NOTHROW( Parser::parseWeatherData(QString::fromStdString(jsonData), *location) );
+        REQUIRE_FALSE( nullptr == Parser::parseWeatherData(QString::fromStdString(jsonData), *location) );
     }
 }
 

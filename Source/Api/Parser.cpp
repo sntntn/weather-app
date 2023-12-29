@@ -40,14 +40,13 @@ QSharedPointer<DetailedWeatherData> Parser::parseDetailedWeatherData(const QStri
     QJsonObject current = obj.value("current").toObject();
     QJsonObject daily = obj.value("daily").toObject();
     QJsonObject hourly = obj.value("hourly").toObject();
-
     QTimeZone timeZone = QTimeZone(timezoneId.toLatin1());
     int temperature = static_cast<int>(qRound(current.value("temperature_2m").toDouble()));
     int weatherCode = current.value("weather_code").toInt();
     bool isDay = static_cast<bool>(current.value("is_day").toInt());
     int windSpeed = static_cast<int>(qRound(current.value("wind_speed_10m").toDouble()));
     int apparentTemperature = static_cast<int>(qRound(current.value("apparent_temperature").toDouble()));
-    int snowDepth = static_cast<int>(qRound(current.value("snow_depth").toDouble()));
+    double snowDepth = current.value("snow_depth").toDouble();
     int humidity = static_cast<int>(qRound(current.value("relative_humidity_2m").toDouble()));
     int visibility = static_cast<int>(qRound(current.value("visibility").toDouble()));
     int pressure =  static_cast<int>(qRound(current.value("pressure_msl").toDouble()));
@@ -109,8 +108,6 @@ QSharedPointer<DetailedWeatherData> Parser::parseDetailedWeatherData(const QStri
         int wc = static_cast<int>(qRound(weeklyCodeJ[i].toDouble()));
         weeklyCode.push_back(wc);
 
-        //QDate date = QDate::fromString(static_cast<QString>(weeklyDayJ[i].toString()), "yyyy-MM-dd");
-        //QString dayName = date.toString("dddd");
         QString dayName = QDate::fromString(static_cast<QString>(weeklyDayJ[i].toString()), "yyyy-MM-dd").toString("dddd");
         weeklyDayName.push_back(dayName);
 
@@ -126,7 +123,6 @@ QSharedPointer<DetailedWeatherData> Parser::parseDetailedWeatherData(const QStri
         QString sunset = static_cast<QString>(weeklySunsetJ[i].toString());
         weeklySunset.push_back(sunset);
     }
-
 
     QSharedPointer<DetailedWeatherData> data(new DetailedWeatherData(geoLocation,
                                                                      temperature,

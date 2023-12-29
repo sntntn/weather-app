@@ -122,7 +122,7 @@ class VisibilityPressureSnowWidget : public QWidget
 
 public:
     VisibilityPressureSnowWidget(QWidget *parent = nullptr);
-    void updateData(const int visibilityValue, const int pressureValue, const int snowValue);
+    void updateData(const int visibilityValue, const int pressureValue, double snowValue);
 };
 
 class WindInfoWidget : public QWidget

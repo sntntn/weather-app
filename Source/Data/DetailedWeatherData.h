@@ -18,7 +18,7 @@ public:
                                  const int windDirection,
                                  const int apparentTemperature,
                                  const int precipitation,
-                                 const int snowDepth,
+                                 const double snowDepth,
                                  const int uvIndex,
                                  const int humidity,
                                  const int visibility,
@@ -75,7 +75,7 @@ public:
     {
         return m_precipitation;
     }
-    inline int snowDepth() const
+    inline double snowDepth() const
     {
         return m_snowDepth;
     }
@@ -147,7 +147,7 @@ private:
     int m_windDirection;
     int m_apparentTemperature;
     int m_precipitation;
-    int m_snowDepth;
+    double m_snowDepth;
     int m_uvIndex;
     int m_humidity;
     int m_visibility;

@@ -122,7 +122,6 @@ MinMaxTempWidget::MinMaxTempWidgetItem::MinMaxTempWidgetItem(const QString iconP
         mainLayout->addWidget(info);
         mainLayout->addStretch(1);
 
-
         this->setLayout(mainLayout);
 }
 
@@ -156,12 +155,12 @@ SunWidget::SunWidget(QWidget *parent)
         this->setLayout(mainLayout);
 }
 
-void SunWidget::updateData(const QTimeZone &timezone, const QVector<QString> sunriseValue, const QVector<QString> sunsetValue)
+void SunWidget::updateData(const QTimeZone &timezone, const QVector<QString> sunriseValues, const QVector<QString> sunsetValues)
 {
         auto* sunriseWidget = static_cast<SunWidgetItem*>(mainLayout->itemAt(0)->widget());
-        sunriseWidget->updateData(timezone, sunriseValue);
+        sunriseWidget->updateData(timezone, sunriseValues);
         auto* sunsetWidget = static_cast<SunWidgetItem*>(mainLayout->itemAt(2)->widget());
-        sunsetWidget->updateData(timezone, sunsetValue);
+        sunsetWidget->updateData(timezone, sunsetValues);
 }
 
 SunWidget::SunWidgetItem::SunWidgetItem(const QString iconPath, const QString infoName, QWidget *parent)
@@ -190,17 +189,19 @@ SunWidget::SunWidgetItem::SunWidgetItem(const QString iconPath, const QString in
         this->setLayout(mainLayout);
 }
 
-void SunWidget::SunWidgetItem::updateData(const QTimeZone &timezone, const QVector<QString> value)
+void SunWidget::SunWidgetItem::updateData(const QTimeZone &timezone, const QVector<QString> values)
 {
-        info->setText(value[0].mid(11,5));
+        info->setText(values[0].mid(11,5));
 
-        QDateTime specifiedTime = QDateTime::fromString(value[0], Qt::ISODate);
+        QDateTime specifiedTime = QDateTime::fromString(values[0], Qt::ISODate);
+        specifiedTime.setTimeZone(timezone);
         QDateTime currentTime = QDateTime::currentDateTime().toTimeZone(timezone);
 
         if(specifiedTime < currentTime){
-            specifiedTime = QDateTime::fromString(value[1], Qt::ISODate);
+            specifiedTime = QDateTime::fromString(values[1], Qt::ISODate);
+            specifiedTime.setTimeZone(timezone);
         }
-        qint64 differenceInSeconds = currentTime.secsTo(specifiedTime);
+        auto differenceInSeconds = currentTime.secsTo(specifiedTime);
         int hours = differenceInSeconds / 3600;
         int minutes = (differenceInSeconds % 3600) / 60;
 
@@ -265,11 +266,16 @@ VisibilityPressureSnowWidget::VisibilityPressureSnowWidget(QWidget *parent)
     this->setLayout(mainLayout);
 }
 
-void VisibilityPressureSnowWidget::updateData(const int visibilityValue, const int pressureValue, const int snowValue)
+void VisibilityPressureSnowWidget::updateData(const int visibilityValue, const int pressureValue, double snowValue)
 {
     visibility->updateData(visibilityValue, " " + Settings::instance().visibilityUnitString());
-    pressure->updateData(pressureValue, "hPa");
-    snow->updateData(snowValue, " ");
+    pressure->updateData(pressureValue, " hPa");
+
+    if(Settings::instance().precipitationUnitApiParameter() == "mm"){
+        snow->updateData(static_cast<int>(qRound(snowValue * 100)), " m");
+    }
+    else
+        snow->updateData(static_cast<int>(qRound(snowValue * 12)), " in");
 }
 
 WindInfoWidget::WindInfoWidget(QWidget *parent)

@@ -14,12 +14,14 @@ GraphDialog::GraphDialog(const QVector<int>& temperatures, const QString &dayNam
     setWindowTitle(m_dayName + " Hourly Temperature");
 }
 
-void GraphDialog::resizeEvent(QResizeEvent *event) {
+void GraphDialog::resizeEvent(QResizeEvent *event)
+{
     QDialog::resizeEvent(event);
     update();
 }
 
-void GraphDialog::paintEvent(QPaintEvent*) {
+void GraphDialog::paintEvent(QPaintEvent*)
+{
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing);
 
@@ -29,24 +31,21 @@ void GraphDialog::paintEvent(QPaintEvent*) {
     int bottomMargin = 50;
     QRect drawingRect = rect().adjusted(leftMargin, topMargin, -rightMargin, -bottomMargin);
 
-    // Draw the grid lines first so they are underneath the graph
-    QPen gridPen(QColor(70, 70, 70), 1); // Light grey color for the grid lines
+    QPen gridPen(QColor(70, 70, 70), 1);
     painter.setPen(gridPen);
 
-    // Vertical grid lines for time labels (00:00, 06:00, 12:00, 18:00)
     QStringList timeLabels = {"00:00", "06:00", "12:00", "18:00"};
-    int hours[] = {0, 6, 12, 18, 24};  // Corresponding hours for the labels
+    int hours[] = {0, 6, 12, 18, 24};
     for (int i : hours) {
         int x = drawingRect.left() + (drawingRect.width() * i / 24);
         painter.drawLine(x, drawingRect.top(), x, drawingRect.bottom());
     }
 
-    // Horizontal grid lines for temperature values
-    double yRange = m_maxTemp - m_minTemp + 6; // +3 for top and bottom
+    double yRange = m_maxTemp - m_minTemp + 6;
     double yStep = drawingRect.height() / yRange;
-    int startLabel = m_minTemp - 3; // Start one degree above the min temp - 3
-    // Adjust the starting label if it's not an even number above the min temp
-    for (int i = startLabel; i <= m_maxTemp + 3; i += 2) { // Draw every other line
+    int startLabel = m_minTemp - 3;
+
+    for (int i = startLabel; i <= m_maxTemp + 3; i += 2) {
         int y = drawingRect.bottom() - ((i - (m_minTemp - 3)) * yStep);
         painter.drawLine(drawingRect.left(), y, drawingRect.right(), y);
     }
@@ -54,15 +53,13 @@ void GraphDialog::paintEvent(QPaintEvent*) {
     gridPen.setColor(QColor(240, 240, 240));
     painter.setPen(gridPen);
 
-    // Time labels on X-axis
-    int labelStep = drawingRect.width() / 23;  // 24 points for 23 intervals
+    int labelStep = drawingRect.width() / 23;
     for (int i = 0; i < 4; ++i) {
-        int x = drawingRect.left() + hours[i] * labelStep;  // 4 time steps per label
+        int x = drawingRect.left() + hours[i] * labelStep;
         painter.drawText(x - painter.fontMetrics().horizontalAdvance(timeLabels[i]) / 2,
                          rect().bottom() - 10, timeLabels[i]);
     }
 
-    // Temperature labels on Y-axis
     for (int i = m_minTemp - 3; i <= m_maxTemp + 3; i += 2) {
         int y = drawingRect.bottom() - ((i - (m_minTemp - 3)) * yStep);
         QString label = QString::number(i) + "°";
@@ -72,35 +69,29 @@ void GraphDialog::paintEvent(QPaintEvent*) {
                          y + painter.fontMetrics().height() / 4, label);
     }
 
-    // Draw the graph line
     QPen linePen(Qt::blue, 2);
     painter.setPen(linePen);
     QPainterPath path;
 
-    double xScale = static_cast<double>(drawingRect.width()) / 23;  // 24 points for 23 intervals
+    double xScale = static_cast<double>(drawingRect.width()) / 23;
     double yScale = static_cast<double>(drawingRect.height()) / yRange;
 
-    // Initialize path at the first data point
     QPointF firstPoint(drawingRect.left(), drawingRect.bottom() - ((m_temperatures.first() - (m_minTemp - 3)) * yScale));
     path.moveTo(firstPoint);
 
-    // Draw the graph line
     for (int i = 1; i < m_temperatures.size(); ++i) {
         double x = drawingRect.left() + i * xScale;
         double y = drawingRect.bottom() - ((m_temperatures[i] - (m_minTemp - 3)) * yScale);
         path.lineTo(QPointF(x, y));
     }
 
-    // Complete the fill path
     path.lineTo(QPointF(drawingRect.right(), drawingRect.bottom()));
     path.lineTo(QPointF(drawingRect.left(), drawingRect.bottom()));
     path.closeSubpath();
 
-    // Fill the area under the graph
-    QBrush fillBrush(QColor(0, 0, 255, 127)); // Semi-transparent blue
+    QBrush fillBrush(QColor(0, 0, 255, 127));
     painter.fillPath(path, fillBrush);
 
-    // Draw the path
     painter.setPen(linePen);
     painter.drawPath(path);
 }
@@ -111,10 +102,11 @@ void GraphDialog::calculateTemperatureRange()
     m_maxTemp = *std::max_element(m_temperatures.constBegin(), m_temperatures.constEnd());
 }
 
-double GraphDialog::mapTemperatureToY(int temperature) {
+double GraphDialog::mapTemperatureToY(int temperature)
+{
     double range = m_maxTemp - m_minTemp;
     if (range == 0) {
-        return rect().height() / 2.0; // Avoid division by zero
+        return rect().height() / 2.0;
     }
     double scale = rect().height() / range;
     return rect().bottom() - (temperature - m_minTemp) * scale;

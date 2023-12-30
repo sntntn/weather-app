@@ -1,10 +1,11 @@
 #ifndef WEATHERDATA_H
 #define WEATHERDATA_H
 
+#include "Data.h"
+
 #include <QString>
 #include <QTimeZone>
 
-#include "Data.h"
 #include "GeoLocationData.h"
 
 class WeatherData : public Data

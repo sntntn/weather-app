@@ -1,10 +1,10 @@
 #ifndef GEOLOCATIONDATA_H
 #define GEOLOCATIONDATA_H
 
-#include <QGeoCoordinate>
-
-#include "Serializable.h"
 #include "Data.h"
+#include "Serializable.h"
+
+#include <QGeoCoordinate>
 
 class GeoLocationData : public Data, public Serializable
 {

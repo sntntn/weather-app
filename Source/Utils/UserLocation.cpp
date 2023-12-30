@@ -20,8 +20,7 @@ void UserLocation::getLocation()
 
 void UserLocation::positionUpdated(const QGeoPositionInfo &info)
 {
-    // todo konstruktor geolocation
-    GeoLocationData data = GeoLocationData("My location", "My location", info.coordinate(), "My location");
+    GeoLocationData data = GeoLocationData("My location", "My location", info.coordinate(), "");
     emit userLocationFetched(data);
 }
 

@@ -21,10 +21,10 @@ public:
     void replyFinished(QNetworkReply* reply) override;
 
 signals:
-    void geocodingDataUpdated(const QList<GeoLocationData>& locations);
+    void geocodingDataUpdated(const QList<GeoLocationData> &locations);
 
 public slots:
-    void geocodeCity(const QString& location);
+    void geocodeCity(const QString &location);
 
 private:
     QString OPEN_CAGE_API_KEY;

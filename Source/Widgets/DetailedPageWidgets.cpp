@@ -7,13 +7,14 @@
 #include "Settings.h"
 
 namespace WidgetUtils{
-QFrame* createLineFrame(QFrame::Shape shape, const QString &color = "white") {
-    auto *line = new QFrame();
-    line->setFrameShape(shape);
-    line->setLineWidth(1);
-    line->setStyleSheet("color: " + color + ";");
-    return line;
-}
+    QFrame* createLineFrame(QFrame::Shape shape, const QString &color = "white")
+    {
+        auto *line = new QFrame();
+        line->setFrameShape(shape);
+        line->setLineWidth(1);
+        line->setStyleSheet("color: " + color + ";");
+        return line;
+    }
 }
 
 BasicInfoWidget::BasicInfoWidget(QWidget *parent)

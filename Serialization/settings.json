@@ -1,0 +1,29 @@
+{
+    "locations": [
+        {
+            "country": "Serbia",
+            "latitude": 44.8178131,
+            "longitude": 20.4568974,
+            "place": "Belgrade, City of Belgrade, Serbia",
+            "renamedPlace": "Belgrade"
+        },
+        {
+            "country": "Serbia",
+            "latitude": 45.2551338,
+            "longitude": 19.8451756,
+            "place": "Novi Sad, South Backa Administrative District, Serbia",
+            "renamedPlace": "Novi Sad"
+        },
+        {
+            "country": "Kenya",
+            "latitude": -4.05052,
+            "longitude": 39.667169,
+            "place": "Mombasa, Mvita, Kenya",
+            "renamedPlace": "Mombasa"
+        }
+    ],
+    "precipitationUnit": 1,
+    "shareLocation": true,
+    "temperatureUnit": 0,
+    "windSpeedUnit": 1
+}

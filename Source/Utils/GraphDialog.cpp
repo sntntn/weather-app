@@ -6,10 +6,10 @@
 #include <QPainterPath>
 #include <QFontMetrics>
 
-GraphDialog::GraphDialog(const QVector<int>& temperatures, const QString &dayNameString, QWidget *parent)
+GraphDialog::GraphDialog(const QVector<int>& temperatures, QString dayNameString, QWidget *parent)
     : QDialog(parent)
     , m_temperatures(temperatures)
-    , m_dayName(dayNameString)
+    , m_dayName(std::move(dayNameString))
 {
     calculateTemperatureRange();
     resize(400, 300);
@@ -90,12 +90,12 @@ void minMaxTempGraphDialog::paintEvent(QPaintEvent*)
     QPen gridPen(QColor(70, 70, 70), 1);
     QPen labelPen(Qt::white);
     QStringList dayLabels = getAbbreviatedDayNames();
-    const int numDays = dayLabels.size();
+    const int numDays = static_cast<int>(dayLabels.size());
     const int yRange = m_maxTemp - m_minTemp + 6;
     const double yStep = static_cast<double>(drawingRect.height()) / yRange;
 
     painter.setPen(gridPen);
-    for (int i = 0; i < numDays; ++i) {
+    for (int i = 0; i < numDays; i++) {
         int x = drawingRect.left() + (drawingRect.width() * i / (numDays - 1));
         painter.drawLine(x, drawingRect.top(), x, drawingRect.bottom());
         painter.setPen(labelPen);
@@ -121,12 +121,12 @@ void minMaxTempGraphDialog::paintEvent(QPaintEvent*)
     };
 
     painter.setPen(QPen(Qt::red, 3));
-    for (int i = 1; i < m_maxTemperatures.size(); ++i) {
+    for (int i = 1; i < m_maxTemperatures.size(); i++) {
         painter.drawLine(mapDayToX(i - 1), mapTemperatureToY(m_maxTemperatures[i - 1]),
                          mapDayToX(i), mapTemperatureToY(m_maxTemperatures[i]));
     }
     painter.setPen(QPen(Qt::blue, 3));
-    for (int i = 1; i < m_minTemperatures.size(); ++i) {
+    for (int i = 1; i < m_minTemperatures.size(); i++) {
         painter.drawLine(mapDayToX(i - 1), mapTemperatureToY(m_minTemperatures[i - 1]),
                          mapDayToX(i), mapTemperatureToY(m_minTemperatures[i]));
     }
@@ -155,7 +155,7 @@ void GraphDialog::paintEvent(QPaintEvent*)
     painter.setPen(gridPen);
 
     QStringList timeLabels = {"00:00", "06:00", "12:00", "18:00"};
-    int hours[] = {0, 6, 12, 18, 24};
+    QVector<int> hours = {0, 6, 12, 18, 24};
     for (int i : hours) {
         int x = drawingRect.left() + (drawingRect.width() * i / 24);
         painter.drawLine(x, drawingRect.top(), x, drawingRect.bottom());
@@ -166,7 +166,7 @@ void GraphDialog::paintEvent(QPaintEvent*)
     int startLabel = m_minTemp - 3;
 
     for (int i = startLabel; i <= m_maxTemp + 3; i += 2) {
-        int y = drawingRect.bottom() - ((i - (m_minTemp - 3)) * yStep);
+        int y = static_cast<int>(drawingRect.bottom()) - ((i - (m_minTemp - 3)) * yStep);
         painter.drawLine(drawingRect.left(), y, drawingRect.right(), y);
     }
 
@@ -181,7 +181,7 @@ void GraphDialog::paintEvent(QPaintEvent*)
     }
 
     for (int i = m_minTemp - 3; i <= m_maxTemp + 3; i += 2) {
-        int y = drawingRect.bottom() - ((i - (m_minTemp - 3)) * yStep);
+        int y = static_cast<int>(drawingRect.bottom()) - ((i - (m_minTemp - 3)) * yStep);
         QString label = QString::number(i) + "°";
         int labelWidth = painter.fontMetrics().horizontalAdvance(label);
 

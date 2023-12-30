@@ -82,7 +82,7 @@ QSharedPointer<DetailedWeatherData> Parser::parseDetailedWeatherData(const QStri
         QDateTime currentTime = QDateTime::currentDateTime().toTimeZone(timeZone);
         QString formattedCurrentTime = currentTime.toString(Qt::ISODate).left(16);
         int matchingIndex = -1;
-        const int hourlyTimeJsize = hourlyTimeJ.size();
+        const int hourlyTimeJsize = static_cast<int>(hourlyTimeJ.size());
         for (int i = 0; i < hourlyTimeJsize; ++i) {
             QString timeEntry = hourlyTimeJ[i].toString();
             if (formattedCurrentTime < timeEntry) {

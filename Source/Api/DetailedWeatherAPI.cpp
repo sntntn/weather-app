@@ -63,10 +63,12 @@ void DetailedWeatherAPI::replyFinished(QNetworkReply *reply)
     QString jsonData = reply->readAll();
     auto data = Parser::parseDetailedWeatherData(jsonData, location);
 
-    if(data.isNull())
+    if(data.isNull()){
         emit errorOccurred(parseErrMsg);
-    else
+    }
+    else{
         emit dataFetched(data);
+    }
 
     reply->deleteLater();
 }

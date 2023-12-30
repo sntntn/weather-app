@@ -18,6 +18,32 @@ namespace WidgetUtils
     }
 }
 
+singleWidgetItem::singleWidgetItem(const QString &iconPath, const QString &infoName, QWidget *parent)
+    : QWidget(parent)
+    , mainLayout(new QVBoxLayout(this))
+    , lowerLayout(new QHBoxLayout())
+    , infoIcon(QPixmap(iconPath))
+    , infoIconLabel(new QLabel(this))
+    , infoLabel(new QLabel(infoName))
+    , info(new QLabel(this))
+{
+    mainLayout->addWidget(infoLabel);
+    infoIconLabel->setPixmap(infoIcon.scaled(iconWidth, iconHeight,
+                                             Qt::KeepAspectRatio, Qt::SmoothTransformation));
+    lowerLayout->addWidget(infoIconLabel);
+    lowerLayout->addWidget(info);
+    mainLayout->addLayout(lowerLayout);
+
+    this->setLayout(mainLayout);
+}
+
+void singleWidgetItem::updateData(const int value, const QString &unit)
+{
+    info->setText(QString::number(value) + unit);
+}
+
+// Location info
+// --------------------------------------------------------------
 LocationInfoWidget::LocationInfoWidget(QWidget *parent)
     : QWidget(parent)
     , mainLayout(new QVBoxLayout(this))
@@ -40,12 +66,15 @@ void LocationInfoWidget::updateData(const QGeoCoordinate &newCoordinates,
 
 void LocationInfoWidget::mousePressEvent(QMouseEvent *)
 {
-    MapDialog *mapDialog = new MapDialog();
+    auto *mapDialog = new MapDialog();
     mapDialog->setAttribute(Qt::WA_DeleteOnClose);
     mapDialog->drawCoordinateDot(coordinates.latitude(), coordinates.longitude());
     mapDialog->show();
 }
 
+
+// Basic weather info
+// --------------------------------------------------------------
 BasicInfoWidget::BasicInfoWidget(QWidget *parent)
     : QWidget(parent)
     , basicInfoLayout(new QHBoxLayout())
@@ -103,8 +132,11 @@ void BasicInfoWidget::updateData(const int weatherCode, const bool isDay,
 
     temperatureLabel->setText(QString::number(temperature) + "°");
         feelsLikeLabel->setText("Feels like: " + QString::number(apparentTemperature) + "°");
-}    
+}
 
+
+// Highest / lowest temperature
+// --------------------------------------------------------------
 MinMaxTempWidget::MinMaxTempWidget(QWidget *parent)
     : QWidget{parent}
     , mainLayout(new QHBoxLayout(this))
@@ -153,9 +185,9 @@ void MinMaxTempWidget::updateData(const QVector<int> &maxTempValues, const QVect
 
 void MinMaxTempWidget::mousePressEvent(QMouseEvent*)
 {
-        minMaxTempGraphDialog *dialog = new minMaxTempGraphDialog(weeklyMaxTemperatures,
-                                                                  weeklyMinTemperatures,
-                                                                  weeklyDayNames);
+        auto *dialog = new minMaxTempGraphDialog(weeklyMaxTemperatures,
+                                                 weeklyMinTemperatures,
+                                                 weeklyDayNames);
         dialog->setAttribute(Qt::WA_DeleteOnClose);
         dialog->show();
 }
@@ -186,6 +218,9 @@ void MinMaxTempWidget::MinMaxTempWidgetItem::updateData(const int value, const Q
         info->setText(QString::number(value) + unit);
 }
 
+
+// Sunrize / sunset time
+// --------------------------------------------------------------
 SunWidget::SunWidget(QWidget *parent)
     : QWidget(parent)
     , mainLayout(new QHBoxLayout(this))
@@ -266,6 +301,8 @@ void SunWidget::SunWidgetItem::updateData(const QTimeZone &timezone, const QVect
                                 QString::number(minutes) + "m");
 }
 
+// Humidity, UV index, rain
+// --------------------------------------------------------------
 HumidityUvRainWidget::HumidityUvRainWidget(QWidget *parent)
     : QWidget{parent}
     , mainLayout(new QHBoxLayout(this))
@@ -299,6 +336,9 @@ void HumidityUvRainWidget::updateData(const int humidityValue, const int uvIndex
     rain->updateData(rainValue, " " + Settings::instance().precipitationUnitString());
 }
 
+
+// Visibility, air pressure, snow
+// --------------------------------------------------------------
 VisibilityPressureSnowWidget::VisibilityPressureSnowWidget(QWidget *parent)
     : QWidget{parent}
     , mainLayout(new QHBoxLayout(this))
@@ -333,10 +373,13 @@ void VisibilityPressureSnowWidget::updateData(const int visibilityValue, const i
     if(Settings::instance().precipitationUnitApiParameter() == "mm"){
         snow->updateData(static_cast<int>(qRound(snowValue * 100)), " m");
     }
-    else
+    else{
         snow->updateData(static_cast<int>(qRound(snowValue * 12)), " in");
+    }
 }
 
+// Wind speed, wind gusts
+// --------------------------------------------------------------
 WindInfoWidget::WindInfoWidget(QWidget *parent)
     : QWidget(parent)
     , mainLayout(new QHBoxLayout(this))
@@ -406,30 +449,8 @@ void WindInfoWidget::updateData(const int windSpeedValue, const int windGustsVal
     compassLabel->setPixmap(compassIcon.scaled(70, 70, Qt::KeepAspectRatio, Qt::SmoothTransformation));
 }
 
-singleWidgetItem::singleWidgetItem(const QString &iconPath, const QString &infoName, QWidget *parent)
-    : QWidget(parent)
-    , mainLayout(new QVBoxLayout(this))
-    , lowerLayout(new QHBoxLayout())
-    , infoIcon(QPixmap(iconPath))
-    , infoIconLabel(new QLabel(this))
-    , infoLabel(new QLabel(infoName))
-    , info(new QLabel(this))
-{
-    mainLayout->addWidget(infoLabel);
-    infoIconLabel->setPixmap(infoIcon.scaled(iconWidth, iconHeight,
-                                              Qt::KeepAspectRatio, Qt::SmoothTransformation));
-    lowerLayout->addWidget(infoIconLabel);
-    lowerLayout->addWidget(info);
-    mainLayout->addLayout(lowerLayout);
-
-    this->setLayout(mainLayout);
-}
-
-void singleWidgetItem::updateData(const int value, const QString &unit)
-{
-    info->setText(QString::number(value) + unit);
-}
-
+// Hourly weather
+// --------------------------------------------------------------
 HourlyWeatherWidget::HourlyWeatherWidget(QWidget *parent)
     : QWidget(parent)
     , mainLayout(new QVBoxLayout(this))
@@ -494,6 +515,9 @@ void HourlyWeatherWidget::HourlyWidgetItem::updateData(const int tempText, const
     hourTempLabel->setText(QString::number(tempText) + "°");
 }
 
+
+// Daily weather
+// --------------------------------------------------------------
 DailyWeatherWidget::DailyWeatherWidget(QWidget *parent)
     : QWidget{parent}
     , mainLayout(new QGridLayout(this))
@@ -520,7 +544,7 @@ void DailyWeatherWidget::updateData(const QVector<QString> &dayNames, const QVec
                                     const QVector<int> &temperatures)
 {
     for (int i = 0; i < daysPerWeek; ++i) {
-        auto* widget = static_cast<DailyWidgetItem*>(mainLayout->itemAt(i + 1)->widget());
+        auto* widget = dynamic_cast<DailyWidgetItem*>(mainLayout->itemAt(i + 1)->widget());
         int startIndex = i * hoursPerDay;
 
         QVector<int> dayTemperatures = temperatures.mid(startIndex, hoursPerDay);
@@ -611,6 +635,8 @@ void DailyWeatherWidget::DailyWidgetItem::paintEvent(QPaintEvent *event)
         painter.setClipPath(path);
         painter.fillPath(path, brush);
 }
+
+// --------------------------------------------------------------
 
 QString HumidityUvRainWidget::uvIndextoDescription(const int uvIndex)
 {

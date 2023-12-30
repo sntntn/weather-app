@@ -70,7 +70,6 @@ private:
     QTimer *scrollTimer;
     LocationInfoWidget *locationInfo;
     BasicInfoWidget *basicInfo;
-    QLabel *minmaxTemperature;
     HumidityUvRainWidget *humidityUvRain;
     VisibilityPressureSnowWidget *visibilityPressureSnow;
     WindInfoWidget *windInfo;

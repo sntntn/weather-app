@@ -58,10 +58,12 @@ void WeatherAPI::replyFinished(QNetworkReply *reply)
 
     QSharedPointer<WeatherData> data(Parser::parseWeatherData(jsonData, location));
 
-    if(data.isNull())
+    if(data.isNull()){
         emit errorOccurred(parseErrMsg);
-    else
+    }
+    else{
         emit dataFetched(data);
+    }
 
     reply->deleteLater();
 }

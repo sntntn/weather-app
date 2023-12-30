@@ -188,7 +188,7 @@ void DetailedWeatherPage::highlightWidget()
     }
 
     auto newSelectedWidget = std::find_if(m_widgets.begin(), m_widgets.end(), [this](const auto* element) {
-        const WeatherWidget* widget = dynamic_cast<const WeatherWidget*>(element); // Check if it's not an ErrorWidget
+        const auto* widget = dynamic_cast<const WeatherWidget*>(element); // Check if it's not an ErrorWidget
         return (widget != nullptr ? widget->data->location() == this->data->location() : false);
     });
 

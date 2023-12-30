@@ -26,8 +26,8 @@ SettingsDialog::SettingsDialog(QWidget *parent)
     , cancel(new QPushButton("Cancel"))
     , widgetOrder(settings.savedLocations())
     , trashCan("../Resources/trashCan/redTrash.png")
-    , trashIcon(trashCan)
     , orderCan("../Resources/order/order.png")
+    , trashIcon(trashCan)
     , orderIcon(orderCan)
 {
     setWindowTitle("Settings");
@@ -91,7 +91,7 @@ SettingsDialog::SettingsDialog(QWidget *parent)
         auto *orderLabel = new QLabel();
         orderLabel->setPixmap(orderIcon.pixmap(orderIcon.actualSize(QSize(20, 20))));
         auto *locationNameEdit = new QLineEdit(location.getRenamedPlace());
-        locationNameEdit->setStyleSheet("QLineEdit { border: none; border-bottom: 1px solid black; }");
+        locationNameEdit->setStyleSheet("QLineEdit { border: none; }");
         auto *deleteButton = new QPushButton();
         deleteButton->setIcon(trashIcon);
 
@@ -179,7 +179,7 @@ void SettingsDialog::resetOrder()
 
 bool SettingsDialog::eventFilter(QObject *obj, QEvent *event) {
     if (obj == listWidget && event->type() == QEvent::KeyPress) {
-        QKeyEvent *keyEvent = static_cast<QKeyEvent *>(event);
+        auto *keyEvent = dynamic_cast<QKeyEvent *>(event);
 
         if (keyEvent->key() == Qt::Key_Return || keyEvent->key() == Qt::Key_Enter) {
             return true;

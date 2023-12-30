@@ -27,6 +27,8 @@ SettingsDialog::SettingsDialog(QWidget *parent)
     , widgetOrder(settings.savedLocations())
     , trashCan("../Resources/trashCan/redTrash.png")
     , trashIcon(trashCan)
+    , arrowCan("../Resources/arrow/arrow.png")
+    , arrowIcon(arrowCan)
 {
     setWindowTitle("Settings");
 
@@ -86,16 +88,16 @@ SettingsDialog::SettingsDialog(QWidget *parent)
 
         auto *customWidget = new QWidget();
         auto *layout = new QHBoxLayout(customWidget);
+        auto *arrowLabel = new QLabel();
+        arrowLabel->setPixmap(arrowIcon.pixmap(arrowIcon.actualSize(QSize(20, 20))));
         auto *locationNameEdit = new QLineEdit(location.getRenamedPlace());
-        locationNameEdit->setAlignment(Qt::AlignRight);
-        locationNameEdit->setStyleSheet("QLineEdit { border: none; }");
-        locationNameEdit->setCursorPosition(0);
-        locationNameEdit->setAlignment(Qt::AlignLeft);
+        locationNameEdit->setStyleSheet("QLineEdit { border: none; border-bottom: 1px solid black; }");
         auto *deleteButton = new QPushButton();
         deleteButton->setIcon(trashIcon);
 
+        layout->addWidget(arrowLabel);
         layout->addWidget(locationNameEdit, 1);
-        layout->addStretch(1);
+
         layout->addWidget(deleteButton);
 
         connect(locationNameEdit, &QLineEdit::returnPressed, [locationNameEdit]() {

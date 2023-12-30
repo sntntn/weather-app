@@ -91,14 +91,12 @@ SettingsDialog::SettingsDialog(QWidget *parent)
         auto *arrowLabel = new QLabel();
         arrowLabel->setPixmap(arrowIcon.pixmap(arrowIcon.actualSize(QSize(20, 20))));
         auto *locationNameEdit = new QLineEdit(location.getRenamedPlace());
-        locationNameEdit->setStyleSheet("QLineEdit { border: none; }");
+        locationNameEdit->setStyleSheet("QLineEdit { border: none; border-bottom: 1px solid black; }");
         auto *deleteButton = new QPushButton();
         deleteButton->setIcon(trashIcon);
 
-//        layout->addItem(new QSpacerItem(10, 10, QSizePolicy::Expanding, QSizePolicy::Minimum));
         layout->addWidget(arrowLabel);
         layout->addWidget(locationNameEdit, 1);
-        layout->addStretch(1);
         layout->addWidget(deleteButton);
 
         connect(locationNameEdit, &QLineEdit::returnPressed, [locationNameEdit]() {

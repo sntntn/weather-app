@@ -15,11 +15,11 @@ UserLocation::UserLocation(QObject *parent)
 
 void UserLocation::getLocation()
 {
-    if(source != nullptr){
-        source->requestUpdate();
+    if(source == nullptr){
+        emit userLocationError(errMsg);
     }
     else{
-        emit userLocationError(errMsg);
+        source->requestUpdate();
     }
 }
 

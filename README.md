@@ -13,9 +13,13 @@ User-Friendly Interface: The app has an intuitive and user-friendly interface, m
 
 # Technologies Used
 Programming Language: C++
+
 GUI Framework: Qt (with Qt Widgets and Qt Quick)
+
 Network Communication: Qt Network module for API requests
+
 Geocoding: Utilizes a custom Geocoding API handler for location data retrieval.
+
 Build System: CMake
 
 # Programming language

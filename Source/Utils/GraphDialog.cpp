@@ -1,5 +1,7 @@
 #include "GraphDialog.h"
 
+#include <algorithm>
+
 #include <QPainter>
 #include <QPainterPath>
 #include <QFontMetrics>
@@ -15,6 +17,25 @@ GraphDialog::GraphDialog(const QVector<int>& temperatures, const QString &dayNam
 }
 
 void GraphDialog::resizeEvent(QResizeEvent *event)
+{
+    QDialog::resizeEvent(event);
+    update();
+}
+
+minMaxTempGraphDialog::minMaxTempGraphDialog(const QVector<int>& maxTemperatures,
+                                             const QVector<int>& minTemperatures,
+                                             const QVector<QString>& dayNames, QWidget *parent)
+    : QDialog(parent)
+    , m_maxTemperatures(maxTemperatures)
+    , m_minTemperatures(minTemperatures)
+    , m_dayNames(dayNames)
+{
+    calculateTemperatureRange();
+    resize(400, 300);
+    setWindowTitle("Weekly Highest/Lowest Temperature");
+}
+
+void minMaxTempGraphDialog::resizeEvent(QResizeEvent *event)
 {
     QDialog::resizeEvent(event);
     update();
@@ -53,6 +74,70 @@ void MapDialog::drawCoordinateDot(double latitude, double longitude) {
     painter.setBrush(Qt::red);
     painter.drawEllipse(QPointF(xCoordinate, yCoordinate), 2, 2);
     mapLabel->setPixmap(QPixmap::fromImage(mapImage));
+}
+
+void minMaxTempGraphDialog::paintEvent(QPaintEvent*)
+{
+    QPainter painter(this);
+    painter.setRenderHint(QPainter::Antialiasing);
+
+    const int leftMargin = 60;
+    const int rightMargin = 50;
+    const int topMargin = 10;
+    const int bottomMargin = 50;
+    QRect drawingRect = rect().adjusted(leftMargin, topMargin, -rightMargin, -bottomMargin);
+
+    QPen gridPen(QColor(70, 70, 70), 1);
+    QPen labelPen(Qt::white);
+    QStringList dayLabels = getAbbreviatedDayNames();
+    const int numDays = dayLabels.size();
+    const int yRange = m_maxTemp - m_minTemp + 6;
+    const double yStep = static_cast<double>(drawingRect.height()) / yRange;
+
+    painter.setPen(gridPen);
+    for (int i = 0; i < numDays; ++i) {
+        int x = drawingRect.left() + (drawingRect.width() * i / (numDays - 1));
+        painter.drawLine(x, drawingRect.top(), x, drawingRect.bottom());
+        painter.setPen(labelPen);
+        painter.drawText(x - painter.fontMetrics().horizontalAdvance(dayLabels[i]) / 2,
+                         drawingRect.bottom() + 20, dayLabels[i]);
+        painter.setPen(gridPen);
+    }
+
+    for (int i = m_minTemp - 3; i <= m_maxTemp + 3; i += 2) {
+        int y = drawingRect.bottom() - static_cast<int>((i - m_minTemp + 3) * yStep);
+        painter.drawLine(drawingRect.left(), y, drawingRect.right(), y);
+        painter.setPen(labelPen);
+        painter.drawText(drawingRect.left() - painter.fontMetrics().horizontalAdvance(QString::number(i) + "°") - 10,
+                             y + painter.fontMetrics().height() / 4, QString::number(i) + "°");
+            painter.setPen(gridPen);
+    }
+
+    auto mapDayToX = [&drawingRect, numDays](int dayIndex) -> int {
+        return drawingRect.left() + (drawingRect.width() * dayIndex / (numDays - 1));
+    };
+    auto mapTemperatureToY = [&drawingRect, this, yStep](int temperature) -> int {
+        return drawingRect.bottom() - static_cast<int>((temperature - m_minTemp + 3) * yStep);
+    };
+
+    painter.setPen(QPen(Qt::red, 3));
+    for (int i = 1; i < m_maxTemperatures.size(); ++i) {
+        painter.drawLine(mapDayToX(i - 1), mapTemperatureToY(m_maxTemperatures[i - 1]),
+                         mapDayToX(i), mapTemperatureToY(m_maxTemperatures[i]));
+    }
+    painter.setPen(QPen(Qt::blue, 3));
+    for (int i = 1; i < m_minTemperatures.size(); ++i) {
+        painter.drawLine(mapDayToX(i - 1), mapTemperatureToY(m_minTemperatures[i - 1]),
+                         mapDayToX(i), mapTemperatureToY(m_minTemperatures[i]));
+    }
+}
+
+QStringList minMaxTempGraphDialog::getAbbreviatedDayNames() {
+    QStringList dayList;
+    for (const QString &day : m_dayNames) {
+        dayList << day.mid(0, 3);
+    }
+    return dayList;
 }
 
 void GraphDialog::paintEvent(QPaintEvent*)
@@ -129,6 +214,12 @@ void GraphDialog::paintEvent(QPaintEvent*)
 
     painter.setPen(linePen);
     painter.drawPath(path);
+}
+
+void minMaxTempGraphDialog::calculateTemperatureRange()
+{
+    m_minTemp = *std::min_element(m_minTemperatures.constBegin(), m_minTemperatures.constEnd());
+    m_maxTemp = *std::max_element(m_maxTemperatures.constBegin(), m_maxTemperatures.constEnd());
 }
 
 void GraphDialog::calculateTemperatureRange()

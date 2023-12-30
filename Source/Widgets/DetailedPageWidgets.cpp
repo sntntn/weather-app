@@ -6,7 +6,8 @@
 
 #include "Settings.h"
 
-namespace WidgetUtils{
+namespace WidgetUtils
+{
     QFrame* createLineFrame(QFrame::Shape shape, const QString &color = "white")
     {
         auto *line = new QFrame();
@@ -29,17 +30,16 @@ LocationInfoWidget::LocationInfoWidget(QWidget *parent)
     mainLayout->addWidget(countryLabel, 0, Qt::AlignHCenter);
 }
 
-void LocationInfoWidget::updateData(const QGeoCoordinate &newCoordinates, const QString &cityName, const QString &countryName)
+void LocationInfoWidget::updateData(const QGeoCoordinate &newCoordinates,
+                                    const QString &cityName, const QString &countryName)
 {
     cityLabel->setText(cityName);
     countryLabel->setText(countryName);
     coordinates = newCoordinates;
 }
 
-void LocationInfoWidget::mousePressEvent(QMouseEvent *event)
+void LocationInfoWidget::mousePressEvent(QMouseEvent *)
 {
-    Q_UNUSED(event);
-
     MapDialog *mapDialog = new MapDialog();
     mapDialog->setAttribute(Qt::WA_DeleteOnClose);
     mapDialog->drawCoordinateDot(coordinates.latitude(), coordinates.longitude());
@@ -91,7 +91,8 @@ void BasicInfoWidget::updateData(const int weatherCode, const bool isDay,
                                  const int apparentTemperature)
 {
     weatherIcon.load(Settings::instance().weatherCodeToIcon(weatherCode, isDay));
-    iconLabel->setPixmap(weatherIcon.scaled(iconWidth, iconHeight, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+    iconLabel->setPixmap(weatherIcon.scaled(iconWidth, iconHeight, Qt::KeepAspectRatio,
+                                            Qt::SmoothTransformation));
     iconLabel->setFixedHeight(iconHeight);
 
     weatherDescriptionLabel->setText(weatherCodeToDescription(weatherCode));
@@ -102,42 +103,65 @@ void BasicInfoWidget::updateData(const int weatherCode, const bool isDay,
 
     temperatureLabel->setText(QString::number(temperature) + "°");
         feelsLikeLabel->setText("Feels like: " + QString::number(apparentTemperature) + "°");
-}
+}    
 
 MinMaxTempWidget::MinMaxTempWidget(QWidget *parent)
     : QWidget{parent}
     , mainLayout(new QHBoxLayout(this))
 {
-        this->setObjectName("TempContainer");
-        this->setStyleSheet("#TempContainer { "
-                            "background-color: #e0e0e0;"
-                            "border: 2px solid black;"
-                            "border-radius: 15px; "
-                            "margin: 5px; "
-                            "}"
-                            "#TempContainer QLabel { "
-                            "color: black;"
-                            "}"
-                            );
-
-        auto *maxTemp = new MinMaxTempWidgetItem("../Resources/temperature/uparrowBlack.png", "Highest temp:", this);
-        auto *minTemp = new MinMaxTempWidgetItem("../Resources/temperature/downarrowBlack.png", "Lowest temp:", this);
+        auto *maxTemp = new MinMaxTempWidgetItem("../Resources/temperature/uparrowBlack.png",
+                                                 "Highest temp:", this);
+        auto *minTemp = new MinMaxTempWidgetItem("../Resources/temperature/downarrowBlack.png",
+                                                 "Lowest temp:", this);
         mainLayout->addWidget(maxTemp);
         mainLayout->addWidget(WidgetUtils::createLineFrame(QFrame::VLine, "black"));
         mainLayout->addWidget(minTemp);
-
         this->setLayout(mainLayout);
 }
 
-void MinMaxTempWidget::updateData(const int maxTempValue, const int minTempValue)
+void MinMaxTempWidget::paintEvent(QPaintEvent *event)
 {
-        auto* maxWidget = dynamic_cast<MinMaxTempWidgetItem*>(mainLayout->itemAt(0)->widget());
-        maxWidget->updateData(maxTempValue, "°");
-        auto* minWidget = dynamic_cast<MinMaxTempWidgetItem*>(mainLayout->itemAt(2)->widget());
-        minWidget->updateData(minTempValue, "°");
+        QPainter painter(this);
+        painter.setRenderHint(QPainter::Antialiasing);
+
+        QPainterPath roundedRectPath;
+        roundedRectPath.addRoundedRect(rect().adjusted(1, 1, -5, -5), 15, 15);
+
+        painter.setClipPath(roundedRectPath);
+
+        QColor backgroundColor(0xe0, 0xe0, 0xe0);
+        painter.fillPath(roundedRectPath, backgroundColor);
+
+        QPen borderPen(Qt::black, 2);
+        painter.setPen(borderPen);
+        painter.drawPath(roundedRectPath);
+
+        QWidget::paintEvent(event);
 }
 
-MinMaxTempWidget::MinMaxTempWidgetItem::MinMaxTempWidgetItem(const QString &iconPath, const QString &infoName, QWidget *parent)
+void MinMaxTempWidget::updateData(const QVector<int> &maxTempValues, const QVector<int> &minTempValues,
+                                  const QVector<QString> &dayNames)
+{
+        auto* maxWidget = dynamic_cast<MinMaxTempWidgetItem*>(mainLayout->itemAt(0)->widget());
+        maxWidget->updateData(maxTempValues[0], "°");
+        auto* minWidget = dynamic_cast<MinMaxTempWidgetItem*>(mainLayout->itemAt(2)->widget());
+        minWidget->updateData(minTempValues[0], "°");
+        weeklyMaxTemperatures = maxTempValues;
+        weeklyMinTemperatures = minTempValues;
+        weeklyDayNames = dayNames;
+}
+
+void MinMaxTempWidget::mousePressEvent(QMouseEvent*)
+{
+        minMaxTempGraphDialog *dialog = new minMaxTempGraphDialog(weeklyMaxTemperatures,
+                                                                  weeklyMinTemperatures,
+                                                                  weeklyDayNames);
+        dialog->setAttribute(Qt::WA_DeleteOnClose);
+        dialog->show();
+}
+
+MinMaxTempWidget::MinMaxTempWidgetItem::MinMaxTempWidgetItem(const QString &iconPath,
+                                                             const QString &infoName, QWidget *parent)
     : QWidget(parent)
     , mainLayout(new QHBoxLayout(this))
     , infoIcon(QPixmap(iconPath))
@@ -148,7 +172,9 @@ MinMaxTempWidget::MinMaxTempWidgetItem::MinMaxTempWidgetItem(const QString &icon
         infoIconLabel->setPixmap(infoIcon.scaled(iconWidth, iconHeight,
                                                   Qt::KeepAspectRatio, Qt::SmoothTransformation));
         mainLayout->addWidget(infoIconLabel);
+        infoLabel->setStyleSheet("color: black;");
         mainLayout->addWidget(infoLabel);
+        info->setStyleSheet("color: black;");
         mainLayout->addWidget(info);
         mainLayout->addStretch(1);
 
@@ -159,7 +185,6 @@ void MinMaxTempWidget::MinMaxTempWidgetItem::updateData(const int value, const Q
 {
         info->setText(QString::number(value) + unit);
 }
-
 
 SunWidget::SunWidget(QWidget *parent)
     : QWidget(parent)
@@ -185,7 +210,8 @@ SunWidget::SunWidget(QWidget *parent)
         this->setLayout(mainLayout);
 }
 
-void SunWidget::updateData(const QTimeZone &timezone, const QVector<QString> &sunriseValues, const QVector<QString> &sunsetValues)
+void SunWidget::updateData(const QTimeZone &timezone, const QVector<QString> &sunriseValues,
+                           const QVector<QString> &sunsetValues)
 {
         auto* sunriseWidget = dynamic_cast<SunWidgetItem*>(mainLayout->itemAt(0)->widget());
         sunriseWidget->updateData(timezone, sunriseValues);
@@ -193,7 +219,8 @@ void SunWidget::updateData(const QTimeZone &timezone, const QVector<QString> &su
         sunsetWidget->updateData(timezone, sunsetValues);
 }
 
-SunWidget::SunWidgetItem::SunWidgetItem(const QString &iconPath, const QString &infoName, QWidget *parent)
+SunWidget::SunWidgetItem::SunWidgetItem(const QString &iconPath, const QString &infoName,
+                                        QWidget *parent)
     : QWidget(parent)
     , mainLayout(new QHBoxLayout(this))
     , timeLayout(new QVBoxLayout())
@@ -264,7 +291,8 @@ HumidityUvRainWidget::HumidityUvRainWidget(QWidget *parent)
     this->setLayout(mainLayout);
 }
 
-void HumidityUvRainWidget::updateData(const int humidityValue, const int uvIndexValue, const int rainValue)
+void HumidityUvRainWidget::updateData(const int humidityValue, const int uvIndexValue,
+                                      const int rainValue)
 {
     humidity->updateData(humidityValue, "%");
     uvIndex->updateData(uvIndexValue, " (" + uvIndextoDescription(uvIndexValue) + ")");
@@ -296,7 +324,8 @@ VisibilityPressureSnowWidget::VisibilityPressureSnowWidget(QWidget *parent)
     this->setLayout(mainLayout);
 }
 
-void VisibilityPressureSnowWidget::updateData(const int visibilityValue, const int pressureValue, double snowValue)
+void VisibilityPressureSnowWidget::updateData(const int visibilityValue, const int pressureValue,
+                                              double snowValue)
 {
     visibility->updateData(visibilityValue, " " + Settings::instance().visibilityUnitString());
     pressure->updateData(pressureValue, " hPa");
@@ -351,7 +380,8 @@ WindInfoWidget::WindInfoWidget(QWidget *parent)
     this->setLayout(mainLayout);
 }
 
-void WindInfoWidget::updateData(const int windSpeedValue, const int windGustsValue, const int windDirectionValue)
+void WindInfoWidget::updateData(const int windSpeedValue, const int windGustsValue,
+                                const int windDirectionValue)
 {
 
     windSpeed->setText(QString::number(windSpeedValue) + Settings::instance().windSpeedUnitString());
@@ -399,8 +429,6 @@ void singleWidgetItem::updateData(const int value, const QString &unit)
 {
     info->setText(QString::number(value) + unit);
 }
-
-
 
 HourlyWeatherWidget::HourlyWeatherWidget(QWidget *parent)
     : QWidget(parent)
@@ -562,7 +590,8 @@ void DailyWeatherWidget::onShowTemperatureGraph(const QVector<int>& temperatures
     dialog.exec();
 }
 
-void DailyWeatherWidget::DailyWidgetItem::paintEvent(QPaintEvent *event) {
+void DailyWeatherWidget::DailyWidgetItem::paintEvent(QPaintEvent *event)
+{
         QWidget::paintEvent(event);
 
         QPainter painter(this);

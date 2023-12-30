@@ -48,6 +48,7 @@ set(PROJECT_SOURCES
         Pages/Page.cpp Pages/Page.h
         Pages/HomePage.cpp Pages/HomePage.h
         Pages/DetailedWeatherPage.cpp Pages/DetailedWeatherPage.h
+        Pages/ErrorPage.h Pages/ErrorPage.cpp
         Pages/CustomCompleter.cpp Pages/CustomCompleter.h
 
         Settings/Settings.cpp Settings/Settings.h

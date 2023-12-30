@@ -68,6 +68,7 @@ set(CPP_SOURCES
     ../Source/Pages/Page.cpp ../Source/Pages/Page.h
     ../Source/Pages/HomePage.cpp ../Source/Pages/HomePage.h
     ../Source/Pages/DetailedWeatherPage.cpp ../Source/Pages/DetailedWeatherPage.h
+    ../Source/Pages/ErrorPage.cpp ../Source/Pages/ErrorPage.h
     ../Source/Pages/CustomCompleter.cpp ../Source/Pages/CustomCompleter.h
 
     ../Source/Settings/Settings.cpp ../Source/Settings/Settings.h

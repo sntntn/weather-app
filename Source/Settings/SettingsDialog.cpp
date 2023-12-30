@@ -10,6 +10,7 @@
 #include "HomePage.h"
 #include "WidgetsManager.h"
 #include "GeoLocationData.h"
+#include "Serializer.h"
 
 SettingsDialog::SettingsDialog(QWidget *parent)
     : QDialog(parent)
@@ -128,7 +129,7 @@ SettingsDialog::SettingsDialog(QWidget *parent)
     setLayout(mainLayout);
 
     connect(save, &QPushButton::clicked, this, &SettingsDialog::changeSettings);
-    //TODO fix grandparent
+    // TODO fix grandparent
     connect(this, &SettingsDialog::settingsChanged, qobject_cast<MainWindow*>(this->parent()->parent()->parent()), &MainWindow::refreshPages);
     connect(cancel, &QPushButton::clicked, this, &SettingsDialog::resetOrder);
     connect(cancel, &QPushButton::clicked, this, &SettingsDialog::close);
@@ -140,13 +141,6 @@ void SettingsDialog::changeSettings()
     Settings::WindSpeedUnit selectedWindUnit= static_cast<Settings::WindSpeedUnit>(windSpeedUnit->itemData(windSpeedUnit->currentIndex()).toInt());
     Settings::PrecipitationUnit selectedPrecUnit = static_cast<Settings::PrecipitationUnit>(precipitationUnit->itemData(precipitationUnit->currentIndex()).toInt());
 
-    settings.m_temperatureUnit = selectedTempUnit;
-    settings.m_windSpeedUnit = selectedWindUnit;
-    settings.m_precipitationUnit = selectedPrecUnit;
-    settings.m_shareLocation = locationSwitch->isChecked();
-    settings.m_savedLocations = widgetOrder;
-
-    //TO DO
     for (int i = 0; i < listWidget->count(); i++) {
         auto locationMap = listWidget->item(i)->data(Qt::UserRole).toMap();
         auto geoLocation = GeoLocationData::fromVariantMap(locationMap);
@@ -154,15 +148,18 @@ void SettingsDialog::changeSettings()
         QString newLocationName = listWidget->itemWidget(listWidget->item(i))->findChild<QLineEdit *>()->text();
         geoLocation.setRenamedPlace(newLocationName);
         qDebug() << "New Renamed Place: " << geoLocation.getRenamedPlace();
-        //seter radi ali ne postavlja se ime u programu
-
 
         auto iter = std::find(widgetOrder.begin(), widgetOrder.end(), geoLocation);
         if (iter != widgetOrder.end()) {
             *iter = geoLocation;
         }
-
     }
+
+    settings.m_temperatureUnit = selectedTempUnit;
+    settings.m_windSpeedUnit = selectedWindUnit;
+    settings.m_precipitationUnit = selectedPrecUnit;
+    settings.m_shareLocation = locationSwitch->isChecked();
+    settings.m_savedLocations = widgetOrder;
 
     emit settingsChanged();
     this->close();

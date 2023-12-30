@@ -29,7 +29,7 @@ MapDialog::MapDialog(QWidget *parent)
     mapLabel->setScaledContents(true);
 
     mapImage.load("../Resources/map/map.jpg");
-    mapLabel->setPixmap(QPixmap::fromImage(mapImage.scaled(600, 300, Qt::KeepAspectRatio)));
+    mapLabel->setPixmap(QPixmap::fromImage(mapImage.scaled(mapImage.width(), mapImage.height(), Qt::KeepAspectRatio)));
 
     setWindowTitle(tr("Map"));
     resize(mapImage.width(), mapImage.height());
@@ -49,9 +49,9 @@ void MapDialog::drawCoordinateDot(double latitude, double longitude) {
     int yCoordinate = static_cast<int>((90.0 - latitude) / 180.0 * mapHeight);
 
     QPainter painter(&mapImage);
-    painter.setPen(QPen(Qt::red, 6));
+    painter.setPen(QPen(Qt::red, 4));
     painter.setBrush(Qt::red);
-    painter.drawEllipse(QPointF(xCoordinate, yCoordinate), 4, 4);
+    painter.drawEllipse(QPointF(xCoordinate, yCoordinate), 2, 2);
     mapLabel->setPixmap(QPixmap::fromImage(mapImage));
 }
 

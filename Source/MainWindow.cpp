@@ -10,6 +10,7 @@
 #include "WeatherWidget.h"
 #include "HomePage.h"
 #include "DetailedWeatherPage.h"
+#include "ErrorPage.h"
 #include "GeocodingAPI.h"
 #include "UserLocation.h"
 #include "Settings.h"
@@ -23,7 +24,8 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
     , settings(Settings::instance())
     , homePage(new HomePage(this))
-    , detailedWeather(new DetailedWeatherPage(this))
+    , detailedWeatherPage(new DetailedWeatherPage(this))
+    , errorPage(new ErrorPage(this))
     , stackedWidget(new QStackedWidget(this))
     , userLocation(new UserLocation(this))
     , weatherApi(new WeatherAPI(this))
@@ -32,21 +34,23 @@ MainWindow::MainWindow(QWidget *parent)
     resize(900,600);
 
     stackedWidget->addWidget(homePage);
-    stackedWidget->addWidget(detailedWeather);
+    stackedWidget->addWidget(detailedWeatherPage);
+    stackedWidget->addWidget(errorPage);
     setCentralWidget(stackedWidget);
     stackedWidget->setCurrentWidget(homePage);
 
     requestUserLocationData();
     getSavedLocationsData();
 
-    connect(this, &MainWindow::detailedWeatherPageShown, detailedWeather, &DetailedWeatherPage::getData);
+    connect(this, &MainWindow::errorPageShown, errorPage, &ErrorPage::setErrMsg);
+    connect(this, &MainWindow::detailedDataRequested, detailedWeatherPage, &DetailedWeatherPage::getData);
     connect(this, &MainWindow::deletePageWidgets, homePage, &Page::deleteWidgets);
-    connect(this, &MainWindow::deletePageWidgets, detailedWeather, &Page::deleteWidgets);
+    connect(this, &MainWindow::deletePageWidgets, detailedWeatherPage, &Page::deleteWidgets);
     connect(userLocation, &UserLocation::userLocationFetched, this, &MainWindow::getLocationData);
     connect(userLocation, &UserLocation::userLocationError, homePage, &HomePage::addErrorWidget);
     connect(weatherApi, &WeatherAPI::errorOccurred, homePage, &HomePage::addErrorWidget);
     connect(weatherApi, &WeatherAPI::dataFetched, homePage, &HomePage::addNewWidget);
-    connect(weatherApi, &WeatherAPI::dataFetched, detailedWeather, &DetailedWeatherPage::addNewWidget);
+    connect(weatherApi, &WeatherAPI::dataFetched, detailedWeatherPage, &DetailedWeatherPage::addNewWidget);
 }
 
 MainWindow::~MainWindow()
@@ -73,15 +77,29 @@ void MainWindow::getLocationData(const GeoLocationData &location)
     weatherApi->fetchData(location);
 }
 
+void MainWindow::getDetailedData(const GeoLocationData &location)
+{
+    // todo: without this old text stays in the search bar
+    stackedWidget->setCurrentWidget(detailedWeatherPage);
+    stackedWidget->setCurrentWidget(homePage);
+
+    emit detailedDataRequested(location);
+}
+
 void MainWindow::showHomePage()
 {
     stackedWidget->setCurrentWidget(homePage);
 }
 
-void MainWindow::showDetailedWeatherPage(const GeoLocationData &data)
+void MainWindow::showDetailedWeatherPage()
 {
-    stackedWidget->setCurrentWidget(detailedWeather);
-    emit detailedWeatherPageShown(data);
+    stackedWidget->setCurrentWidget(detailedWeatherPage);
+}
+
+void MainWindow::showErrorPage(const QString &errMsg)
+{
+    stackedWidget->setCurrentWidget(errorPage);
+    emit errorPageShown(errMsg);
 }
 
 QWidget* MainWindow::currentPage()

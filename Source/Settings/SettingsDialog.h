@@ -45,6 +45,7 @@ private:
     QIcon trashIcon;
 
     void setupUi();
+    bool eventFilter(QObject *obj, QEvent *event) override;
 
     const QString trashIconPath = "../Resources/trashCan/redTrash.png";
 };

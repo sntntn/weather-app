@@ -15,7 +15,12 @@ UserLocation::UserLocation(QObject *parent)
 
 void UserLocation::getLocation()
 {
-    source->requestUpdate();
+    if(source != nullptr){
+        source->requestUpdate();
+    }
+    else{
+        emit userLocationError(errMsg);
+    }
 }
 
 void UserLocation::positionUpdated(const QGeoPositionInfo &info)

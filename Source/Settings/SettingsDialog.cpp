@@ -73,6 +73,8 @@ SettingsDialog::SettingsDialog(QWidget *parent)
 
     listWidget->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     listWidget->setDragDropMode(QAbstractItemView::InternalMove);
+    listWidget->installEventFilter(this);
+
 
     for (const auto& location : settings.savedLocations()) {
 
@@ -146,4 +148,17 @@ void SettingsDialog::changeSettings()
 void SettingsDialog::resetOrder()
 {
     widgetOrder = settings.savedLocations();
+}
+
+
+bool SettingsDialog::eventFilter(QObject *obj, QEvent *event) {
+    if (obj == listWidget && event->type() == QEvent::KeyPress) {
+        QKeyEvent *keyEvent = static_cast<QKeyEvent *>(event);
+
+        if (keyEvent->key() == Qt::Key_Return || keyEvent->key() == Qt::Key_Enter) {
+            return true;
+        }
+    }
+
+    return QDialog::eventFilter(obj, event);
 }

@@ -17,6 +17,35 @@ namespace WidgetUtils{
     }
 }
 
+LocationInfoWidget::LocationInfoWidget(QWidget *parent)
+    : QWidget(parent)
+    , mainLayout(new QVBoxLayout(this))
+    , cityLabel(new QLabel(this))
+    , countryLabel(new QLabel(this))
+{
+    cityLabel->setStyleSheet("font-size: 24px; font-weight: bold;");
+    mainLayout->addWidget(cityLabel, 0, Qt::AlignHCenter);
+    countryLabel->setStyleSheet("font-size: 18px; color: gray;");
+    mainLayout->addWidget(countryLabel, 0, Qt::AlignHCenter);
+}
+
+void LocationInfoWidget::updateData(const QGeoCoordinate &newCoordinates, const QString &cityName, const QString &countryName)
+{
+    cityLabel->setText(cityName);
+    countryLabel->setText(countryName);
+    coordinates = newCoordinates;
+}
+
+void LocationInfoWidget::mousePressEvent(QMouseEvent *event)
+{
+    Q_UNUSED(event);
+
+    MapDialog *mapDialog = new MapDialog();
+    mapDialog->setAttribute(Qt::WA_DeleteOnClose);
+    mapDialog->drawCoordinateDot(coordinates.latitude(), coordinates.longitude());
+    mapDialog->show();
+}
+
 BasicInfoWidget::BasicInfoWidget(QWidget *parent)
     : QWidget(parent)
     , basicInfoLayout(new QHBoxLayout())
@@ -81,7 +110,7 @@ MinMaxTempWidget::MinMaxTempWidget(QWidget *parent)
 {
         this->setObjectName("TempContainer");
         this->setStyleSheet("#TempContainer { "
-                            "background-color: white;"
+                            "background-color: #e0e0e0;"
                             "border: 2px solid black;"
                             "border-radius: 15px; "
                             "margin: 5px; "
@@ -289,9 +318,22 @@ WindInfoWidget::WindInfoWidget(QWidget *parent)
     , windSpeedLabel(new QLabel("Wind Speed"))
     , windSpeed(new QLabel())
     , compassLabel(new QLabel(this))
-    , initialCompassIcon(QPixmap("../Resources/wind/whiteCompass.png"))
-    , arrowIcon(QPixmap("../Resources/wind/whiteArrow.png"))
+    , initialCompassIcon(QPixmap("../Resources/wind/compass.png"))
+    , arrowIcon(QPixmap("../Resources/wind/arrow.png"))
 {
+    this->setObjectName("WindContainer");
+    this->setStyleSheet("#WindContainer { "
+                        "background-color: #e0e0e0;"
+                        "border: 2px solid black;"
+                        "border-radius: 15px; "
+                        "margin: 5px; "
+                        "}"
+                        "#WindContainer QLabel { "
+                        "color: black;"
+                        "}"
+                        );
+
+    mainLayout->setContentsMargins(15, 15, 15, 15);
     windSpeedLabel->setAlignment(Qt::AlignLeft | Qt::AlignBottom);
     windSpeed->setAlignment(Qt::AlignLeft);
     leftLayout->addWidget(windSpeedLabel);
@@ -331,7 +373,7 @@ void WindInfoWidget::updateData(const int windSpeedValue, const int windGustsVal
                        center.y() - arrowIcon.height() / 2,
                        arrowIcon);
     painter.end();
-    compassLabel->setPixmap(compassIcon.scaled(100, 100, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+    compassLabel->setPixmap(compassIcon.scaled(70, 70, Qt::KeepAspectRatio, Qt::SmoothTransformation));
 }
 
 singleWidgetItem::singleWidgetItem(const QString &iconPath, const QString &infoName, QWidget *parent)
@@ -363,10 +405,14 @@ void singleWidgetItem::updateData(const int value, const QString &unit)
 HourlyWeatherWidget::HourlyWeatherWidget(QWidget *parent)
     : QWidget(parent)
     , mainLayout(new QVBoxLayout(this))
+    , hourlyLabel(new QLabel("      Hourly"))
     , hourlyWeatherArea(new QScrollArea(this))
     , hourlyWeatherContents(new QWidget(this))
     , itemsLayout(new QHBoxLayout())
 {
+    hourlyLabel->setStyleSheet("font: bold 15px;");
+    mainLayout->addWidget(hourlyLabel);
+
     for(int i = 0; i < hoursPerDay; i++){
         auto *widget = new HourlyWidgetItem(this);
         widget->setFixedSize(widgetItemWidth, widgetItemHeight);
@@ -423,11 +469,18 @@ void HourlyWeatherWidget::HourlyWidgetItem::updateData(const int tempText, const
 DailyWeatherWidget::DailyWeatherWidget(QWidget *parent)
     : QWidget{parent}
     , mainLayout(new QGridLayout(this))
+    , dailyLabel(new QLabel("7-DAY FORECAST"))
 {
+
+    dailyLabel->setStyleSheet("font: bold 15px; margin: 10px;");
+    dailyLabel->setAlignment(Qt::AlignHCenter);
+    mainLayout->addWidget(dailyLabel, 0, 0);
+
     for(int i = 0; i < daysPerWeek; i++){
         auto *widget = new DailyWidgetItem(this);
-        mainLayout->addWidget(widget, i, 0);
+        mainLayout->addWidget(widget, i + 1, 0);
     }
+
     this->setLayout(mainLayout);
 
     connect(this, &DailyWeatherWidget::showTemperatureGraph,
@@ -439,7 +492,7 @@ void DailyWeatherWidget::updateData(const QVector<QString> &dayNames, const QVec
                                     const QVector<int> &temperatures)
 {
     for (int i = 0; i < daysPerWeek; ++i) {
-        auto* widget = static_cast<DailyWidgetItem*>(mainLayout->itemAt(i)->widget());
+        auto* widget = static_cast<DailyWidgetItem*>(mainLayout->itemAt(i + 1)->widget());
         int startIndex = i * hoursPerDay;
 
         QVector<int> dayTemperatures = temperatures.mid(startIndex, hoursPerDay);

@@ -67,16 +67,13 @@ private:
     QSpacerItem *horizontalSpacer;
     QPushButton *addToSavedLocations;
     QTimer *scrollTimer;
-    QLabel *locationLabel;
-    QLabel *countryLabel;
+    LocationInfoWidget *locationInfo;
     BasicInfoWidget *basicInfo;
     QLabel *minmaxTemperature;
     HumidityUvRainWidget *humidityUvRain;
     VisibilityPressureSnowWidget *visibilityPressureSnow;
     WindInfoWidget *windInfo;
-    QLabel *hourlyLabel;
     HourlyWeatherWidget *hourlyWidget;
-    QLabel *dailyLabel;
     DailyWeatherWidget *dailyWidget;
     WeatherWidget *selectedWidget;
     MinMaxTempWidget *minmaxWidget;

@@ -47,6 +47,9 @@ set(TEST_SOURCES
     test_GeoLocationData.cpp
     test_DetailedWeatherData.cpp
     test_CustomCompleter.cpp
+    test_DetailedWeatherAPI.cpp
+    test_WeatherWidget.cpp
+    test_ErrorWiget.cpp
 )
 
 set(CPP_SOURCES
@@ -87,7 +90,8 @@ set(CPP_SOURCES
     ../Source/Widgets/DetailedPageWidgets.cpp ../Source/Widgets/DetailedPageWidgets.h
 )
 
-add_executable(weather-app-tests ${TEST_SOURCES} ${CPP_SOURCES} catch.hpp)
+add_executable(weather-app-tests ${TEST_SOURCES} ${CPP_SOURCES} catch.hpp
+    )
 
 target_link_libraries(weather-app-tests PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)
 target_link_libraries(weather-app-tests PRIVATE Qt6::Network)

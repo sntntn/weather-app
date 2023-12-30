@@ -26,6 +26,8 @@ SettingsDialog::SettingsDialog(QWidget *parent)
     , trashCan("../Resources/trashCan/redTrash.png")
     , trashIcon(trashCan)
 {
+    setWindowTitle("Settings");
+
     locationSwitch->setChecked(settings.m_shareLocation);
     mainLayout->addWidget(locationSwitch);
 

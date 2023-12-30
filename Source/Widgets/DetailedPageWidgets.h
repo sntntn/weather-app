@@ -203,12 +203,13 @@ class DailyWeatherWidget : public QWidget
         QLabel *temperatureIconLabel;
         QLabel *dailymaxTempLabel;
         QVector<int> temperatureDataForTheDay;
+        QString dayNameString;
 
     protected:
         void paintEvent(QPaintEvent *event) override;
-        void mousePressEvent(QMouseEvent*) override {
+        inline void mousePressEvent(QMouseEvent*) override {
             auto *parentWidget = qobject_cast<DailyWeatherWidget*>(this->parent());
-            parentWidget->emitItemClicked(temperatureDataForTheDay);
+            parentWidget->emitItemClicked(temperatureDataForTheDay, dayNameString);
         }
 
     public:
@@ -222,14 +223,14 @@ public:
     void updateData(const QVector<QString> &dayNames, const QVector<int> &weatherCodes,
                     const QVector<int> &minTemps, const QVector<int> &maxTemps,
                     const QVector<int> &temperatures);
-    void emitItemClicked(const QVector<int>& temperatures) {
-        emit showTemperatureGraph(temperatures);
+    inline void emitItemClicked(const QVector<int>& temperatures, const QString &dayNameString) {
+        emit showTemperatureGraph(temperatures, dayNameString);
     }
 
 public slots:
-    void onShowTemperatureGraph(const QVector<int>& temperatures);
+    void onShowTemperatureGraph(const QVector<int>& temperatures, const QString &dayNameString);
 
 signals:
-    void showTemperatureGraph(const QVector<int>& temperatures);
+    void showTemperatureGraph(const QVector<int>& temperatures, const QString &dayNameString);
 };
 #endif // DETAILEDPAGEWIDGETS_H

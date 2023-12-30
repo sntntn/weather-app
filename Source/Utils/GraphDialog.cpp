@@ -166,7 +166,7 @@ void GraphDialog::paintEvent(QPaintEvent*)
     int startLabel = m_minTemp - 3;
 
     for (int i = startLabel; i <= m_maxTemp + 3; i += 2) {
-        int y = static_cast<int>(drawingRect.bottom()) - ((i - (m_minTemp - 3)) * yStep);
+        int y = static_cast<int>(drawingRect.bottom() - ((i - (m_minTemp - 3)) * yStep));
         painter.drawLine(drawingRect.left(), y, drawingRect.right(), y);
     }
 
@@ -181,7 +181,7 @@ void GraphDialog::paintEvent(QPaintEvent*)
     }
 
     for (int i = m_minTemp - 3; i <= m_maxTemp + 3; i += 2) {
-        int y = static_cast<int>(drawingRect.bottom()) - ((i - (m_minTemp - 3)) * yStep);
+        int y = static_cast<int>(drawingRect.bottom() - ((i - (m_minTemp - 3)) * yStep));
         QString label = QString::number(i) + "°";
         int labelWidth = painter.fontMetrics().horizontalAdvance(label);
 

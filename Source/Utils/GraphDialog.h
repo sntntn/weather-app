@@ -11,7 +11,7 @@ class GraphDialog : public QDialog
     Q_OBJECT
 
 public:
-    GraphDialog(const QVector<int>& temperatures, const QString &dayNameString, QWidget *parent = nullptr);
+    GraphDialog(const QVector<int>& temperatures, QString dayNameString, QWidget *parent = nullptr);
 
 protected:
     void paintEvent(QPaintEvent*) override;

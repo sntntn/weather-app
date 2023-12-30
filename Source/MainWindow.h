@@ -38,6 +38,7 @@ public slots:
     void showErrorPage(const QString &errMsg);
     void refreshPages();
     void getLocationData(const GeoLocationData &location);
+    void getDetailedData(const GeoLocationData &location);
 
 signals:
     void detailedDataRequested(const GeoLocationData &data);

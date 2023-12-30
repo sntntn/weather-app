@@ -77,6 +77,15 @@ void MainWindow::getLocationData(const GeoLocationData &location)
     weatherApi->fetchData(location);
 }
 
+void MainWindow::getDetailedData(const GeoLocationData &location)
+{
+    // todo: without this old text stays in the search bar
+    stackedWidget->setCurrentWidget(detailedWeatherPage);
+    stackedWidget->setCurrentWidget(homePage);
+
+    emit detailedDataRequested(location);
+}
+
 void MainWindow::showHomePage()
 {
     stackedWidget->setCurrentWidget(homePage);

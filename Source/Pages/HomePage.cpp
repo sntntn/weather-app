@@ -64,7 +64,7 @@ HomePage::HomePage(QWidget *parent)
     connect(searchBar, &QLineEdit::textChanged, this, [this]() { debounceTimer->start(); });
     connect(debounceTimer, &QTimer::timeout, this, &HomePage::onSearchBarTextChanged);
     connect(this, &HomePage::searchBarPressed, &geocodingApi, &GeocodingAPI::geocodeCity);
-    connect(this, &HomePage::locationObjectSelected, mainWindow, &MainWindow::detailedDataRequested);
+    connect(this, &HomePage::locationObjectSelected, mainWindow, &MainWindow::getDetailedData);
 }
 
 HomePage::~HomePage()
@@ -75,7 +75,7 @@ HomePage::~HomePage()
 void HomePage::addNewWidget(const QSharedPointer<WeatherData> data)
 {
     auto *widget = new WeatherWidget(data, scrollAreaContents);
-    connect(widget, &WeatherWidget::clicked, this->mainWindow, &MainWindow::detailedDataRequested);
+    connect(widget, &WeatherWidget::clicked, this->mainWindow, &MainWindow::getDetailedData);
 
     int position = static_cast<int>(Settings::instance().savedLocations().indexOf(widget->data->location()));
 

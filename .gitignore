@@ -75,6 +75,7 @@ CMakeLists.txt.user*
 build*
 *.user
 
-#config file
-config.ini
+#config.ini
 
+#Serialization files
+Serialization/*.json

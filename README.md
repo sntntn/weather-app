@@ -1,11 +1,35 @@
 # Weather App
 
-The application delivers updates and forecasts of weather data for any location across the globe.
+Weather App is a simple application that provides weather information based on user input. It allows users to check the current weather and detailed weather forecasts for a specific location.
+
+# Features
+Geocoding: The application uses geocoding to convert user-entered location names into geographic coordinates (latitude and longitude) for accurate weather data retrieval.
+
+Weather Data: Utilizes various weather APIs to fetch real-time weather data, including temperature, humidity, wind speed, and other relevant information.
+
+Detailed Weather: Users can access detailed weather forecasts, providing hourly and daily predictions for a specific location.
+
+User-Friendly Interface: The app has an intuitive and user-friendly interface, making it easy for users to navigate and obtain the weather information they need.
+
+# Technologies Used
+Programming Language: C++
+GUI Framework: Qt (with Qt Widgets and Qt Quick)
+Network Communication: Qt Network module for API requests
+Geocoding: Utilizes a custom Geocoding API handler for location data retrieval.
+Build System: CMake
 
 # Programming language
 [![c_plus_plus](https://img.shields.io/badge/Language-C%2B%2B-red)](https://www.cplusplus.com/)
 [![qt6](https://img.shields.io/badge/Framework-Qt6-blue)](https://doc.qt.io/qt-6/)
 
+# Environment
+The Weather App project is developed and tested in the following environment:
+
+Operating System: Linux (Ubuntu)
+
+Integrated Development Environment (IDE): Qt Creator
+
+Compiler: GCC (GNU Compiler Collection)
 
 # Demo video
 

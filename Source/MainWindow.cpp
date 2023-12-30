@@ -43,7 +43,7 @@ MainWindow::MainWindow(QWidget *parent)
     getSavedLocationsData();
 
     connect(this, &MainWindow::errorPageShown, errorPage, &ErrorPage::setErrMsg);
-    connect(this, &MainWindow::detailedWeatherPageShown, detailedWeatherPage, &DetailedWeatherPage::getData);
+    connect(this, &MainWindow::detailedDataRequested, detailedWeatherPage, &DetailedWeatherPage::getData);
     connect(this, &MainWindow::deletePageWidgets, homePage, &Page::deleteWidgets);
     connect(this, &MainWindow::deletePageWidgets, detailedWeatherPage, &Page::deleteWidgets);
     connect(userLocation, &UserLocation::userLocationFetched, this, &MainWindow::getLocationData);
@@ -82,10 +82,9 @@ void MainWindow::showHomePage()
     stackedWidget->setCurrentWidget(homePage);
 }
 
-void MainWindow::showDetailedWeatherPage(const GeoLocationData &data)
+void MainWindow::showDetailedWeatherPage()
 {
     stackedWidget->setCurrentWidget(detailedWeatherPage);
-    emit detailedWeatherPageShown(data);
 }
 
 void MainWindow::showErrorPage(const QString &errMsg)

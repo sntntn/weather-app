@@ -51,6 +51,7 @@ private slots:
 signals:
     void locationSaved(const GeoLocationData &data);
     void errorOccurred(const QString &errMsg);
+    void detailedDataFetched();
 
 private:
     static const int spacerWidth = 40;

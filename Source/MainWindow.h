@@ -34,13 +34,13 @@ public:
 
 public slots:
     void showHomePage();
-    void showDetailedWeatherPage(const GeoLocationData &data);
+    void showDetailedWeatherPage();
     void showErrorPage(const QString &errMsg);
-    void getLocationData(const GeoLocationData &location);
     void refreshPages();
+    void getLocationData(const GeoLocationData &location);
 
 signals:
-    void detailedWeatherPageShown(const GeoLocationData &data);
+    void detailedDataRequested(const GeoLocationData &data);
     void errorPageShown(const QString &errMsg);
     void deletePageWidgets();
 

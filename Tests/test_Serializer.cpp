@@ -44,5 +44,26 @@ TEST_CASE("Serializer class"){
         // Assert
         REQUIRE(expectedJson == outputJson);
     }
+
+    SECTION("Test if serializer gets the correct information from a file"){
+        // Arrange
+        GeoLocationData expected("Mombasa, Mvita, Kenya", "Mombasa",
+                                 QGeoCoordinate(-4.05052, 39.667169), "Kenya");
+
+        QString path = QCoreApplication::applicationDirPath() + "/../Tests/Resources/serializer.json";
+
+        // Act
+        GeoLocationData location;
+        Serializer::load(location, path);
+
+        bool check = location.getCoordinates() == expected.getCoordinates() &&
+                     location.getRenamedPlace() == expected.getRenamedPlace() &&
+                     location.getDetailedPlace() == expected.getDetailedPlace();
+
+        // Assert
+        REQUIRE(check);
+    }
+
+
 }
 

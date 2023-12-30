@@ -28,10 +28,13 @@ public:
 signals:
     void clicked(const GeoLocationData &data);
 
+protected:
+    void resizeEvent(QResizeEvent*) override;
+
 private:
     static const int hBoxSpacing = 10;
     static const int hBoxMarginSize = 10;
-    static const int locationFontSize = 20;
+    static const int locationFontSize = 17;
     static const int timeFontSize = 14;
     static const int temperatureFontSize = 45;
     static const int minmaxTemperatureFontSize = 14;
@@ -51,8 +54,7 @@ private:
     QLabel* iconLabel;
     QPixmap weatherIcon;
 
-    int adjustLabelFontSize(const QString &fontName);
-    int adjustCountryLabelFontSize(const QString &fontName);
+    void adjustLabelFontSize(QLabel* label, const int widthConstraint, const int heightConstraint, const int initialSize);
 };
 
 #endif // WEATHERWIDGET_H

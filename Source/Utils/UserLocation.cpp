@@ -18,6 +18,9 @@ void UserLocation::getLocation()
     if(source != nullptr){
         source->requestUpdate();
     }
+    else{
+        emit userLocationError(errMsg);
+    }
 }
 
 void UserLocation::positionUpdated(const QGeoPositionInfo &info)

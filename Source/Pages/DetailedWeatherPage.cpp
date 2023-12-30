@@ -133,7 +133,8 @@ void DetailedWeatherPage::setData(const QSharedPointer<DetailedWeatherData> deta
     basicInfo->updateData(this->data->weatherCode(), this->data->isDay(), this->data->timezone(),
                           this->data->temperature(), this->data->apparentTemperature());
 
-    minmaxWidget->updateData(this->data->weeklyMaxTemp().first(), this->data->weeklyMinTemp().first());
+    minmaxWidget->updateData(this->data->weeklyMaxTemp(), this->data->weeklyMinTemp(),
+                             this->data->weeklyDayName());
 
     sunWidget->updateData(this->data->timezone(), this->data->sunrise(), this->data->sunset());
 

@@ -27,6 +27,28 @@ private:
     void calculateTemperatureRange();
 };
 
+class minMaxTempGraphDialog : public QDialog
+{
+    Q_OBJECT
+
+public:
+    minMaxTempGraphDialog(const QVector<int>& maxTemperatures, const QVector<int>& minTemperatures,
+                          const QVector<QString> &dayNames, QWidget *parent = nullptr);
+
+protected:
+    void paintEvent(QPaintEvent*) override;
+    void resizeEvent(QResizeEvent *event) override;
+
+private:
+    QVector<int> m_maxTemperatures;
+    QVector<int> m_minTemperatures;
+    QVector<QString> m_dayNames;
+    int m_minTemp;
+    int m_maxTemp;
+
+    void calculateTemperatureRange();
+    QStringList getAbbreviatedDayNames();
+};
 
 class MapDialog : public QDialog {
 

@@ -26,7 +26,7 @@ public:
     void updateData(const QGeoCoordinate &coordinates, const QString& cityName, const QString& countryName);
 
 protected:
-    void mousePressEvent(QMouseEvent *event) override;
+    void mousePressEvent(QMouseEvent *) override;
 };
 
 class BasicInfoWidget : public QWidget
@@ -56,7 +56,12 @@ public:
 
 class MinMaxTempWidget : public QWidget
 {
+    Q_OBJECT
+
     QHBoxLayout *mainLayout;
+    QVector<int> weeklyMaxTemperatures;
+    QVector<int> weeklyMinTemperatures;
+    QVector<QString> weeklyDayNames;
 
     class MinMaxTempWidgetItem : public QWidget{
 
@@ -73,9 +78,14 @@ class MinMaxTempWidget : public QWidget
         void updateData(const int value, const QString &unit);
     };
 
+protected:
+    void mousePressEvent(QMouseEvent*) override;
+    void paintEvent(QPaintEvent*) override;
+
 public:
     MinMaxTempWidget(QWidget *parent = nullptr);
-    void updateData(const int maxTempValue, const int minTempValue);
+    void updateData(const QVector<int> &maxTempValues, const QVector<int> &minTempValues,
+                    const QVector<QString> &dayNames);
 };
 
 class SunWidget : public QWidget

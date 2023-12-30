@@ -67,6 +67,11 @@ public:
         return m_shareLocation;
     }
 
+    inline Settings::TemperatureUnit tempUnit() const
+    {
+        return m_temperatureUnit;
+    }
+
 private:
     Settings();
     Settings(const Settings&) = delete;

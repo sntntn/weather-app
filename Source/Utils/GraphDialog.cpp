@@ -20,6 +20,41 @@ void GraphDialog::resizeEvent(QResizeEvent *event)
     update();
 }
 
+MapDialog::MapDialog(QWidget *parent)
+    : QDialog(parent)
+    , mapLabel(new QLabel(this))
+    , layout(new QVBoxLayout(this))
+{
+    layout->addWidget(mapLabel);
+    mapLabel->setScaledContents(true);
+
+    mapImage.load("../Resources/map/map.jpg");
+    mapLabel->setPixmap(QPixmap::fromImage(mapImage.scaled(600, 300, Qt::KeepAspectRatio)));
+
+    setWindowTitle(tr("Map"));
+    resize(mapImage.width(), mapImage.height());
+}
+
+void MapDialog::resizeEvent(QResizeEvent *event)
+{
+    QDialog::resizeEvent(event);
+    update();
+}
+
+void MapDialog::drawCoordinateDot(double latitude, double longitude) {
+    const int mapWidth = mapImage.width();
+    const int mapHeight = mapImage.height();
+
+    int xCoordinate = static_cast<int>((longitude + 180.0) / 360.0 * mapWidth);
+    int yCoordinate = static_cast<int>((90.0 - latitude) / 180.0 * mapHeight);
+
+    QPainter painter(&mapImage);
+    painter.setPen(QPen(Qt::red, 6));
+    painter.setBrush(Qt::red);
+    painter.drawEllipse(QPointF(xCoordinate, yCoordinate), 4, 4);
+    mapLabel->setPixmap(QPixmap::fromImage(mapImage));
+}
+
 void GraphDialog::paintEvent(QPaintEvent*)
 {
     QPainter painter(this);

@@ -3,6 +3,8 @@
 
 #include <QObject>
 #include <QDialog>
+#include <QLabel>
+#include <QVBoxLayout>
 
 class GraphDialog : public QDialog
 {
@@ -23,6 +25,23 @@ private:
 
     double mapTemperatureToY(int temperature);
     void calculateTemperatureRange();
+};
+
+
+class MapDialog : public QDialog {
+
+    Q_OBJECT
+
+    QLabel *mapLabel;
+    QImage mapImage;
+    QVBoxLayout *layout;
+
+protected:
+    void resizeEvent(QResizeEvent *event) override;
+
+public:
+    explicit MapDialog(QWidget *parent = nullptr);
+    void drawCoordinateDot(double latitude, double longitude);
 };
 
 #endif // GRAPHDIALOG_H

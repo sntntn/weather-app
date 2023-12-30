@@ -42,6 +42,8 @@ set(TEST_SOURCES
     test_WeatherData.cpp
     test_DetailedWeatherPage.cpp
     test_Serializer.cpp
+    test_HomePage.cpp
+    test_BasicWidget.cpp
 )
 
 set(CPP_SOURCES

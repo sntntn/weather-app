@@ -8,8 +8,26 @@
 #include <QTimeZone>
 #include <QGridLayout>
 #include <QScrollArea>
+#include <QGeoCoordinate>
 
 #include "GraphDialog.h"
+
+class LocationInfoWidget : public QWidget
+{
+    Q_OBJECT
+
+    QVBoxLayout *mainLayout;
+    QLabel *cityLabel;
+    QLabel *countryLabel;
+    QGeoCoordinate coordinates;
+
+public:
+    LocationInfoWidget(QWidget *parent = nullptr);
+    void updateData(const QGeoCoordinate &coordinates, const QString& cityName, const QString& countryName);
+
+protected:
+    void mousePressEvent(QMouseEvent *event) override;
+};
 
 class BasicInfoWidget : public QWidget
 {
@@ -155,6 +173,7 @@ class HourlyWeatherWidget : public QWidget
     static const int widgetItemWidth = 70;
     static const int widgetItemHeight = 100;
     QVBoxLayout *mainLayout;
+    QLabel* hourlyLabel;
     QScrollArea *hourlyWeatherArea;
     QWidget *hourlyWeatherContents;
     QHBoxLayout *itemsLayout;
@@ -190,6 +209,7 @@ class DailyWeatherWidget : public QWidget
     static const int padding = 20;
     static const int dailyMaxLabelWidth = 60;
     QGridLayout *mainLayout;
+    QLabel *dailyLabel;
 
     class DailyWidgetItem : public QWidget
     {

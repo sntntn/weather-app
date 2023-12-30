@@ -22,15 +22,83 @@ TEST_CASE("Test Settings class reachable functions"){
         REQUIRE(iconPath == "../Resources/weatherIcons/HeavyRainSwrsNight.png");
     }
 
-    SECTION("Test if function toVariant correctly saves shareLocation value"){
+    SECTION("Test if temperatureUnitApiParameter function correctly converts "
+            "temperature unit to api parameter") {
+        // Arrange
+        Settings::TemperatureUnit temperatureUnit = Settings::instance().tempUnit();
+
+        // Act
+        QString tempApiParam = Settings::instance().temperatureUnitApiParameter();
+
+        // Assert
+        switch (temperatureUnit) {
+        case Settings::TemperatureUnit::CELSIUS:
+            REQUIRE(tempApiParam == "celsius");
+            break;
+        case Settings::TemperatureUnit::FAHRENHEIT:
+            REQUIRE(tempApiParam == "fahrenheit");
+            break;
+        default:
+            REQUIRE(tempApiParam == "");
+            break;
+        }
+    }
+
+    SECTION("Test if temperatureUnitString function correctly converts "
+            "temperature unit to string") {
+        // Arrange
+        Settings::TemperatureUnit temperatureUnit = Settings::instance().tempUnit();
+
+        // Act
+        QString tempString = Settings::instance().temperatureUnitString();
+
+        // Assert
+        switch (temperatureUnit) {
+        case Settings::TemperatureUnit::CELSIUS:
+            REQUIRE(tempString == "°C");
+            break;
+        case Settings::TemperatureUnit::FAHRENHEIT:
+            REQUIRE(tempString == "°F");
+            break;
+        default:
+            REQUIRE(tempString == "");
+            break;
+        }
+    }
+
+    SECTION("Test if temperatureUnitsNames function correctly converts "
+            "temperature unit to name") {
+        // Arrange
+        Settings::TemperatureUnit temperatureUnit = Settings::instance().tempUnit();
+
+        // Act
+        QString tempName = Settings::instance().temperatureUnitName();
+
+        // Assert
+        switch (temperatureUnit) {
+        case Settings::TemperatureUnit::CELSIUS:
+            REQUIRE(tempName == "Celsius");
+            break;
+        case Settings::TemperatureUnit::FAHRENHEIT:
+            REQUIRE(tempName == "Fahrenheit");
+            break;
+        default:
+            REQUIRE(tempName == "");
+            break;
+        }
+    }
+
+    SECTION("Test if function toVariant correctly saves shareLocation and temperature unit value"){
         // Arrange
         bool shareLocation = Settings::instance().shareLocation();
+        Settings::TemperatureUnit temperatureUnit = Settings::instance().tempUnit();
 
         // Act
         auto map = Settings::instance().toVariant().toMap();
 
         // Assert
         REQUIRE(map.value("shareLocation").toBool() == shareLocation);
+        REQUIRE(map.value("temperatureUnit").value<Settings::TemperatureUnit>() == temperatureUnit);
     }
 
     SECTION("Test if function toVariant correctly saves locations"){
@@ -75,16 +143,15 @@ TEST_CASE("Test Settings class reachable functions"){
     }
 
     SECTION("Settings serialization and deserialization") {
-        // Arrange - setup original settings
+        // Arrange
         bool shareLocation = Settings::instance().shareLocation();
 
-        // Act - Deserialize settings from QVariant
+        // Act
         QVariant map = Settings::instance().toVariant();
         Settings::instance().fromVariant(map);
 
-        // Assert - Check if settings were restored correctly
+        // Assert
         REQUIRE(shareLocation == Settings::instance().shareLocation());
     }
-
 }
 

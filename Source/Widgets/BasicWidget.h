@@ -14,9 +14,7 @@ public:
 
 protected:
     QHBoxLayout *mainLayout;
-
     const QString fontName = "Roboto";
-
 };
 
 #endif // BASICWIDGET_H

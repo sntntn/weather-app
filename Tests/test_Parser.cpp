@@ -21,9 +21,10 @@ TEST_CASE("WeatherData parser"){
         std::string jsonData = buffer.str();
 
         // Act
+        auto data = Parser::parseWeatherData(QString::fromStdString(jsonData), location);
 
         // Assert
-        REQUIRE_FALSE( nullptr == Parser::parseWeatherData(QString::fromStdString(jsonData), location) );
+        REQUIRE_FALSE( nullptr == data );
     }
 
     SECTION("Test parseWeatherData with invalid JSON") {
@@ -48,10 +49,6 @@ TEST_CASE("WeatherData parser"){
         REQUIRE_FALSE(nullptr == Parser::parseWeatherData(validJson, location));
     }
 }
-
-
-#include "catch.hpp"
-#include "Parser.h"
 
 TEST_CASE("parseGeocodingData") {
 

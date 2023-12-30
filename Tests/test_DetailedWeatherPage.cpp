@@ -15,9 +15,9 @@ TEST_CASE("DetailedWeatherPage Tests"){
     SECTION("Initialization") {
         // Arrange
         MainWindow* mainwindow = new MainWindow();
-        DetailedWeatherPage *page = new DetailedWeatherPage(mainwindow);
 
         // Act
+        DetailedWeatherPage *page = new DetailedWeatherPage(mainwindow);
 
         // Assert
         REQUIRE(page != nullptr);

@@ -29,15 +29,12 @@ DetailedWeatherPage::DetailedWeatherPage(QWidget *parent)
     , horizontalSpacer(new QSpacerItem(spacerWidth, 0, QSizePolicy::Expanding, QSizePolicy::Minimum))
     , addToSavedLocations(new QPushButton("Add"))
     , scrollTimer(new QTimer(this))
-    , locationLabel(new QLabel(this))
-    , countryLabel(new QLabel(this))
+    , locationInfo(new LocationInfoWidget(this))
     , basicInfo(new BasicInfoWidget(this))
     , humidityUvRain(new HumidityUvRainWidget(this))
     , visibilityPressureSnow(new VisibilityPressureSnowWidget(this))
     , windInfo(new WindInfoWidget(this))
-    , hourlyLabel(new QLabel("      Hourly"))
     , hourlyWidget(new HourlyWeatherWidget(this))
-    , dailyLabel(new QLabel("7-DAY FORECAST"))
     , dailyWidget(new DailyWeatherWidget(this))
     , selectedWidget(nullptr)
     , minmaxWidget(new MinMaxTempWidget(this))
@@ -57,10 +54,7 @@ DetailedWeatherPage::DetailedWeatherPage(QWidget *parent)
     weatherLayout->setAlignment(Qt::AlignTop);
     weatherLayout->addLayout(buttonsLayout);
 
-    locationLabel->setStyleSheet("font-size: 24px; font-weight: bold;");
-    weatherLayout->addWidget(locationLabel, 0, Qt::AlignHCenter);
-    countryLabel->setStyleSheet("font-size: 18px; color: gray;");
-    weatherLayout->addWidget(countryLabel, 0, Qt::AlignHCenter);
+    weatherLayout->addWidget(locationInfo);
     weatherLayout->addWidget(basicInfo);
     basicInfo->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
 
@@ -69,14 +63,7 @@ DetailedWeatherPage::DetailedWeatherPage(QWidget *parent)
     weatherLayout->addWidget(humidityUvRain);
     weatherLayout->addWidget(visibilityPressureSnow);
     weatherLayout->addWidget(windInfo);
-
-    hourlyLabel->setStyleSheet("font: bold 15px;");
-    weatherLayout->addWidget(hourlyLabel);
     weatherLayout->addWidget(hourlyWidget);
-
-    dailyLabel->setStyleSheet("font: bold 15px; margin: 10px;");
-    dailyLabel->setAlignment(Qt::AlignHCenter);
-    weatherLayout->addWidget(dailyLabel);
     weatherLayout->addWidget(dailyWidget);
 
     weatherScrollAreaContents->setLayout(weatherLayout);
@@ -142,9 +129,7 @@ void DetailedWeatherPage::setData(const QSharedPointer<DetailedWeatherData> deta
     this->data = detailedData;
     highlightWidget();
 
-    locationLabel->setText(this->data->location().getRenamedPlace());
-    countryLabel->setText(this->data->location().getCountry());
-
+    locationInfo->updateData(this->data->location().getCoordinates(), this->data->location().getRenamedPlace(), this->data->location().getCountry());
     basicInfo->updateData(this->data->weatherCode(), this->data->isDay(), this->data->timezone(),
                           this->data->temperature(), this->data->apparentTemperature());
 
@@ -181,7 +166,7 @@ void DetailedWeatherPage::addButtonClicked()
     emit locationSaved(this->data->location());
     this->addToSavedLocations->setVisible(false);
     Settings::instance().savedLocations().push_back(this->data->location());
-    weatherScrollArea->ensureWidgetVisible(locationLabel);
+    weatherScrollArea->ensureWidgetVisible(locationInfo);
 }
 
 void DetailedWeatherPage::homeButtonClicked()

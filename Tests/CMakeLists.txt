@@ -44,6 +44,9 @@ set(TEST_SOURCES
     test_Serializer.cpp
     test_HomePage.cpp
     test_BasicWidget.cpp
+    test_GeoLocationData.cpp
+    test_DetailedWeatherData.cpp
+    test_CustomCompleter.cpp
 )
 
 set(CPP_SOURCES

@@ -31,8 +31,8 @@ WeatherWidget::WeatherWidget(const QSharedPointer<WeatherData> data, QWidget *pa
     mainLayout->setSpacing(hBoxSpacing);
     mainLayout->setContentsMargins(hBoxMarginSize, hBoxMarginSize, hBoxMarginSize, hBoxMarginSize);
 
-    locationLabel->setFont(QFont(fontName, adjustLabelFontSize(fontName), QFont::Bold));
-    timeLabel->setFont(QFont(fontName, timeFontSize, QFont::Normal));
+    locationLabel->setFont(QFont(fontName, locationFontSize, QFont::Bold));
+    countryLabel->setFont(QFont(fontName, countryFontSize, QFont::Normal));
     temperatureLabel->setFont(QFont(fontName, temperatureFontSize, QFont::Bold));
     maxTemperatureLabel->setFont(QFont(fontName, minmaxTemperatureFontSize, QFont::Normal));
     minTemperatureLabel->setFont(QFont(fontName, minmaxTemperatureFontSize, QFont::Normal));
@@ -43,11 +43,11 @@ WeatherWidget::WeatherWidget(const QSharedPointer<WeatherData> data, QWidget *pa
     locationLabel->setWordWrap(true);
     timeLabel->setStyleSheet("color: white;");
     temperatureLabel->setStyleSheet("color: white;");
-
-    countryLabel->setFont(QFont(fontName, adjustCountryLabelFontSize(fontName), QFont::Normal));
     countryLabel->setStyleSheet("color: white;");
     countryLabel->setWordWrap(true);
 
+    locationLabel->setAlignment(Qt::AlignCenter);
+    countryLabel->setAlignment(Qt::AlignCenter);
     cityCountryLayout->addWidget(locationLabel, 0, Qt::AlignCenter);
     cityCountryLayout->addWidget(countryLabel, 0, Qt::AlignCenter);
     cityCountryLayout->setSpacing(0);
@@ -71,48 +71,44 @@ WeatherWidget::WeatherWidget(const QSharedPointer<WeatherData> data, QWidget *pa
     setLayout(mainLayout);
 }
 
-int WeatherWidget::adjustCountryLabelFontSize(const QString &fontName)
-{
-    QString countryText = data->location().getCountry();
+void WeatherWidget::adjustLabelFontSize(QLabel* label, const int widthConstraint, const int heightConstraint, const int initialSize) {
+    QFont font = label->font();
+    int minFontSize = 5;
+    int currentFontSize = initialSize;
 
-    int countryLabelFontSize = initialFontSize - 8;
-    QFont font(fontName, countryLabelFontSize);
+    font.setPointSize(currentFontSize);
+    label->setFont(font);
+    label->setWordWrap(true);
+
     QFontMetrics fm(font);
+    QRect textRect = fm.boundingRect(0, 0, widthConstraint, QWIDGETSIZE_MAX,
+                                     Qt::TextWordWrap | Qt::AlignCenter, label->text());
 
-    QRect textRect = fm.boundingRect(0, 0, countryLabel->width(), QWIDGETSIZE_MAX, Qt::TextWordWrap, countryText);
-    int textHeight = textRect.height();
-
-    int maxHeight = countryLabel->maximumHeight();
-    int minFontSize = 8;
-
-    while (textHeight > maxHeight && font.pointSize() > minFontSize) {
-        font.setPointSize(font.pointSize() - 1);
+    while ((textRect.width() > widthConstraint || textRect.height() > heightConstraint) && currentFontSize > minFontSize) {
+        currentFontSize--;
+        font.setPointSize(currentFontSize);
         fm = QFontMetrics(font);
-        textRect = fm.boundingRect(0, 0, countryLabel->width(), QWIDGETSIZE_MAX, Qt::TextWordWrap, countryText);
-        textHeight = textRect.height();
+        textRect = fm.boundingRect(0, 0, widthConstraint, QWIDGETSIZE_MAX,
+                                   Qt::TextWordWrap | Qt::AlignCenter, label->text());
     }
 
-    countryLabel->setFont(font);
+    label->setFont(font);
+    textRect = fm.boundingRect(0, 0, widthConstraint, QWIDGETSIZE_MAX,
+                               Qt::TextWordWrap | Qt::AlignCenter, label->text());
 
-    return font.pointSize();
+    label->setFixedSize(textRect.width(), textRect.height());
 }
 
+void WeatherWidget::resizeEvent(QResizeEvent *event) {
+    QWidget::resizeEvent(event);
 
-int WeatherWidget::adjustLabelFontSize(const QString &fontName)
-{
-    QFont font(fontName, initialFontSize);
-    QFontMetrics fm(font);
+    int margins = mainLayout->contentsMargins().left() + mainLayout->contentsMargins().right();
+    int spacing = mainLayout->spacing();
+    int maxWidth = this->width() / 2 - margins - spacing;
 
-    QRect textRect = fm.boundingRect(0, 0, countryLabel->width(), initialFontSize, Qt::AlignCenter | Qt::TextWordWrap, countryLabel->text());
-    int textHeight = textRect.height();
-
-    const int fmHeight = fm.height();
-    while (textHeight > initialFontSize && fmHeight> 0) {
-        font.setPointSize(font.pointSize() - 1);
-        fm = QFontMetrics(font);
-        textHeight = fm.height();
-    }
-    return font.pointSize();
+    adjustLabelFontSize(locationLabel, maxWidth, labelHeight, locationFontSize);
+    adjustLabelFontSize(countryLabel, maxWidth, labelHeight, countryFontSize);
+    adjustLabelFontSize(temperatureLabel, maxWidth, iconHeight, temperatureFontSize);
 }
 
 void WeatherWidget::mousePressEvent(QMouseEvent *event)

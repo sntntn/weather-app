@@ -15,6 +15,7 @@ public:
 private:
     QGeoPositionInfoSource *source;
 
+    bool userLocationRequested = false;
     const QString errMsg = "Unable to access your location. Please check and enable location permissions in your system settings.";
 
 private slots:

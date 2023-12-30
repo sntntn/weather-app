@@ -20,8 +20,12 @@ void UserLocation::getLocation()
 
 void UserLocation::positionUpdated(const QGeoPositionInfo &info)
 {
-    GeoLocationData data = GeoLocationData("My location", "My location", info.coordinate(), "");
-    emit userLocationFetched(data);
+    // positionUpdated signal is emitted twice (?) so we check if it's the first time
+    if(!userLocationRequested){
+        userLocationRequested = true;
+        GeoLocationData data = GeoLocationData("My location", "My location", info.coordinate(), "");
+        emit userLocationFetched(data);
+    }
 }
 
 void UserLocation::handleError(const QGeoPositionInfoSource::Error)

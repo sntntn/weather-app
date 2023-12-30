@@ -56,6 +56,5 @@ private:
     void getSavedLocationsData();
     void requestUserLocationData();
     void serializeData();
-
 };
 #endif // MAINWINDOW_H

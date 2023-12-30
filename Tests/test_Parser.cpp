@@ -47,5 +47,27 @@ TEST_CASE("WeatherData parser"){
         })";
         REQUIRE_FALSE(nullptr == Parser::parseWeatherData(validJson, location));
     }
-
 }
+
+
+#include "catch.hpp"
+#include "Parser.h"
+
+TEST_CASE("parseGeocodingData") {
+
+    SECTION("Test with invalid JSON data, missing required fields") {
+        QJsonArray resultsArray;
+        QJsonObject invalidResultObject;
+        invalidResultObject["formatted"] = "Invalid Place";
+        resultsArray.append(invalidResultObject);
+
+        QList<GeoLocationData> locations;
+        Parser::parseGeocodingData(resultsArray, locations);
+
+        //onda je prazna
+        REQUIRE(locations.isEmpty());
+    }
+}
+
+
+

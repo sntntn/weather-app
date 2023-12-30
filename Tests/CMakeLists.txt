@@ -45,6 +45,7 @@ set(TEST_SOURCES
     test_HomePage.cpp
     test_BasicWidget.cpp
     test_GeoLocationData.cpp
+    test_DetailedWeatherData.cpp
 )
 
 set(CPP_SOURCES

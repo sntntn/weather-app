@@ -1,10 +1,11 @@
 #ifndef WEATHERAPI_H
 #define WEATHERAPI_H
 
+#include "ApiHandler.h"
+
 #include <QGeoCoordinate>
 #include <QString>
 
-#include "ApiHandler.h"
 #include "GeoLocationData.h"
 
 class WeatherData;

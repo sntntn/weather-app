@@ -82,7 +82,5 @@ TEST_CASE("Serializer class"){
         // Assert
         REQUIRE(check);
     }
-
-
 }
 

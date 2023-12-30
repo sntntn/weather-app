@@ -39,7 +39,8 @@ void WeatherAPI::fetchData(const GeoLocationData &location)
     reply->setProperty("location", location.toVariant());
 }
 
-void WeatherAPI::replyFinished(QNetworkReply *reply){
+void WeatherAPI::replyFinished(QNetworkReply *reply)
+{
     if (reply->error() != QNetworkReply::NoError) {
 //        qDebug() << reply->errorString().toStdString();
         emit errorOccurred(networkErrMsg);

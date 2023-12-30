@@ -42,9 +42,9 @@ private:
     QPushButton *cancel;
     QList<GeoLocationData> widgetOrder;
     QPixmap trashCan;
-    QPixmap arrowCan;
+    QPixmap orderCan;
     QIcon trashIcon;
-    QIcon arrowIcon;
+    QIcon orderIcon;
 
     void setupUi();
     bool eventFilter(QObject *obj, QEvent *event) override;

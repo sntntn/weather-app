@@ -25,7 +25,7 @@ public:
 signals:
     void settingsChanged();
 
-public slots:
+private slots:
     void changeSettings();
     void resetOrder();
 

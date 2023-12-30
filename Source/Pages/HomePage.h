@@ -67,7 +67,6 @@ private:
     void onCompletionActivated(const QString& text);
     void styleSheetsSetup();
 
-    QList<QString> getLocationNames();
     GeocodingAPI geocodingApi;
 };
 

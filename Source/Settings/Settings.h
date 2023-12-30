@@ -57,7 +57,7 @@ public:
     };
     Q_ENUM(PrecipitationUnit)
 
-    inline QList<GeoLocationData> &savedLocations()
+    inline QList<GeoLocationData>& savedLocations()
     {
         return m_savedLocations;
     }

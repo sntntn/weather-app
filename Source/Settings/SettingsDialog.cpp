@@ -87,7 +87,10 @@ SettingsDialog::SettingsDialog(QWidget *parent)
         auto *customWidget = new QWidget();
         auto *layout = new QHBoxLayout(customWidget);
         auto *locationNameEdit = new QLineEdit(location.getRenamedPlace());
+        locationNameEdit->setAlignment(Qt::AlignRight);
         locationNameEdit->setStyleSheet("QLineEdit { border: none; }");
+        locationNameEdit->setCursorPosition(0);
+        locationNameEdit->setAlignment(Qt::AlignLeft);
         auto *deleteButton = new QPushButton();
         deleteButton->setIcon(trashIcon);
 

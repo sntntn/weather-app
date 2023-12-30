@@ -499,10 +499,12 @@ void DailyWeatherWidget::DailyWidgetItem::updateData(const QString &dayName, con
     dailyminTempLabel->setText(QString::number(minTemp) + "°");
     dailymaxTempLabel->setText(QString::number(maxTemp) + "°");
     temperatureDataForTheDay = temperatures;
+    dayNameString = dayName;
 }
 
-void DailyWeatherWidget::onShowTemperatureGraph(const QVector<int>& temperatures) {
-    GraphDialog dialog(temperatures, this);
+void DailyWeatherWidget::onShowTemperatureGraph(const QVector<int>& temperatures,
+                                                const QString &dayNameString) {
+    GraphDialog dialog(temperatures, dayNameString, this);
     dialog.exec();
 }
 

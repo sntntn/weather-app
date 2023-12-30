@@ -64,6 +64,25 @@ TEST_CASE("Serializer class"){
         REQUIRE(check);
     }
 
+    SECTION("Test if serializing and deserializing returns the same object"){
+        // Arrange
+        GeoLocationData expected("Mombasa, Mvita, Kenya", "Mombasa",
+                                 QGeoCoordinate(-4.05052, 39.667169), "Kenya");
+        QString path = QCoreApplication::applicationDirPath() + "/../Tests/Resources/serializer_output.json";
+
+        // Act
+        Serializer::save(expected, path);
+        GeoLocationData location;
+        Serializer::load(location, path);
+
+        bool check = location.getCoordinates() == expected.getCoordinates() &&
+                     location.getRenamedPlace() == expected.getRenamedPlace() &&
+                     location.getDetailedPlace() == expected.getDetailedPlace();
+
+        // Assert
+        REQUIRE(check);
+    }
+
 
 }
 

@@ -28,7 +28,7 @@ void UserLocation::positionUpdated(const QGeoPositionInfo &info)
     // positionUpdated signal is emitted twice (?) so we check if it's the first time
     if(!userLocationRequested){
         userLocationRequested = true;
-        GeoLocationData data = GeoLocationData("My location", "My location", info.coordinate(), "");
+        GeoLocationData data = GeoLocationData("My location", info.coordinate());
         emit userLocationFetched(data);
     }
 }

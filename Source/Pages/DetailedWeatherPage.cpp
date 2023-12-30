@@ -129,7 +129,10 @@ void DetailedWeatherPage::setData(const QSharedPointer<DetailedWeatherData> deta
     this->data = detailedData;
     highlightWidget();
 
-    locationInfo->updateData(this->data->location().getCoordinates(), this->data->location().getRenamedPlace(), this->data->location().getCountry());
+    locationInfo->updateData(this->data->location().getCoordinates(),
+                             this->data->location().getRenamedPlace(),
+                             this->data->location().getDetailedPlace());
+
     basicInfo->updateData(this->data->weatherCode(), this->data->isDay(), this->data->timezone(),
                           this->data->temperature(), this->data->apparentTemperature());
 

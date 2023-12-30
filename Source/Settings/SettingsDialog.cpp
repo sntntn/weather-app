@@ -87,10 +87,12 @@ SettingsDialog::SettingsDialog(QWidget *parent)
         auto *customWidget = new QWidget();
         auto *layout = new QHBoxLayout(customWidget);
         auto *locationNameEdit = new QLineEdit(location.getRenamedPlace());
+        locationNameEdit->setStyleSheet("QLineEdit { border: none; }");
         auto *deleteButton = new QPushButton();
         deleteButton->setIcon(trashIcon);
 
         layout->addWidget(locationNameEdit, 1);
+        layout->addStretch(1);
         layout->addWidget(deleteButton);
 
         connect(locationNameEdit, &QLineEdit::returnPressed, [locationNameEdit]() {
@@ -147,7 +149,6 @@ void SettingsDialog::changeSettings()
 
         QString newLocationName = listWidget->itemWidget(listWidget->item(i))->findChild<QLineEdit *>()->text();
         geoLocation.setRenamedPlace(newLocationName);
-        qDebug() << "New Renamed Place: " << geoLocation.getRenamedPlace();
 
         auto iter = std::find(widgetOrder.begin(), widgetOrder.end(), geoLocation);
         if (iter != widgetOrder.end()) {

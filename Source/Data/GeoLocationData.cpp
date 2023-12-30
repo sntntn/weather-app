@@ -15,6 +15,15 @@ GeoLocationData::GeoLocationData(QString place, QString renamedPlace, QGeoCoordi
     qRegisterMetaType<GeoLocationData>("GeoLocationData");
 }
 
+GeoLocationData::GeoLocationData(QString renamedPlace, QGeoCoordinate coordinates)
+    : m_place("")
+    , m_renamedPlace(std::move(renamedPlace))
+    , m_coordinates(std::move(coordinates))
+    , m_country("")
+{
+    qRegisterMetaType<GeoLocationData>("GeoLocationData");
+}
+
 bool GeoLocationData::operator==(const GeoLocationData &other) const
 {
     return this->m_coordinates == other.m_coordinates;

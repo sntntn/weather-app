@@ -31,6 +31,10 @@ public:
         return m_coordinates;
     }
 
+    inline void setRenamedPlace(QString &renamedPlace){
+        m_renamedPlace = renamedPlace;
+    }
+
     QVariant toVariant() const override;
     void fromVariant(const QVariant & variant) override;
     static GeoLocationData fromVariantMap(const QVariantMap& geoLocation);

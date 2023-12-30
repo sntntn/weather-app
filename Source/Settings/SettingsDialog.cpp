@@ -4,6 +4,7 @@
 #include <QListWidget>
 #include <QMetaObject>
 #include <QMetaEnum>
+#include <QDebug>
 
 #include "MainWindow.h"
 #include "HomePage.h"
@@ -84,12 +85,16 @@ SettingsDialog::SettingsDialog(QWidget *parent)
 
         auto *customWidget = new QWidget();
         auto *layout = new QHBoxLayout(customWidget);
-        auto *label = new QLabel(location.getRenamedPlace());
+        auto *locationNameEdit = new QLineEdit(location.getRenamedPlace());
         auto *deleteButton = new QPushButton();
         deleteButton->setIcon(trashIcon);
 
-        layout->addWidget(label, 1);
+        layout->addWidget(locationNameEdit, 1);
         layout->addWidget(deleteButton);
+
+        connect(locationNameEdit, &QLineEdit::returnPressed, [locationNameEdit]() {
+            locationNameEdit->clearFocus();
+        });
 
         connect(deleteButton, &QPushButton::clicked, this, [this, listItem]() {
             auto locationMap = listItem->data(Qt::UserRole).toMap();
@@ -140,6 +145,24 @@ void SettingsDialog::changeSettings()
     settings.m_precipitationUnit = selectedPrecUnit;
     settings.m_shareLocation = locationSwitch->isChecked();
     settings.m_savedLocations = widgetOrder;
+
+    //TO DO
+    for (int i = 0; i < listWidget->count(); i++) {
+        auto locationMap = listWidget->item(i)->data(Qt::UserRole).toMap();
+        auto geoLocation = GeoLocationData::fromVariantMap(locationMap);
+
+        QString newLocationName = listWidget->itemWidget(listWidget->item(i))->findChild<QLineEdit *>()->text();
+        geoLocation.setRenamedPlace(newLocationName);
+        qDebug() << "New Renamed Place: " << geoLocation.getRenamedPlace();
+        //seter radi ali ne postavlja se ime u programu
+
+
+        auto iter = std::find(widgetOrder.begin(), widgetOrder.end(), geoLocation);
+        if (iter != widgetOrder.end()) {
+            *iter = geoLocation;
+        }
+
+    }
 
     emit settingsChanged();
     this->close();

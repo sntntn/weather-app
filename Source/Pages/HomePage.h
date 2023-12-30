@@ -16,7 +16,6 @@
 #include "GeoLocationData.h"
 #include "CustomCompleter.h"
 
-struct LocationData;
 class WeatherWidget;
 class WeatherData;
 class MainWindow;

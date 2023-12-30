@@ -11,6 +11,7 @@ class GeoLocationData;
 class WeatherWidget;
 class HomePage;
 class DetailedWeatherPage;
+class ErrorPage;
 class UserLocation;
 class GeoLocationData;
 class WeatherAPI;
@@ -34,11 +35,13 @@ public:
 public slots:
     void showHomePage();
     void showDetailedWeatherPage(const GeoLocationData &data);
+    void showErrorPage(const QString &errMsg);
     void getLocationData(const GeoLocationData &location);
     void refreshPages();
 
 signals:
     void detailedWeatherPageShown(const GeoLocationData &data);
+    void errorPageShown(const QString &errMsg);
     void deletePageWidgets();
 
 protected:
@@ -48,7 +51,8 @@ private:
     Ui::MainWindow *ui;
     Settings &settings;
     HomePage *homePage;
-    DetailedWeatherPage *detailedWeather;
+    DetailedWeatherPage *detailedWeatherPage;
+    ErrorPage *errorPage;
     QStackedWidget *stackedWidget;
     UserLocation *userLocation;
     WeatherAPI *weatherApi;

@@ -47,10 +47,10 @@ public slots:
 private slots:
     void addButtonClicked();
     void homeButtonClicked();
-    void handleApiError(const QString &errMsg);
 
 signals:
     void locationSaved(const GeoLocationData &data);
+    void errorOccurred(const QString &errMsg);
 
 private:
     static const int spacerWidth = 40;

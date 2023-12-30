@@ -32,7 +32,7 @@ WeatherWidget::WeatherWidget(const QSharedPointer<WeatherData> data, QWidget *pa
     mainLayout->setContentsMargins(hBoxMarginSize, hBoxMarginSize, hBoxMarginSize, hBoxMarginSize);
 
     locationLabel->setFont(QFont(fontName, locationFontSize, QFont::Bold));
-    countryLabel->setFont(QFont(fontName, locationFontSize - 6, QFont::Normal));
+    countryLabel->setFont(QFont(fontName, countryFontSize, QFont::Normal));
     temperatureLabel->setFont(QFont(fontName, temperatureFontSize, QFont::Bold));
     maxTemperatureLabel->setFont(QFont(fontName, minmaxTemperatureFontSize, QFont::Normal));
     minTemperatureLabel->setFont(QFont(fontName, minmaxTemperatureFontSize, QFont::Normal));
@@ -73,7 +73,7 @@ WeatherWidget::WeatherWidget(const QSharedPointer<WeatherData> data, QWidget *pa
 
 void WeatherWidget::adjustLabelFontSize(QLabel* label, const int widthConstraint, const int heightConstraint, const int initialSize) {
     QFont font = label->font();
-    int minFontSize = 8;
+    int minFontSize = 5;
     int currentFontSize = initialSize;
 
     font.setPointSize(currentFontSize);
@@ -106,8 +106,9 @@ void WeatherWidget::resizeEvent(QResizeEvent *event) {
     int spacing = mainLayout->spacing();
     int maxWidth = this->width() / 2 - margins - spacing;
 
-    adjustLabelFontSize(locationLabel, maxWidth, 40, locationFontSize);
-    adjustLabelFontSize(countryLabel, maxWidth, 40, locationFontSize - 4);
+    adjustLabelFontSize(locationLabel, maxWidth, labelHeight, locationFontSize);
+    adjustLabelFontSize(countryLabel, maxWidth, labelHeight, countryFontSize);
+    adjustLabelFontSize(temperatureLabel, maxWidth, iconHeight, temperatureFontSize);
 }
 
 void WeatherWidget::mousePressEvent(QMouseEvent *event)

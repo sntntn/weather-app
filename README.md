@@ -12,19 +12,15 @@ Detailed Weather: Users can access detailed weather forecasts, providing hourly 
 User-Friendly Interface: The app has an intuitive and user-friendly interface, making it easy for users to navigate and obtain the weather information they need.
 
 # Technologies Used
-Programming Language: C++
+Programming Language: [![c_plus_plus](https://img.shields.io/badge/Language-C%2B%2B-red)](https://www.cplusplus.com/)
 
-GUI Framework: Qt (with Qt Widgets and Qt Quick)
+GUI Framework: [![qt6](https://img.shields.io/badge/Framework-Qt6-blue)](https://doc.qt.io/qt-6/)
 
 Network Communication: Qt Network module for API requests
 
 Geocoding: Utilizes a custom Geocoding API handler for location data retrieval.
 
 Build System: CMake
-
-# Programming language
-[![c_plus_plus](https://img.shields.io/badge/Language-C%2B%2B-red)](https://www.cplusplus.com/)
-[![qt6](https://img.shields.io/badge/Framework-Qt6-blue)](https://doc.qt.io/qt-6/)
 
 # Environment
 The Weather App project is developed and tested in the following environment:

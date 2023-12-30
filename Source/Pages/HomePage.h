@@ -46,11 +46,13 @@ private:
     static const int widgetHeight = 180;
 
     const QString settingsIconPath = "../Resources/settingsIcon/settings.png";
+    const QString refreshIconPath = "../Resources/refresh_icon/refresh_icon.png";
 
     QVBoxLayout *mainLayout;
     QHBoxLayout *upperLayout;
     QLineEdit *searchBar;
     QPushButton *settingsButton;
+    QPushButton *refreshButton;
     QScrollArea *scrollArea;
     QWidget *scrollAreaContents;
     QGridLayout *widgetsLayout;
@@ -58,6 +60,8 @@ private:
     QTimer *debounceTimer;
     QPixmap settingsPixmap;
     QIcon settingsIcon;
+    QPixmap refreshPixmap;
+    QIcon refreshIcon;
 
     QList<GeoLocationData> locations;
 

@@ -17,6 +17,7 @@ HomePage::HomePage(QWidget *parent)
     , upperLayout(new QHBoxLayout())
     , searchBar(new QLineEdit())
     , settingsButton(new QPushButton())
+    , refreshButton(new QPushButton())
     , scrollArea(new QScrollArea())
     , scrollAreaContents(new QWidget())
     , widgetsLayout(new QGridLayout())
@@ -24,7 +25,12 @@ HomePage::HomePage(QWidget *parent)
     , debounceTimer(new QTimer(this))
     , settingsPixmap(settingsIconPath)
     , settingsIcon(settingsPixmap)
+    , refreshPixmap(refreshIconPath)
+    , refreshIcon(refreshPixmap)
 {
+    refreshButton->setIcon(refreshIcon);
+    upperLayout->addWidget(refreshButton);
+
     searchBar->setPlaceholderText("Enter location...");
     searchBar->setCompleter(completer);
     upperLayout->addWidget(searchBar);
@@ -52,11 +58,11 @@ HomePage::HomePage(QWidget *parent)
     styleSheetsSetup();
 
     connect(settingsButton, &QPushButton::clicked, this, &HomePage::openSettingsDialog);
+    connect(refreshButton, &QPushButton::clicked, mainWindow, &MainWindow::refreshPages);
     connect(&geocodingApi, &GeocodingAPI::geocodingDataUpdated, this, &HomePage::updateCompleter);
     connect(completer, QOverload<const QString&>::of(&QCompleter::activated), this, &HomePage::onCompletionActivated);
     connect(searchBar, &QLineEdit::textChanged, this, [this]() { debounceTimer->start(); });
     connect(debounceTimer, &QTimer::timeout, this, &HomePage::onSearchBarTextChanged);
-//    connect(searchBar, &QLineEdit::textChanged, this, &HomePage::onSearchBarTextChanged);
     connect(this, &HomePage::searchBarPressed, &geocodingApi, &GeocodingAPI::geocodeCity);
     connect(this, &HomePage::locationObjectSelected, mainWindow, &MainWindow::showDetailedWeatherPage);
 }
@@ -163,6 +169,12 @@ void HomePage::styleSheetsSetup()
         );
 
     settingsButton->setStyleSheet(
+        "QPushButton { "
+        "    background-color: #d7d6d5;"
+        "}"
+        );
+
+    refreshButton->setStyleSheet(
         "QPushButton { "
         "    background-color: #d7d6d5;"
         "}"

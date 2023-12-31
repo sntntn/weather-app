@@ -14,7 +14,7 @@ User-Friendly Interface: The app has an intuitive and user-friendly interface, m
 # Technologies Used
 Programming Language: [![c_plus_plus](https://img.shields.io/badge/Language-C%2B%2B-red)](https://www.cplusplus.com/)
 
-GUI Framework: [![qt6](https://img.shields.io/badge/Framework-Qt6-blue)](https://doc.qt.io/qt-6/)
+Framework: [![qt6](https://img.shields.io/badge/Framework-Qt6-blue)](https://doc.qt.io/qt-6/)
 
 Network Communication: Qt Network module for API requests
 

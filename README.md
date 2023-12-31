@@ -32,6 +32,7 @@ Integrated Development Environment (IDE): Qt Creator
 Compiler: GCC (GNU Compiler Collection)
 
 # Demo video
+[Link](https://youtu.be/iShJhQ29PVE)
 
 # Developers
  - <a href="https://gitlab.com/veljkoprodan">Veljko Prodan 163/2019</a>

@@ -1,0 +1,62 @@
+\doxysection{Main\+Window Class Reference}
+\hypertarget{class_main_window}{}\label{class_main_window}\index{MainWindow@{MainWindow}}
+Inheritance diagram for Main\+Window\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{class_main_window}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Slots}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{class_main_window_a373372f4e8708f9fb20a486ffe6d716d}\label{class_main_window_a373372f4e8708f9fb20a486ffe6d716d} 
+void {\bfseries show\+Home\+Page} ()
+\item 
+\Hypertarget{class_main_window_a0dcc2d028ac8be630803b7a1d9df7872}\label{class_main_window_a0dcc2d028ac8be630803b7a1d9df7872} 
+void {\bfseries show\+Detailed\+Weather\+Page} ()
+\item 
+\Hypertarget{class_main_window_a66452be793b79da33714f73ae5a46a34}\label{class_main_window_a66452be793b79da33714f73ae5a46a34} 
+void {\bfseries show\+Error\+Page} (const QString \&err\+Msg)
+\item 
+\Hypertarget{class_main_window_a350d71d4c32fa826fe77e5b87bd82cc4}\label{class_main_window_a350d71d4c32fa826fe77e5b87bd82cc4} 
+void {\bfseries refresh\+Pages} ()
+\item 
+\Hypertarget{class_main_window_aa5e3e214fd9ac3fea048180ca4f15b4a}\label{class_main_window_aa5e3e214fd9ac3fea048180ca4f15b4a} 
+void {\bfseries get\+Location\+Data} (const Geo\+Location\+Data \&location)
+\item 
+\Hypertarget{class_main_window_a0e42c89e14aee05b86ee2a66fa241600}\label{class_main_window_a0e42c89e14aee05b86ee2a66fa241600} 
+void {\bfseries get\+Detailed\+Data} (const Geo\+Location\+Data \&location)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Signals}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{class_main_window_a3edd3186c3b53781915ecb4179c66fbd}\label{class_main_window_a3edd3186c3b53781915ecb4179c66fbd} 
+void {\bfseries detailed\+Data\+Requested} (const Geo\+Location\+Data \&data)
+\item 
+\Hypertarget{class_main_window_a6febcbeebaed04d64cc7a7f6acabff77}\label{class_main_window_a6febcbeebaed04d64cc7a7f6acabff77} 
+void {\bfseries error\+Page\+Shown} (const QString \&err\+Msg)
+\item 
+\Hypertarget{class_main_window_a62caa1bf59d8f6668b69f7604fab4f12}\label{class_main_window_a62caa1bf59d8f6668b69f7604fab4f12} 
+void {\bfseries delete\+Page\+Widgets} ()
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{class_main_window_a996c5a2b6f77944776856f08ec30858d}\label{class_main_window_a996c5a2b6f77944776856f08ec30858d} 
+{\bfseries Main\+Window} (QWidget \texorpdfstring{$\ast$}{*}parent=nullptr)
+\item 
+\Hypertarget{class_main_window_a6a631ac0750b50e8ce22d70c1d965752}\label{class_main_window_a6a631ac0750b50e8ce22d70c1d965752} 
+QWidget \texorpdfstring{$\ast$}{*} {\bfseries current\+Page} ()
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{class_main_window_a05fb9d72c044aa3bb7d187b994704e2f}\label{class_main_window_a05fb9d72c044aa3bb7d187b994704e2f} 
+void {\bfseries close\+Event} (QClose\+Event \texorpdfstring{$\ast$}{*}event) override
+\end{DoxyCompactItemize}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+Source/Main\+Window.\+h\item 
+Source/Main\+Window.\+cpp\end{DoxyCompactItemize}

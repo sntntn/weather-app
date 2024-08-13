@@ -13,18 +13,18 @@ class GeoLocationData;
 
 class WeatherAPI : public ApiHandler
 {
-    Q_OBJECT
+  Q_OBJECT
 
 public:
-    explicit WeatherAPI(QObject *parent = nullptr);
-    ~WeatherAPI() = default;
-    void fetchData(const GeoLocationData &location);
+  explicit WeatherAPI(QObject *parent = nullptr);
+  ~WeatherAPI() = default;
+  void fetchData(const GeoLocationData &location);
 
 signals:
-    void dataFetched(const QSharedPointer<WeatherData> data);
+  void dataFetched(const QSharedPointer<WeatherData> data);
 
 public slots:
-    void replyFinished(QNetworkReply* reply) override;
+  void replyFinished(QNetworkReply *reply) override;
 };
 
 #endif // WEATHERAPI_H

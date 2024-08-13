@@ -5,19 +5,20 @@
 
 class WidgetsManager : public QListWidget
 {
-    Q_OBJECT
+  Q_OBJECT
 
 public:
-    using QListWidget::QListWidget;
+  using QListWidget::QListWidget;
 
 protected:
-    void dropEvent(QDropEvent *event) override {
-        QListWidget::dropEvent(event);
-        emit itemsRearranged();
-    }
+  void dropEvent(QDropEvent *event) override
+  {
+	QListWidget::dropEvent(event);
+	emit itemsRearranged();
+  }
 
 signals:
-    void itemsRearranged();
+  void itemsRearranged();
 };
 
 #endif // WIDGETSMANAGER_H

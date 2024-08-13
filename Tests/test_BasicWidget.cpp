@@ -4,16 +4,14 @@
 
 TEST_CASE("Test BasicWidget initialization")
 {
-    SECTION("BasicWidget Constructor Test")
-    {
-        // Arrange
+  SECTION("BasicWidget Constructor Test")
+  {
+	// Arrange
 
-        // Act
-        BasicWidget* basicWidget = new BasicWidget(nullptr);
+	// Act
+	BasicWidget *basicWidget = new BasicWidget(nullptr);
 
-        // Assert
-        REQUIRE(basicWidget != nullptr);
-    }
+	// Assert
+	REQUIRE(basicWidget != nullptr);
+  }
 }
-
-

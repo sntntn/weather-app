@@ -4,14 +4,14 @@
 
 TEST_CASE("Test ErrorWidget initialization")
 {
-    SECTION("ErrorWidget Constructor Test")
-    {
-        // Arrange
+  SECTION("ErrorWidget Constructor Test")
+  {
+	// Arrange
 
-        // Act
-        ErrorWidget* errorWidget = new ErrorWidget(nullptr);
+	// Act
+	ErrorWidget *errorWidget = new ErrorWidget(nullptr);
 
-        // Assert
-        REQUIRE(errorWidget != nullptr);
-    }
+	// Assert
+	REQUIRE(errorWidget != nullptr);
+  }
 }

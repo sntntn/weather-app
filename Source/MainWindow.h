@@ -18,48 +18,50 @@ class WeatherAPI;
 class Data;
 
 QT_BEGIN_NAMESPACE
-namespace Ui { class MainWindow; }
+namespace Ui
+{
+class MainWindow;
+}
 QT_END_NAMESPACE
 
 class MainWindow : public QMainWindow
 {
-    Q_OBJECT
+  Q_OBJECT
 
 public:
-    MainWindow(QWidget *parent = nullptr);
-    ~MainWindow();
+  MainWindow(QWidget *parent = nullptr);
+  ~MainWindow();
 
-    QWidget* currentPage();
-
+  QWidget *currentPage();
 
 public slots:
-    void showHomePage();
-    void showDetailedWeatherPage();
-    void showErrorPage(const QString &errMsg);
-    void refreshPages();
-    void getLocationData(const GeoLocationData &location);
-    void getDetailedData(const GeoLocationData &location);
+  void showHomePage();
+  void showDetailedWeatherPage();
+  void showErrorPage(const QString &errMsg);
+  void refreshPages();
+  void getLocationData(const GeoLocationData &location);
+  void getDetailedData(const GeoLocationData &location);
 
 signals:
-    void detailedDataRequested(const GeoLocationData &data);
-    void errorPageShown(const QString &errMsg);
-    void deletePageWidgets();
+  void detailedDataRequested(const GeoLocationData &data);
+  void errorPageShown(const QString &errMsg);
+  void deletePageWidgets();
 
 protected:
-    void closeEvent(QCloseEvent *event) override;
+  void closeEvent(QCloseEvent *event) override;
 
 private:
-    Ui::MainWindow *ui;
-    Settings &settings;
-    HomePage *homePage;
-    DetailedWeatherPage *detailedWeatherPage;
-    ErrorPage *errorPage;
-    QStackedWidget *stackedWidget;
-    UserLocation *userLocation;
-    WeatherAPI *weatherApi;
+  Ui::MainWindow	  *ui;
+  Settings			  &settings;
+  HomePage			  *homePage;
+  DetailedWeatherPage *detailedWeatherPage;
+  ErrorPage			  *errorPage;
+  QStackedWidget	  *stackedWidget;
+  UserLocation		  *userLocation;
+  WeatherAPI		  *weatherApi;
 
-    void getSavedLocationsData();
-    void requestUserLocationData();
-    void serializeData();
+  void getSavedLocationsData();
+  void requestUserLocationData();
+  void serializeData();
 };
 #endif // MAINWINDOW_H

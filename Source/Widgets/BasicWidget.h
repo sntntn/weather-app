@@ -7,14 +7,14 @@
 
 class BasicWidget : public QWidget
 {
-    Q_OBJECT
+  Q_OBJECT
 
 public:
-    explicit BasicWidget(QWidget *parent = nullptr);
+  explicit BasicWidget(QWidget *parent = nullptr);
 
 protected:
-    QHBoxLayout *mainLayout;
-    const QString fontName = "Roboto";
+  QHBoxLayout  *mainLayout;
+  const QString fontName = "Roboto";
 };
 
 #endif // BASICWIDGET_H

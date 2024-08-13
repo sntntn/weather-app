@@ -4,9 +4,9 @@
 #include "ApiHandler.h"
 
 #include <QGeoCoordinate>
-#include <QString>
 #include <QNetworkAccessManager>
 #include <QObject>
+#include <QString>
 
 #include "GeoLocationData.h"
 
@@ -14,22 +14,21 @@ class DetailedWeatherData;
 
 class DetailedWeatherAPI : public ApiHandler
 {
-    Q_OBJECT
+  Q_OBJECT
 
 public:
-    explicit DetailedWeatherAPI(QObject *parent = nullptr);
-    ~DetailedWeatherAPI() = default;
-    void fetchData(const GeoLocationData &location);
+  explicit DetailedWeatherAPI(QObject *parent = nullptr);
+  ~DetailedWeatherAPI() = default;
+  void fetchData(const GeoLocationData &location);
 
 private slots:
-    void replyFinished(QNetworkReply *reply) override;
+  void replyFinished(QNetworkReply *reply) override;
 
 signals:
-    void dataFetched(const QSharedPointer<DetailedWeatherData> data);
+  void dataFetched(const QSharedPointer<DetailedWeatherData> data);
 
 private:
-    GeoLocationData location;
+  GeoLocationData location;
 };
 
 #endif // DETAILEDWEATHERAPI_H
-

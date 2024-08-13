@@ -8,11 +8,10 @@
 class ErrorWidget : public BasicWidget
 {
 public:
-    explicit ErrorWidget(const QString &errorMessage, QWidget *parent = nullptr);
+  explicit ErrorWidget(const QString &errorMessage, QWidget *parent = nullptr);
 
 private:
-    QLabel *errorMessageLabel;
-
+  QLabel *errorMessageLabel;
 };
 
 #endif // ERRORWIDGET_H

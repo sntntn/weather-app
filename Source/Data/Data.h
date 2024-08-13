@@ -6,10 +6,10 @@
 class Data
 {
 public:
-    Data() = default;
+  Data() = default;
 
 public:
-    virtual ~Data() = default;
+  virtual ~Data() = default;
 };
 
 #endif // DATA_H

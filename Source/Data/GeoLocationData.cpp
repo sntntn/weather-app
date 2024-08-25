@@ -24,6 +24,8 @@ bool GeoLocationData::operator==(const GeoLocationData &other) const
   return this->m_coordinates == other.m_coordinates;
 }
 
+//Delete this row
+
 QVariant GeoLocationData::toVariant() const
 {
   QVariantMap map;

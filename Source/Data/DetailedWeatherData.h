@@ -8,123 +8,70 @@ class GeoLocationData;
 class DetailedWeatherData : public WeatherData
 {
 public:
-  explicit DetailedWeatherData(const GeoLocationData &location, const int temperature, const int weatherCode,
-							   const bool isDay, const QTimeZone &timezone, const int windSpeed, const int windGusts,
-							   const int windDirection, const int apparentTemperature, const int precipitation,
-							   const double snowDepth, const int uvIndex, const int humidity, const int visibility,
-							   const int pressure, const QVector<int> &hourlyTemperature,
-							   const QVector<int> &fullHourlyTemperature, const QVector<int> &hourlyCode,
-							   const QVector<bool> &hourlyIsDay, const QVector<QString> &hourlyTimeStamp,
-							   const QVector<int> &weeklyMaxTemp, const QVector<int> &weeklyMinTemp,
-							   const QVector<int> &weeklyCode, const QVector<QString> &sunrise,
-							   const QVector<QString> &sunset, const QVector<QString> &weeklyDayName);
+    explicit DetailedWeatherData(const GeoLocationData &location,
+                                 int temperature,
+                                 int weatherCode,
+                                 bool isDay,
+                                 const QTimeZone &timezone,
+                                 int windSpeed,
+                                 int windGusts,
+                                 int windDirection,
+                                 int apparentTemperature,
+                                 int precipitation,
+                                 double snowDepth,
+                                 int uvIndex,
+                                 int humidity,
+                                 int visibility,
+                                 int pressure,
+                                 const QVector<int> &hourlyTemperature,
+                                 const QVector<int> &fullHourlyTemperature,
+                                 const QVector<int> &hourlyCode,
+                                 const QVector<bool> &hourlyIsDay,
+                                 const QVector<QString> &hourlyTimeStamp,
+                                 const QVector<int> &weeklyMaxTemp,
+                                 const QVector<int> &weeklyMinTemp,
+                                 const QVector<int> &weeklyCode,
+                                 const QVector<QString> &sunrise,
+                                 const QVector<QString> &sunset,
+                                 const QVector<QString> &weeklyDayName);
 
-  inline GeoLocationData location() const
-  {
-	return m_location;
+    [[nodiscard]] inline auto location() const -> GeoLocationData { return m_location; }
+    [[nodiscard]] inline auto temperature() const -> int { return m_temperature; }
+    [[nodiscard]] inline auto weatherCode() const -> int { return m_weatherCode; }
+    [[nodiscard]] inline auto isDay() const -> bool { return m_isDay; }
+    [[nodiscard]] inline auto timezone() const -> QTimeZone { return m_timezone; }
+    [[nodiscard]] inline auto windSpeed() const -> int { return m_windSpeed; }
+    [[nodiscard]] inline auto windGusts() const -> int { return m_windGusts; }
+    [[nodiscard]] inline auto windDirection() const -> int { return m_windDirection; }
+    [[nodiscard]] inline auto apparentTemperature() const -> int { return m_apparentTemperature; }
+    [[nodiscard]] inline auto precipitation() const -> int { return m_precipitation; }
+    [[nodiscard]] inline auto snowDepth() const -> double { return m_snowDepth; }
+    [[nodiscard]] inline auto uvIndex() const -> int { return m_uvIndex; }
+    [[nodiscard]] inline auto humidity() const -> int { return m_humidity; }
+    [[nodiscard]] inline auto visibility() const -> int { return m_visibility; }
+    [[nodiscard]] inline auto pressure() const -> int { return m_pressure; }
+    [[nodiscard]] inline auto hourlyTemperature() const -> QVector<int>
+    {
+        return m_hourlyTemperature;
   }
-  inline int temperature() const
-  {
-	return m_temperature;
-  }
-  inline int weatherCode() const
-  {
-	return m_weatherCode;
-  }
-  inline bool isDay() const
-  {
-	return m_isDay;
-  }
-  inline QTimeZone timezone() const
-  {
-	return m_timezone;
-  }
-  inline int windSpeed() const
-  {
-	return m_windSpeed;
-  }
-  inline int windGusts() const
-  {
-	return m_windGusts;
-  }
-  inline int windDirection() const
-  {
-	return m_windDirection;
-  }
-  inline int apparentTemperature() const
-  {
-	return m_apparentTemperature;
-  }
-  inline int precipitation() const
-  {
-	return m_precipitation;
-  }
-  inline double snowDepth() const
-  {
-	return m_snowDepth;
-  }
-  inline int uvIndex() const
-  {
-	return m_uvIndex;
-  }
-  inline int humidity() const
-  {
-	return m_humidity;
-  }
-  inline int visibility() const
-  {
-	return m_visibility;
-  }
-  inline int pressure() const
-  {
-	return m_pressure;
-  }
-  inline QVector<int> hourlyTemperature() const
-  {
-	return m_hourlyTemperature;
-  }
-  inline QVector<int> fullHourlyTemperature() const
+  [[nodiscard]] inline auto fullHourlyTemperature() const -> QVector<int>
   {
 	return m_fullHourlyTemperature;
   }
-  inline QVector<int> hourlyCode() const
-  {
-	return m_hourlyCode;
-  }
-  inline QVector<bool> hourlyIsDay() const
-  {
-	return m_hourlyIsDay;
-  }
-  inline QVector<QString> hourlyTimeStamp() const
+  [[nodiscard]] inline auto hourlyCode() const -> QVector<int> { return m_hourlyCode; }
+  [[nodiscard]] inline auto hourlyIsDay() const -> QVector<bool> { return m_hourlyIsDay; }
+  [[nodiscard]] inline auto hourlyTimeStamp() const -> QVector<QString>
   {
 	return m_hourlyTimeStamp;
   }
-  inline QVector<int> weeklyMaxTemp() const
-  {
-	return m_weeklyMaxTemp;
-  }
-  inline QVector<int> weeklyMinTemp() const
-  {
-	return m_weeklyMinTemp;
-  }
-  inline QVector<int> weeklyCode() const
-  {
-	return m_weeklyCode;
-  }
-  inline QVector<QString> sunrise() const
-  {
-	return m_sunrise;
-  }
-  inline QVector<QString> sunset() const
-  {
-	return m_sunset;
-  }
-  inline QVector<QString> weeklyDayName() const
-  {
-	return m_weeklyDayName;
-  }
+  [[nodiscard]] inline auto weeklyMaxTemp() const -> QVector<int> { return m_weeklyMaxTemp; }
+  [[nodiscard]] inline auto weeklyMinTemp() const -> QVector<int> { return m_weeklyMinTemp; }
+  [[nodiscard]] inline auto weeklyCode() const -> QVector<int> { return m_weeklyCode; }
+  [[nodiscard]] inline auto sunrise() const -> QVector<QString> { return m_sunrise; }
+  [[nodiscard]] inline auto sunset() const -> QVector<QString> { return m_sunset; }
+  [[nodiscard]] inline auto weeklyDayName() const -> QVector<QString> { return m_weeklyDayName; }
 
-private:
+  private:
   GeoLocationData  m_location;
   int			   m_temperature;
   int			   m_weatherCode;

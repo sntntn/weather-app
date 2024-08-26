@@ -11,43 +11,27 @@
 class WeatherData : public Data
 {
 public:
-  WeatherData(const GeoLocationData &location, const int temperature, const int highestTemperature,
-			  const int lowestTemperature, const int weatherCode, const bool isDay, QTimeZone timezone);
+    WeatherData(const GeoLocationData &location,
+                int temperature,
+                int highestTemperature,
+                int lowestTemperature,
+                int weatherCode,
+                bool isDay,
+                QTimeZone timezone);
 
-  inline GeoLocationData location() const
-  {
-	return m_location;
-  }
+    [[nodiscard]] inline auto location() const -> GeoLocationData { return m_location; }
 
-  inline int temperature() const
-  {
-	return m_temperature;
-  }
+    [[nodiscard]] inline auto temperature() const -> int { return m_temperature; }
 
-  inline int highestTemperature() const
-  {
-	return m_highestTemperature;
-  }
+    [[nodiscard]] inline auto highestTemperature() const -> int { return m_highestTemperature; }
 
-  inline int lowestTemperature() const
-  {
-	return m_lowestTemperature;
-  }
+    [[nodiscard]] inline auto lowestTemperature() const -> int { return m_lowestTemperature; }
 
-  inline int weatherCode() const
-  {
-	return m_weatherCode;
-  }
+    [[nodiscard]] inline auto weatherCode() const -> int { return m_weatherCode; }
 
-  inline bool isDay() const
-  {
-	return m_isDay;
-  }
+    [[nodiscard]] inline auto isDay() const -> bool { return m_isDay; }
 
-  inline QTimeZone timezone() const
-  {
-	return m_timezone;
-  }
+    [[nodiscard]] inline auto timezone() const -> QTimeZone { return m_timezone; }
 
 private:
   GeoLocationData m_location;

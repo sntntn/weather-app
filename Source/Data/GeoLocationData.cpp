@@ -19,14 +19,14 @@ GeoLocationData::GeoLocationData(QString renamedPlace, QGeoCoordinate coordinate
   qRegisterMetaType<GeoLocationData>("GeoLocationData");
 }
 
-bool GeoLocationData::operator==(const GeoLocationData &other) const
+auto GeoLocationData::operator==(const GeoLocationData &other) const -> bool
 {
   return this->m_coordinates == other.m_coordinates;
 }
 
 //Delete this row
 
-QVariant GeoLocationData::toVariant() const
+auto GeoLocationData::toVariant() const -> QVariant
 {
   QVariantMap map;
   map.insert("place", m_place);
@@ -49,7 +49,7 @@ void GeoLocationData::fromVariant(const QVariant &variant)
   m_country		 = map.value("country").toString();
 }
 
-GeoLocationData GeoLocationData::fromVariantMap(const QVariantMap &geoLocation)
+auto GeoLocationData::fromVariantMap(const QVariantMap &geoLocation) -> GeoLocationData
 {
   return GeoLocationData{
 	  geoLocation.value("place").toString(), geoLocation.value("renamedPlace").toString(),

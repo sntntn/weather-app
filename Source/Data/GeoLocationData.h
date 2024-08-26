@@ -10,44 +10,32 @@ class GeoLocationData : public Data, public Serializable
 {
 public:
   GeoLocationData()								= default;
-  ~GeoLocationData()							= default;
+  ~GeoLocationData() override = default;
   GeoLocationData(const GeoLocationData &other) = default;
   GeoLocationData(QString place, QString renamedPlace, QGeoCoordinate coordinates, QString country);
   GeoLocationData(QString renamedPlace, QGeoCoordinate coordinates);
 
-  inline QString getDetailedPlace() const
-  {
-	return m_place;
-  }
+  [[nodiscard]] inline auto getDetailedPlace() const -> QString { return m_place; }
 
-  inline QString getRenamedPlace() const
-  {
-	return m_renamedPlace;
-  }
+  [[nodiscard]] inline auto getRenamedPlace() const -> QString { return m_renamedPlace; }
 
-  inline QString getCountry() const
-  {
-	return m_country;
-  }
+  [[nodiscard]] inline auto getCountry() const -> QString { return m_country; }
 
-  inline QGeoCoordinate getCoordinates() const
-  {
-	return m_coordinates;
-  }
+  [[nodiscard]] inline auto getCoordinates() const -> QGeoCoordinate { return m_coordinates; }
 
   inline void setRenamedPlace(QString &renamedPlace)
   {
 	m_renamedPlace = renamedPlace;
   }
 
-  QVariant				 toVariant() const override;
+  [[nodiscard]] auto toVariant() const -> QVariant override;
   void					 fromVariant(const QVariant &variant) override;
-  static GeoLocationData fromVariantMap(const QVariantMap &geoLocation);
+  static auto fromVariantMap(const QVariantMap &geoLocation) -> GeoLocationData;
 
-  GeoLocationData &operator=(const GeoLocationData &other) = default;
-  bool			   operator==(const GeoLocationData &other) const;
+  auto operator=(const GeoLocationData &other) -> GeoLocationData & = default;
+  auto operator==(const GeoLocationData &other) const -> bool;
 
-private:
+  private:
   QString		 m_place;
   QString		 m_renamedPlace;
   QGeoCoordinate m_coordinates;

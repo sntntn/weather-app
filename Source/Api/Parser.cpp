@@ -8,7 +8,8 @@
 #include "GeoLocationData.h"
 #include "WeatherData.h"
 
-WeatherData *Parser::parseWeatherData(const QString &jsonData, const GeoLocationData &geoLocation)
+auto Parser::parseWeatherData(const QString &jsonData, const GeoLocationData &geoLocation)
+    -> WeatherData *
 {
   try
   {
@@ -56,8 +57,8 @@ WeatherData *Parser::parseWeatherData(const QString &jsonData, const GeoLocation
   }
 }
 
-QSharedPointer<DetailedWeatherData> Parser::parseDetailedWeatherData(const QString		   &jsonData,
-																	 const GeoLocationData &geoLocation)
+auto Parser::parseDetailedWeatherData(const QString &jsonData, const GeoLocationData &geoLocation)
+    -> QSharedPointer<DetailedWeatherData>
 {
   try
   {

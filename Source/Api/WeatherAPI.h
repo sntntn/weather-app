@@ -17,11 +17,11 @@ class WeatherAPI : public ApiHandler
 
 public:
   explicit WeatherAPI(QObject *parent = nullptr);
-  ~WeatherAPI() = default;
+  ~WeatherAPI() override = default;
   void fetchData(const GeoLocationData &location);
 
 signals:
-  void dataFetched(const QSharedPointer<WeatherData> data);
+    void dataFetched(QSharedPointer<WeatherData> data);
 
 public slots:
   void replyFinished(QNetworkReply *reply) override;

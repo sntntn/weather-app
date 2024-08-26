@@ -16,7 +16,7 @@ class GeocodingAPI : public ApiHandler
   Q_OBJECT
 public:
   GeocodingAPI();
-  ~GeocodingAPI() = default;
+  ~GeocodingAPI() override = default;
 
   void replyFinished(QNetworkReply *reply) override;
 

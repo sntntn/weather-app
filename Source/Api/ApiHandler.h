@@ -12,9 +12,9 @@ class ApiHandler : public QObject
 
 public:
   explicit ApiHandler(QObject *parent = nullptr);
-  virtual ~ApiHandler();
+  ~ApiHandler() override;
 
-signals:
+  signals:
   void errorOccurred(const QString &errMsg);
 
 protected slots:

@@ -46,10 +46,10 @@ class BasicInfoWidget : public QWidget
   QLabel		  *temperatureLabel;
   QLabel		  *feelsLikeLabel;
 
-  QString getDaySuffix(const int day);
-  QString weatherCodeToDescription(const int weatherCode);
+  static QString getDaySuffix(const int day);
+  static QString weatherCodeToDescription(const int weatherCode);
 
-public:
+  public:
   BasicInfoWidget(QWidget *parent = nullptr);
   void updateData(const int weatherCode, const bool isDay, const QTimeZone &timezone, const int temperature,
 				  const int apparentTemperature);
@@ -141,7 +141,7 @@ class HumidityUvRainWidget : public QWidget
   singleWidgetItem *uvIndex;
   singleWidgetItem *rain;
 
-  QString uvIndextoDescription(const int uvIndex);
+  static QString uvIndextoDescription(const int uvIndex);
 
 public:
   HumidityUvRainWidget(QWidget *parent = nullptr);

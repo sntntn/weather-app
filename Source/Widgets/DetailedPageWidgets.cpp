@@ -8,7 +8,7 @@
 
 namespace WidgetUtils
 {
-QFrame *createLineFrame(QFrame::Shape shape, const QString &color = "white")
+auto createLineFrame(QFrame::Shape shape, const QString &color = "white") -> QFrame *
 {
   auto *line = new QFrame();
   line->setFrameShape(shape);
@@ -55,7 +55,7 @@ void LocationInfoWidget::updateData(const QGeoCoordinate &newCoordinates, const 
   coordinates = newCoordinates;
 }
 
-void LocationInfoWidget::mousePressEvent(QMouseEvent *)
+void LocationInfoWidget::mousePressEvent(QMouseEvent * /*event*/)
 {
   auto *mapDialog = new MapDialog();
   mapDialog->setAttribute(Qt::WA_DeleteOnClose);
@@ -158,7 +158,7 @@ void MinMaxTempWidget::updateData(const QVector<int> &maxTempValues, const QVect
   weeklyDayNames		= dayNames;
 }
 
-void MinMaxTempWidget::mousePressEvent(QMouseEvent *)
+void MinMaxTempWidget::mousePressEvent(QMouseEvent * /*event*/)
 {
   auto *dialog = new minMaxTempGraphDialog(weeklyMaxTemperatures, weeklyMinTemperatures, weeklyDayNames);
   dialog->setAttribute(Qt::WA_DeleteOnClose);
@@ -570,7 +570,7 @@ void DailyWeatherWidget::DailyWidgetItem::paintEvent(QPaintEvent *event)
 
 // --------------------------------------------------------------
 
-QString HumidityUvRainWidget::uvIndextoDescription(const int uvIndex)
+auto HumidityUvRainWidget::uvIndextoDescription(const int uvIndex) -> QString
 {
   switch (uvIndex)
   {
@@ -594,7 +594,7 @@ QString HumidityUvRainWidget::uvIndextoDescription(const int uvIndex)
   }
 }
 
-QString BasicInfoWidget::getDaySuffix(const int day)
+auto BasicInfoWidget::getDaySuffix(const int day) -> QString
 {
   switch (day)
   {
@@ -613,7 +613,7 @@ QString BasicInfoWidget::getDaySuffix(const int day)
   }
 }
 
-QString BasicInfoWidget::weatherCodeToDescription(const int weatherCode)
+auto BasicInfoWidget::weatherCodeToDescription(const int weatherCode) -> QString
 {
   switch (weatherCode)
   {

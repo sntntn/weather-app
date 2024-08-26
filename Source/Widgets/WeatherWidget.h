@@ -55,7 +55,10 @@ private:
   QLabel	  *iconLabel;
   QPixmap	   weatherIcon;
 
-  void adjustLabelFontSize(QLabel *label, const int widthConstraint, const int heightConstraint, const int initialSize);
+  static void adjustLabelFontSize(QLabel *label,
+                                  const int widthConstraint,
+                                  const int heightConstraint,
+                                  const int initialSize);
 };
 
 #endif // WEATHERWIDGET_H

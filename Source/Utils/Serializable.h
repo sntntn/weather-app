@@ -7,7 +7,7 @@ class Serializable
 {
 public:
   virtual ~Serializable()								= default;
-  virtual QVariant toVariant() const					= 0;
+  [[nodiscard]] virtual auto toVariant() const -> QVariant = 0;
   virtual void	   fromVariant(const QVariant &variant) = 0;
 };
 

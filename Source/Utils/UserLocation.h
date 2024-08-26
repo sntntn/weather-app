@@ -21,9 +21,9 @@ private:
 
 private slots:
   void positionUpdated(const QGeoPositionInfo &info);
-  void handleError(const QGeoPositionInfoSource::Error);
+  void handleError(QGeoPositionInfoSource::Error);
 
-signals:
+  signals:
   void userLocationFetched(const GeoLocationData &data);
   void userLocationError(const QString &errMsg);
 };

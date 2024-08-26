@@ -68,7 +68,7 @@ void MapDialog::drawCoordinateDot(double latitude, double longitude)
   mapLabel->setPixmap(QPixmap::fromImage(mapImage));
 }
 
-void minMaxTempGraphDialog::paintEvent(QPaintEvent *)
+void minMaxTempGraphDialog::paintEvent(QPaintEvent * /*event*/)
 {
   QPainter painter(this);
   painter.setRenderHint(QPainter::Antialiasing);
@@ -126,7 +126,7 @@ void minMaxTempGraphDialog::paintEvent(QPaintEvent *)
   }
 }
 
-QStringList minMaxTempGraphDialog::getAbbreviatedDayNames()
+auto minMaxTempGraphDialog::getAbbreviatedDayNames() -> QStringList
 {
   QStringList dayList;
   for (const QString &day : m_dayNames)
@@ -136,7 +136,7 @@ QStringList minMaxTempGraphDialog::getAbbreviatedDayNames()
   return dayList;
 }
 
-void GraphDialog::paintEvent(QPaintEvent *)
+void GraphDialog::paintEvent(QPaintEvent * /*event*/)
 {
   QPainter painter(this);
   painter.setRenderHint(QPainter::Antialiasing);
@@ -228,7 +228,7 @@ void GraphDialog::calculateTemperatureRange()
   m_maxTemp = *std::max_element(m_temperatures.constBegin(), m_temperatures.constEnd());
 }
 
-double GraphDialog::mapTemperatureToY(int temperature)
+auto GraphDialog::mapTemperatureToY(int temperature) -> double
 {
   double range = m_maxTemp - m_minTemp;
   if (range == 0)

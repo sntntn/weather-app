@@ -14,8 +14,8 @@ public:
   GraphDialog(const QVector<int> &temperatures, QString dayNameString, QWidget *parent = nullptr);
 
 protected:
-  void paintEvent(QPaintEvent *) override;
-  void resizeEvent(QResizeEvent *event) override;
+    void paintEvent(QPaintEvent * /*event*/) override;
+    void resizeEvent(QResizeEvent *event) override;
 
 private:
   QVector<int> m_temperatures;
@@ -23,7 +23,7 @@ private:
   int		   m_minTemp;
   int		   m_maxTemp;
 
-  double mapTemperatureToY(int temperature);
+  auto mapTemperatureToY(int temperature) -> double;
   void	 calculateTemperatureRange();
 };
 
@@ -36,8 +36,8 @@ public:
 						const QVector<QString> &dayNames, QWidget *parent = nullptr);
 
 protected:
-  void paintEvent(QPaintEvent *) override;
-  void resizeEvent(QResizeEvent *event) override;
+    void paintEvent(QPaintEvent * /*event*/) override;
+    void resizeEvent(QResizeEvent *event) override;
 
 private:
   QVector<int>	   m_maxTemperatures;
@@ -47,7 +47,7 @@ private:
   int			   m_maxTemp;
 
   void		  calculateTemperatureRange();
-  QStringList getAbbreviatedDayNames();
+  auto getAbbreviatedDayNames() -> QStringList;
 };
 
 class MapDialog : public QDialog

@@ -15,20 +15,16 @@ class ErrorPage : public Page
 
 public:
   ErrorPage(QWidget *parent = nullptr);
-  ~ErrorPage() = default;
+  ~ErrorPage() override = default;
 
-public slots:
+  public slots:
   void setErrMsg(const QString &errMsg);
 
   // todo widgets scroll area like in DetailedWeatherPage
-  virtual void addNewWidget(const QSharedPointer<WeatherData>)
-  {
-  }
-  virtual void addErrorWidget(const QString &)
-  {
-  }
+  void addNewWidget(const QSharedPointer<WeatherData> /*data*/) override {}
+  void addErrorWidget(const QString & /*errMsg*/) override {}
 
-private:
+  private:
   QVBoxLayout *mainLayout;
   QHBoxLayout *upperLayout;
   QLabel	  *errorLabel;

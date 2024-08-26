@@ -4,7 +4,7 @@ CustomCompleter::CustomCompleter(QObject *parent) : QCompleter(parent)
 {
 }
 
-bool CustomCompleter::eventFilter(QObject *obj, QEvent *event)
+auto CustomCompleter::eventFilter(QObject *obj, QEvent *event) -> bool
 {
   if (event->type() == QEvent::KeyPress)
   {

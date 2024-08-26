@@ -31,7 +31,7 @@ class DetailedWeatherPage : public Page
 
 public:
   explicit DetailedWeatherPage(QWidget *parent = nullptr);
-  ~DetailedWeatherPage() = default;
+  ~DetailedWeatherPage() override = default;
 
   void resizeEvent(QResizeEvent *event) override;
 
@@ -39,14 +39,14 @@ public:
   DetailedWeatherAPI				 *api;
 
 public slots:
-  void addNewWidget(const QSharedPointer<WeatherData> data) override;
-  void addErrorWidget(const QString &errMsg) override;
-  void getData(const GeoLocationData &data);
-  void setData(const QSharedPointer<DetailedWeatherData> data);
+    void addNewWidget(QSharedPointer<WeatherData> data) override;
+    void addErrorWidget(const QString &errMsg) override;
+    void getData(const GeoLocationData &data);
+    void setData(QSharedPointer<DetailedWeatherData> data);
 
 private slots:
-  void addButtonClicked();
-  void homeButtonClicked();
+    void addButtonClicked();
+    void homeButtonClicked();
 
 signals:
   void locationSaved(const GeoLocationData &data);

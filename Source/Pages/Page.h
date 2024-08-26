@@ -13,17 +13,14 @@ class Page : public QWidget
   Q_OBJECT
 
 public:
-  virtual ~Page() = default;
+    ~Page() override = default;
 
-  inline int numWidgets() const
-  {
-	return m_widgets.size();
-  }
+    [[nodiscard]] inline auto numWidgets() const -> int { return m_widgets.size(); }
 
 public slots:
-  virtual void addNewWidget(const QSharedPointer<WeatherData> data) = 0;
-  virtual void addErrorWidget(const QString &errMsg)				= 0;
-  void		   deleteWidgets();
+    virtual void addNewWidget(QSharedPointer<WeatherData> data) = 0;
+    virtual void addErrorWidget(const QString &errMsg) = 0;
+    void deleteWidgets();
 
 protected:
   explicit Page(QWidget *parent = nullptr);

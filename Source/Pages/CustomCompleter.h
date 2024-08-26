@@ -11,7 +11,7 @@ public:
   CustomCompleter(QObject *parent = nullptr);
 
 protected:
-  bool eventFilter(QObject *obj, QEvent *event) override;
+    auto eventFilter(QObject *obj, QEvent *event) -> bool override;
 };
 
 #endif // CUSTOMCOMPLETER_H

@@ -26,16 +26,16 @@ class HomePage : public Page
 
 public:
   explicit HomePage(QWidget *parent = nullptr);
-  ~HomePage();
+  ~HomePage() override;
 
-signals:
+  signals:
   void searchBarPressed(const QString &location);
   void locationObjectSelected(const GeoLocationData &locationData);
 
 public slots:
-  void addNewWidget(const QSharedPointer<WeatherData> data) override;
-  void addErrorWidget(const QString &errMsg) override;
-  void onSearchBarTextChanged();
+    void addNewWidget(QSharedPointer<WeatherData> data) override;
+    void addErrorWidget(const QString &errMsg) override;
+    void onSearchBarTextChanged();
 
 private:
   static const int leftMargin	 = 25;

@@ -98,7 +98,7 @@ void MainWindow::showErrorPage(const QString &errMsg)
   emit errorPageShown(errMsg);
 }
 
-QWidget *MainWindow::currentPage()
+auto MainWindow::currentPage() -> QWidget *
 {
   return stackedWidget->currentWidget();
 }

@@ -30,11 +30,11 @@ class MainWindow : public QMainWindow
 
 public:
   MainWindow(QWidget *parent = nullptr);
-  ~MainWindow();
+  ~MainWindow() override;
 
-  QWidget *currentPage();
+  auto currentPage() -> QWidget *;
 
-public slots:
+  public slots:
   void showHomePage();
   void showDetailedWeatherPage();
   void showErrorPage(const QString &errMsg);

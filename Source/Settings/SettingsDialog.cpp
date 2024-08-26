@@ -177,7 +177,7 @@ void SettingsDialog::resetOrder()
   widgetOrder = settings.savedLocations();
 }
 
-bool SettingsDialog::eventFilter(QObject *obj, QEvent *event)
+auto SettingsDialog::eventFilter(QObject *obj, QEvent *event) -> bool
 {
   if (obj == listWidget && event->type() == QEvent::KeyPress)
   {

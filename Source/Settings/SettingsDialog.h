@@ -20,9 +20,9 @@ class SettingsDialog : public QDialog
 
 public:
   SettingsDialog(QWidget *parent = nullptr);
-  ~SettingsDialog() = default;
+  ~SettingsDialog() override = default;
 
-signals:
+  signals:
   void settingsChanged();
 
 private slots:
@@ -47,7 +47,7 @@ private:
   QIcon					 orderIcon;
 
   void setupUi();
-  bool eventFilter(QObject *obj, QEvent *event) override;
+  auto eventFilter(QObject *obj, QEvent *event) -> bool override;
 
   const QString trashIconPath = "../Resources/trashCan/redTrash.png";
 };

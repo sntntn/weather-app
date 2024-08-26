@@ -77,7 +77,7 @@ private:
   Settings(const Settings &)			= delete;
   Settings &operator=(const Settings &) = delete;
 
-  QString temperatureUnitToApiParameter(const TemperatureUnit tempUnit) const;
+  static QString temperatureUnitToApiParameter(const TemperatureUnit tempUnit);
   QString windSpeedUnitToApiParameter(const WindSpeedUnit windSpeedUnit) const;
   QString precipitationUnitToApiParameter(const PrecipitationUnit precUnit) const;
 

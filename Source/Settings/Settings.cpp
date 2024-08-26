@@ -6,7 +6,7 @@
 #include "GeoLocationData.h"
 #include "Serializer.h"
 
-QString Settings::temperatureUnitToApiParameter(const TemperatureUnit tempUnit) const
+auto Settings::temperatureUnitToApiParameter(const TemperatureUnit tempUnit) -> QString
 {
   switch (tempUnit)
   {

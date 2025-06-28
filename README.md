@@ -40,3 +40,27 @@ Compiler: GCC (GNU Compiler Collection)
  - <a href="https://gitlab.com/sntntn">Vukašin Marković 312/2019</a>
  - <a href="https://gitlab.com/floxinoxinihiliplification">Lucija Kecić 165/2018</a>
  - ~~<a href="https://gitlab.com/mi19008">Ana Obradinović 8/2019</a>~~
+
+# Original Development on GitLab
+
+This project was originally developed on GitLab. You can find the initial repository and its associated documentation on the following link:
+
+- [GitLab Repository](https://gitlab.com/matf-bg-ac-rs/course-rs/projects-2023-2024/weather-app)
+
+An internal tooling pipeline for static analysis and debugging is documented in detail on GitLab:
+
+- [Tools Documentation](https://gitlab.com/sntntn/azrs-tracking/-/issues/?sort=created_date&state=all&first_page_size=20)
+
+The following tools and technologies were used in the development of this project:
+
+- **Git** for version control
+- **GDB** for debugging
+- **Valgrind** for memory analysis
+- **CMake** for build management
+- **Clang** for static analysis
+- **Docker** for containerization
+- **Git hooks** for automated actions
+- **Meld** for file comparison
+- **Python & Bash scripting** for automation and toolchain enhancement
+
+
